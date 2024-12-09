@@ -327,13 +327,14 @@ Ensures that a class has only one instance and provides a global point of access
 - `Static method (getInstance)`: Provides a global point of access to the instance.
 #### Example
 ```java
-public class Singleton {
+class Singleton {
     // Step 1: Create a private static instance of the class.
     private static Singleton instance;
 
     // Step 2: Make the constructor private to prevent instantiation.
-    private Singleton() {
-        // ...
+    private Singleton(){
+        System.out.println("Object Created");
+        ...
     }
 
     // Step 3: Provide a public static method to get the instance.
@@ -342,6 +343,17 @@ public class Singleton {
             instance = new Singleton();
         }
         return instance;
+    }
+}
+
+public class Main{
+    public static void main(String[] args){
+        Singleton a1 = Singleton.getInstance();
+        Singleton a2 = Singleton.getInstance();
+        Singleton a3 = Singleton.getInstance();
+        Singleton a4 = Singleton.getInstance();
+        Singleton a5 = Singleton.getInstance();
+        // Singleton a2 = new Singleton();
     }
 }
 ```
