@@ -1,5 +1,13 @@
 # Express.js
 It enables the creation of robust RESTful APIs, handling routing, middleware integration, and serving dynamic/static content.
+# Routing
+A route is a combination of:
+1. **HTTP Method**: Such as `GET`, `POST`, `PUT`, or `DELETE`.
+2. **Path**: The endpoint or route URL.
+3. **Callback Function**: Code to execute when the route is matched.
+```js
+app.METHOD(PATH, HANDLER);
+```
 # Middleware
 It refers to functions that execute during the lifecycle of a request to the server. Middleware functions can perform various tasks, such as modifying the request and response objects, executing code, ending the request-response cycle, or passing control to the next middleware function in the stack.
 ## Key Features
