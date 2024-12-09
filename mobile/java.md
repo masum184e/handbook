@@ -307,7 +307,8 @@ Package hierarchy is created and accessed through (`.`) dot operator.
 ### this
 
 - differentiate the local scope and class scope.
-  **Passing Current Object as Argument:**
+
+**Passing Current Object as Argument:**
 
 ```java
 class ClassB{

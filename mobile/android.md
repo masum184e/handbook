@@ -484,6 +484,7 @@ adapter.updateItem(newItem);
 public void addItem(String newItem) {
   itemList.add(newItem);
   notifyItemInserted(itemList.size() - 1);
+  recycclerView.scrollToPosition(itemList.size() - 1);
 }
 ```
 **MainActivity:**
@@ -496,6 +497,7 @@ adapter.addItem(newItem);
 ## Animation
 **Adaptar:**
 ```java
+private int lastPosition = -1;
 public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
   ...
   setAnimation(holder.itemView, position);
