@@ -127,3 +127,46 @@ When a request is sent to the server, Express processes it through the middlewar
   ```js
   app.use(express.raw({ type: "application/octet-stream" }));
   ```
+
+# View Engine
+A view engine in Express allows you to render dynamic HTML pages by combining template files with data. It simplifies the process of serving HTML content and is commonly used to generate pages dynamically based on user input, database content, or application logic.
+
+**Set EJS as the view engine**
+```js
+app.set('view engine', 'ejs');
+```
+
+**Folder Structure:**
+
+```text
+project
+├── views
+│   ├── index.ejs
+│   ├── about.ejs
+├── public
+│   └── css
+│       └── styles.css
+├── app.js
+```
+
+**Render Views and Pass Data**
+
+```js
+app.get('/', (req, res) => {
+  const data = { title: 'Home Page', message: 'Welcome to our website!' };
+  res.render('index', data);
+});
+```
+
+**`views/index.ejs`:**
+```js
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <h1><%= message %></h1>
+</body>
+</html>
+```
