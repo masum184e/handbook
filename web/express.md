@@ -128,6 +128,50 @@ When a request is sent to the server, Express processes it through the middlewar
   app.use(express.raw({ type: "application/octet-stream" }));
   ```
 
+# Error-handling Middleware
+It is used to catch and handle errors in an application. It ensures that the app doesn't crash and provides a mechanism for handling errors gracefully by sending appropriate responses to the client.
+
+**Arguments:**
+
+1. `err` - The error object, which contains details about the error.
+2. `req` - The request object.
+3. `res` - The response object.
+4. `next` - A callback to pass control to the next middleware.
+
+The key difference is the presence of the `err` parameter.
+
+**Key Characteristics**
+1. Error-handling middleware must have four parameters.
+2. It should be registered after all other routes and middleware in the app.
+
+
+## Setup
+### 1. Route that introduces an error
+```js
+app.get('/error', (req, res, next) => {
+    const error = new Error('Something went wrong!');
+    error.status = 500;
+    next(error);
+});
+```
+This route explicitly creates an error and passes it to the next middleware using `next(error)`.
+### 2. Error-handling middleware
+```js
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    const statusCode = err.status || 500;
+    const message = err.message || 'Internal Server Error';
+    res.status(statusCode).json({
+        error: {
+            message: message,
+            status: statusCode,
+        },
+    });
+});
+```
+`console.error(err.stack)` logs the error stack trace for debugging purposes.
+### 3. Middleware order
+The error-handling middleware is added after all other routes and middleware. This ensures that it can catch errors from any part of the app.
 # View Engine
 A view engine in Express allows you to render dynamic HTML pages by combining template files with data. It simplifies the process of serving HTML content and is commonly used to generate pages dynamically based on user input, database content, or application logic.
 
