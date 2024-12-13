@@ -172,6 +172,54 @@ app.use((err, req, res, next) => {
 `console.error(err.stack)` logs the error stack trace for debugging purposes.
 ### 3. Middleware order
 The error-handling middleware is added after all other routes and middleware. This ensures that it can catch errors from any part of the app.
+# Rate Limiting vs. Throttling
+## Rate Limiting
+- Sets a maximum number of allowed requests per client in a time window.
+- Example: A client can make up to 100 requests per hour.
+## Throttling
+- Restricts the rate at which requests are processed.
+- Example: Allow only 10 requests per second per client.
+## Why Implement Rate Limiting and Throttling?
+- Prevent DoS (Denial of Service) attacks.
+- Ensure fair resource distribution among users.
+- Protect APIs from being overused.
+- Reduce server load and improve stability.
+## Implement Rate Limiting
+1. **Install the library:**
+```bash
+npm install express-rate-limit
+```
+2. **Configure the rate limiter:**
+```js
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again after 15 minutes.',
+});
+```
+3. **Apply the rate limiter:**
+```js
+app.use(limiter);
+```
+## Implement Throttling
+1. **Install the library:**
+```bash
+npm install bottleneck
+```
+2. **Throttle Request Handling**
+```js
+// Wrap route handlers
+const throttledHandler = limiter.wrap(async (req, res) => {
+    res.send('Request processed');
+});
+```
+3. **Apply:**
+```js
+// Apply to a route
+app.get('/api/throttle', async (req, res) => {
+    throttledHandler(req, res);
+});
+```
 # View Engine
 A view engine in Express allows you to render dynamic HTML pages by combining template files with data. It simplifies the process of serving HTML content and is commonly used to generate pages dynamically based on user input, database content, or application logic.
 
