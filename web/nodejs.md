@@ -108,3 +108,36 @@ async function readFile() {
 
 readFile();
 ```
+# File Handling
+## Key Methods
+**Reading Files:**
+- `fs.readFile()` (asynchronous)
+    ```js
+    fs.readFile('example.txt', 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading file:', err);
+        return;
+      }
+      console.log('File content:', data);
+    });
+    ```
+- `fs.readFileSync()` (synchronous)
+    ```js
+    try {
+      const data = fs.readFileSync('example.txt', 'utf8');
+      console.log('File content:', data);
+    } catch (err) {
+      console.error('Error reading file:', err);
+    }
+    ```
+**Writing Files:**
+- `fs.writeFile()` (asynchronous)
+- `fs.writeFileSync()` (synchronous)
+**Appending Data to Files:**
+- `fs.appendFile()` (asynchronous)
+- `fs.appendFileSync()` (synchronous)
+**Checking File/Directory Existence:**
+- `fs.existsSync()` (synchronous)
+**Deleting Files:**
+- `fs.unlink()` (asynchronous)
+- `fs.unlinkSync()` (synchronous)
