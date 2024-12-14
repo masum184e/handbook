@@ -69,3 +69,42 @@ eventEmitter.on('greet', (name) => {
 // Trigger the event
 eventEmitter.emit('greet', 'Alice');
 ```
+# Errors in Asynchronous Code
+## Error Handling in Callbacks
+In callbacks, the first argument is conventionally reserved for errors (known as the error-first callback pattern which is an error object).
+```js
+// Reading a non-existent file
+fs.readFile('nonexistent.txt', 'utf8', (err, data) => {
+    if (err) {
+        console.error('Error reading file:', err.message);
+        return; // Exit to avoid further processing
+    }
+    console.log('File content:', data);
+});
+```
+## Error Handling with Promises
+Promises handle errors using the `.catch()` method.
+```js
+// Reading a non-existent file
+fs.readFile('nonexistent.txt', 'utf8')
+    .then((data) => {
+        console.log('File content:', data);
+    })
+    .catch((err) => {
+        console.error('Error reading file:', err.message);
+    });
+```
+## Error Handling with `async/await`
+Use a `try...catch` block to handle errors in `async` functions.
+```js
+async function readFile() {
+    try {
+        const data = await fs.readFile('nonexistent.txt', 'utf8');
+        console.log('File content:', data);
+    } catch (err) {
+        console.error('Error reading file:', err.message);
+    }
+}
+
+readFile();
+```
