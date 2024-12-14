@@ -32,3 +32,40 @@ Node.js is built to handle multiple I/O operations efficiently while using a sin
 | **Browser Support**      | Requires bundlers like Webpack for browsers                      | Supported in most modern browsers                                                                                           |
 | **Example Import**       | `const module = require('./module')`                             | `import module from './module.js'`                                                                                          |
 | **Example Export**       | `module.exports = { key: value }`                                | `export default { key: value }` or `export const key = value`                                                               |
+# Modules
+## `fs` - File System Module
+It supports reading, writing, updating, and deleting files, as well as handling directories.
+## `http` - HTTP Module
+It is used to create HTTP servers and handle HTTP requests and responses.
+```js
+const http = require('http');
+
+// Create an HTTP server
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello, World!');
+});
+
+// Listen on port 3000
+server.listen(3000, () => {
+    console.log('Server is running at http://localhost:3000');
+});
+```
+## `path` - Path Module
+It handles platform-specific path delimiters.
+## `events` - Events Module
+It is the foundation of Node.js’s event-driven architecture.
+```js
+const EventEmitter = require('events');
+
+// Create an instance of EventEmitter
+const eventEmitter = new EventEmitter();
+
+// Define an event listener
+eventEmitter.on('greet', (name) => {
+    console.log(`Hello, ${name}!`);
+});
+
+// Trigger the event
+eventEmitter.emit('greet', 'Alice');
+```
