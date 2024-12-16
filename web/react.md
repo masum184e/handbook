@@ -1,4 +1,4 @@
-# Index
+# Contents
 - [HTML, CSS, JS](#html-css-js)
 - [Fragments](#fragments)
 - [List Rendering](#list-rendering)

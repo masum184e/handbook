@@ -1,9 +1,28 @@
-# Content
+# Contents
 
 - [Basic](#basic)
+  - [Constant](#constants)
+  - [Scope](#scope)
+  - [Build in Functions](#build-in-functions)
+  - [Anonymous Functions](#anonymous-functions)
+  - [Closures](#closures)
+  - [Array](#array)
 - [JSON](#json)
 - [Standard PHP Library](#standard-php-library)
+  - [SplStack](#splstack-stack)
+  - [SplQueue](#splqueue-queue)
+  - [SplDoublyLinkedList](#spldoublylinkedlist)
 - [Form Handling](#form-handling)
+  - [superglobals](#common-superglobals)
+    - [$\_GET](#_get)
+    - [$\_POST](#_post)
+    - [$\_REQUEST](#_request)
+    - [$\_SERVER](#_server)
+  - [Validation VS Sanitization](#validation-vs-sanitization)
+  - [File Uploading](#file-uploading)
+- [Database Interaction (MySQL)](#database-interaction-mysql)
+  - [Database Connection](#database-connection)
+  - [CRUD](#crud)
 
 # Basic
 
@@ -465,19 +484,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 ```
+
 ## File Uploading
+
 ### Steps
-1. __Create an HTML Form__: The form should include `enctype="multipart/form-data"` in the `<form>` tag, and a file input field, so users can select a file to upload.
-2. ___Access the File Using `$_FILES`__: When the form is submitted, PHP populates the `$_FILES` array with information about the uploaded file.
-3. __Validate the Uploaded File__: Check the file size, type, and any errors to ensure it meets requirements.
-4. __Move the File to a Directory__: Use `move_uploaded_file()` to save the uploaded file to a specific location on the server.
+
+1. **Create an HTML Form**: The form should include `enctype="multipart/form-data"` in the `<form>` tag, and a file input field, so users can select a file to upload.
+2. **\_Access the File Using `$_FILES`**: When the form is submitted, PHP populates the `$_FILES` array with information about the uploaded file.
+3. **Validate the Uploaded File**: Check the file size, type, and any errors to ensure it meets requirements.
+4. **Move the File to a Directory**: Use `move_uploaded_file()` to save the uploaded file to a specific location on the server.
+
 ```html
 <form action="upload.php" method="post" enctype="multipart/form-data">
   <label for="file">Choose a file:</label>
-  <input type="file" name="file" id="file" required>
-  <input type="submit" value="Upload">
+  <input type="file" name="file" id="file" required />
+  <input type="submit" value="Upload" />
 </form>
 ```
+
 ```php
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
@@ -528,8 +552,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 }
 ?>
 ```
+
 # Database Interaction (MySQL)
+
 ## Database Connection
+
 ```php
 <?php
 // Step 1: Database credentials
@@ -548,8 +575,11 @@ if (!$conn) {
 echo "Connected successfully";
 ?>
 ```
+
 ## CRUD
+
 ### Create
+
 ```php
 <?php
 
@@ -566,7 +596,9 @@ $stmt->close();
 $conn->close();
 ?>
 ```
+
 ### Read
+
 ```php
 <?php
 
@@ -584,7 +616,9 @@ if ($result->num_rows > 0) {
 $conn->close();
 ?>
 ```
+
 ### Update
+
 ```php
 <?php
 $name = "Jane Doe";
@@ -601,7 +635,9 @@ $stmt->close();
 $conn->close();
 ?>
 ```
+
 ### Delete
+
 ```php
 <?php
 

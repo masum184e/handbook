@@ -1,6 +1,18 @@
-# Express.js
+# Contents
 
-It enables the creation of robust RESTful APIs, handling routing, middleware integration, and serving dynamic/static content.
+- [Routing](#routing)
+- [req object](#req-object)
+  - [Parsing Bodies](#parsing-request-bodies)
+- [res object](#res-object)
+  - [res.send()](#ressend)
+  - [res.json()](#resjson)
+  - [res.status()](#resstatus)
+- [Middleware](#middleware)
+  - [Types of Middleware](#types-of-middleware)
+  - [Built in Middleware](#built-in-middleware)
+- [Error Handling](#error-handling-middleware)
+- [Rate Limiting vs Throttling](#rate-limiting-vs-throttling)
+- [Views](#view-engine)
 
 # Routing
 
@@ -20,9 +32,11 @@ app.METHOD(PATH, HANDLER);
 1 `req.method`: The HTTP method of the request (e.g., GET, POST, PUT, DELETE). 2. `req.url`: The full URL of the request. 3. `req.query`: An object containing the query string parameters. 4. `req.params`: An object containing route parameters (e.g., from dynamic routes). 5. `req.body`: Contains data sent in the body of the request (available after parsing middleware like `body-parser`). 6. `req.headers`: An object containing the headers of the request. 7. `req.cookies`: Contains cookies sent by the client (if cookie-parser middleware is used).
 
 ## Parsing Request Bodies
+
 When clients send data in an HTTP request (e.g., through forms or APIs), that data often resides in the request body. Express does not parse the request body automatically; instead, middleware is required to handle and parse it.
 
 ### Common Types of Request Bodies
+
 1. **JSON:** Often used in APIs where data is sent in JSON format.
 2. **URL-encoded:** Common in form submissions where key-value pairs are URL-encoded.
 3. **Raw/Plain Text:** Used when sending raw text data.
@@ -129,6 +143,7 @@ When a request is sent to the server, Express processes it through the middlewar
   ```
 
 # Error-handling Middleware
+
 It is used to catch and handle errors in an application. It ensures that the app doesn't crash and provides a mechanism for handling errors gracefully by sending appropriate responses to the client.
 
 **Arguments:**
@@ -141,91 +156,123 @@ It is used to catch and handle errors in an application. It ensures that the app
 The key difference is the presence of the `err` parameter.
 
 **Key Characteristics**
+
 1. Error-handling middleware must have four parameters.
 2. It should be registered after all other routes and middleware in the app.
 
-
 ## Setup
+
 ### 1. Route that introduces an error
+
 ```js
-app.get('/error', (req, res, next) => {
-    const error = new Error('Something went wrong!');
-    error.status = 500;
-    next(error);
+app.get("/error", (req, res, next) => {
+  const error = new Error("Something went wrong!");
+  error.status = 500;
+  next(error);
 });
 ```
+
 This route explicitly creates an error and passes it to the next middleware using `next(error)`.
+
 ### 2. Error-handling middleware
+
 ```js
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    const statusCode = err.status || 500;
-    const message = err.message || 'Internal Server Error';
-    res.status(statusCode).json({
-        error: {
-            message: message,
-            status: statusCode,
-        },
-    });
+  console.error(err.stack);
+  const statusCode = err.status || 500;
+  const message = err.message || "Internal Server Error";
+  res.status(statusCode).json({
+    error: {
+      message: message,
+      status: statusCode,
+    },
+  });
 });
 ```
+
 `console.error(err.stack)` logs the error stack trace for debugging purposes.
+
 ### 3. Middleware order
+
 The error-handling middleware is added after all other routes and middleware. This ensures that it can catch errors from any part of the app.
+
 # Rate Limiting vs. Throttling
+
 ## Rate Limiting
+
 - Sets a maximum number of allowed requests per client in a time window.
 - Example: A client can make up to 100 requests per hour.
+
 ## Throttling
+
 - Restricts the rate at which requests are processed.
 - Example: Allow only 10 requests per second per client.
+
 ## Why Implement Rate Limiting and Throttling?
+
 - Prevent DoS (Denial of Service) attacks.
 - Ensure fair resource distribution among users.
 - Protect APIs from being overused.
 - Reduce server load and improve stability.
+
 ## Implement Rate Limiting
+
 1. **Install the library:**
+
 ```bash
 npm install express-rate-limit
 ```
+
 2. **Configure the rate limiter:**
+
 ```js
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    message: 'Too many requests from this IP, please try again after 15 minutes.',
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again after 15 minutes.",
 });
 ```
+
 3. **Apply the rate limiter:**
+
 ```js
 app.use(limiter);
 ```
+
 ## Implement Throttling
+
 1. **Install the library:**
+
 ```bash
 npm install bottleneck
 ```
+
 2. **Throttle Request Handling**
+
 ```js
 // Wrap route handlers
 const throttledHandler = limiter.wrap(async (req, res) => {
-    res.send('Request processed');
+  res.send("Request processed");
 });
 ```
+
 3. **Apply:**
+
 ```js
 // Apply to a route
-app.get('/api/throttle', async (req, res) => {
-    throttledHandler(req, res);
+app.get("/api/throttle", async (req, res) => {
+  throttledHandler(req, res);
 });
 ```
+
 # View Engine
+
 A view engine in Express allows you to render dynamic HTML pages by combining template files with data. It simplifies the process of serving HTML content and is commonly used to generate pages dynamically based on user input, database content, or application logic.
 
 **Set EJS as the view engine**
+
 ```js
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 ```
 
 **Folder Structure:**
@@ -244,13 +291,14 @@ project
 **Render Views and Pass Data**
 
 ```js
-app.get('/', (req, res) => {
-  const data = { title: 'Home Page', message: 'Welcome to our website!' };
-  res.render('index', data);
+app.get("/", (req, res) => {
+  const data = { title: "Home Page", message: "Welcome to our website!" };
+  res.render("index", data);
 });
 ```
 
 **`views/index.ejs`:**
+
 ```js
 <!DOCTYPE html>
 <html>
