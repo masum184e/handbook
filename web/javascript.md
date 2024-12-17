@@ -828,6 +828,47 @@ It's not a constructor, so we don't use `new Math()`. Instead, we call the metho
 
 5. **Garbage Collection:** Memory cleanup is performed in the background.
 
+
+## Dependencies 
+Two critical dependencies of Node.js are:
+
+1. V8 Engine – Executes JavaScript code.
+2. Libuv – Provides an asynchronous, event-driven I/O model.
+
+### V8 Engine
+1. **Compilation to Machine Code**
+
+    - V8 uses a Just-In-Time (JIT) compiler that converts JavaScript into optimized machine code instead of interpreting it line-by-line.
+2. **Memory Management**
+
+    - V8 includes a garbage collector to automatically free unused memory.
+3. **Optimizations**
+
+    - V8 optimizes JavaScript execution through inline caching, hidden classes, and other techniques.
+4. **Execution of JavaScript APIs**
+
+    - It supports JavaScript features like `Array`, `Promise`, and `Map`.
+
+### Libuv
+1. **Event Loop**
+
+    - Libuv implements the event loop, which allows Node.js to handle multiple asynchronous tasks efficiently in a single thread.
+2. **Thread Pool**
+
+    - For tasks that cannot be performed asynchronously (e.g., file I/O), libuv uses a thread pool to offload blocking operations.
+3. **Timers**
+
+    - Libuv provides support for functions like setTimeout and setInterval.
+4. **File System I/O**
+
+    Libuv enables non-blocking file system operations.
+5. **Networking**
+
+    - Libuv supports TCP, UDP, and DNS functionalities.
+6. **Child Processes**
+
+    Libuv helps Node.js spawn child processes using its threading capabilities.
+
 # Runtime
 
 ![Runtime]("jsruntime.png")
