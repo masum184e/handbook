@@ -871,7 +871,7 @@ Two critical dependencies of Node.js are:
 
 # Runtime
 
-![Runtime]("jsruntime.png")
+![Runtime](jsruntime.png)
 
 ## Components
 1. **JavaScript Engine**
