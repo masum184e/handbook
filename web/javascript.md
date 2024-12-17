@@ -30,6 +30,8 @@
   - [String](#string)
   - [Type Conversion](#type-conversion)
   - [Math Object](#math-object)
+- [Engine](#engine)
+- [Runtime](#runtime)
 - [Prototype](#prototype)
 - [Thread](#thread)
 - [Execution Context](#execution-context)
@@ -738,34 +740,142 @@ Explicit conversion is done manually using JavaScript's built-in functions. Comm
 - `parseInt()` and `parseFloat()` to convert strings to numbers
 
 ## Math Object
+
 It's not a constructor, so we don't use `new Math()`. Instead, we call the methods and properties directly on `Math`.
+
 ### Constants
+
 - Math.PI
 - Math.E
 - Math.LN2
 - Math.LN10
 - Math.SQRT2
+
 ### Rounding Methods
+
 - Math.round(x)
 - Math.ceil(x)
 - Math.floor(x)
 - Math.trunc(x)
+
 ### Arithmetic Methods
+
 - Math.abs(x)
 - Math.pow(base, exponent)
 - Math.sqrt(x)
 - Math.cbrt(x)
 - Math.max(a, b, ..., n)
 - Math.min(a, b, ..., n)
+
 ### Trigonometric Methods
+
 - `Math.sin(x)`, `Math.cos(x)`, and `Math.tan(x)` – Return the sine, cosine, and tangent of `x` (in radians).
 - `Math.asin(x)`, `Math.acos(x)`, `Math.atan(x)` – Return the inverse sine, cosine, and tangent of `x`.
 - `Math.atan2(y, x)` – Returns the angle (in radians) between the positive x-axis and the point `(x, y)`.
+
 ### Logarithmic and Exponential Methods
+
 - `Math.exp(x)` – Returns Euler’s number raised to the power of `x`.
 - `Math.log(x)` – Returns the natural logarithm (base e) of `x`.
 - `Math.log10(x)` – Returns the base-10 logarithm of `x`.
 - `Math.log2(x)` – Returns the base-2 logarithm of `x`.
+
+# Engine
+
+## Components
+
+1. **Parser**
+    - The JavaScript engine first parses the JavaScript code into a data structure called an **Abstract Syntax Tree (AST)**.
+    - The parser analyzes the syntax of the code to ensure it’s valid.
+
+2. **Interpreter**
+
+    - The engine initially uses an interpreter to convert the AST into bytecode and executes it directly.
+    - This is fast to start execution but can be inefficient for repetitive operations.
+
+3. **JIT Compiler (Just-In-Time Compiler)**
+
+    - Modern engines (like Google Chrome's V8) use a Just-In-Time (JIT) compiler to optimize code during runtime.
+    - The JIT compiler converts frequently used code (hot code) into machine code for faster execution.
+    - Optimization: The engine identifies repeated code patterns and optimizes them dynamically.
+
+4. **Garbage Collector**
+
+    - The garbage collector automatically manages memory by removing objects that are no longer in use, freeing up space.
+
+5. **Execution Stack (Call Stack)**
+
+    - JavaScript has a single-threaded execution model with an execution stack (also called the call stack) where functions are pushed and popped as they are executed.
+
+6. **Event Loop and Callback Queue**
+
+    - JavaScript uses an event loop to handle asynchronous code (e.g., `setTimeout`, HTTP requests, promises).
+    - The engine places callback functions in a queue and executes them when the call stack is empty.
+
+## Step-by-Step Process
+
+1. **JavaScript Code:** The engine takes your JavaScript code as input.
+2. **Parsing:** The code is parsed into an Abstract Syntax Tree (AST) to understand its structure.
+3. **Compilation:**
+
+    - Code is first interpreted into bytecode for quick execution.
+    - The JIT compiler further optimizes the bytecode into machine code for better performance.
+
+4. **Execution:**
+
+    - The engine executes the code, pushing and popping functions from the call stack.
+    - If there’s asynchronous code, the event loop manages it.
+
+5. **Garbage Collection:** Memory cleanup is performed in the background.
+
+# Runtime
+
+![Runtime]("jsruntime.png")
+
+## Components
+1. **JavaScript Engine**
+
+    - Responsible for parsing and executing JavaScript code.
+    - Examples: V8 Engine (Chrome), SpiderMonkey (Firefox), JavaScriptCore (Safari).
+3. **Call Stack**
+
+    -A stack-like data structure where function calls are pushed and popped as the code executes.
+    - Follows a Last In, First Out (LIFO) approach.
+4. Web APIs
+
+    - Provided by the browser to handle tasks like DOM manipulation, setTimeout, HTTP requests (AJAX, fetch), and more.
+    - Examples:
+      - setTimeout (Timers API)
+      - fetch or XMLHttpRequest (Networking API)
+      - Event listeners for user interaction.
+5. **Callback Queue**
+
+    - A queue that holds callback functions (from asynchronous operations) that are ready to be executed.
+6. **Event Loop**
+
+    - A mechanism that continuously checks whether the call stack is empty.
+    - If the call stack is empty, it moves callbacks from the callback queue to the call stack for execution.
+7. **Microtask Queue**
+
+    - Handles higher-priority asynchronous tasks, such as `Promise` callbacks or `MutationObserver`.
+    - Microtasks are executed before tasks in the callback queue.
+## How Runtime Works
+1. **Synchronous Code Execution**
+
+    - JavaScript executes synchronous code line by line using the call stack.
+2. **Web APIs**
+
+    - If asynchronous code (e.g., `setTimeout`, `fetch`) is encountered, the task is offloaded to the browser's Web APIs.
+3. **Callback Queue and Microtask Queue**
+
+    - Once the asynchronous task is complete, the browser places the callback in either the callback queue (for `setTimeout` and events) or the microtask queue (for Promises).
+4. **Event Loop**
+
+    - The event loop checks whether the call stack is empty.
+    - If it is, it first processes any tasks in the microtask queue, and then processes tasks in the callback queue.
+5. **Execution of Callbacks**
+
+    -Callbacks are moved to the call stack and executed.
 
 # Prototype
 
