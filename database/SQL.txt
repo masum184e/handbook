@@ -5,8 +5,6 @@
 !!ACCESSING
 !!command: mysql -u root -p
 
-!!DML - Data Manipulation Language
-!!DDL - Data Definition Language
 !!help data manipulation - this command return all the command for DML
 !!help data definition - this command return all the command for DDL
 =====================================================INTRODUCTION END=====================================================
@@ -111,32 +109,11 @@
 =====================================================TABLE END=====================================================
 
 =====================================================CRUD START=====================================================
-!!CREATE-INSERTION
-!!command: INSERT INTO table_name (columns) VALUES (values);
-!!Rules:
--> column and value order should be same
--> it's not mandatory to follow the order of column as same as the order of column during definition, just maintain that it's follow order in sql command
--> any value that goes into a VARCHAR, CHAR, DATE or TEXT column has single quotes
--> you can skip column names but values order should be same as column and can't leave any column
--> for multiple insertion separate all tuple with comma
--> you can insert data only in specified columns by skipping other column name in sql command
-
 !!READ-SELECTION
-!!command: SELECT */column_name FROM table_name;
-!!* return all column
 !!select with limit: SELECT * FROM table_name LIMIT numberOfRows/start-1,numberOfRows;(top->bottom)
-
-!!UPDATE-MODIFICATION
-!!command: UPDATE table_name SET column_name=value WHERE column_name=value;
-!!in this way you can update multiple column for a single record
-!!if you want to update multiple record, you have to use CASE
-!!but with CASE, you can only modify one single column
-!!command: UPDATE table_name SET column_name CASE WHEN column_name_1=value THEN new_value END;
-!!column_name value will be updated with new_value
 
 !!DELETE-DELETION
 !!command: DELETE FROM table_name WHERE column_name=value;
-!!WHERE is necessary otherwise all records will be delete
 =====================================================CRUD END=====================================================
 
 =====================================================COLUMN START=====================================================
@@ -145,9 +122,6 @@
 =====================================================COLUMN END=====================================================
 
 =====================================================WHERE START=====================================================
-!!where is used to access specified data
-!!command: WHERE column_name operator 'value';
-
 !!operators: =,!=,>,<,>=,<=,BETWEEN(between a inclusive range),LIKE(search for a pattern),IN(to specify multiple possible values for a column)
 !!EXPLORE THIS OPERATOR WITH STRING VS CHARACTER
 
@@ -239,10 +213,6 @@
 !!its better to not set any size or set max size of auto incremented column
 !!STARTING AUTO INCREMENT WITH A PARTICULAR NUMBER IN SQL
 !!command: ALTER TABLE table_name AUTO_INCREMENT=starting_number;
-
-!!ALIAS
-!!used to temporarily rename a table name or column name
-!!command: SELECT column_name AS alias_column_name FROM table_name AS alias_table_name 
 
 !!DISTINCT
 !!used to display unique values
