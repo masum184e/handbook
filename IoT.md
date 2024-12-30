@@ -5,6 +5,7 @@
   - [ESP 32 Board](#esp-32-board)
     - [Chip](#processoresp-wroom32)
     - [Pin](#power-and-control-pins)
+    - [Wi-Fi Module](#wi-fi-module)
 - [Arduino Programming](#arduino---programming)
 - [Components](#components)
   - [Breadboard](#breadboard)
