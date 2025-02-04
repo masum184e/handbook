@@ -793,8 +793,90 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F]
 
 This blocks hotlinking of image files unless the request comes from `example.com`.
 
-# Laravel
+# REST API
 
+## REST Principles
+A RESTful API follows six key principles:
+
+### 1. Client-Server Architecture
+- The client and server are separate entities.
+- The client sends requests, and the server processes them and returns responses.
+
+Example: A frontend React app (client) sends an HTTP request to a PHP backend (server) for data.
+
+### 2. Statelessness
+- The server does not store any client state between requests.
+- Each request from a client must contain all necessary information.
+
+Example: Every API request must include authentication credentials (e.g., a JWT token), as the server does not remember previous requests.
+
+### 3. Cacheability
+- Responses must define whether they can be cached.
+- Caching can improve performance and reduce server load.
+
+Example: Using HTTP headers like Cache-Control: max-age=3600 allows browsers to cache data for an hour.
+
+### 4. Uniform Interface
+- A consistent API structure makes it easy to understand and use.
+- Uses standard HTTP methods like GET, POST, PUT, DELETE.
+### 5. Layered System
+- Clients interact with an API without needing to know about the underlying backend layers.
+- There may be intermediaries like load balancers or proxies.
+### 6. Code on Demand (Optional)
+- A server can return executable code (like JavaScript) to be run on the client.
+## Authentication
+### JWT
+**Installation:**
+```shell
+composer require firebase/php-jwt
+```
+**Generate JWT:**
+```php
+<?php
+require './../vendor/autoload.php';
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+function create_jwt($user_email) {
+    $issuedAt = time();
+    $expirationTime = $issuedAt + 3600; // Token valid for 1 hour
+    $payload = [
+        'iss' => 'yourdomain.com',   // Issuer
+        'iat' => $issuedAt,          // Issued at
+        'exp' => $expirationTime,    // Expiration time
+        'userEmail' => $user_email
+    ];
+
+    // Encode the payload to create the JWT
+    $jwt = JWT::encode($payload, JWT_SECRET_KEY, 'HS256');
+    return $jwt;
+}
+?>
+```
+
+# Laravel
+## Project Structure
+```
+project-name/
+│── app/              # Main application logic (Models, Controllers)
+│── bootstrap/        # Laravel bootstrapping files
+│── config/           # Configuration files (database, mail, cache)
+│── database/         # Migrations, seeders, factories
+│── public/           # Entry point (index.php)
+│── resources/        # Views (Blade templates), assets (CSS, JS)
+│── routes/           # API & Web routes
+│── storage/          # Logs, cache, session storage
+│── tests/            # Automated tests
+│── vendor/           # Composer dependencies
+│── .env              # Environment configuration
+│── artisan           # CLI tool for Laravel
+│── composer.json     # Composer dependencies
+```
+## Configuring
+Setup database credentials and run the database migrations
+```shell
+php artisan migrate
+```
 ## Migrations
 
 Migrations in Laravel are a way to define database schemas in a structured, version-controlled manner. Instead of manually creating tables in a database, migrations allow you to define the structure using PHP code. It allow to track chnages in the database schema over time.
