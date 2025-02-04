@@ -23,6 +23,13 @@
 - [Database Interaction (MySQL)](#database-interaction-mysql)
   - [Database Connection](#database-connection)
   - [CRUD](#crud)
+- [`.htaccess`](#htaccess)
+  - [Why](#why-implement-htaccess)
+  - [Configurations](#configurations)
+- [Laravel](#laravel)
+  - [Migrations](#migrations)
+  - [Model](#model)
+  - [Seeders](#seeders)
 
 # Basic
 
@@ -652,4 +659,306 @@ echo "Record deleted successfully";
 $stmt->close();
 $conn->close();
 ?>
+```
+
+# `.htaccess`
+
+The `.htaccess` (Hypertext Access) file is a configuration file used by Apache web servers to control various aspects of website behavior. It allows you to override global server settings on a per-directory basis without modifying the main server configuration file (`httpd.conf`).
+
+The `.htaccess` file is useful for implementing security measures, URL redirections, custom error pages, access controls, and other server configurations.
+
+## Why Implement `.htaccess`?
+
+1. Security
+
+- Restrict access to certain files or directories.
+- Prevent directory listing.
+- Block specific IP addresses.
+- Implement authentication.
+
+2. URL Rewriting & Redirection
+
+- Redirect users to another page.
+- Convert dynamic URLs into SEO-friendly URLs.
+- Force HTTPS for secure connections.
+
+3. Custom Error Pages
+
+- Create custom error pages (e.g., 404 Not Found, 500 Internal Server Error).
+
+4. Performance Optimization
+
+- Enable caching to speed up website loading.
+- Compress files using Gzip.
+- Prevent hotlinking of images and other media.
+
+5. Access Control
+
+- Password-protect directories.
+- Allow or deny access based on IP addresses.
+
+## Configurations
+
+### 1. Redirect HTTP to HTTPS
+
+Forcing users to use a secure HTTPS connection:
+
+```
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+```
+
+- `RewriteEngine On`: Enables the rewriting engine.
+- `RewriteCond %{HTTPS} !=on`: Checks if the request is not HTTPS.
+- `RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]`: Redirects to HTTPS.
+
+### 2. URL Rewriting
+
+Convert URLs like `example.com/page.php?id=10` to `example.com/page/10`:
+
+```
+RewriteEngine On
+RewriteRule ^page/([0-9]+)/?$ page.php?id=$1 [L,QSA]
+```
+
+- `^page/([0-9]+)/?$` matches URLs like `page/10`.
+- `page.php?id=$1` rewrites it back to the dynamic page.
+
+### 3. Redirect Old URL to New URL
+
+Redirect an old page to a new page:
+
+```
+Redirect 301 /old-page.html https://example.com/new-page.html
+```
+
+301 is a permanent redirect.
+
+### 4. Block Specific IP Addresses
+
+Prevent access from a specific IP:
+
+```
+Deny from 192.168.1.100
+```
+
+To allow only a certain IP:
+
+```
+Order Deny,Allow
+Deny from all
+Allow from 192.168.1.200
+```
+
+### 5. Password-Protect a Directory
+
+Create an `.htpasswd` file with the username and encrypted password:
+
+```
+AuthType Basic
+AuthName "Restricted Area"
+AuthUserFile /path/to/.htpasswd
+Require valid-user
+```
+
+### 6. Prevent Directory Listing
+
+Disable users from viewing a list of files in a directory:
+
+```
+Options -Indexes
+```
+
+### 7. Enable Gzip Compression
+
+Reduce page load time by compressing resources:
+
+```
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
+```
+
+### 8. Prevent Hotlinking
+
+Prevent other websites from using your images:
+
+```
+RewriteEngine On
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://example.com/ [NC]
+RewriteRule \.(jpg|jpeg|png|gif)$ - [F]
+```
+
+This blocks hotlinking of image files unless the request comes from `example.com`.
+
+# Laravel
+
+## Migrations
+
+Migrations in Laravel are a way to define database schemas in a structured, version-controlled manner. Instead of manually creating tables in a database, migrations allow you to define the structure using PHP code. It allow to track chnages in the database schema over time.
+
+### Steps
+
+1. Run the following command:
+
+```shell
+php artisan make:migration posts
+```
+
+2. Define the schema
+
+```php
+  public function up(): void
+    {
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id(); // Auto-incrementing primary key
+            $table->string('title');
+            $table->text('content');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps(); // Creates `created_at` and `updated_at` columns
+        });
+    }
+```
+
+3. Run the migration
+
+```shell
+php artisan migrate
+```
+
+4. Undo Changes
+
+- If you want to undo the last migration:
+
+```shell
+php artisan migrate:rollback
+```
+
+- To rollback all migrations and start fresh:
+
+```shell
+php artisan migrate:fresh
+```
+
+## Model
+
+A model is a class that interacts with a database table. Laravel uses Eloquent ORM (Object-Relational Mapping) to work with databases efficiently.
+
+### Steps
+
+1. Run the following command
+
+```shell
+php artisan make:model Post
+```
+
+2. Define the model
+
+```php
+class Post extends Model
+{
+    use HasFactory;
+
+    // Define the table name if different from the default (plural form of model name)
+    protected $table = 'posts';
+
+    // Define the primary key (optional, default is 'id')
+    protected $primaryKey = 'id';
+
+    // Enable or disable timestamps (created_at and updated_at)
+    public $timestamps = true;
+
+    // Allow mass assignment (set fillable fields)
+    protected $fillable = ['title', 'content'];
+
+    // If you want to prevent mass assignment on some fields
+    protected $guarded = ['id'];
+
+    // Define date fields explicitly (optional)
+    protected $dates = ['created_at', 'updated_at'];
+}
+```
+
+### CRUD
+
+#### Create
+
+```php
+Post::create([
+    'title' => 'Laptop',
+    'content' => 'A high-end gaming laptop'
+]);
+```
+
+#### Read
+
+**Get All Post**
+
+```php
+$posts = Post::all();
+```
+
+**Find a Specific Post by ID**
+
+```php
+$post = Post::find(1);
+```
+
+#### Update
+
+```php
+Post::where('id', 1)->update(['title' => "Gaming Laptop"]);
+```
+
+#### Delete
+
+```php
+Post::destroy(1);
+```
+
+### Relationships
+
+1. **One-to-Many**
+
+```php
+public function category(){
+    return $this->belongsTo(Category::class);
+}
+```
+
+## Seeders
+
+Seeders in Laravel allow you to populate your database with dummy data for testing and development. Instead of manually inserting records, you can automate the process using Laravel's built-in seeder system.
+
+### Steps
+
+1. Run the following command
+
+```shell
+php artisan make:factory PostFactory --model=Post
+```
+
+2. Define the factory
+
+```php
+public function definition(): array{
+    return [
+        'title' => $this->faker->name(),
+        'content' => $this->faker->description()
+    ];
+}
+```
+
+3. Use the factory in seeder
+
+```php
+User::factory(10)->create();
+```
+
+4. Run all seeders
+
+```shell
+php artisan db:seed
 ```
