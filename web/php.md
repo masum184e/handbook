@@ -30,6 +30,9 @@
   - [Migrations](#migrations)
   - [Model](#model)
   - [Seeders](#seeders)
+  - [Routing](#routing)
+  - [Views](#views)
+  - [Controller](#controller)
 
 # Basic
 
@@ -796,41 +799,56 @@ This blocks hotlinking of image files unless the request comes from `example.com
 # REST API
 
 ## REST Principles
+
 A RESTful API follows six key principles:
 
 ### 1. Client-Server Architecture
+
 - The client and server are separate entities.
 - The client sends requests, and the server processes them and returns responses.
 
 Example: A frontend React app (client) sends an HTTP request to a PHP backend (server) for data.
 
 ### 2. Statelessness
+
 - The server does not store any client state between requests.
 - Each request from a client must contain all necessary information.
 
 Example: Every API request must include authentication credentials (e.g., a JWT token), as the server does not remember previous requests.
 
 ### 3. Cacheability
+
 - Responses must define whether they can be cached.
 - Caching can improve performance and reduce server load.
 
 Example: Using HTTP headers like Cache-Control: max-age=3600 allows browsers to cache data for an hour.
 
 ### 4. Uniform Interface
+
 - A consistent API structure makes it easy to understand and use.
 - Uses standard HTTP methods like GET, POST, PUT, DELETE.
+
 ### 5. Layered System
+
 - Clients interact with an API without needing to know about the underlying backend layers.
 - There may be intermediaries like load balancers or proxies.
+
 ### 6. Code on Demand (Optional)
+
 - A server can return executable code (like JavaScript) to be run on the client.
+
 ## Authentication
+
 ### JWT
+
 **Installation:**
+
 ```shell
 composer require firebase/php-jwt
 ```
+
 **Generate JWT:**
+
 ```php
 <?php
 require './../vendor/autoload.php';
@@ -855,7 +873,9 @@ function create_jwt($user_email) {
 ```
 
 # Laravel
+
 ## Project Structure
+
 ```
 project-name/
 │── app/              # Main application logic (Models, Controllers)
@@ -872,11 +892,15 @@ project-name/
 │── artisan           # CLI tool for Laravel
 │── composer.json     # Composer dependencies
 ```
+
 ## Configuring
+
 Setup database credentials and run the database migrations
+
 ```shell
 php artisan migrate
 ```
+
 ## Migrations
 
 Migrations in Laravel are a way to define database schemas in a structured, version-controlled manner. Instead of manually creating tables in a database, migrations allow you to define the structure using PHP code. It allow to track chnages in the database schema over time.
@@ -1043,4 +1067,80 @@ User::factory(10)->create();
 
 ```shell
 php artisan db:seed
+```
+
+## Routing
+
+Laravel routes are defined in the `routes/` directory and support various HTTP methods such as `GET`, `POST`, `PUT`, `DELETE`, and more.
+
+### Basic Route
+
+```php
+use Illuminate\Support\Facades\Route;
+
+Route::get('/hello', function () {
+    return "Hello, Laravel!";
+});
+```
+
+### Route with parameter
+
+```php
+Route::get('/user/{id}', function ($id) {
+    return "User ID: " . $id;
+});
+```
+
+### Route with controller
+
+```php
+use App\Http\Controllers\UserController;
+
+Route::get('/user/{id}', [UserController::class, 'show']);
+```
+
+## Views
+
+Views are typically stored in the `resources/views/` directory.
+
+### Return a view in routes
+
+```php
+Route::get('/welcome', function () {
+    return view('welcome');
+});
+```
+
+### Pass data to view
+
+```php
+Route::get('/greet', function () {
+    return view('welcome', ['name' => 'John']);
+});
+```
+
+### Blade Syntax
+
+- echo variable with `{{ }}`
+- conditional statement
+  `php
+    @if ($isAdmin)
+    <p>Welcome, Admin!</p>
+@else
+    <p>Welcome, User!</p>
+@endif
+    `
+- Loop
+  ```
+  @foreach($users as $user)
+      <li>{{ $user }}</li>
+  @endforeach
+  ```
+
+## Controller
+
+Create controller with following command:
+
+```shell
+php artisan make:controller PageController
 ```
