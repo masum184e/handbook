@@ -871,7 +871,28 @@ function create_jwt($user_email) {
 }
 ?>
 ```
+# REST API
+RESTful APIs (Representational State Transfer) use standard HTTP methods to perform operations on resources.
+## Methods
+### PUT
+- update an entire resource with new data
+- If a field is missing, it may get removed.
+### PATCH
+- Updates only the specified fields of a resource.
+- More efficient than `PUT` when only some fields need modification.
+## Summary of REST API Methods
 
+| HTTP Method | Purpose                    | Idempotent | Example             |
+|------------|----------------------------|------------|---------------------|
+| **GET**    | Retrieve data              | ✅         | `GET /users/123`   |
+| **POST**   | Create new resource        | ❌         | `POST /users`      |
+| **PUT**    | Update entire resource     | ✅         | `PUT /users/123`   |
+| **PATCH**  | Partially update resource  | ❌         | `PATCH /users/123` |
+| **DELETE** | Remove resource            | ✅         | `DELETE /users/123`|
+| **OPTIONS**| Check available methods    | ✅         | `OPTIONS /users`   |
+| **HEAD**   | Get headers only           | ✅         | `HEAD /users/123`  |
+
+**Idempotency** means that making multiple identical requests has the same effect as making a single request. In simpler terms, an idempotent operation produces the same result no matter how many times it is performed.
 # Laravel
 
 ## Project Structure
@@ -1068,6 +1089,8 @@ User::factory(10)->create();
 ```shell
 php artisan db:seed
 ```
+
+Before seeding ensure the `$fillable` attribute frome models.
 
 ## Routing
 
