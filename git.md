@@ -170,10 +170,62 @@ Each commit has:
 - `git commit -am 'message here'` -> staging and commiting together
 
 ## History
+Git provides commands like `git log` to navigate through the commit history.
+
+1. `git log` displays a list of commits in reverse chronogloical order(latest commit first)
+
+It shows:
+- **Commit hash** – A unique identifier (SHA-1 hash) for each commit.
+- **Author** – The person who made the commit.
+- **Date** – When the commit was created.
+- **Commit message** – A short description of the commit.
+
+**Example Output:**
+```shell
+commit d6f9b1a2b6c3e9d0d46f15e5b2af324e54b8d214 (HEAD -> main)
+Author: John Doe <john@example.com>
+Date:   Sat Feb 23 10:30:00 2025
+
+    Updated README file
+
+commit b1c3d9f3e6a2d8a7c9b3e8a2f9c1d6e7a8f5c3d2
+Author: John Doe <john@example.com>
+Date:   Fri Feb 22 14:20:15 2025
+
+    Initial commit: Added README
+```
+2. `git log --online` -> return online-log
+
+**Example Output:**
+```shell
+d6f9b1a Updated README file
+b1c3d9f Initial commit: Added README
+```
+3. `git log -n` -> return latest n commit.
+4. `git log --author="John Doe"` -> return commits by a specific user.
+5. `git log --grep="bug fix"` -> search commit contain specific keyword.
+6. `git log -p` -> shows changes(diff) introduced by each commit.
 
 ## Differences
+The `git diff` command allows you to compare changes in your project.
+
+It helps identify differences between:
+
+✅ Working directory and staging area
+✅ Staged changes and last commit
+✅ Two commits
+✅ Two branches
 
 ## Status
+
+The git status command is used to check the state of the working directory and staging area. 
+
+It provides information about:
+
+✅ Untracked files (new files not yet added to Git)
+✅ Modified files (changes not yet staged)
+✅ Staged files (ready to be committed)
+✅ Branch information (current branch, ahead/behind status)
 
 # `.git` Folder
 
