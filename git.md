@@ -60,6 +60,47 @@ Working Directory => Staging Areay => Local Repository => Remote Repository
         Modify File           git add file            git commit -m         git push origin main
 ```
 
+## Configuration
+
+`git config` is a command used to configure Git settings on your system.
+
+### Types of Git Configurations
+
+1. **System Level**
+
+- Applies to all users and repositories on the computer.
+- Stored in: `C:\Program Files\Git\etc\gitconfig` (Windows).
+
+2. **Global-level**
+
+- Applies to all repositories for the current user.
+- Stored in: `~/.gitconfig` or `~/.config/git/config`.
+
+3. Local-level
+
+- Specific to a single repository.
+- Stored in: `.git/config` inside the repository.
+
+### Commands
+
+1. **Setup user information:**
+
+```shell
+git config --global user.name "John Doe"
+git config --global user.email "john.doe@example.com"
+```
+
+- `user.name`: Your name (appears in commit history).
+- `user.email`: Your email (used for commit identification).
+
+2. **Check Configuration Settings**
+
+```shell
+git config --list
+```
+
+Displays user details, editor preferences, merge tools, etc.
+
 # Fundamentals
 
 ## Initialization
@@ -89,23 +130,27 @@ Reinitialized existing Git repository in /path/to/project/.git/
 ```
 
 ## Staging
+
 `git add` is a command in Git that moves changes from the working directory to the staging area (also known as the index). The staging area is an intermediate space where Git collects changes before committing them to the repository.
 
 This allows you to control which changes are included in the next commit, giving you flexibility in tracking modifications.
 
 ### Why is Staging Important?
+
 - **Selective Commit** – You can stage specific files while leaving others uncommitted.
 - **Organized Workflow** – Allows reviewing changes before committing.
 - **Avoids Mistakes** – Prevents accidental commits of unfinished changes.
 
 ### Commands
-- `git add file_name`      -> take the file into staging state(here files are trackable)
-- `git add -A`             -> stage all changed file in directory and subdirectories
-- `git add .`              -> stage all changed file in directory but not subdirectories
-- `git add *.extension`    -> stage all changed file in directory with specific extension
+
+- `git add file_name` -> take the file into staging state(here files are trackable)
+- `git add -A` -> stage all changed file in directory and subdirectories
+- `git add .` -> stage all changed file in directory but not subdirectories
+- `git add *.extension` -> stage all changed file in directory with specific extension
 - `git add **/*.extension` -> stage all changed file in directory and subdirectories with specific extension
 
 ## Commits
+
 A commit in Git is a snapshot of the current state of your project. The `git commit` command takes all staged changes (added using `git add`) and saves them permanently in the repository's history.
 
 Each commit has:
@@ -114,12 +159,14 @@ Each commit has:
 ✅ A reference to the previous commit, forming a history.
 
 ### Why Are Commits Important?
+
 - **Version Control** – You can track changes over time.
 - **Revert to Previous States** – Restore any earlier version of your project.
 - **Collaboration** – Helps teams understand what was changed and why.
 
 ### Commands
-- `git commit -m 'message here'`  -> moving staging to local repository(message should be clear and understandable)
+
+- `git commit -m 'message here'` -> moving staging to local repository(message should be clear and understandable)
 - `git commit -am 'message here'` -> staging and commiting together
 
 ## History
