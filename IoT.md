@@ -2,12 +2,17 @@
 
 - [Introduction](#introduction)
 - [Development Boards](#development-boards)
-  - [ESP 32 Board](#esp-32-board)
+  - [ESP 32](#esp-32)
     - [Chip](#processoresp-wroom32)
     - [Pin](#power-and-control-pins)
     - [Wi-Fi Module](#wi-fi-module)
+    - [Modes](#modes)
+  - [Arduino Uno](#arduino-uno)
+    - [Components](#components)
+    - [Pins](#pins)
 - [Arduino Programming](#arduino---programming)
 - [Components](#components)
+  - [LED](#led-1)
   - [Breadboard](#breadboard)
   - [Buzzer](#buzzer)
   - [Ultrasonic Sonar Sensor](#ultrasonic-sonar-sensor)
@@ -15,6 +20,19 @@
   - [Servo Motor](#servo-motor)
   - [Potentiometer](#potentiometer)
   - [Push Button](#push-button)
+  - [PIR Motion Sensor\*](#pir-motion-sensor)
+  - [LCD Display\*](#lcd-display)
+  - [I2C LCD Display\*](#i2c-lcd-display)
+  - [Seven Segment Display\*](#seven-segment-display)
+  - [DHT11 Humidity and Temperature Sensor\*](#dht11-humidity-and-temperature-sensor)
+  - [LDR Sensor\*](#ldr-sensor)
+  - [Soil Moisture\*](#soil-moisture)
+  - [MQ-5 Gas Sensor\*](#mq-5-gas-sensor)
+  - [BMP180 Sensor*](#bmp180-sensor)
+  - [DC Motor](#dc-motor)
+  - [Motor Driver](#motor-driver)
+  - [Motor Shield\*](#motor-shield)
+  - [HC-05 Bluetooth*](#hc-05-bluetooth)
 
 # Introduction
 
@@ -138,7 +156,7 @@ The choice of board depends on the project requirements:
 | **Typical Clock Speed**       | Higher clock speeds, often >1 GHz                                                | Lower clock speeds, usually in the range of MHz                                |
 | **Data Processing**           | Suitable for processing large datasets, running AI models                        | Limited to smaller, control-oriented data processing                           |
 
-# ESP 32 Board
+# ESP 32
 
 ## Processor(ESP-WROOM32)
 
@@ -171,6 +189,10 @@ It is used for both powering the board and data communication between the board 
 
 It supplies 5V to the board from a USB power source and the onboard 3.3V LDO Voltage Regulator steps this down to 3.3V to power the ESP32 chip and peripherals.
 
+A AMS117 3.3V regulator ic supply 3.3V to the board. ESP32 active with 3.3V and all the GPIO pin output 3.3V
+
+For those device who require more voltage, ESP32 have a VIN pin. VIN source external power which is more than 3.3V. Even for those device whose require 3.3V, ESP32 have a 3V3 pin for them also.
+
 It is used to upload to the microcontroller via the onboard USB-to-Serial converter.
 
 ## LDO Voltage Regulator
@@ -188,6 +210,16 @@ It facilitates communication between the ESP32 microcontroller and a host comput
 Keep the micro usb port at left side the squared black box from lower side is the CP2102 chip.
 
 ## Power and Control Pins
+
+- It have 25GPIO(General Purpose Input Output) pin.
+- Due to multiplexing, one GPIO pin can do multiple task.
+
+**Characeterstics:**
+
+- 15 ADC pin with 12 bit.
+- 2 UART(Universal Asynchronous Receiver and Transmitter) pin. It enable two channel for serial communication.
+- Each GPIO pin consider as PWM pin, means there have 25 PWM pin.
+- 2 DAC(Digital to Analog Converter) pin with 8 bit.
 
 | **Board Label** | **ESP32 Function** | **Description**                                           |
 | --------------- | ------------------ | --------------------------------------------------------- |
@@ -623,25 +655,34 @@ void fetchData() {
 ```
 
 ### AP
+
 In Access Point Mode (AP), the ESP32 creates its own Wi-Fi network. Devices such as smartphones or laptops can connect to this network to communicate directly with the ESP32. This is especially useful when there’s no existing Wi-Fi network available, or if you want to create a standalone system.
 
-### How It Works
+#### How It Works
+
 1. **ESP32 as an AP:**
-  -The ESP32 broadcasts its SSID (Wi-Fi name) and allows clients to connect.
-  - It assigns IP addresses to clients using a built-in DHCP server.
+   -The ESP32 broadcasts its SSID (Wi-Fi name) and allows clients to connect.
+
+- It assigns IP addresses to clients using a built-in DHCP server.
+
 2. **Communication:**
-  - The ESP32 can host a web server or exchange data directly with the connected devices.
+
+- The ESP32 can host a web server or exchange data directly with the connected devices.
+
 3. **Benefits:**
-  - Does not require an external router.
-  - Allows localized control and communication.
+
+- Does not require an external router.
+- Allows localized control and communication.
 
 #### Steps to Set Up ESP32 in AP Mode
+
 1. Initialize Wi-Fi in AP mode using `WiFi.softAP()`.
 2. Define the SSID and password for the ESP32 network.
 3. Optionally, set the IP address using `WiFi.softAPConfig()` (default IP is `192.168.4.1`).
 4. Create a web server to interact with clients.
 
 #### Configuring Wi-Fi Network
+
 ```cpp
 #include <WiFi.h> // Use <ESP8266WiFi.h> if using ESP8266
 
@@ -721,6 +762,7 @@ void loop() {
 The ESP32/ESP8266 assigns itself an IP address (e.g., `192.168.4.1`) for clients to connect.
 
 #### Controlling LED
+
 ```cpp
 #include <WiFi.h> // Include Wi-Fi library
 
@@ -791,6 +833,294 @@ void loop() {
   }
 }
 ```
+
+### Send Email
+
+**Install ESP-Mail-Client library to communicate with an SMTP server**
+
+Before sending emails using Gmail, you need to enable Less Secure Apps (or generate an App Password if you have 2FA enabled).
+
+```cpp
+#include <WiFi.h>
+#include <ESP_Mail_Client.h>
+
+// WiFi Credentials
+#define WIFI_SSID "yourwifi"
+#define WIFI_PASSWORD "yourpassword"
+
+// SMTP Server Settings (Gmail)
+#define SMTP_HOST "smtp.gmail.com"
+#define SMTP_PORT 587
+
+// Sender Credentials
+#define AUTHOR_EMAIL "sender@email.com"
+#define AUTHOR_PASSWORD "abcdefghij"
+
+// Create an SMTP session
+SMTPSession smtp;
+
+// Function Prototype
+bool sendEmail(const char* recipientEmail, const char* subject, const char* messageBody);
+
+// SMTP Callback Function
+void smtpCallback(SMTP_Status status);
+
+void setup() {
+    Serial.begin(115200);
+
+    // Connect to WiFi
+    Serial.print("Connecting to WiFi...");
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    while (WiFi.status() != WL_CONNECTED) {
+        Serial.print(".");
+        delay(500);
+    }
+    Serial.println("\nConnected to WiFi");
+
+    // Send Email using Function
+    if (sendEmail("masum1834e@gmail.com", "ESP32 Email Test", "Hello from ESP32! This is a test email.")) {
+        Serial.println("Email sent successfully!");
+    } else {
+        Serial.println("Email sending failed.");
+    }
+}
+
+void loop() {
+}
+
+// Function to Send Email
+bool sendEmail(const char* recipientEmail, const char* subject, const char* messageBody) {
+    smtp.debug(1);
+    smtp.callback(smtpCallback);
+
+    ESP_Mail_Session session;
+    session.server.host_name = SMTP_HOST;
+    session.server.port = SMTP_PORT;
+    session.login.email = AUTHOR_EMAIL;
+    session.login.password = AUTHOR_PASSWORD;
+    session.login.user_domain = "";
+
+    SMTP_Message message;
+    message.sender.name = "ESP32";
+    message.sender.email = AUTHOR_EMAIL;
+    message.subject = subject;
+    message.addRecipient("Receiver", recipientEmail);
+    message.text.content = messageBody;
+
+    // Secure Connection
+    // session.timezone_offset = 0;
+    session.secure.startTLS = false;
+
+    // Connect to SMTP Server
+    if (!smtp.connect(&session)) {
+        Serial.println("Failed to connect to SMTP server.");
+        return false;
+    }
+
+    // Send Email
+    if (!MailClient.sendMail(&smtp, &message)) {
+        Serial.println("Error sending email: " + smtp.errorReason());
+        return false;
+    }
+    return true;
+}
+
+// Callback Function for Status
+void smtpCallback(SMTP_Status status) {
+    Serial.println(status.info());
+}
+```
+
+## Modes
+
+### Active Mode
+
+- The ESP32 is fully operational.
+- The CPU(s) are running at the configured clock speed.
+- Peripherals such as Wi-Fi, Bluetooth, ADC, and GPIOs are active.
+- This mode consumes the most power.
+- Normally it require 160-260mA, when wifi & bluetooth require more power it consume 790mA.
+
+**Example:**
+
+```cpp
+void setup() {
+    Serial.begin(115200);
+    Serial.println("ESP32 is in Active Mode");
+}
+
+void loop() {
+    Serial.println("Performing tasks...");
+    delay(1000); // Simulate active processing
+}
+```
+
+### Modem Sleep Mode
+
+- The CPU remains active, but the **Wi-Fi and Bluetooth modules are turned off** intermittently.
+- Most power consuming component is Wifi, bluetooth, radio. That's why in modem sleep mode this are turned off including input-output of GPIO pins.
+- Suitable for applications where Wi-Fi is not needed all the time, saving power.
+- It requires 3-20mA to active ESP32.
+- After few time it move to active mode which called Association sleep pattern.
+- Normally you can't active modem sleep mode, you have to move station mode first and build wifi connection with router first.
+- ESP32 connect with wifi following DTIM(Delivary Traffic Indication Message) Beacon Mechanism
+
+**Example:**
+
+```cpp
+void setup() {
+    Serial.begin(115200);
+    WiFi.disconnect(true);  // Disable Wi-Fi to save power
+    WiFi.mode(WIFI_OFF);
+    Serial.println("Modem Sleep Mode Activated");
+}
+
+void loop() {
+    Serial.println("Processing data without Wi-Fi...");
+    delay(2000);
+}
+```
+
+### Light Sleep Mode
+
+- The CPU is paused, but memory and some peripherals remain active.
+- Wi-Fi and Bluetooth can remain connected but will wake the CPU when needed.
+- Consumes less power than Active and Modem Sleep modes.
+- GPIO input-output, RAM, ESP32 codre are keep in Clock Gating
+- It require only 0.8mA to active ESP32
+
+**Example:**
+
+```cpp
+void setup() {
+    Serial.begin(115200);
+    esp_sleep_enable_timer_wakeup(5000000); // Wake up after 5 seconds
+    Serial.println("Entering Light Sleep Mode...");
+    delay(1000);
+}
+
+void loop() {
+    Serial.println("Going to sleep...");
+    delay(1000);
+    esp_light_sleep_start(); // Enter light sleep
+    Serial.println("Woke up!");
+}
+```
+
+### Deep Sleep Mode
+
+- The CPU, Wi-Fi, and Bluetooth are completely turned off.
+- Only a small section of RAM is retained.
+- The device can wake up using a timer or an external GPIO interrupt.
+- Consumes the least power.
+
+**Example:**
+
+```cpp
+void setup() {
+    Serial.begin(115200);
+    Serial.println("ESP32 Entering Deep Sleep Mode...");
+    esp_sleep_enable_timer_wakeup(10 * 1000000); // Wake up after 10 seconds
+    esp_deep_sleep_start(); // Enter deep sleep
+}
+
+void loop() {
+    // This code won't run as ESP32 restarts after waking up
+}
+```
+
+### Comparison of Power Consumption
+
+# Arduino Uno
+
+consists of microcontroller-based development boards that can read inputs (such as sensors, switches, or buttons) and control outputs (like LEDs, motors, or displays).
+
+- Arduino requires 5V and 500mA.
+- ESP32 have to be compromised when voltage is more than 3.3V, but Arduino can handle upto 0V-5V.
+- Arduino have linear voltage mapping means when voltage change 0.1V, data also change at 0.1. But ESP32 can't make differences between 0.0 and 0.1 neither between 3.2 and 3.3
+
+## Components
+
+1. **Power Supply:**
+
+   - Power can be supplied with USB port, which also be used to send code.
+   - Arduino have a DC power supply port.
+   - Arduino can be powered up with pin like VIN(positive) and GND(negative).
+
+2. **Pins:**
+
+   - Arduino have 14 Digital(input/output) pins and 6 Analog pins.
+   - Analog pin can be use for both analog and digital input, but can't be use for analog output.
+   - Pin with (~) sign is used for analog output.
+
+3. **LED:**
+
+   Arduino have 4 LED.
+
+   - Power LED:
+     - In a corner of the board, there have a green led which lights up when arduino have enough power.
+   - Test LED:
+     - A yellow color LED appear just below the pin number 13
+     - It activated when pin number 13 is HIGH
+   - TX/RX LED:
+     - Arduino communicate(send-recieve) with other devices with serial communication.
+     - After receieving data RX LED powered up.
+     - After sending data TX LED powered up.
+     - Pin number 0 and 1 used to communicate with other device, but when communicating with other device with this pin, you can't do multiple task with it.
+
+4. **Reset Button:**
+
+   - It restart the programs execution.
+
+5. **Memory:**
+
+   - Arduino have 32Kb flush memory and 2Kb RAM.
+   - When power is off, RAM clear it's space.
+   - Arduino have 1Kb EEPPROM to store data permanantly.
+
+6. **Fuse:**
+
+   - Arduino can't handle more than 500mA that's why arduino have 500mA fuse.
+
+7. **Voltage Regulator:**
+
+   - Arduino can't handle more than 5V.
+   - Arduino may accept upto 20V which is reduced at 5V.
+   - Arduino have 2 voltage regulator one reduce the voltage at 5V(beside the dc power supply) and another reduce at 3.3V
+
+8. **Crystal:**
+
+   - Arduino have a crystal of 16Mhz.
+   - It produce clock signal.
+   - Microcontroller can't perform their action without clock signal.
+
+9. **Microcontroller:**
+
+   Arduino have 2 micro controller.
+
+   - Atmega328p:
+
+     - It is the main micro controler.
+     - It is called DIP(dual inline packagin) due to organized pin in 2 row.
+     - It perform code uploading, decision making, input/output device controlling.
+
+   - ATMEGA16U2:
+     - It placed just behind the USB port.
+     - Arduino transfer data with serial communication.
+     - But code transform from computer via USB(universal serial bus).
+     - This micro controller convert the code into serial communication.
+
+## Pins
+
+| **Pin Type**                                      | **Description**                                 |
+| ------------------------------------------------- | ----------------------------------------------- |
+| **Digital (0-13)**                                | Used for input/output, PWM (3, 5, 6, 9, 10, 11) |
+| **Analog (A0-A5)**                                | Reads analog voltage (0-1023 range)             |
+| **Power (5V, 3.3V, GND)**                         | Provides power to external components           |
+| **PWM (~)**                                       | Simulates analog output using digital pulses    |
+| **I2C (A4 - SDA, A5 - SCL)**                      | Communicates with sensors/displays              |
+| **SPI (10 - SS, 11 - MOSI, 12 - MISO, 13 - SCK)** | Used for fast communication with modules        |
+
 # Arduino - Programming
 
 ## Sketch
@@ -1083,6 +1413,17 @@ String myString = "Hello, Arduino!";
 
 # Components
 
+## LED
+
+A Light Emitting Diode (LED) is a semiconductor device that emits light when an electric current passes through it. It is a unidirectional component, meaning it allows current to flow in one direction (from the anode to the cathode).
+
+- diod set the path(positive to negative) of electricity.
+
+### Controlling
+
+- `digitalWrite()` is used to control the led with digtal output.
+- `analogWrite()` is used to control the led with analog output(0-255).
+
 ## Breadboard
 
 The breadboard is a white rectangular board with small embedded holes to insert electronic components.
@@ -1211,9 +1552,32 @@ Infrared (IR) sensors are widely used for object detection, proximity sensing, a
 
 ### Types of IR Sensors
 
-- **\_IR Proximity Sensor**: Used for detecting nearby objects. Emits IR light and detects the reflected light.
-- **\_IR Receiver Module (e.g., TSOP1738)**: Decodes IR signals from a remote control.
-- **\_IR Transmitter and Receiver Pair**: Used in line-following robots or simple communication.
+- **IR Proximity Sensor**: Used for detecting nearby objects. Emits IR light and detects the reflected light.
+- **IR Receiver Module (e.g., TSOP1738)**: Decodes IR signals from a remote control.
+- **IR Transmitter and Receiver Pair**: Used in line-following robots or simple communication.
+
+**Passive IR Sensor:**
+
+- Only decode IR signal from objects, can't emit IR signal.
+
+**Active IR Sensor:**
+
+- Transmeter emit IR signal.
+- Receiever detect IR signal which build with photo diod/photo transister.
+- Transmeter only produce IR signal, but reciever recieves ir, uv, mw signal as well which is filtered at end.
+
+### Applications
+
+#### Object Detection
+
+- Emit IR signal.
+- Some signal absorb by the object, some are reflected.
+- Reflected signal recieve by reciver and object detected.
+
+#### Black-White
+
+- White color don't absorb any light.
+- Black color absorb all light.
 
 ### Structure
 
@@ -1228,6 +1592,9 @@ An IR proximity sensor typically has 3 pins:
 - Connect VCC to the ESP32's 3.3V (or 5V if supported by the sensor).
 - Connect GND to the ESP32's GND.
 - Connect the OUT pin to a GPIO pin (e.g., GPIO23).
+
+- accept digital value as HIGH/LOW.
+- accept analog value from 0 to 1023, lower value indicate white color, higher one indicate black.
 
 ### Controlling
 
@@ -1332,6 +1699,9 @@ void loop() {
 ## Potentiometer
 
 A potentiometer is a variable resistor that allows you to adjust resistance manually. It's commonly used to control voltage or signal levels, such as adjusting the brightness of LEDs, volume control, or analog inputs for microcontrollers.
+
+- Analog resolution of Arduino is 10 bit which produce data between 0-1023 range.
+- Analog resolution of ESP32 is 12 bit which produce data between 0-4095 range.
 
 ### Structure
 
@@ -1467,5 +1837,1166 @@ void loop() {
   }
 
   lastButtonState = buttonState; // Save the button state for next iteration
+}
+```
+
+## PIR Motion Sensor
+
+A PIR (Passive Infrared) motion sensor is an electronic device that detects movement by sensing infrared (IR) radiation emitted by objects in its field of view.
+
+### How it work
+
+1. **Infrared Detection:** All objects emit infrared radiation. Humans and animals, being warm-blooded, emit more infrared energy than non-living objects.
+
+2. **Pyroelectric Sensor:** The PIR sensor contains a pyroelectric sensor, which detects changes in infrared radiation.
+
+3. **Fresnel Lens:** The sensor is covered by a Fresnel lens that helps focus infrared signals onto the pyroelectric sensor.
+
+4. **Dual Sensing Elements:** Most PIR sensors have two sensing elements. When a moving object crosses both elements, the sensor detects a change and triggers an output signal.
+
+5. **Signal Processing:** The PIR sensor processes the signal and sends a HIGH signal to the microcontroller or circuit to indicate motion detection.
+
+### Structure
+
+A PIR sensor typically has three pins:
+
+1. **VCC:** Power supply (usually 5V or 3.3V).
+2. **GND:** Ground connection.
+3. **OUT:** Digital output signal (HIGH when motion is detected, LOW when no motion is detected).
+
+### Hardware Setup
+
+1. **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+2. **GND:** Connect to the ESP32's `GND`.
+3. **OUT:** Connect to an ESP32 GPIO pin (e.g., GPIO15).
+
+### Adjustable Components
+
+Most PIR sensors come with two potentiometers:
+
+- **Sensitivity Adjustment:** Adjusts the detection range.
+- **Time Delay Adjustment:** Controls how long the output signal remains HIGH after motion is detected.
+
+### Controlling
+
+```cpp
+#define PIR_PIN 15
+
+void setup() {
+  pinMode(PIR_PIN, INPUT);
+  Serial.begin(115200);
+}
+
+void loop() {
+  int motion = digitalRead(PIR_PIN);
+
+  if(motion == HIGH) {
+    Serial.println("Motion Detected!");
+  }
+}
+```
+
+## LCD Display
+
+An LCD (Liquid Crystal Display) is an electronic display module used to display text, numbers, and custom characters.
+
+One of the most commonly used LCD modules is the 16x2 LCD, which:
+
+- Has 16 columns and 2 rows for text.
+- Uses the Hitachi HD44780 controller.
+- Can operate in 4-bit or 8-bit mode.
+- Requires an I2C module to reduce the number of GPIO connections.
+
+### Types of LCD Displays
+
+1. **Parallel LCD (16x2, 20x4, etc.):** Requires 6+ GPIO pins (RS, EN, D4-D7, etc.).
+2. **I2C LCD (16x2, 20x4, etc.):** Uses only 2 pins (SDA & SCL), making it ideal for ESP32.
+
+### Structure
+
+A 16x2 LCD has 16 pins:
+
+| Pin   | Name  | Description                                            |
+| ----- | ----- | ------------------------------------------------------ |
+| 1     | VSS   | Ground                                                 |
+| 2     | VCC   | Power Supply (5V)                                      |
+| 3     | V0    | Contrast Adjust (via potentiometer)                    |
+| 4     | RS    | Register Select (Command/Data)                         |
+| 5     | RW    | Read/Write (Usually GND for write-only)                |
+| 6     | EN    | Enable (Triggers LCD to read data)                     |
+| 7-10  | D0-D3 | Data Lines (Used in 8-bit mode, ignored in 4-bit mode) |
+| 11-14 | D4-D7 | Data Lines (Used in 4-bit or 8-bit mode)               |
+| 15    | LED+  | Backlight Power (5V)                                   |
+| 16    | LED-  | Backlight Ground (GND)                                 |
+
+### Hardware Setup
+
+We use the 4-bit mode (fewer GPIOs needed) to interface the LCD with ESP32.
+
+| LCD Pin | ESP32 Pin                                                         |
+| ------- | ----------------------------------------------------------------- |
+| VSS     | GND                                                               |
+| VCC     | 5V                                                                |
+| V0      | Middle pin of a 10KΩ potentiometer (other two pins to 5V and GND) |
+| RS      | GPIO 4                                                            |
+| RW      | GND                                                               |
+| EN      | GPIO 5                                                            |
+| D4      | GPIO 18                                                           |
+| D5      | GPIO 19                                                           |
+| D6      | GPIO 21                                                           |
+| D7      | GPIO 22                                                           |
+| LED+    | 5V                                                                |
+| LED-    | GND                                                               |
+
+**Note:** The RW pin is grounded because we only need to write to the LCD.
+
+### Controlling
+
+**Install the LiquidCrystal library**
+
+```cpp
+#include <LiquidCrystal.h>
+
+#define RS 4
+#define EN 5
+#define D4 18
+#define D5 19
+#define D6 21
+#define D7 22
+
+LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
+
+void setup() {
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("Hello, ESP32!");
+
+  lcd.setCursor(0, 1);
+  lcd.print("Parallel LCD");
+}
+
+void loop() {
+  int motion = digitalRead(PIR_PIN);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  if(motion == HIGH) {
+    lcd.print("Motion Detected");
+  }else{
+    lcd.print("No Motion Found")
+  }
+}
+```
+
+- `lcd.setCursor(0,0);` → Moves cursor to row 0, column 0.
+
+## I2C LCD Display
+
+An I2C LCD is a character LCD that uses the I2C (Inter-Integrated Circuit) communication protocol instead of parallel communication. This significantly reduces the number of GPIO pins required to interface the LCD with microcontrollers like the ESP32.
+
+### Structure
+
+I2C LCDs have a small PCF8574 I2C adapter soldered on the back. This adapter allows the LCD to communicate using the I2C bus, reducing the number of required GPIOs.
+
+1. **VCC:** Power supply (usually 5V or 3.3V).
+2. **GND:** Ground connection.
+3. **SDA:** Data Line.
+4. **SCL:** Clock Line.
+
+### Hardware Setup
+
+1. **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+2. **GND:** Connect to the ESP32's `GND`.
+3. **SDA:** Connect to ESP32 GPIO 21
+4. **SCL:** Connect to ESP32 GPIO 22
+
+### Controlling
+
+**Install the LiquidCrystal library**
+
+```cpp
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+#define I2C_ADDR 0x27
+#define LCD_COLUMNS 16
+#define LCD_ROWS 2
+
+LiquidCrystal_I2C lcd(I2C_ADDR, LCD_COLUMNS, LCD_ROWS);
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+
+  lcd.setCursor(0, 0);
+  lcd.print("Hello, ESP32!");
+
+  lcd.setCursor(0, 1);
+  lcd.print("I2C LCD Display");
+}
+
+void loop() {
+
+}
+
+```
+
+- `lcd.init();` → Initializes the LCD.
+- `lcd.backlight();` → Turns on the LCD backlight.
+
+## Seven Segment Display
+
+A Seven Segment Display (SSD) is an electronic display device used to display numerical data. It consists of seven LED segments (a–g) and an optional dot segment (dp), arranged in the shape of the number "8." By selectively turning on or off these segments, we can display numbers and some letters.
+
+### Types
+
+Types of Seven Segment Displays
+
+- **Common Anode (CA)** – All anode pins are connected together and need LOW (0V) to turn ON segments.
+- **Common Cathode (CC)** – All cathode pins are connected together and need HIGH (3.3V/5V) to turn ON segments.
+
+### Structure
+
+A single-digit 7-segment display typically has 10 pins:
+
+- 7 segment control pins: `a, b, c, d, e, f, g`
+- 1 dot control pin: `dp` (decimal point)
+- 2 common pins: `COM` (common anode or common cathode)
+
+### Hardware Setup
+
+- **a:** Connect to ESP32 GPIO 18
+- **b:** Connect to ESP32 GPIO 5
+- **c:** Connect to ESP32 GPIO 4
+- **d:** Connect to ESP32 GPIO 2
+- **e:** Connect to ESP32 GPIO 15
+- **f:** Connect to ESP32 GPIO 19
+- **g:** Connect to ESP32 GPIO 21
+- **dp:** Not Used
+- **COM:** Connect to the ESP32's `GND`.
+
+NOTE: Since each segment is an LED, resistors (220Ω - 1KΩ) should be used in series with each segment to limit the current.
+
+### Controlling
+
+```cpp
+const int a = 18;
+const int b = 5;
+const int c = 4;
+const int d = 2;
+const int e = 15;
+const int f = 19;
+const int g = 21;
+
+// Array to hold segment values for numbers 0-9
+const int numbers[10][7] = {
+  {1, 1, 1, 1, 1, 1, 0}, // 0
+  {0, 1, 1, 0, 0, 0, 0}, // 1
+  {1, 1, 0, 1, 1, 0, 1}, // 2
+  {1, 1, 1, 1, 0, 0, 1}, // 3
+  {0, 1, 1, 0, 0, 1, 1}, // 4
+  {1, 0, 1, 1, 0, 1, 1}, // 5
+  {1, 0, 1, 1, 1, 1, 1}, // 6
+  {1, 1, 1, 0, 0, 0, 0}, // 7
+  {1, 1, 1, 1, 1, 1, 1}, // 8
+  {1, 1, 1, 1, 0, 1, 1}  // 9
+};
+
+const int segmentPins[7] = {a, b, c, d, e, f, g};
+
+void setup() {
+  for (int i = 0; i < 7; i++) {
+    pinMode(segmentPins[i], OUTPUT);
+  }
+}
+
+void displayNumber(int num) {
+  for (int i = 0; i < 7; i++) {
+    digitalWrite(segmentPins[i], numbers[num][i]);
+  }
+}
+
+void loop() {
+  for (int num = 0; num < 10; num++) {
+    displayNumber(num);
+    delay(1000);
+  }
+}
+```
+
+## DHT11 Humidity and Temperature Sensor
+
+The DHT11 is a low-cost digital humidity and temperature sensor used in weather monitoring. It provides temperature (°C) and humidity (%) readings using a single data pin.
+
+**DHT11 Features**
+
+- **Temperature Range:** 0°C to 50°C (±2°C accuracy)
+- **Humidity Range:** 20% to 90% (±5% accuracy)
+- **Operating Voltage:** 3.3V - 5V
+- **Output Signal:** Digital (Single-wire communication)
+- **Sampling Rate:** 1Hz (one reading per second)
+
+**DHT11 vs. DHT22**
+
+| Feature             | DHT11    | DHT22 (AM2302) |
+| ------------------- | -------- | -------------- |
+| Temperature Range   | 0 - 50°C | -40 to 80°C    |
+| Humidity Range      | 20 - 90% | 0 - 100%       |
+| Accuracy (Temp)     | ±2°C     | ±0.5°C         |
+| Accuracy (Humidity) | ±5%      | ±2%            |
+| Price               | Cheaper  | More Expensive |
+
+### Structure
+
+1. **VCC:** Power Supply.
+2. **GND:** Ground Connection.
+3. **DATA:** Digital Output.
+4. **NC:** Not Connected.
+
+### Hardware Setup
+
+1. **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+2. **GND:** Connect to the ESP32's `GND`.
+3. **DATA:** Connect to an ESP32 GPIO pin (e.g., GPIO4).
+4. **NC:** Not Connected
+
+**Note:** A 10KΩ pull-up resistor is recommended between VCC and DATA for stable readings.
+
+### Controlling
+
+**Install the DHT sensor library (by Adafruit)**
+
+```cpp
+#include <DHT.h>
+
+#define DHTPIN 4
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+}
+
+void loop() {
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  if (isnan(temperature) || isnan(humidity)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.println("°C");
+
+  Serial.print("Humidity: ");
+  Serial.print(humidity);
+  Serial.println("%");
+
+  delay(2000);
+}
+```
+
+## LDR sensor
+
+An LDR (Light Dependent Resistor) sensor, also known as a photoresistor, is a light-sensitive device that changes its resistance based on the amount of light falling on it. The resistance of an LDR decreases when the light intensity increases and increases when the light intensity decreases.
+
+### How it work
+
+- When light intensity increases, LDR resistance decreases, and the voltage at the analog pin increases.
+- When light intensity decreases, LDR resistance increases, and the voltage at the analog pin decreases.
+
+### Structure
+
+LDR sensor alone cannot generate a voltage signal, it is usually used in a voltage divider circuit with a fixed resistor.
+
+Create a voltage divider using an LDR and a fixed resistor (typically 10kΩ). The voltage at the junction of the LDR and the resistor is read by an analog pin of the ESP32.
+
+### Hardware Setup
+
+1. **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+2. **GND:** Connect to the ESP32's `GND`.
+3. **OUTPUT:** Connect to an ESP32 GPIO pin (e.g., GPI34) + One end of `10kΩ` resistor.
+
+### Controlling
+
+```cpp
+#define LDR_PIN 34
+
+void setup() {
+    Serial.begin(115200);
+}
+
+void loop() {
+    int ldrValue = analogRead(LDR_PIN);
+    Serial.print("LDR Value: ");
+    Serial.println(ldrValue);
+
+    delay(500);
+}
+```
+
+**Interpreting the LDR Readings**
+
+- High Value (~4095 on ESP32 ADC 12-bit resolution) → Bright light.
+- Low Value (~0-1000) → Low light or darkness.
+
+## Soil Moisture
+
+A soil moisture sensor measures the water content in the soil to determine if a plant needs watering.
+
+### Types
+
+There are two main types of soil moisture sensors:
+
+1. **Resistive Soil Moisture Sensor (Analog)**
+
+- Uses two metal probes to measure electrical resistance in the soil.
+- More moisture → Less resistance → Higher analog value.
+- Dry soil → More resistance → Lower analog value.
+- Issue: Metal probes corrode over time.
+
+2. **Capacitive Soil Moisture Sensor (Recommended)**
+
+- Measures capacitance rather than resistance, providing more stable and accurate readings.
+- Does not corrode, making it more durable for long-term use
+
+### Structure
+
+- **VCC**: Connects to the power supply (3.3V or 5V).
+- **GND**: Connects to the ground.
+- **A0(Analog Output):** Reads soil moisture.
+
+### Hardware Setup
+
+- **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+- **GND:** Connect to the ESP32's `GND`.
+- **A0:** Connect to ESP32 GPIO 34
+
+### Controlling
+
+```cpp
+#define SOIL_MOISTURE_PIN 34
+
+void setup() {
+    Serial.begin(115200);
+}
+
+void loop() {
+    int moistureValue = analogRead(SOIL_MOISTURE_PIN);
+    Serial.print("Soil Moisture Value: ");
+    Serial.println(moistureValue);
+
+    delay(1000);
+}
+```
+
+### Interpreting the Readings
+
+| Moisture Level | Analog Value (0-4095) | Soil Condition    |
+| -------------- | --------------------- | ----------------- |
+| **Dry**        | 0 - 1500              | Needs watering 🌵 |
+| **Moist**      | 1500 - 2500           | Good condition 🌿 |
+| **Wet**        | 2500 - 4095           | Too much water 🚰 |
+
+**Tip:** Place the sensor vertically in the soil for better readings.
+
+## MQ-5 Gas Sensor
+
+The MQ-5 is a gas sensor that detects LPG (Liquefied Petroleum Gas), natural gas, and town gas.
+
+- Detects LPG, methane (CH₄), and natural gas.
+- Provides both analog and digital outputs.
+- Heating time: 20 seconds for stable readings.
+
+**How it work:**
+
+The MQ-5 sensor contains a metal-oxide (SnO₂) sensing layer that reacts with gases in the air. When a target gas is present, the sensor's resistance changes, altering its output voltage.
+
+- More gas → Lower resistance → Higher output voltage.
+- Less gas → Higher resistance → Lower output voltage.
+
+### Structure
+
+- **VCC**: Connects to the power supply (3.3V or 5V).
+- **GND**: Connects to the ground.
+- **A0(Analog Output):** Reads gas concentration.
+- **D0(Digital Output):** Detects gas level(HIGH/LOW).
+
+Note: The analog pin (A0) provides a variable reading based on gas concentration, while the digital pin (D0) gives a HIGH or LOW signal when the gas exceeds a threshold.
+
+### Hardware Setup
+
+- **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+- **GND:** Connect to the ESP32's `GND`.
+- **A0:** Connect to ESP32 GPIO 34
+- **D0:** Connect to ESP32 GPIO 26
+
+### Controlling
+
+```cpp
+#define MQ5_PIN 34
+
+void setup() {
+    Serial.begin(115200);
+}
+
+void loop() {
+    int gasValue = analogRead(MQ5_PIN);
+    Serial.print("Gas Sensor Value: ");
+    Serial.println(gasValue);
+
+    delay(1000);
+}
+```
+
+## BMP180 Sensor
+
+The BMP180 is a digital barometric pressure sensor that can measure atmospheric pressure and temperature.
+
+### Characterstics
+
+- Measures pressure (300 hPa to 1100 hPa) with high accuracy.
+- Measures temperature (0°C to 65°C).
+- Uses I2C or SPI communication.
+- Low power consumption (3.3V or 5V compatible).
+
+### Structure
+
+- **VCC**: Connects to the power supply (3.3V or 5V).
+- **GND**: Connects to the ground.
+- **SDA:**
+- **SCL:**
+
+### Harware Setup
+
+To connect the BMP180 to the ESP32, we will use the I2C communication protocol.
+
+- **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+- **GND:** Connect to the ESP32's `GND`.
+- **SDA:** Connect to ESP32 GPIO 21
+- **SCL:** Connect to ESP32 GPIO 22
+
+### Controlling
+
+Install the **Adafruit BMP085** library (BMP180 is an improved version of BMP085).
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BMP085.h>
+
+Adafruit_BMP085 bmp;
+
+void setup() {
+    Serial.begin(115200);
+
+    if (!bmp.begin()) {
+        Serial.println("Could not find BMP180 sensor. Check connections!");
+        while (1);
+    }
+    Serial.println("BMP180 sensor initialized successfully.");
+}
+
+void loop() {
+    float temperature = bmp.readTemperature();
+
+    int32_t pressure = bmp.readPressure();
+
+    float altitude = bmp.readAltitude(101325);
+
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.println(" °C");
+
+    Serial.print("Pressure: ");
+    Serial.print(pressure);
+    Serial.println(" Pa");
+
+    Serial.print("Altitude: ");
+    Serial.print(altitude);
+    Serial.println(" meters");
+
+    Serial.println("----------------------");
+
+    delay(2000);
+}
+```
+
+## DC Motor
+
+A DC motor (Direct Current motor) is an electromechanical device that converts electrical energy into mechanical energy using direct current. It operates on the principle of electromagnetic induction, where a current-carrying conductor placed in a magnetic field experiences a force, causing rotation.
+
+**Components**
+
+- Permanent Magnet(fixed).
+- Electro Magnet(surrounded by magnet).
+
+**How works:**
+
+- Electricity supplies in the Electro Magnet and create a magnetic field
+- Magnetic field attracts toward Permanent magnet and make a rotation
+- Higher rate of electricity make strong attraction which create high rotation.
+
+### Note
+
+- Never supply power from arduino/esp32 to dc motor, you may sacrifice the board
+- Motor driver must be used with arduino/esp32 to control motor.
+
+## Motor Driver
+
+A motor driver is an electronic circuit that allows a microcontroller (like the ESP32) to control high-power motors. Since microcontrollers operate at low voltage (3.3V or 5V) and provide limited current, they cannot directly power motors, which often require higher voltage and current. A motor driver acts as an interface between the microcontroller and the motors, allowing safe and efficient operation.
+
+Motor shields usually include:
+
+- **H-bridge** circuits for controlling motor direction
+- **PWM** (Pulse Width Modulation) control for speed regulation
+
+`L298N Motor Driver` is a dual chanel H-bridge(1) mootor driver which can control 2 dc motor
+
+### Components
+
+- Heat sink above L298N chip.
+- Power Supply(`VS` and `GND`).
+- `+5V` is used to supply power from motor driver.
+- `5V Jumper`:
+  - It make 7805 chip active.
+  - It produce 5V from scrue terminal.
+  - Remove it if the power supply is above 12V.
+
+**Never supply power to `+5V` and `VS` at a time.**
+
+### Structurue
+
+- **IN1, IN2** - Control Rotation Direction of Motor A
+- **IN3, IN4** - Control Rotation Direction of Motor B
+- **EN_A** - PWM speed control for Motor A
+- **EN_B** - PWM speed control for Motor B
+
+Making `EN_A`, `EN_B` low will pause the motor.
+
+### Hardware Setup
+
+- **IN1** - GPIO 18
+- **IN2** - GPIO 19
+- **IN3** - GPIO 21
+- **IN4** - GPIO 22
+- **EN_A** - GPIO 5 (PWM)
+- **EN_B** - GPIO 23 (PWM)
+- **GND** - GND
+
+### Controlling
+
+```cpp
+#define IN1 18
+#define IN2 19
+#define IN3 21
+#define IN4 22
+#define EN_A 5
+#define EN_B 23
+
+void setup() {
+    pinMode(IN1, OUTPUT);
+    pinMode(IN2, OUTPUT);
+    pinMode(IN3, OUTPUT);
+    pinMode(IN4, OUTPUT);
+    pinMode(EN_A, OUTPUT);
+    pinMode(EN_B, OUTPUT);
+
+    // TURN OFF MOTORS - INITIAL STATE
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
+}
+
+void loop() {
+  directionControl();
+  delay(1000);
+  speedControl();
+  delay();
+}
+
+// CONTROL SPINNING DIRECTION OF MOTOR
+void directionControl(){
+  // set motors to maximum speed
+  // for PWM maximum possible values are 0 to 255
+  analogWrite(EN_A, 255)
+  analogWrite(EN_B, 255)
+
+  // turn on motor A & B
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+  delay(2000);
+
+  // change motor direction
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+
+  // turn off motor
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+
+}
+
+// control speed to lowest to highest
+void speedControl(){
+  // ...
+}
+```
+
+## Motor Shield
+
+The Adafruit Motor Shield V1 is an expansion board designed to control DC motors and stepper motors with an Arduino. It is based on the L293D motor driver IC, which allows it to control up to 4 DC motors or 2 stepper motors while also providing speed and direction control.
+
+### Characterstics
+
+- Controls up to 4 DC motors or 2 stepper motors.
+- Can run 2 servo motors using dedicated servo headers.
+- Uses the L293D H-Bridge(2) driver chips for controlling motors.
+- Each L293D motor driver can supply 600mA per motor with 1.2A peak current and controll 2 dc motor and a stepper motor.
+- Has thermal shutdown and internal diodes for motor protection.
+- Powered from external power source (up to 25V) or from Arduino’s Vin.
+
+### Structurue
+
+- **DC Motor:** Connect two wires to M1, M2, M3, or M4 terminals.
+- **Stepper Motor:** Connect four wires to M1 & M2 or M3 & M4.
+- **Servo Motor:** Plug into the servo headers.
+- **Power Supply:** Connect with +M and GND.
+- **Reset Button:** Reset Arduino/ESP32.
+
+**Note:** Relase the jumper from PWR pin before supplying power from external source. Enough power turn on the green LED on the shield.
+
+### Power Supply
+
+Power can be supply in two way:
+
+1. **Together:**
+
+   - Jumper must not compromise.
+   - Power supplies from arduino and LED will blink.
+   - If motor requires more than 12V, NEVER do it, you may compromise the board and sheild both.
+
+2. **Separatly:**
+   - Eject the jumper first.
+   - Supply power with +M and GND to Sheild.
+   - Supply power with USB or external source to Board.
+
+`NEVER supply power in both arduino and motor sheild`
+
+### Hardware Setup
+
+**Arduino:** - Don't need to configure it, just place the board on the arduino.
+
+**ESP32:** - Adafruit Motor Sheild is compatible with Arduino-based boards. - ESP32 does not natively support this library because it uses a different architecture.
+
+**Pin Mapping Between ESP32 and L293D (Motor Shield)**
+
+| Motor Shield Pin | Function            | ESP32 Pin |
+| ---------------- | ------------------- | --------- |
+| **Motor A**      |                     |           |
+| M1 (A-IN1)       | Direction 1         | GPIO 18   |
+| M2 (A-IN2)       | Direction 2         | GPIO 19   |
+| PWM (A-EN)       | Speed Control (PWM) | GPIO 5    |
+| **Motor B**      |                     |           |
+| M3 (B-IN1)       | Direction 1         | GPIO 21   |
+| M4 (B-IN2)       | Direction 2         | GPIO 22   |
+| PWM (B-EN)       | Speed Control (PWM) | GPIO 23   |
+
+### Controlling
+
+Install **Adafruit** Library.
+
+**DC Motor:**
+
+```cpp
+#include <AFMotor.h>  // Include Adafruit Motor Shield library
+
+AF_DCMotor motor(1);  // Create motor object for M1
+// AF_DCMotor motor(2);  // Create motor object for M2
+// AF_DCMotor motor(3);  // Create motor object for M3
+// AF_DCMotor motor(4);  // Create motor object for M4
+
+void setup() {
+  Serial.begin(9600);
+  motor.setSpeed(150);  // Set speed (0-255)
+}
+
+void loop() {
+  Serial.println("Moving Forward");
+  motor.run(FORWARD);
+  delay(2000);
+
+  Serial.println("Moving Backward");
+  motor.run(BACKWARD);
+  delay(2000);
+
+  Serial.println("Stopping");
+  motor.run(RELEASE);
+  delay(2000);
+}
+```
+
+**Stepper Motor:**
+
+```cpp
+#include <AFMotor.h>
+
+AF_Stepper motor(200, 1);  // 200 steps per revolution, connected to M1 & M2
+
+void setup() {
+  Serial.begin(9600);
+  motor.setSpeed(10);  // Set speed in RPM
+}
+
+void loop() {
+  Serial.println("Moving forward 100 steps");
+  motor.step(100, FORWARD, SINGLE);
+  delay(1000);
+
+  Serial.println("Moving backward 100 steps");
+  motor.step(100, BACKWARD, SINGLE);
+  delay(1000);
+}
+```
+
+**Servo Motor:**
+
+```cpp
+#include <Servo.h>
+
+Servo myServo;  // Create servo object
+
+void setup() {
+  myServo.attach(10);  // Attach to pin 10
+}
+
+void loop() {
+  myServo.write(0);   // Move to 0 degrees
+  delay(1000);
+
+  myServo.write(90);  // Move to 90 degrees
+  delay(1000);
+
+  myServo.write(180); // Move to 180 degrees
+  delay(1000);
+}
+```
+
+## HC-05 Bluetooth
+
+The HC-05 Bluetooth module is a commonly used wireless communication module that allows devices to communicate over Bluetooth serial communication (UART - Universal Asynchronous Receiver-Transmitter).
+
+- Build serial communication with arduino.
+- Arduino and ESP32 bot uses `RX` and `TX` for transfer and recieve data.
+
+While uploading code to the board, keep `RX` and `TX` free from any connection. Code comes from computer with serial communication and reciever channel busy to recieve the code. After uploading the code keep it alive again.
+
+### Characterstics
+
+- Supports Bluetooth 2.0 with SPP (Serial Port Protocol).
+- Can operate in Master or Slave mode.
+- Operates on 3.3V logic levels but can tolerate 5V on VCC.
+- Communicates via UART (TX/RX pins) at default 9600 baud rate.
+- Has an AT command mode to configure settings like device name, password, role (Master/Slave), etc.
+- Works at a range of 10 meters (approx.) and at a speed of 1Mbps.
+- In data mode baud rate is 9600 and in command mode baud rate is 38400.
+- If it require password use 1234 or 0000
+- Bluetooth module receieve command as `ASCII character`.
+
+### Structure
+
+It have 6 pin and 2 LED.
+
+- **VCC:** Power supply (3.6V - 6V)
+- **GND:** Ground
+- **TXD:** Transmit Data (connects to RX of ESP32)
+- **RXD:** Receive Data (connects to TX of ESP32 via voltage divider if needed)
+- **EN (Enable):** Enables module when HIGH
+- **State:** Indicates connection status
+- **LED:**
+  - Lights up in every 2 seconds - Command Mode.
+  - Keep lighting - Waiting to connect with data mode.
+  - Lighting up after few seconds - Data Mode.
+- **Key/Mode:** Used for entering AT command mode
+  - Bluetooth can work in 2 mode - data & command.
+  - In data mode, we send command/data from mobile.
+  - In command mode, we send command/data from serial mointor.
+  - HIGH mode indicates command mode, LOWER mode indicates data mode.
+
+### Hardware Setup
+
+- **VCC:** 3.3V
+- **GND:** GND
+- **TXD:** RX (GPIO16)
+- **RXD:** TX (GPIO17) (Use voltage divider if needed)
+- **EN:** 3.3V (Optional)
+- **Key:** Not needed unless using AT mode
+
+**Important:** HC-05 operates at 3.3V logic level, but it tolerates 5V on VCC. However, the RX pin on HC-05 expects 3.3V, so use a voltage divider (1kΩ & 2kΩ) to step down the ESP32 TX signal.
+
+### Controlling
+
+**Arduino Code:**
+
+```cpp
+#include <SoftwareSerial.h>
+
+SoftwareSerial BTSerial(10, 11); // RX, TX
+
+void setup() {
+    Serial.begin(9600);        // Serial Monitor baud rate
+    BTSerial.begin(9600);      // HC-05 Bluetooth baud rate
+
+    Serial.println("HC-05 Bluetooth Module Ready!");
+}
+
+void loop() {
+    // Send data from Serial Monitor to HC-05
+    if (Serial.available()) {
+        char data = Serial.read();
+        BTSerial.write(data);   // Send to Bluetooth
+    }
+
+    // Receive data from HC-05 and print on Serial Monitor
+    if (BTSerial.available()) {
+        char receivedData = BTSerial.read();
+        Serial.write(receivedData); // Print received data
+    }
+}
+```
+
+**Mobile App:**
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.bluetoothapp">
+
+    <!-- Permissions for Bluetooth -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:theme="@style/Theme.BluetoothApp">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect to HC-05" />
+
+    <EditText
+        android:id="@+id/editMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter message" />
+
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send" />
+
+    <TextView
+        android:id="@+id/textReceived"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Received: "
+        android:textSize="18sp"
+        android:padding="10dp"/>
+</LinearLayout>
+```
+
+```java
+package com.example.bluetoothapp;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Set;
+import java.util.UUID;
+
+public class MainActivity extends AppCompatActivity {
+
+    private BluetoothAdapter bluetoothAdapter;
+    private BluetoothSocket bluetoothSocket;
+    private OutputStream outputStream;
+    private InputStream inputStream;
+    private BluetoothDevice hc05Device;
+
+    private Button btnConnect, btnSend;
+    private EditText editMessage;
+    private TextView textReceived;
+
+    private final String HC05_ADDRESS = "98:D3:61:F5:76:8B";  // Replace with your HC-05 MAC address
+    private final UUID HC05_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnConnect = findViewById(R.id.btnConnect);
+        btnSend = findViewById(R.id.btnSend);
+        editMessage = findViewById(R.id.editMessage);
+        textReceived = findViewById(R.id.textReceived);
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connectToHC05();
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
+
+    }
+
+    private void connectToHC05() {
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth not supported", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Toast.makeText(this, "Enable Bluetooth first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Find HC-05 in paired devices
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        for (BluetoothDevice device : pairedDevices) {
+            if (device.getName().equals("HC-05") || device.getAddress().equals(HC05_ADDRESS)) {
+                hc05Device = device;
+                break;
+            }
+        }
+
+        if (hc05Device == null) {
+            Toast.makeText(this, "HC-05 not found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            bluetoothSocket = hc05Device.createRfcommSocketToServiceRecord(HC05_UUID);
+            bluetoothSocket.connect();
+            outputStream = bluetoothSocket.getOutputStream();
+            inputStream = bluetoothSocket.getInputStream();
+
+            Toast.makeText(this, "Connected to HC-05", Toast.LENGTH_SHORT).show();
+
+            // Start a thread to listen for incoming data
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    receiveData();
+                }
+            }).start();
+
+        } catch (IOException e) {
+            Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sendMessage() {
+        if (bluetoothSocket == null || !bluetoothSocket.isConnected()) {
+            Toast.makeText(this, "Not connected to HC-05", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String message = editMessage.getText().toString();
+        if (!message.isEmpty()) {
+            try {
+                outputStream.write(message.getBytes());
+                Toast.makeText(this, "Message Sent", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                Toast.makeText(this, "Failed to send", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void receiveData() {
+        byte[] buffer = new byte[1024];
+        int bytes;
+        while (true) {
+            try {
+                bytes = inputStream.read(buffer);
+                final String receivedMessage = new String(buffer, 0, bytes);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textReceived.setText("Received: " + receivedMessage);
+                    }
+                });
+
+            } catch (IOException e) {
+                break;
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (bluetoothSocket != null) {
+                bluetoothSocket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 ```
