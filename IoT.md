@@ -28,11 +28,12 @@
   - [LDR Sensor\*](#ldr-sensor)
   - [Soil Moisture\*](#soil-moisture)
   - [MQ-5 Gas Sensor\*](#mq-5-gas-sensor)
-  - [BMP180 Sensor*](#bmp180-sensor)
+  - [BMP180 Sensor\*](#bmp180-sensor)
   - [DC Motor](#dc-motor)
   - [Motor Driver](#motor-driver)
   - [Motor Shield\*](#motor-shield)
-  - [HC-05 Bluetooth*](#hc-05-bluetooth)
+  - [HC-05 Bluetooth\*](#hc-05-bluetooth)
+  - [Relay Module\*](#relay-module)
 
 # Introduction
 
@@ -2998,5 +2999,73 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+}
+```
+
+## Relay Module
+
+A relay module is an electronic switching device that uses an electromagnet to mechanically switch electrical circuits. It allows low-power devices (like microcontrollers) to control high-voltage appliances such as lights, fans, and motors.
+
+**Types of Relay Modules**
+
+- Single-channel relay module (controls one device)
+- Two-channel relay module (controls two devices)
+- Four-channel relay module (controls four devices)
+- Eight-channel relay module (controls eight devices)
+
+### Working principle
+
+A relay consists of:
+
+1. **Electromagnet (Coil)** – When voltage is applied to the coil, it creates a magnetic field.
+2. **Common (COM) Terminal** – The moving contact that switches between Normally Open (NO) and Normally Closed (NC) terminals.
+3. **Normally Open (NO) Terminal** – A terminal that remains disconnected from COM when the relay is off.
+4. **Normally Closed (NC) Terminal** – A terminal that is connected to COM when the relay is off.
+5. **Switching Mechanism** – When the coil is energized, the COM contact moves from NC to NO.
+
+### Components
+
+1. **Electromagnetic Relay** – The main switching component.
+2. **Optocoupler (Isolation Circuit)** – Provides electrical isolation between the control circuit and the relay.
+3. **Transistor** – Acts as a switch to activate the relay coil.
+4. **Flyback Diode** – Protects against voltage spikes generated when the relay is turned off.
+5. **Resistors & Capacitors** – Used for proper circuit operation.
+6. **LED Indicators** – Shows relay status (ON/OFF).
+7. **Screw Terminals** – Used to connect external devices like AC loads.
+8. **Input Pins (VCC, GND, IN)** – To interface with microcontrollers like Arduino or ESP32.
+
+### Structure
+
+- **VCC:** - Power Supply.
+- **GND:** - Ground.
+- **IN:** - Control Signal.
+
+### Hardware Setup
+
+- **VCC:** - Connect with 5V power supply.
+- **GND:** - Connect with GND.
+- **IN:** - Connect to an ESP32 GPIO pin (e.g., GPIO23).
+
+**AC Load Connection**
+
+- **COM (Common)** – Connected to one terminal of the AC load.
+- **NO (Normally Open)** – Connected to the AC power supply.
+- **NC (Normally Closed)** – Usually not used unless needed for normally ON circuits.
+
+### Controlling
+
+```cpp
+int relayPin = 7;  // Define relay pin
+
+void setup() {
+    pinMode(relayPin, OUTPUT);  // Set relay pin as an output
+}
+
+void loop() {
+    digitalWrite(relayPin, HIGH);  // Turn ON the relay (AC device ON)
+    delay(5000);  // Keep it ON for 5 seconds
+
+    digitalWrite(relayPin, LOW);   // Turn OFF the relay (AC device OFF)
+    delay(5000);  // Keep it OFF for 5 seconds
 }
 ```
