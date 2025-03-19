@@ -81,6 +81,9 @@ XML used in android development primarily for defining the user interface (UI) l
 - [AppBarLayout](#appbarlayout)
 - [Logging](#logging)
 - [Database](#database)
+  - [Shared Preferences](#sharedpreferences)
+  - [File Storage](#file-storage)
+- [JSON Parsing](#json-parsing)
 - [Retrofit](#retrofit)
 - [Google Map](#google-map)
 
@@ -2146,7 +2149,22 @@ editor.remove("key");
 editor.apply();
 ```
 
-## Internal Storage - File
+## File Storage
+
+File storage in Android is used to save and retrieve data in the form of files. Android provides two main storage options:
+
+1. **Internal Storage** – Private to the app, stored in app-specific directories, and inaccessible to other apps.
+2. **External Storage** – Accessible to other apps and users but requires permissions.
+
+### Internal Storage
+
+Internal storage is private to the application, meaning other apps cannot access its files. When the app is uninstalled, all stored files are deleted.
+
+**When to Use Internal Storage?**
+
+- Saving app-specific files (e.g., logs, config files, private images)
+- Storing sensitive user data (since files are not accessible to other apps)
+- Data should not be shared outside the app
 
 Use internal storage to store private data within the device's internal memory.
 
@@ -2173,6 +2191,184 @@ while ((line = bufferedReader.readLine()) != null) {
     sb.append(line);
 }
 String fileContents = sb.toString();
+```
+
+### External Storage
+
+External storage is accessible by the user and other apps. It is suitable for storing large files such as images, videos, and documents.
+
+**Permissions Required**
+
+Unlike internal storage, external storage requires runtime permissions
+
+```java
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
+
+**Request Runtime Permissions**
+
+```java
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE = 100;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        } else {
+            writeToFile("Hello, External Storage!");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                writeToFile("Hello, External Storage!");
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}
+```
+
+**Writing Data to External Storage:**
+
+```java
+import android.os.Environment;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class ExternalStorageHelper {
+    private static final String FILE_NAME = "example.txt";
+
+    public static void writeToExternalStorage(String data) {
+        if (isExternalStorageWritable()) {
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), FILE_NAME);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                fos.write(data.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean isExternalStorageWritable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+}
+```
+
+**Reading Data from External Storage:**
+
+```java
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class ExternalStorageHelper {
+    private static final String FILE_NAME = "example.txt";
+
+    public static String readFromExternalStorage() {
+        StringBuilder stringBuilder = new StringBuilder();
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), FILE_NAME);
+        try (FileInputStream fis = new FileInputStream(file)) {
+            int ch;
+            while ((ch = fis.read()) != -1) {
+                stringBuilder.append((char) ch);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+}
+```
+
+**Use in Activity:**
+
+```java
+ExternalStorageHelper.writeToExternalStorage("Hello, External Storage!");
+String data = ExternalStorageHelper.readFromExternalStorage();
+Log.d("ExternalStorage", "Read Data: " + data);
+```
+
+# JSON Parsing
+
+## Step 1: Add Moshi DependencyStep 1: Add Moshi Dependency
+
+```js
+dependencies {
+    implementation 'com.squareup.moshi:moshi:1.12.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.12.0'
+}
+```
+
+## Step 2: Create Model Class
+
+```java
+import com.squareup.moshi.Json;
+
+public class Post {
+    @Json(name = "userId")
+    private int userId;
+
+    @Json(name = "id")
+    private int id;
+
+    @Json(name = "title")
+    private String title;
+
+    @Json(name = "body")
+    private String body;
+
+    // Getters
+}
+```
+
+## Step 3: Parse JSON String Using Moshi
+
+```java
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
+public class MoshiExample {
+    public static void main(String[] args) {
+        // Sample JSON String
+        String jsonString = "{ \"userId\": 1, \"id\": 101, \"title\": \"Learn JSON Parsing\", \"body\": \"Moshi example.\" }";
+
+        // Moshi Instance
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<Post> jsonAdapter = moshi.adapter(Post.class);
+
+        // Convert JSON to Java Object
+        try {
+            Post post = jsonAdapter.fromJson(jsonString);
+            System.out.println("Title: " + post.getTitle());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
 ```
 
 # Retrofit
