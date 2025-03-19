@@ -65,6 +65,7 @@ XML used in android development primarily for defining the user interface (UI) l
   - [ChipGroup](#chipgroup)
   - [AutoCompleteTextView](#autocompletetextView)
   - [View](#view)
+- [App Lifecycle](#app-lifecycle)
 - [Themes](#themes)
 - [Styling](#styling)
 - [Eventlistener](#eventlistener)
@@ -1090,6 +1091,22 @@ Basic building block for user interface.
 
 It does not display any content on its own, it can be used as a placeholder, a separator, or a background element.
 
+# App Lifecycle
+
+The Android app lifecycle represents the different states an application can be in, based on user interaction and system behavior.
+
+## App Lifecycle States:
+
+1. **Foreground (Active)** → The app is visible and being used.
+2. **Background** → The app is running but not visible.
+3. **Killed** → The system terminates the app to free memory.
+
+## How the System Manages the App Lifecycle:
+
+- When a user launches an app, it moves from the background to the foreground.
+- If the user switches to another app, the current app moves to the background.
+- If the system needs memory, it may kill the app running in the background.
+
 # Styling
 
 ## Shape
@@ -1493,10 +1510,59 @@ protected void onDestroy(){
 
 # Intent
 
+In Android, Intents are used for communication between components such as activities, services, and broadcast receivers. There are two types of intents:
+
+1. **Explicit Intent** → Used to navigate to a specific component (e.g., opening another activity within the same app).
+2. **Implicit Intent** → Used to request an action from another app without specifying the exact component (e.g., opening a web page or sharing text).
+
+## Explicit Intent
+
 Intent class is used to navigate through activity. Intent class accept two parameter, first one is current activity, and another one is navigated activity.
 
 ```java
 Intent intent = new Intent(this, SecondActivity.class);
+startActivity(intent);
+```
+
+## Implicit Intent
+
+An Implicit Intent is used when you do not specify the exact component, but instead, request an action that can be handled by another app.
+
+**Open a Web Page:**
+
+```java
+Intent intent = new Intent(Intent.ACTION_VIEW);
+intent.setData(Uri.parse("https://www.google.com"));
+startActivity(intent);
+```
+
+This will open the browser to display Google.
+
+**Make a Phone Call:**
+
+```java
+Intent intent = new Intent(Intent.ACTION_DIAL);
+intent.setData(Uri.parse("tel:+123456789"));
+startActivity(intent);
+```
+
+This will open the dialer app with the number pre-filled.
+
+**Share Text:**
+
+```java
+Intent intent = new Intent(Intent.ACTION_SEND);
+intent.setType("text/plain");
+intent.putExtra(Intent.EXTRA_TEXT, "Check out this cool app!");
+startActivity(Intent.createChooser(intent, "Share via"));
+```
+
+This will show a chooser to share the text via apps like WhatsApp, Messages, etc.
+
+**Open Camera:**
+
+```java
+Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 startActivity(intent);
 ```
 
@@ -2686,4 +2752,3 @@ public boolean onCreateOptionsMenu(Menu menu) {
     return true;
 }
 ```
-
