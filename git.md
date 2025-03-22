@@ -10,6 +10,7 @@
   - [History](#history)
   - [Differences](#differences)
   - [Status](#status)
+- [Remote Repositories](#remote-repositories)
 - [`git` folder](#git-folder)
 - [Merge Conflict](#merge-conflict)
 
@@ -154,8 +155,11 @@ This allows you to control which changes are included in the next commit, giving
 A commit in Git is a snapshot of the current state of your project. The `git commit` command takes all staged changes (added using `git add`) and saves them permanently in the repository's history.
 
 Each commit has:
+
 ✅ A unique commit ID (SHA-1 hash).
+
 ✅ A commit message describing the changes.
+
 ✅ A reference to the previous commit, forming a history.
 
 ### Why Are Commits Important?
@@ -166,21 +170,29 @@ Each commit has:
 
 ### Commands
 
-- `git commit -m 'message here'` -> moving staging to local repository(message should be clear and understandable)
-- `git commit -am 'message here'` -> staging and commiting together
+- `git commit -m 'message here'` -> moving staging to local repository(message should be clear and understandable).
+- `git commit -am 'message here'` -> staging and commiting together.
+- `git reset --soft HEAD~1` -> undo the last commit but keep changes in staging area.
+- `git reset --mixed HEAD~1` -> undo the last commit but keep changes in working directory.
+- `git reset --hard HEAD~1` -> permanently deletes the last commit and all changes.
 
 ## History
+
+### `git log`
+
 Git provides commands like `git log` to navigate through the commit history.
 
 1. `git log` displays a list of commits in reverse chronogloical order(latest commit first)
 
 It shows:
+
 - **Commit hash** – A unique identifier (SHA-1 hash) for each commit.
 - **Author** – The person who made the commit.
 - **Date** – When the commit was created.
 - **Commit message** – A short description of the commit.
 
 **Example Output:**
+
 ```shell
 commit d6f9b1a2b6c3e9d0d46f15e5b2af324e54b8d214 (HEAD -> main)
 Author: John Doe <john@example.com>
@@ -194,38 +206,145 @@ Date:   Fri Feb 22 14:20:15 2025
 
     Initial commit: Added README
 ```
+
 2. `git log --online` -> return online-log
 
 **Example Output:**
+
 ```shell
 d6f9b1a Updated README file
 b1c3d9f Initial commit: Added README
 ```
+
 3. `git log -n` -> return latest n commit.
 4. `git log --author="John Doe"` -> return commits by a specific user.
 5. `git log --grep="bug fix"` -> search commit contain specific keyword.
 6. `git log -p` -> shows changes(diff) introduced by each commit.
 
 ## Differences
+
 The `git diff` command allows you to compare changes in your project.
 
 It helps identify differences between:
 
 ✅ Working directory and staging area
+
 ✅ Staged changes and last commit
+
 ✅ Two commits
+
 ✅ Two branches
 
 ## Status
 
-The git status command is used to check the state of the working directory and staging area. 
+The git status command is used to check the state of the working directory and staging area.
 
 It provides information about:
 
 ✅ Untracked files (new files not yet added to Git)
+
 ✅ Modified files (changes not yet staged)
+
 ✅ Staged files (ready to be committed)
+
 ✅ Branch information (current branch, ahead/behind status)
+
+# Remote Repositories
+
+## Remote Name
+
+A remote name likde `origin` is an alias for a remote repository's URL.
+
+Instead of typing the full remote URL every time, Git allows you to use a short name with easier reference.
+
+**Without a Remote Name**
+
+```shell
+git push https://github.com/user/repo.git main
+```
+
+**With a Remote Name**
+
+```shell
+git push origin main
+```
+
+## Remote Commands
+
+1. **List all remote repo of local repo:**
+
+```shell
+git remote -v
+```
+
+It return both fetch and push URLs.
+
+- **Fetch URL:** Used for pulling (downloading) changes from the remote repository.
+- **Push URL:** Used for pushing (uploading) changes to the remote repository.
+
+By default, both are the same, but they can be different. For example, in some workflows:
+
+- You might fetch from a read-only URL (like `git://` or SSH with limited access).
+- You might push to a different URL (like HTTPS with authentication).
+
+**Setting different URL:**
+
+- `--push` flag is used to set a different push URL from the fetch URL
+
+```shell
+git remote set-url --push origin git@github.com:user/repo.git
+```
+
+- the default url is fetch url
+
+```shell
+git remote set-url origin https://github.com/user/repo.git
+```
+
+2. `git remote add <name> <url>` - Add a new remote repository
+3. `git remote remove <name>` - Remove remote repository
+4. `git remote rename <old-name> <new-name>` - Rename remote repository
+5. `git remote show <name>` - Show information about remote repository
+6. `git remote set-url <name> <new-url>` - Change remote URL
+7. `git remote get-url <name>` - Verify the remote URL
+
+## `push` Commands
+
+It uploads your local commits to a remote repository. It syncs your local branch with a remote branch, allowing others to see and collaborate on your changes.
+
+### What Happens Under the Hood?
+
+When you push:
+
+1. Git checks your local commits.
+2. It sends the changes to the remote repository.
+3. If successful, the remote branch updates to match your local branch.
+
+If your remote branch has new commits, Git prevents you from pushing — you’ll need to pull and resolve conflicts first.
+
+## `fetch` Commands
+
+It downloads changes from the remote repository, but it doesn’t update your local working directory or current branch. It only updates your remote-tracking branches, allowing you to inspect the changes before integrating them.
+
+It is used to retrieve the latest changes from a remote repository without merging them into your local repository. It allows you to update your local copy with new branches, tags, and commits available on the remote without modifying your working directory.
+
+1. `git fetch` - fetch from default remote, download commit, branches, tags but does not merge them into current branch.
+2. `git fetch <remote>` - fetch from specified remote.
+3. `git fetch <remote> <branch>` - fetch from specified branch.
+4. `git fetch -all` - update all configured remote when a repo has multiple remotes
+5. `git fetch --dry-run` - Simulates fetching without actually downloading anything.
+6. `git fetch origin <commit-hash>` - Fetches a specific commit from the remote.
+
+## `pull` Commands
+
+It is used to fetch and merge changes from a remote repository into the current branch. It is essentially a combination of `git fetch` (downloads changes) and `git merge` (applies them to your branch).
+
+1. `git pull` - Fetches and merges changes from the default remote.
+2. `git pull <remote>` - Fetches and merges changes from specified remote.
+3. `git pull <remote> <branch>` - Pull form specified branch.
+4. `git pull --rebase` - Instead of merging changes, this command applies changes on top of your current branch, keeping the history clean.
+5. `git pull --no-commit` - Pulls changes but does not automatically create a merge commit.
+6. `git pull --no-merge` - Fetches updates but does not merge them automatically.
 
 # `.git` Folder
 
