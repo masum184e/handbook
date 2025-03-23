@@ -101,21 +101,21 @@ Working Directory => Staging Areay => Local Repository => Remote Repository
 
 1. **Setup user information:**
 
-```shell
-git config --global user.name "John Doe"
-git config --global user.email "john.doe@example.com"
-```
+   ```shell
+   git config --global user.name "John Doe"
+   git config --global user.email "john.doe@example.com"
+   ```
 
-- `user.name`: Your name (appears in commit history).
-- `user.email`: Your email (used for commit identification).
+   - `user.name`: Your name (appears in commit history).
+   - `user.email`: Your email (used for commit identification).
 
 2. **Check Configuration Settings**
 
-```shell
-git config --list
-```
+   ```shell
+   git config --list
+   ```
 
-Displays user details, editor preferences, merge tools, etc.
+   Displays user details, editor preferences, merge tools, etc.
 
 # Fundamentals
 
@@ -135,13 +135,13 @@ ls -a
 
 Output:
 
-```
+```shell
 . .. .git
 ```
 
 Reinitializing won’t overwrite existing version history. If the repository is already initialized, it will simply reinitialize Git settings.
 
-```
+```shell
 Reinitialized existing Git repository in /path/to/project/.git/
 ```
 
@@ -170,13 +170,11 @@ This allows you to control which changes are included in the next commit, giving
 
 A commit in Git is a snapshot of the current state of your project. The `git commit` command takes all staged changes (added using `git add`) and saves them permanently in the repository's history.
 
-Each commit has:
+**Each commit has:**
 
-✅ A unique commit ID (SHA-1 hash).
-
-✅ A commit message describing the changes.
-
-✅ A reference to the previous commit, forming a history.
+- A unique commit ID (SHA-1 hash).
+- A commit message describing the changes.
+- A reference to the previous commit, forming a history.
 
 ### Why Are Commits Important?
 
@@ -243,27 +241,122 @@ The `git diff` command allows you to compare changes in your project.
 
 It helps identify differences between:
 
-✅ Working directory and staging area
+- Working directory and staging area
+- Staged changes and last commit
+- Two commits
+- Two branches
 
-✅ Staged changes and last commit
+### Commands
 
-✅ Two commits
-
-✅ Two branches
+- `git diff` - show differences before `git add .`
+- `git diff --staged` - show differences after `git add .`
+- `git diff HEAD` - show differences both before and after `git add .`
+- `git diff <commit1> <commit2>` - Compare two specific commits
+- `git diff -- file.txt` - Show changes for a specific file
 
 ## Status
 
-The git status command is used to check the state of the working directory and staging area.
+The git status command is used to check the state of the working directory and staging area. It helps you understand which changes are tracked, untracked, or staged before committing them.
 
 It provides information about:
 
-✅ Untracked files (new files not yet added to Git)
+- Untracked files (new files not yet added to Git)
+- Modified files (changes not yet staged)
+- Staged files (ready to be committed)
+- Branch information (current branch, ahead/behind status)
 
-✅ Modified files (changes not yet staged)
+### States
 
-✅ Staged files (ready to be committed)
+1. Before `git init`
 
-✅ Branch information (current branch, ahead/behind status)
+   ```shell
+   fatal: not a git repository (or any of the parent directories): .git
+   ```
+
+2. After `git init` with empty file
+
+   ```shell
+   On branch master
+
+   No commits yet
+
+   nothing to commit (create/copy files and use "git add" to track)
+   ```
+
+3. After `git init` with untracked file
+
+   ```shell
+   On branch master
+
+   No commits yet
+
+   Untracked files:
+     (use "git add <file>..." to include in what will be committed)
+           index.html
+
+   nothing added to commit but untracked files present (use "git add" to track)
+   ```
+
+4. After `git add .`
+
+   ```shell
+   On branch master
+
+   No commits yet
+
+   Changes to be committed:
+     (use "git rm --cached <file>..." to unstage)
+           new file:   index.html
+   ```
+
+5. After `git commit -m"commit message"`
+
+   ```shell
+   On branch master
+   nothing to commit, working tree clean
+   ```
+
+6. After making another change after initialization
+
+   ```shell
+   On branch master
+   Changes not staged for commit:
+     (use "git add <file>..." to update what will be committed)
+     (use "git restore <file>..." to discard changes in working directory)
+           modified:   index.html
+
+   no changes added to commit (use "git add" and/or "git commit -a")
+   ```
+
+7. After tracked
+   ```shell
+   On branch master
+   Changes to be committed:
+     (use "git restore --staged <file>..." to unstage)
+           modified:   index.html
+   ```
+8. Create and Leave an Untracked File
+   ```shell
+   On branch main
+   Untracked files:
+     (use "git add <file>..." to include in what will be committed)
+   	newfile.txt
+   ```
+9. Removed a Tracked File
+   ```shell
+      On branch main
+   Changes not staged for commit:
+     (use "git add/rm <file>..." to update what will be committed)
+     (use "git restore <file>..." to discard changes)
+   	deleted:    hello.txt
+   ```
+   To stage the deletion run `git add hello.txt` or `git rm hello.txt`. Then check again:
+   ```
+      On branch main
+   Changes to be committed:
+   	deleted:    hello.txt
+   ```
+   Then commit the deletion
 
 # Branching
 
