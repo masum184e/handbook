@@ -192,6 +192,11 @@ A commit in Git is a snapshot of the current state of your project. The `git com
 
 ## History
 
+Git provides powerful tools to view the history of commits made to a repository. The most commonly used commands for this purpose are:
+
+- `git log`: Shows the commit history.
+- `git reflog`: Shows a reference log of changes to the branch's HEAD.
+
 ### `git log`
 
 Git provides commands like `git log` to navigate through the commit history.
@@ -234,6 +239,42 @@ b1c3d9f Initial commit: Added README
 4. `git log --author="John Doe"` -> return commits by a specific user.
 5. `git log --grep="bug fix"` -> search commit contain specific keyword.
 6. `git log -p` -> shows changes(diff) introduced by each commit.
+
+### `git reflog`
+
+Unlike `git log`, which shows the commit history, `git reflog` tracks local reference changes, including:
+
+- When a commit was made
+- When branches were switched
+- When commits were reset, rebased, or amended
+
+1. `git reflog` shows:
+   ```shell
+   e3a1b5c (HEAD -> main) HEAD@{0}: commit: Updated index.html with a welcome message
+   f3a29c1 HEAD@{1}: commit: Added index.html with a basic heading
+   d7e4f12 HEAD@{2}: checkout: moving from feature-branch to main
+   ```
+
+- `HEAD@{0}`: Most recent reference update (latest commit).
+- `HEAD@{1}`: Previous commit before the latest.
+- `checkout: moving from feature-branch to main:` Shows that the branch was switched.
+
+### Difference Between `git log` and `git reflog`
+
+| Feature                           | `git log` | `git reflog` |
+| --------------------------------- | --------- | ------------ |
+| Shows commit history              | ✅        | ✅           |
+| Shows branch movements (checkout) | ❌        | ✅           |
+| Shows reset/rebase history        | ❌        | ✅           |
+| Available only locally            | ❌        | ✅           |
+| Shows remote commits              | ✅        | ❌           |
+
+### Using `git log` and `git reflog` for Recovery
+
+If you accidentally reset or delete a commit, you can recover.
+
+1. View the reference log with `git reflog`. Suppose the lost commit hash was `e3a1b5c`.
+2. Reset to the lost commit with `git reset --hard e3a1b5c`. This restores the repository to the state of that commit.
 
 ## Differences
 
@@ -403,6 +444,92 @@ It combines the commit history of two branches and creates a new merge commit.
 3. `git merge --no-ff <branch-name>` - Forces Git to create a merge commit(No Fast-Forward) even if a fast-forward merge is possible. Preserves branch history.
 4. `git merge --commit <branch-name>` - Merges the branch and immediately creates a merge commit. This is the default behavior.
 5. `git merge --no-commit <branch-name>` - Merges changes but does not create a merge commit. Allows reviewing or modifying files before committing.
+
+### Fast-Forward Merge
+
+A Fast-Forward Merge happens when there is a linear commit history between branches. In this case, Git simply moves the branch pointer forward to the latest commit of the merged branch instead of creating a new merge commit.
+
+#### When Fast-Forward Merge Happens
+
+- The feature branch is ahead of the main branch.
+- No new commits were made on the main branch after branching.
+
+#### Example
+
+1. Just commited in main branch.
+2. Created new branch.
+3. Make some changes in new branch.
+4. Committed the changes.
+5. Merge main and new branch.
+
+Since `main` has not progressed after the branch was created, Git moves the `main` pointer to the latest commit of `new-branch`, effectively "fast-forwarding" it.
+
+**Output:**
+
+```shell
+Updating f3a29c1..e3a1b5c
+Fast-forward
+ file.txt | 1 +
+```
+
+**Fast-Forward Merge Visualization**
+
+```less
+Before Merge:
+main:    A --- B  (Feature Branch)
+         |
+         v
+        A  (Main Branch)
+
+After Merge:
+main:    A --- B  (Both Branches Point Here)
+```
+
+Since no new commits were added to `main`, it simply moves forward.
+
+### Recursive Merge
+
+A Recursive Merge happens when both branches have diverged, meaning there are commits on both branches that are not shared.
+
+#### When Recursive Merge Happens
+
+- Both branches have new commits since they diverged.
+- A new merge commit is created to combine the histories.
+
+#### Example
+
+1. Just commited in main branch.
+2. Created new branch.
+3. Make some changes in new branch.
+4. Switch back to main branch and make some changes as well.
+
+Now, both `main` and `new-branch` have unique commits.
+
+Since both branches have diverged, Git performs a recursive merge and creates a new merge commit.
+
+**Output:**
+
+```shell
+Merge made by the 'recursive' strategy.
+```
+
+**Recursive Merge Visualization**
+
+```shell
+Before Merge:
+main:    A --- C   (Main Branch)
+          \
+           B --- D (Feature Branch)
+
+After Merge:
+main:    A --- C --- M  (Merge Commit)
+          \       /
+           B --- D  (Feature Branch)
+```
+
+The merge commit `M` combines the histories.
+
+### Difference Between Fast-Forward and Recursive Merge
 
 # Remote Repositories
 
@@ -692,3 +819,18 @@ Here:
 
 - The HEAD section contains the changes in the current branch (`feature-b`).
 - The section after `=======` contains the incoming changes from the branch being merged (`feature-a`).
+
+Resolve the conflict, stage it and commit the merge.
+
+Before merging, you can check for potential conflicts using `git diff --check` and after a conflict occurs, you can list conflicted files using `git status`. It will output:
+
+```shell
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   file.txt
+```
+
+If you want to cancel the merge and return to the pre-merge state use `git merge --abort`.
