@@ -3,6 +3,7 @@
 - [Basics](#basics)
   - [Version Control](#version-control)
   - [Workflow](#workflow)
+  - [Configuration](#configuration)
 - [Fundamentals](#fundamentals)
   - [Initialization](#initialization)
   - [Staging](#staging)
@@ -10,7 +11,16 @@
   - [History](#history)
   - [Differences](#differences)
   - [Status](#status)
+- [Branching](#branching)
+  - [Branches](#branches)
+  - [Switching Branches](#switching-branches)
+  - [Merging Branches](#merging-branches)
 - [Remote Repositories](#remote-repositories)
+  - [Remote Name](#remote-name)
+  - [Remote Commands](#remote-commands)
+  - [`push` Commands](#push-commands)
+  - [`fetch` Commands](#fetch-commands)
+  - [`pull` Commands](#pull-commands)
 - [`git` folder](#git-folder)
 - [Merge Conflict](#merge-conflict)
 
@@ -69,18 +79,23 @@ Working Directory => Staging Areay => Local Repository => Remote Repository
 
 1. **System Level**
 
-- Applies to all users and repositories on the computer.
-- Stored in: `C:\Program Files\Git\etc\gitconfig` (Windows).
+   - Applies to all users and repositories on the computer.
+   - Stored in: `C:\Program Files\Git\etc\gitconfig` (Windows).
 
 2. **Global-level**
 
-- Applies to all repositories for the current user.
-- Stored in: `~/.gitconfig` or `~/.config/git/config`.
+   - Applies to all repositories for the current user.
+   - Stored in: `~/.gitconfig` or `~/.config/git/config`.
 
-3. Local-level
+3. **Local-level**
 
-- Specific to a single repository.
-- Stored in: `.git/config` inside the repository.
+   - Specific to a single repository.
+   - Stored in: `.git/config` inside the repository.
+
+**📌 Note:**
+
+- Local configurations override global configurations.
+- Global configurations override system configurations.
 
 ### Commands
 
@@ -149,6 +164,7 @@ This allows you to control which changes are included in the next commit, giving
 - `git add .` -> stage all changed file in directory but not subdirectories
 - `git add *.extension` -> stage all changed file in directory with specific extension
 - `git add **/*.extension` -> stage all changed file in directory and subdirectories with specific extension
+- `git restore --staged file_name` -> unstage file without losing your changes.
 
 ## Commits
 
@@ -249,6 +265,52 @@ It provides information about:
 
 ✅ Branch information (current branch, ahead/behind status)
 
+# Branching
+
+Branching in Git allows developers to create separate lines of development, making it easier to work on new features, bug fixes, or experiments without affecting the main codebase.
+
+## Branches
+
+### Commands
+
+1. `git branch` - show all local branches in the repository, current branch marked with and asterisk(`*`).
+2. `git branch -a` - Lists both local and remote branches.
+3. `git branch <branch-name>` - Creates a new branch but does not switch to it.
+4. `git branch -m <new-name>` - rename current branch.
+5. `git branch -m <old-name> <new-name>` - rename specific branch.
+6. `git branch -d <branch-name>` - Deletes a local branch (only if it has been merged). If the branch contains unmerged changes, Git will prevent deletion.
+7. `git branch -D <branch-name>` - Forcefully deletes a branch, even if it has unmerged changes.
+8. `git branch -v` - Displays the latest commit message for each branch.
+9. `git branch --merged` -
+10. `` - Lists branches that have already been merged into the current branch.
+11. `git branch --no-merged` - Lists branches that have not been merged yet.
+12. `git branch -r` - Lists remote branches.
+13. `git branch --show-current` - Check the current branch.
+
+## Switching Branches
+
+### Commands
+
+1. `git checkout <branch-name>` - Moves to the specified branch. Updates the working directory to match the branch's latest commit.
+2. `git checkout -b <new-branch>` - Creates a new branch and immediately switches to it.
+3. `git checkout <commit-hash>` - Moves to a previous commit in "detached HEAD" mode. This means you are not on any branch, just viewing an old commit.
+4. `git checkout <branch-name> -- <file-path>` - Restores a specific file from another branch without switching branches.
+5. `git checkout -- <file-path>` - Resets a file to its last committed state.
+6. `git checkout HEAD -- <file-path>` - Recovers a deleted file that was last committed.
+7. `git checkout HEAD .` - Resets all files in the working directory to the last committed version.
+
+## Merging Branches
+
+It combines the commit history of two branches and creates a new merge commit.
+
+### Commands
+
+1. `git merge <branch-name>` - Merges `<branch-name>` into the current branch. Creates a new commit combining changes from both branches.
+2. `git merge --ff <branch-name>` - If possible, Git moves the branch pointer forward without creating a merge commit(Fast-Forward Merge). Works only if there are no diverging commits.
+3. `git merge --no-ff <branch-name>` - Forces Git to create a merge commit(No Fast-Forward) even if a fast-forward merge is possible. Preserves branch history.
+4. `git merge --commit <branch-name>` - Merges the branch and immediately creates a merge commit. This is the default behavior.
+5. `git merge --no-commit <branch-name>` - Merges changes but does not create a merge commit. Allows reviewing or modifying files before committing.
+
 # Remote Repositories
 
 ## Remote Name
@@ -345,6 +407,20 @@ It is used to fetch and merge changes from a remote repository into the current 
 4. `git pull --rebase` - Instead of merging changes, this command applies changes on top of your current branch, keeping the history clean.
 5. `git pull --no-commit` - Pulls changes but does not automatically create a merge commit.
 6. `git pull --no-merge` - Fetches updates but does not merge them automatically.
+
+## `clone` Commands
+
+It create a copy of a remote repository on your local machine.
+
+When you clone a repository, Git performs the following actions:
+
+- Copies the entire repository (all branches, commits, history, etc.) from the remote server to your local machine.
+
+- Sets up the remote connection (origin by default) so you can fetch, push, and pull changes.
+
+1. `git clone <repository_url> <new_directory_name>` - Clone the repo into a specific directory.
+2. `git clone --branch <branch_name> <repository_url>` - Clone a specific branch.
+3. `git clone --depth 1 <repository_url>` - If you only need the latest version of the repository and not the full commit history.
 
 # `.git` Folder
 
