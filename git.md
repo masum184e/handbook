@@ -30,6 +30,7 @@
   - [Forking](#forking)
   - [Pull Request](#pull-request)
   - [Review PR](#review-pr)
+  - [Squashing commits](#squashing-commits)
 - [`git` folder](#git-folder)
 - [Merge Conflict](#merge-conflict)
 - [Stashing](#stashing)
@@ -748,6 +749,63 @@ A Pull Request (PR) is a way to propose changes to a repository. It allows devel
       - Merge commit (keeps all commits).
       - Squash and merge (combines commits into one).
       - Rebase and merge (applies commits individually).
+
+## Squashing commits
+
+Squashing commits means combining multiple commits into a single commit before merging a pull request (PR). This helps keep the commit history clean, making it easier to track changes and understand the project's development.
+
+### Why Squash Commits?
+
+1. **Clean Git History** – A single commit per PR keeps the history simple and easier to read.
+2. **Removes Unnecessary Commits** – Intermediate commits like "fixed typo" or "debugging" are removed.
+3. **Easier Reverts** – If something goes wrong, reverting a single commit is simpler than dealing with multiple commits.
+4. **Better Collaboration** – Other developers can easily review a single meaningful commit rather than a list of small commits.
+
+### How to work
+
+1. Explore the commit with `git log --oneline`
+   ```ts
+   abc1234 Fixed typo
+   def5678 Updated feature file
+   ghi9012 Initial commit for new feature
+   ```
+2. Squash Commits Using Interactive Rebase
+
+   Before merging the PR, squash commits using interactive rebase
+
+   ```ts
+   git rebase -i HEAD~3
+   ```
+
+   This opens an interactive editor with something like:
+
+   ```ts
+   pick ghi9012 Initial commit for new feature
+   pick def5678 Updated feature file
+   pick abc1234 Fixed typo
+   ```
+
+   Change `pick` to `squash (s)` for the second and third commits:
+
+   ```ts
+   pick ghi9012 Initial commit for new feature
+   squash def5678 Updated feature file
+   squash abc1234 Fixed typo
+   ```
+
+   Save and close the editor. Git will prompt you to edit the commit message. You can keep only the essential part, like:
+
+   ```ts
+   Added new feature with updates and typo fixes
+   ```
+
+3. Push the Squashed Commit
+
+   After squashing, force-push the changes:
+
+   ```ts
+   git push origin feature-branch --force
+   ```
 
 # `.git` Folder
 
