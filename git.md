@@ -21,8 +21,19 @@
   - [`push` Commands](#push-commands)
   - [`fetch` Commands](#fetch-commands)
   - [`pull` Commands](#pull-commands)
+  - [`clone` Commands](#clone-commands)
+- [Flags](#flags)
+  - [`-u`](#-u)
+  - [`-message`](#-message)
+  - [`-move`](#--move)
+- [Collaboration](#collaboration)
+  - [Forking](#forking)
+  - [Pull Request](#pull-request)
+  - [Review PR](#review-pr)
 - [`git` folder](#git-folder)
 - [Merge Conflict](#merge-conflict)
+- [Stashing](#stashing)
+- [Cleaning](#cleaning)
 
 # Basics
 
@@ -604,6 +615,14 @@ When you push:
 
 If your remote branch has new commits, Git prevents you from pushing — you’ll need to pull and resolve conflicts first.
 
+1. `git push` - Pushes the changes from the current branch to its corresponding upstream branch.
+2. `git push <remote> <branch>` - pushes the specified branch to the remote.
+3. `git push -u <remote> <branch>` - Pushes the branch and sets it as the upstream branch for future `git push` and `git pull` commands.
+4. `git push --force` - Forces Git to push changes, even if it overwrites changes on the remote repository.
+5. `git push --force-with-lease` - Similar to `--force`, but only forces the push if no one else has updated the remote branch since your last fetch. This prevents accidental overwriting of others' work.
+6. `git push --dry-run` - Simulate Push Without Making Changes. Useful for verification before executing a real push.
+7. `git push --delete <remote> <branch>` - Remove a remote branch
+
 ## `fetch` Commands
 
 It downloads changes from the remote repository, but it doesn’t update your local working directory or current branch. It only updates your remote-tracking branches, allowing you to inspect the changes before integrating them.
@@ -641,6 +660,94 @@ When you clone a repository, Git performs the following actions:
 1. `git clone <repository_url> <new_directory_name>` - Clone the repo into a specific directory.
 2. `git clone --branch <branch_name> <repository_url>` - Clone a specific branch.
 3. `git clone --depth 1 <repository_url>` - If you only need the latest version of the repository and not the full commit history.
+
+# Flags
+
+| Symbol | Meaning                                                                      |
+| ------ | ---------------------------------------------------------------------------- |
+| A      | Added → The file is newly added and staged for commit.                       |
+| M      | Modified → The file has been changed but not staged or committed.            |
+| D      | Deleted → The file has been removed but the change is not yet committed.     |
+| R      | Renamed → The file has been renamed.                                         |
+| C      | Copied → The file has been copied from another file.                         |
+| U      | Unmerged (Conflict) → The file has merge conflicts that need to be resolved. |
+| ??     | Untracked → The file is new and not tracked by Git.                          |
+
+## `-u`
+
+The `-u` flag (short for `--set-upstream`) is used with `git push` to set the upstream (tracking) branch for your local branch. This means that after using this flag once, you can simply run `git push` or `git pull` without specifying the remote and branch.
+
+If we don't use `-u`, we need to specify the branch whenever we want to push.
+
+## `-message`
+
+The `-m` flag (short for `--message`) is used with `git commit` to provide a commit message directly in the command. This avoids opening the default text editor for writing a commit message.
+
+**Multi-line commit message:**
+
+```shell
+git commit -m "Fixed the login issue" -m "Resolved bug where incorrect credentials were not handled properly."
+```
+
+If you run `git commit` without `-m`, Git will open your default text edittor to enter detailed commit message. `git commit <message>` will occur error.
+
+## `--move`
+
+- Renames a branch only if the new branch name does not already exist.
+- If the target branch name exists, the command fails with an error message.
+
+**`--move --force`**
+
+It's short form is `-M`
+
+- Renames a branch even if the new branch name already exists.
+- Forces the renaming by overwriting the existing branch.
+
+# Collaboration
+
+## Forking
+
+Forking a repository is creating a copy of another user's repository in your GitHub account. This is useful when you want to contribute to a project but don't have direct access to push changes.
+
+### Why Use Forking?
+
+- You can freely experiment with changes without affecting the original repository.
+- It allows contributors to work on a project without needing permission.
+- You can send pull requests to the original repository when your changes are ready.
+
+## Pull Request
+
+A Pull Request (PR) is a way to propose changes to a repository. It allows developers to collaborate, review, and discuss code changes before merging them into the main project.
+
+### Steps
+
+1. Fork the Repository.
+2. Clone the Forked Repository
+3. Add the original repository as an upstream remote (to fetch updates from the original repo)
+4. Create a New Branch
+5. Make Changes & Commit
+6. Push Changes to New Branch
+7. Visit your Forked Repository
+8. You'll see a message about your newly pushed branch. Click "Compare & pull request."
+9. Select the base branch (usually main or develop) and your feature branch.
+10. Provide a title and description of the changes.
+11. Click "Create pull request."
+
+## Review PR
+
+1. Navigate to the repository, click on the Pull Requests tab and select the PR you want to review.
+2. Read the title and description, under stand the purpose.
+3. Click on the File changed tab and examine the modifications.
+4. Approve or Request Changes
+   - If the code is good, click "Approve" and submit the review.
+   - If the code needs fixes, click "Request changes" and explain what should be improved.
+   - If unsure, click "Comment" to start a discussion.
+5. Merge the PR
+   1. Click "Merge pull request".
+   2. Choose between:
+      - Merge commit (keeps all commits).
+      - Squash and merge (combines commits into one).
+      - Rebase and merge (applies commits individually).
 
 # `.git` Folder
 
@@ -834,3 +941,53 @@ Unmerged paths:
 ```
 
 If you want to cancel the merge and return to the pre-merge state use `git merge --abort`.
+
+# Stashing
+
+When working on a Git repository, sometimes you might need to switch branches or pull updates, but you have uncommitted changes that you don’t want to commit yet. Instead of committing incomplete work, you can temporarily "stash" your changes using `git stash`.
+
+**Why Use git stash?**
+
+- You need to switch branches but don’t want to commit unfinished work.
+- You want to pull the latest changes without committing temporary edits.
+- You want to keep your working directory clean for testing or debugging.
+
+## Commands
+
+1. `git stash` - Stashing Your Changes with
+
+   Git temporarily saves (stashes) tracked changes and resets your working directory to match the last commit.
+
+   The file is not lost; it is stored in a `stash stack`.
+
+2. `git stash list` - Viewing Stashed Changes
+
+   - `stash@{0}`: The most recent stash.
+   - `WIP on main`: Stashed from the `main` branch.
+
+3. `git stash show -p stash@{0}` - see what changes were stashed.
+4. `git stash apply` - This reapplies the most recent stash but keeps the stash in the list.
+5. `git stash apply stash@{0}` - apply specific stash.
+6. `git stash pop` - remove the most recent stash.
+7. `git stash drop stash@{0}` - remove a specific stash.
+8. `git stash clear` - clear all stashed.
+
+# Cleaning
+
+When working in a Git repository, you may end up with untracked files (files that are not yet staged or committed). These can clutter your working directory, especially after switching branches or running builds that generate temporary files. Git provides the `git clean` command to remove untracked files and directories safely.
+
+**The `git clean` command is used to delete:**
+
+- Untracked files (files that are not staged or committed).
+- Untracked directories (if explicitly specified).
+- Ignored files (if explicitly specified).
+
+**⚠️ Warning:** git clean is irreversible. Once deleted, the files cannot be recovered unless backed up.
+
+## Commands
+
+1. `git clean -n` → Preview what will be deleted.
+2. `git clean -f` → Remove untracked files.
+3. `git clean -fd` → Remove untracked files and directories.
+4. `git clean -fX` → Remove only ignored files.
+5. `git clean -fx` → Remove everything untracked (including ignored files).
