@@ -13,6 +13,12 @@
   - [Reading Data](#reading-data)
   - [Writting Data](#writting-data)
   - [MySQL Database Connection](#mysql-database-connection)
+- [Data Manipulation](#data-manipulation)
+  - [Subsetting](#subsetting)
+- [Data Visualization](#data-visualization)
+  - [Plotting](#plotting)
+  - [Subplot](#subplot)
+  - [Saving Plots](#saving-plots)
 
 # Introduction
 
@@ -470,4 +476,145 @@ dbExecute(conn, delete_query)
 ```r
 # Disconnect from MySQL
 dbDisconnect(conn)
+```
+
+# Data Manipulation
+
+Subsetting data is a fundamental operation in data manipulation in R, allowing users to extract specific rows, columns, or elements from a dataset. This is useful when working with large datasets and only specific portions of the data are required for analysis.
+
+## Subsetting
+
+### Using Indexing (`[ ]`)
+
+Indexing is the most basic way to subset data in R. It can be done using row and column indices.
+
+```r
+# Creating a numeric vector
+vec <- c(10, 20, 30, 40, 50)
+
+# Subsetting using index positions
+vec[1]   # Extracts first element (10)
+vec[2:4] # Extracts elements from index 2 to 4 (20, 30, 40)
+vec[c(1, 3, 5)] # Extracts elements at positions 1, 3, and 5 (10, 30, 50)
+```
+
+### Subsetting Using Logical Conditions
+
+```r
+# Extracting rows where Score is greater than 85
+high_scores <- df[df$Score > 85, ]
+```
+
+### Using the `subset()` Function
+
+```r
+# Extracting rows where Score is greater than 85
+high_scores <- subset(df, Score > 85)
+
+# Extracting specific columns with condition
+high_scores_name <- subset(df, Score > 85, select = c(Name, Score))
+```
+
+### Using `dplyr` Package
+
+The `dplyr` package makes subsetting and filtering easier with functions like `filter()`, `select()`, and `slice()`.
+
+```r
+# Install and load dplyr package
+install.packages("dplyr")
+library(dplyr)
+
+# Filtering rows where Score > 85
+high_scores <- df %>% filter(Score > 85)
+
+# Selecting specific columns
+selected_data <- df %>% select(Name, Score)
+
+# Filtering and selecting in one step
+filtered_selected <- df %>% filter(Score > 85) %>% select(Name, Score)
+
+print(filtered_selected)
+```
+
+# Data Visualization
+
+## Plotting
+
+The `plot()` function is the most commonly used function in Base R for creating scatter plots, line plots, and other types of graphs.
+
+**Syntax:**
+
+```r
+plot(x, y, type = "p", col = "black", main = "Title", xlab = "X-axis", ylab = "Y-axis")
+```
+
+- `x`, `y` → Numeric vectors (data for the x-axis and y-axis).
+- `type` → `"p"` for points (scatter plot), `"l"` for lines, `"b"` for both.
+- `col` → Color of points or lines.
+- `main` → Title of the plot.
+- `xlab`, `ylab` → Labels for x and y axes.
+- `lwd` → Sets the line width for line plot.
+- `pch` → change point shape.
+- `grid` → adds a grid to the plot.
+
+### Bar Chart
+
+Used to visualize categorical data.
+
+```r
+# Sample data
+categories <- c("A", "B", "C", "D")
+values <- c(10, 20, 15, 25)
+
+# Bar chart
+barplot(values, names.arg = categories, col = "skyblue", main = "Bar Chart", ylab = "Values")
+```
+
+### Histogram
+
+Used to show the distribution of numerical data.
+
+```r
+# Generating random data
+data <- rnorm(100, mean = 50, sd = 10)  # 100 random values
+
+# Histogram
+hist(data, col = "orange", breaks = 10, main = "Histogram", xlab = "Values", border = "black")
+```
+
+### Boxplot
+
+Used for visualizing distributions and detecting outliers.
+
+```r
+# Generating random data
+set.seed(123)
+data1 <- rnorm(50, mean = 30, sd = 5)
+data2 <- rnorm(50, mean = 40, sd = 5)
+
+# Boxplot
+boxplot(data1, data2, names = c("Group 1", "Group 2"), col = c("red", "blue"), main = "Boxplot")
+```
+
+- `boxplot(data1, data2)` compares two groups.
+
+## Subplot
+
+```r
+# Setting up 2x2 plot layout
+par(mfrow = c(2, 2))
+
+# Four different plots
+plot(x, y, type = "p", main = "Scatter Plot")
+plot(x, y, type = "l", main = "Line Plot")
+barplot(values, names.arg = categories, col = "green", main = "Bar Chart")
+hist(data, col = "purple", main = "Histogram")
+```
+
+## Saving Plots
+
+```r
+png("myplot.png", width = 600, height = 400)  # Open a PNG file
+plot(x, y, main = "Saved Plot")
+dev.off()  # Close the file
 ```
