@@ -14,11 +14,17 @@
   - [Writting Data](#writting-data)
   - [MySQL Database Connection](#mysql-database-connection)
 - [Data Manipulation](#data-manipulation)
+  - [Inspecting](#inspecting)
   - [Subsetting](#subsetting)
+  - [Applying Functions](#applying-functions)
 - [Data Visualization](#data-visualization)
   - [Plotting](#plotting)
   - [Subplot](#subplot)
   - [Saving Plots](#saving-plots)
+  - [Advanced Visualization with `ggplot2`](#advanced-visualization-with-ggplot2)
+- [Programming](#programming)
+  - [Debugging](#debugging)
+  - [Error Handling](#error-handling)
 
 # Introduction
 
@@ -482,6 +488,36 @@ dbDisconnect(conn)
 
 Subsetting data is a fundamental operation in data manipulation in R, allowing users to extract specific rows, columns, or elements from a dataset. This is useful when working with large datasets and only specific portions of the data are required for analysis.
 
+## Inspecting
+
+| **Pandas Method**                        | **Equivalent R Method**                     | **Explanation**                                                                  |
+| ---------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------- |
+| `df.info()`                              | `str(df)`                                   | Provides a summary of the dataset including data types and sample values.        |
+| `df.head(n)`                             | `head(df, n)`                               | Returns the first `n` rows of the dataset.                                       |
+| `df.tail(n)`                             | `tail(df, n)`                               | Returns the last `n` rows of the dataset.                                        |
+| `df.shape`                               | `dim(df)`                                   | Returns a tuple with the number of rows and columns.                             |
+| `df.describe()`                          | `summary(df)`                               | Generates descriptive statistics such as min, max, mean, median, quartiles, etc. |
+| `df.columns`                             | `colnames(df)` or `names(df)`               | Returns column names of the dataframe.                                           |
+| `df.index`                               | `rownames(df)`                              | Returns row labels or index names.                                               |
+| `df.dtypes`                              | `sapply(df, class)` or `str(df)`            | Returns the data type of each column.                                            |
+| `df.isnull()`                            | `is.na(df)`                                 | Returns a boolean matrix indicating missing (`NA`) values.                       |
+| `df.notnull()`                           | `!is.na(df)`                                | Returns a boolean matrix indicating non-missing values.                          |
+| `df.sum()`                               | `colSums(df, na.rm=TRUE)`                   | Returns the sum of each column.                                                  |
+| `df.mean()`                              | `colMeans(df, na.rm=TRUE)`                  | Returns the mean of each column.                                                 |
+| `df.median()`                            | `apply(df, 2, median, na.rm=TRUE)`          | Returns the median of each column.                                               |
+| `df.std()`                               | `apply(df, 2, sd, na.rm=TRUE)`              | Returns the standard deviation of each column.                                   |
+| `df.min()`                               | `apply(df, 2, min, na.rm=TRUE)`             | Returns the minimum value for each column.                                       |
+| `df.max()`                               | `apply(df, 2, max, na.rm=TRUE)`             | Returns the maximum value for each column.                                       |
+| `df['column'].value_counts()`            | `table(df$column)`                          | Returns counts of unique values in a column.                                     |
+| `df.sample(n)`                           | `df[sample(nrow(df), n), ]`                 | Returns `n` random samples from the dataset.                                     |
+| `df.corr()`                              | `cor(df, use="complete.obs")`               | Computes correlation matrix of numerical columns.                                |
+| `df.nunique()`                           | `sapply(df, function(x) length(unique(x)))` | Returns the number of unique values per column.                                  |
+| `df['column'].str.upper()`               | `toupper(df$column)`                        | Converts string to uppercase.                                                    |
+| `df['column'].str.lower()`               | `tolower(df$column)`                        | Converts string to lowercase.                                                    |
+| `df['column'].str.len()`                 | `nchar(df$column)`                          | Returns the length of each string in a column.                                   |
+| `df['column'].str.replace('old', 'new')` | `gsub('old', 'new', df$column)`             | Replaces substrings in a column.                                                 |
+| `df['column'].str.contains('pattern')`   | `grepl('pattern', df$column)`               | Checks if a pattern exists in each row of the column.                            |
+
 ## Subsetting
 
 ### Using Indexing (`[ ]`)
@@ -535,6 +571,126 @@ filtered_selected <- df %>% filter(Score > 85) %>% select(Name, Score)
 
 print(filtered_selected)
 ```
+
+## Applying Functions
+
+In R, the `apply`, `lapply`, `sapply`, and `tapply` functions are commonly used for applying functions to data structures efficiently. They are part of the **apply family** and help perform operations on matrices, lists, and vectors without using explicit loops.
+
+### `apply()`
+
+The `apply()` function is used for applying a function to the rows or columns of a matrix or data frame.
+**Syntax:**
+
+```r
+apply(X, MARGIN, FUN, ...)
+```
+
+- `X`: The matrix or data frame.
+- `MARGIN`: 1 for rows, 2 for columns.
+- `FUN`: The function to be applied.
+
+```r
+1  2  3
+4  5  6
+7  8  9
+```
+
+- `1` - calculate the sum of each column c(12, 15, 18)
+- `2` - calculate the sum of each row c(6, 15, 24)
+
+### `lapply()`
+
+`lapply()` applies a function to each element of a list or vector and returns a list.
+**Syntax:**
+
+```r
+lapply(X, FUN, ...)
+```
+
+- `X`: The list or vector.
+- `FUN`: The function to be applied.
+
+```r
+my_list <- list(a = 1:5, b = 6:10, c = 11:15)
+```
+
+Calculate the sum for each vector, returning a list:
+
+```
+$a
+[1] 15
+
+$b
+[1] 40
+
+$c
+[1] 65
+```
+
+### `sapply()`
+
+`sapply()` is similar to `lapply()` but tries to return a vector or matrix instead of a list.
+
+```r
+sapply(X, FUN, ...)
+```
+
+Similar to `lapply()`, but `sapply()` simplifies the output into a named numeric vector:
+
+```r
+a  b  c
+15 40 65
+```
+
+### `tapply()`
+
+`tapply()` is used to apply a function to subsets of a vector grouped by a factor.
+
+```r
+tapply(X, INDEX, FUN, ...)
+```
+
+- `X`: The numeric vector.
+- `INDEX`: A factor or list of factors for grouping.
+- `FUN`: The function to apply.
+
+**Example:**
+
+```r
+# Creating a data frame
+df <- data.frame(
+  values = c(10, 20, 30, 40, 50, 60),
+  group = c("A", "B", "A", "B", "A", "B")
+)
+
+# Applying mean function by group
+result <- tapply(df$values, df$group, mean)
+print(result)
+```
+
+**Explaination:**
+Groups are `"A"` and `"B"`:
+
+```r
+A: (10, 30, 50)
+B: (20, 40, 60)
+```
+
+`tapply(df$values, df$group, mean)` calculates mean for each group:
+
+```r
+A  B
+30 40
+```
+
+### Summary
+
+| Function   | Input Type         | Output Type              | Use Case                                             |
+| ---------- | ------------------ | ------------------------ | ---------------------------------------------------- |
+| `apply()`  | Matrix, Data Frame | Vector, Matrix           | Apply function to rows/columns                       |
+| `lapply()` | List, Vector       | List                     | Apply function to each element                       |
+| `sapply()` | List, Vector       | Simplified Vector/Matrix | Similar to `lapply()`, but returns simplified output |
+| `tapply()` | Vector + Factor    | Vector (Grouped Result)  | Apply function by group                              |
 
 # Data Visualization
 
@@ -618,3 +774,188 @@ png("myplot.png", width = 600, height = 400)  # Open a PNG file
 plot(x, y, main = "Saved Plot")
 dev.off()  # Close the file
 ```
+
+## Advanced Visualization with `ggplot2`
+
+### Key Components of ggplot2
+
+- `Data (data)` – The dataset used for visualization.
+- `Aesthetics (aes())` – Defines how variables are mapped to graphical properties (e.g., x-axis, y-axis, color, size).
+- `Geometries (geom_*)` – Defines the type of plot (e.g., points, lines, bars).
+- `Facets (facet_*)` – Allows for multi-panel plots by splitting data.
+- `Scales (scale_*)` – Modifies how data is mapped (e.g., color gradients, axes).
+- `Themes (theme_*)` – Controls non-data elements like grid lines, titles, background, etc.
+
+### Example
+
+Scatter Plot with Regression Line:
+
+```r
+# Load necessary library
+library(ggplot2)
+
+# Load the mtcars dataset
+data(mtcars)
+
+# Create an advanced scatter plot
+ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl), size = hp)) +
+  geom_point(alpha = 0.7) +         # Scatter plot with transparency
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +  # Regression line
+  scale_color_manual(values = c("red", "blue", "green")) +  # Custom colors for cylinders
+  labs(title = "Car Weight vs. MPG",
+       subtitle = "Colored by Cylinder Count",
+       x = "Weight (1000 lbs)",
+       y = "Miles per Gallon (MPG)",
+       color = "Cylinders",
+       size = "Horsepower") +       # Custom labels
+  theme_minimal()                   # Use a clean theme
+```
+
+#### Explanation
+
+1. **Data Mapping (`aes()`)**
+
+- `x = wt` and `y = mpg`: Weight vs. Miles per Gallon.
+- `color = factor(cyl)`: Cylinder count used for color differentiation.
+- `size = hp`: Horsepower represented by point size.
+
+2. **Plot Elements**
+
+- `geom_point(alpha = 0.7)`: Creates a scatter plot with transparency.
+- `geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed")`: Adds a regression line without confidence intervals.
+
+3. **Customization**
+
+- `scale_color_manual(values = c("red", "blue", "green"))`: Assigns specific colors to cylinder categories.
+- `labs(...)`: Adds a title, subtitle, and axis labels.
+- `theme_minimal()`: Uses a clean and simple theme.
+
+### Faceted Plots
+
+If you want to split the plot into multiple panels based on a categorical variable:
+
+```r
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  facet_wrap(~cyl) +  # Separate plots for each cylinder category
+  theme_light()
+```
+
+This creates separate plots for different cylinder values.
+
+### Combining Multiple Geoms
+
+```r
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point(aes(color = factor(gear))) + # Points colored by gear count
+  geom_smooth(method = "loess", color = "blue") + # LOESS smooth curve
+  theme_classic()
+```
+
+This adds both points and a smooth LOESS curve to the plot.
+
+# Programming
+
+**`for` Loop:**
+
+```r
+for (i in 1:5) {
+    print(paste("Iteration:", i))
+}
+for (num in numbers) {
+    print(num)
+}
+```
+
+## Function
+
+**Syntax:**
+
+```r
+function_name <- function(){
+  # code here
+}
+```
+
+**Return Multiple Value:**
+
+```r
+calculate <- function(x, y) {
+    sum_val <- x + y
+    prod_val <- x * y
+    return(list(sum = sum_val, product = prod_val))
+}
+```
+
+## Debugging
+
+- `traceback()` helps find where an error occurred after execution fails.
+  ```r
+  square <- function(x) { return(x * x)}
+  square("hello")
+  traceback()
+  ```
+- `browser()` pauses execution and allows interactive debugging.
+  ```r
+  calculate <- function(x, y) {
+    sum_val <- x + y
+    browser()
+    prod_val <- x * y
+    return(list(sum = sum_val, product = prod_val))
+  }
+  ```
+- `debug()` enables step-by-step debugging of a function.
+
+  ```r
+  sample_function <- function(x) {
+    return(x^2 + 10)
+  }
+
+  # Enable debugging
+  debug(sample_function)
+
+  sample_function(4)
+
+  # Disable debugging
+  undebug(sample_function)
+  ```
+
+## Error Handling
+
+- `try()` allows execution to continue even if an error occurs.
+
+  ```r
+  result <- try(log("hello"))  # Invalid input
+
+  print("Execution continues...")  # This line runs even after the error
+
+  # Check if an error occurred
+  if (inherits(result, "try-error")) {
+      print("An error occurred, but execution continues.")
+  }
+  ```
+
+- `tryCatch()` allows handling different types of errors.
+  ```r
+  safe_divide <- function(a, b) {
+    result <- tryCatch(
+        {
+            a / b  # Attempt division
+        },
+        warning = function(w) {
+            print("Warning: Something went wrong!")
+            return(NA)
+        },
+        error = function(e) {
+            print("Error: Division by zero!")
+            return(NA)
+        },
+        finally = {
+            print("Execution completed.")
+        }
+    )
+    return(result)
+  }
+  # Call function
+  safe_divide(10, 0)
+  ```
