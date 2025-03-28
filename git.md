@@ -35,6 +35,9 @@
 - [Merge Conflict](#merge-conflict)
 - [Stashing](#stashing)
 - [Cleaning](#cleaning)
+- [Rebase](#rebase)
+- [Reset](#reset)
+- [Revert](#revert)
 
 # Basics
 
@@ -1049,3 +1052,216 @@ When working in a Git repository, you may end up with untracked files (files tha
 3. `git clean -fd` → Remove untracked files and directories.
 4. `git clean -fX` → Remove only ignored files.
 5. `git clean -fx` → Remove everything untracked (including ignored files).
+
+# Rebase
+
+Git rebase is a powerful command that allows you to integrate changes from one branch into another by moving or rewriting commit history. It is an alternative to `git merge`, but instead of creating a merge commit, it rewrites the commit history to keep it linear.
+
+## Why Use Git Rebase?
+
+- **Keeps commit history clean and linear:** Instead of multiple merge commits, rebase makes it appear as if all work happened sequentially.
+
+- **Avoids unnecessary merge commits:** It moves your feature branch commits on top of the latest commit from the main branch.
+
+- **Useful for integrating changes from remote branches:** Before pushing changes, rebasing ensures your branch is up-to-date.
+
+## Example
+
+Let's say you are working on a feature branch (`feature-branch`), and the `main` branch has received updates. Instead of merging, you decide to use rebase.
+
+```
+main:
+A --- B --- C    (main)
+
+feature-branch:
+       \
+        D --- E  (feature-branch)
+```
+
+- `A → B → C` are the commits in the `main` branch.
+- `D → E` are commits in the `feature-branch`, which was created from B.
+
+Now, suppose `main` has received new commits (`C`), and you want to update your `feature-branch` with these latest changes.
+
+1. Switch to `feature-branch`.
+2. Rebase your branch onto `main`: `git rebase main`
+   **What happens now:**
+
+- Git moves commits `D` and `E` aside.
+- It updates `feature-branch` with the latest changes from `main` (i.e., commits `C`).
+- Then, it reapplies `D` and `E` on top of `C`.
+
+3. **Handling Conflicts:**
+   If there are conflicts, Git will pause the rebase and show a message:
+   To resolve, manually fix the conflict in the affected files, use `git add` to stage teh resolved files. Continue the rebase:
+
+```
+git rebase --continue
+```
+
+4. Successfully Rebased History
+
+```
+main:
+A --- B --- C   (main)
+            \
+             D' --- E'  (feature-branch)
+```
+
+Now, `D` and `E` have been reapplied as `D'` and `E'` on top of `C`, keeping history linear.
+
+## Differences: Rebase vs Merge
+
+| Feature            | Merge                      | Rebase                                              |
+| ------------------ | -------------------------- | --------------------------------------------------- |
+| **Commit History** | Creates a merge commit     | Keeps history linear                                |
+| **Commit Order**   | Branches remain separate   | Commits appear as if they were created sequentially |
+| **Use Case**       | Preserves original history | Makes history cleaner                               |
+
+## Commands
+
+- `git rebase <branch>` – Rebase your current branch onto another branch.
+- `git rebase --interactive <commit> (-i)` – Start an interactive rebase for modifying commits.
+- `git rebase --continue` – Continue rebase after resolving conflicts.
+- `git rebase --abort` – Abort rebase and return to the original branch state.
+- `git rebase --skip` – Skip the current conflicting commit and continue rebase.
+- `git rebase --onto <new-base> <old-base> <branch>` – Rebase a branch onto a different base.
+- `git pull --rebase` – Fetch changes and rebase instead of merging.
+
+# Reset
+
+It is used to undo changes by moving the HEAD (current branch pointer) to a different commit. It allows you to remove commits, unstage changes, or discard modifications in the working directory.
+
+## Types
+
+| Reset Mode | Description                                                                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------- |
+| `--soft`   | Moves the branch pointer to a previous commit but keeps changes staged.                                     |
+| `--mixed`  | Moves the branch pointer to a previous commit and unstages changes but keeps them in the working directory. |
+| `--hard`   | Moves the branch pointer to a previous commit and discards all changes.                                     |
+
+## Commands
+
+- `git reset <commit>` – Moves the branch to a specific commit (default: mixed reset).
+- `git reset --soft <commit>` – Moves the branch to a commit, keeping changes staged.
+- `git reset --mixed <commit>` – Moves the branch to a commit, unstaging changes (default behavior).
+- `git reset --hard <commit>` – Moves the branch to a commit and deletes all changes.
+- `git reset HEAD <file>` – Unstages a file without changing its content.
+- `git reset --hard HEAD` – Discards all uncommitted changes.
+- `git reset --keep <commit>` – Like --hard but preserves uncommitted changes that do not conflict.
+- `git reset --merge` – Aborts a failed merge, similar to `git merge --abort`.
+
+## Comparison
+
+| Feature      | `git reset`                   | `git revert`                         |
+| ------------ | ----------------------------- | ------------------------------------ |
+| **History**  | Removes commits               | Creates a new commit to undo changes |
+| **Safety**   | Can be destructive (`--hard`) | Safe for shared branches             |
+| **Use Case** | Undo commits locally          | Undo commits in a public branch      |
+
+# Revert
+
+It is used to undo the changes introduced by a specific commit by creating a new commit that reverses those changes. Unlike `git reset`, which can alter commit history, `git revert` is safe for public repositories and works by adding a new commit that undoes the effect of an earlier commit, leaving the history intact.
+
+## Why Use git revert?
+
+- **Preserve history:** It doesn’t rewrite history, unlike git reset. Instead, it creates a new commit that effectively undoes previous changes.
+
+- **Safe for shared branches:** Since it doesn’t alter the commit history, it is useful when working on shared branches with others.
+
+- **Granular undoing:** You can undo specific commits in a branch without affecting others.
+
+## Example
+
+Let’s assume you have the following commit history in your `main` branch:
+
+```
+A --- B --- C --- D  (main)
+```
+
+Where:
+
+- `A → B → C → D` are commits in the history.
+- Commit `D` has a bug that you need to undo.
+
+Now, instead of resetting to `C` and rewriting history, you can revert commit `D` to create a new commit that undoes the changes in `D`.
+
+### Steps
+
+#### 1. Revert a Single Commit
+
+Suppose the commit hash of `D` is `abcd1234`. To revert the changes in commit `D`, you run:
+
+```bash
+git revert abcd1234
+```
+
+What happens now:
+
+- Git creates a new commit (`E`) that undoes the changes introduced by `D`.
+- Your new commit history will look like this:
+
+```
+A --- B --- C --- D --- E  (main)
+```
+
+Where:
+
+- `E` is the new commit that undoes the changes made in `D`.
+
+#### 2. Revert with Conflict Resolution
+
+Sometimes, reverting a commit can cause conflicts (e.g., if the changes in `D` conflict with the code in later commits). Git will prompt you to resolve the conflicts manually:
+
+1. Resolve the conflicts in the conflicted files.
+
+2. Stage the resolved files:
+
+```bash
+git add <file1> <file2>
+```
+
+3. Complete the revert process:
+
+```bash
+git add <file1> <file2>
+```
+
+#### 3. Revert Multiple Commits
+
+To revert multiple commits, you can use a range of commits. For example, if you want to revert commits `C` and `D`:
+
+```bash
+git revert C^..D
+```
+
+This will revert all changes from commit `C` through `D` inclusively.
+
+#### Revert and Skip Commit (if needed)
+
+If you don't want to revert a specific commit in the middle of a series of commits, you can use the `--skip` option:
+
+```bash
+git revert --skip
+```
+
+This will skip over a problematic commit during the revert process, leaving it unchanged.
+
+## Commands
+
+- `git revert <commit>` – Creates a new commit that undoes the changes from the specified commit.
+- `git revert HEAD` – Reverts the latest commit.
+- `git revert HEAD~n` – Reverts the commit that is n commits before the latest commit.
+- `git revert --no-commit <commit> (-n)` – Applies changes from the commit but does not create a new commit.
+- `git revert --no-edit <commit>` – Reverts a commit without opening the commit message editor.
+- `git revert --continue` – Continues the revert process after resolving conflicts.
+- `git revert --abort` – Aborts the revert operation if conflicts arise.
+- `git revert -m <parent-number> <merge-commit>` – Reverts a merge commit by specifying which parent to keep.
+
+## `git revert` VS `git reset`
+
+| Feature            | `git revert`                              | `git reset`                              |
+| ------------------ | ----------------------------------------- | ---------------------------------------- |
+| **History**        | Adds a new commit that undoes changes     | Removes commits or changes the history   |
+| **Commit History** | Leaves commit history unchanged           | Rewrites history (may require `--force`) |
+| **Use Case**       | Undo a commit safely (on public branches) | Undo recent commits locally              |
