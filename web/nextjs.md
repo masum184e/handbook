@@ -26,6 +26,9 @@
   - [When to use SSR](#when-to-use-ssr)
   - [Key Features of SSR](#key-features-of-ssr)
   - [Example](#example)
+- [How Helps in SEO](#how-helps-in-seo)
+  - [Rendering](#rendering)
+  - [Image Optimization](#image-optimization-1)
 
 # Introduction
 
@@ -872,3 +875,134 @@ const UserPage = ({ user }) => {
 
 export default UserPage;
 ```
+
+# Router
+
+## `pages` directory
+
+The `pages` directory plays a crucial role in defining the structure of the application. It follows a file-based routing system, where each file inside the pages directory automatically becomes a route in your application.
+
+### Routing
+
+- Each `.js`, `.jsx`, `.ts`, or `.tsx` file inside the `pages` directory represents a route.
+- The folder structure determines the URL path.
+- The `pages/api/` directory is special for API routes.
+
+**Example:**
+
+```
+/pages
+  ├── index.js           →  '/'
+  ├── about.js           →  '/about'
+  ├── contact.js         →  '/contact'
+  ├── blog
+  │   ├── index.js       →  '/blog'
+  │   ├── post.js        →  '/blog/post'
+  ├── api
+  │   ├── hello.js       →  '/api/hello'
+```
+
+### Special File
+
+1. **`_app.js` - Custom App Component:** Wraps all pages to maintain global styles, state, or layout.
+
+```jsx
+import "../styles/globals.css";
+
+export default function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+```
+
+2. **`_document.js` - Custom HTML Structure:** Used for modifying the <html> and <body> structure.
+
+```jsx
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function Document() {
+  return (
+    <Html>
+      <Head>
+        <meta name="description" content="My Next.js App" />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+```
+
+## `app` router
+
+With Next.js 13+, a new App Router was introduced, replacing the traditional `pages` directory with a more flexible and powerful routing system using the `app` directory. This new system is built on React Server Components (RSC) and introduces features like layouts, loading states, server actions, and streaming.
+
+### How Work
+
+- The `app` directory follows a folder-based routing system (like `pages/`).
+- Each folder inside `app/` represents a route, and a `page.js` (or `page.tsx`) file inside it is rendered as the page.
+- Supports Server Components by default (unlike `pages/` which defaults to Client Components).
+- Introduces layouts, loading, and error handling.
+
+#### Structure
+
+```
+/app
+  ├── layout.js        →  Root layout for all pages
+  ├── page.js          →  '/'
+  ├── about
+  │   ├── page.js      →  '/about'
+  ├── blog
+  │   ├── page.js      →  '/blog'
+  │   ├── [id]
+  │   │   ├── page.js  →  '/blog/:id' (Dynamic Route)
+  ├── loading.js       →  Loading state for all routes
+  ├── error.js         →  Error handling for all routes
+  ├── api
+  │   ├── route.js     →  API route at '/api'
+```
+
+### Features
+
+1. **File-Based Routing:** Each folder is a route, and `page.js` inside defines the actual page.
+2. **Layouts:** Layouts wrap multiple pages inside a route and persist across navigation.
+3. **Server Components:** Pages are server-rendered by default, but you can use `"use client"` to enable client-side behavior.
+4. **Streming & Suspense:** Next.js supports streaming and React Suspense for loading states and progressive rendering.
+5. **API Routes:** API routes now use `route.js` and support full HTTP methods.
+
+# Data Fetching
+
+## Pages Directory
+
+- Uses `getStaticProps`, `getServerSideProps`, and `getInitialProps` for data fetching.
+- Data fetching happens outside the component and is passed as props.
+- Supports Static Site Generation (SSG) and Server-Side Rendering (SSR).
+
+1. **SSG:** Fetching data at build time (fast, great for SEO).
+2. **SSR:** Fetching data on every request (dynamic data).
+3. **CSR:** Interactive pages that fetch data after the initial render.
+
+## App Directory
+
+- Uses React Server Components (RSC) by default.
+- Fetches data directly in components (no `getStaticProps` or `getServerSideProps`).
+- Supports streaming and Suspense for better performance.
+- Automatic caching and revalidation with `fetch()`.
+
+1. **Server Side Fetching:** Fetching data in Server Components (fast, no extra client-side requests).
+2. **Client Side Fetching:** When using React hooks
+
+# How Helps in SEO
+
+## Rendering
+
+In CSR content(html) is rendered on the browser, then javascript executes, then javascript render the component. Browser don't consider javascript for SEO, so during SEO browser have a empty html.
+
+While in next.js pre-renders pages on the server before sending them to the browser, this ensures search engine can easily index the page content.
+
+In CSR, data fetching response json, but in SSR data fetching response html.
+
+## Image Optimization
+
+Optimized images reduce page load time, improving user experience and SEO.
