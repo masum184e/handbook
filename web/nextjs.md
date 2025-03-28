@@ -11,7 +11,7 @@
 - [Image Optimization](#image-optimization)
 - [Rendering](#rendering)
   - [Client Side Rendering](#client-side-rendering)
-  - [Pre Side Rendering](#pre-rendering)
+  - [Pre Rendering](#pre-rendering)
 - [Client Side Rendering](#client-side-rendering)
   - [When to use](#when-to-use-csr-in-nextjs)
   - [How to use](#how-to-use-csr-in-nextjs)
@@ -20,6 +20,12 @@
   - [What is `getStaticProps`?](#what-is-getstaticprops)
   - [What is `getStaticPaths`?](#what-is-getstaticpaths)
   - [Incremental Static Regeneration](#incremental-static-regeneration)
+- [Server Side Rendering](#server-side-rendering)
+  - [What is `getServerSideProps`?](#what-is-getserversideprops)
+  - [How SSR Works](#how-ssr-works)
+  - [When to use SSR](#when-to-use-ssr)
+  - [Key Features of SSR](#key-features-of-ssr)
+  - [Example](#example)
 
 # Introduction
 
@@ -341,6 +347,11 @@ Server-Side Rendering (SSR) is a method where the server processes and renders t
 
 - Instead of sending an empty page, the server builds the page first and then sends the full HTML to the browser.
 - The page loads quickly because the browser doesn’t have to wait for JavaScript to fetch the data.
+
+Pre rendering can be done with:
+
+1. Static Side Generation
+2. Server Side Rendering
 
 ### Steps
 
@@ -754,3 +765,110 @@ ISR works with getStaticProps, using the revalidate option.
 3. After 10 seconds, another visitor requests `/posts/1`.
 4. Next.js fetches fresh data in the background and updates the page.
 5. All future requests get the new version of `/posts/1`.
+
+# Server Side Rendering
+
+Server-Side Rendering (SSR) in Next.js refers to the process where a webpage is pre-rendered on the server at request time. This means that every time a user requests a page, the server generates the HTML dynamically before sending it to the client. This helps improve performance, SEO, and ensures that data is always up-to-date.
+
+## What is `getServerSideProps`?
+
+Use `getServerSideProps` when data is frequently changing such news update, use `getStaticProps` when data is not frequently changing such showing details of a product, post etc. it store the data in the cache after very first render.
+
+## How SSR Works
+
+1. A request is made to the server.
+2. The server fetches the required data.
+3. The HTML is generated on the server with the fetched data.
+4. The fully rendered HTML is sent to the browser.
+5. The browser displays the content.
+
+## When to Use SSR
+
+- Pages that need real-time data (e.g., stock prices, news updates, user-specific content).
+- Content that changes frequently and cannot be cached effectively.
+- Personalization based on request parameters or authentication.
+
+## Key Features of SSR
+
+1. **Real-time Data Fetching** – Data is fetched at request time, ensuring fresh content for each request.
+2. **Improved SEO** – Since the page is rendered on the server, search engines can easily index the content.
+3. **Slower Initial Load** – SSR can be slower than static generation because it requires generating the page at every request.
+
+## Example
+
+```jsx
+// pages/users.js
+
+export async function getServerSideProps() {
+  // Fetch data from an API
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users = await response.json();
+
+  // Return data as props to be used in the component
+  return {
+    props: { users },
+  };
+}
+
+const UsersPage = ({ users }) => {
+  return (
+    <div>
+      <h1>Users List</h1>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            {user.name} - {user.email}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default UsersPage;
+```
+
+- `getServerSideProps` is a special function in Next.js that runs on the server before the page is delivered.
+- It fetches data at the time of the request and returns it as props.
+- The page is rendered with fresh data on every request.
+- it fetches data on each request.
+
+**Fetching Single User:**
+
+```jsx
+// pages/users/[id].js
+
+export async function getServerSideProps(context) {
+  const { id } = context.params; // Get the ID from the URL
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/users/${id}`
+  );
+  const user = await response.json();
+
+  return {
+    props: { user }, // Pass the fetched user as props
+  };
+}
+
+const UserPage = ({ user }) => {
+  return (
+    <div>
+      <h1>User Details</h1>
+      <p>
+        <strong>Name:</strong> {user.name}
+      </p>
+      <p>
+        <strong>Email:</strong> {user.email}
+      </p>
+      <p>
+        <strong>Phone:</strong> {user.phone}
+      </p>
+      <p>
+        <strong>Website:</strong> {user.website}
+      </p>
+    </div>
+  );
+};
+
+export default UserPage;
+```
