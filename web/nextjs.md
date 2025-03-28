@@ -1,9 +1,25 @@
 # Contents
 
 - [Introduction](#introduction)
+  - [Key Features](#key-features)
+  - [Why Use Next.js](#why-use-nextjs)
+  - [Comparison](#comparison)
 - [Project Structure](#project-structure)
-- []()
-- []()
+  - [Top-level Folders](#top-level-folders)
+  - [Top-level Files](#top-level-files)
+  - [Routing Files](#routing-files)
+- [Image Optimization](#image-optimization)
+- [Rendering](#rendering)
+  - [Client Side Rendering](#client-side-rendering)
+  - [Pre Side Rendering](#pre-rendering)
+- [Client Side Rendering](#client-side-rendering)
+  - [When to use](#when-to-use-csr-in-nextjs)
+  - [How to use](#how-to-use-csr-in-nextjs)
+  - [Combination](#combination)
+- [Static Site Generation](#static-site-generation)
+  - [What is `getStaticProps`?](#what-is-getstaticprops)
+  - [What is `getStaticPaths`?](#what-is-getstaticpaths)
+  - [Incremental Static Regeneration](#incremental-static-regeneration)
 
 # Introduction
 
@@ -252,175 +268,489 @@ Next.js allows showing a blurred version before the full image loads.
 />
 ```
 
-# Server-Side Rendering
+# Rendering
 
-Next.js provides different rendering strategies, including Server-Side Rendering (SSR) and Static Site Generation (SSG), which determine how a page's content is generated and delivered to the client.
+## Client-Side Rendering
 
-Use `getServerSideProps` when data is frequently changing such news update, use `getStaticProps` when data is not frequently changing such showing details of a product, post etc. it store the data in the cache after very first render.
+Client-Side Rendering (CSR) is a method where the browser (client) downloads a minimal HTML file along with JavaScript files. The JavaScript executes in the browser, fetching data from an API, and dynamically rendering content on the page.
 
-## Server-Side Rendering (SSR)
+- When you visit a website using CSR, the browser first loads an empty page with almost no content.
+- Then, it downloads a JavaScript file that builds the page dynamically.
+  -The page loads slowly at first, but once everything is loaded, navigating between pages becomes very fast.
 
-SSR means that the HTML for a page is generated dynamically on each request at runtime. This is useful for pages that require **real-time or frequently updated** data.
+### Steps
 
-### How SSR Works
+1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
+2. **Server Responds with Minimal HTML:** The server responds with a lightweight HTML and Javscripts file.
 
-1. A request is made to the server.
-2. The server fetches the required data.
-3. The HTML is generated on the server with the fetched data.
-4. The fully rendered HTML is sent to the browser.
-5. The browser displays the content.
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>CSR Example</title>
+     </head>
+     <body>
+       <div id="root"></div>
+       <!-- This is where React inserts the content -->
+       <script src="bundle.js"></script>
+       <!-- JavaScript file that builds the page -->
+     </body>
+   </html>
+   ```
 
-### When to Use SSR
+   At this point, the page is still empty! The content is missing because JavaScript hasn’t run yet.
 
-- Pages that need real-time data (e.g., stock prices, news updates, user-specific content).
-- Content that changes frequently and cannot be cached effectively.
-- Personalization based on request parameters or authentication.
+3. **Browser Downloads JavaScript File:**
+
+   - The browser loads bundle.js, which contains the React app.
+   - React runs and fetches the blog post from an API.
+
+4. **JavaScript Fetches Data and Updates the Page:**
+
+   ```jsx
+   import React, { useState, useEffect } from "react";
+
+   function BlogPost() {
+     const [data, setData] = useState(null);
+
+     useEffect(() => {
+       fetch("https://jsonplaceholder.typicode.com/posts/1") // API call
+         .then((response) => response.json())
+         .then((json) => setData(json)); // Set data
+     }, []);
+
+     return (
+       <div>
+         <h1>Client-Side Rendering Example</h1>
+         {data ? <h2>{data.title}</h2> : <p>Loading...</p>}
+       </div>
+     );
+   }
+
+   export default BlogPost;
+   ```
+
+5. **Content is Rendered in the Browser:** The fetched data is used to dynamically generate and update the page's content.
+6. **User Interacts with the Page:** Since the page is now fully loaded in the browser, interactions like clicking buttons or navigating between pages happen instantly without needing a full page reload.
+
+## Pre Rendering
+
+Server-Side Rendering (SSR) is a method where the server processes and renders the full HTML page before sending it to the browser. The browser only has to display the fully rendered content.
+
+- Instead of sending an empty page, the server builds the page first and then sends the full HTML to the browser.
+- The page loads quickly because the browser doesn’t have to wait for JavaScript to fetch the data.
+
+### Steps
+
+1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
+2. **Server Generates the HTML Page:** The server processes the request, executes any necessary database queries or API calls, and generates the full HTML page.
+   In Next.js, we use `getServerSideProps` to fetch data before the page is sent:
+
+   ```jsx
+   export async function getServerSideProps() {
+     const res = await fetch("https://jsonplaceholder.typicode.com/posts/1"); // API call
+     const data = await res.json();
+
+     return { props: { data } }; // Send data to the page
+   }
+
+   function BlogPost({ data }) {
+     return (
+       <div>
+         <h1>Server-Side Rendering Example</h1>
+         <h2>{data.title}</h2>
+       </div>
+     );
+   }
+
+   export default BlogPost;
+   ```
+
+3. **Server Sends a Fully Rendered Page**
+
+   - The server fetches the blog post first and puts it inside the HTML file.
+   - The fully rendered page (with all the necessary content) is sent to the browser.
+   - The browser receives a complete HTML page, which looks like this:
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>SSR Example</title>
+     </head>
+     <body>
+       <div id="root">
+         <h1>Server-Side Rendering Example</h1>
+         <h2>My Blog Post Title</h2>
+       </div>
+     </body>
+   </html>
+   ```
+
+4. **Browser Displays the Page Instantly:** Since the browser receives a ready-to-display HTML page, the content appears much faster.
+5. **JavaScript Enhancements Load in the Background:** If JavaScript frameworks like React or Vue.js are used, they hydrate (attach interactivity to) the already rendered HTML.
+
+# Client-Side Rendering
+
+Client-Side Rendering (CSR) in Next.js means that the page's content is generated on the user's browser rather than on the server. In CSR, Next.js sends a minimal HTML file and JavaScript bundle to the client, and then React hydrates the page in the browser.
+
+## When to Use CSR in Next.js?
+
+CSR is useful in scenarios where:
+
+1. **User Interactivity is Required:** If your page heavily relies on client-side interactions (e.g., dashboards, interactive forms, charts).
+2. **Data is User-Specific:** If the data being displayed is user-specific and does not need to be pre-rendered on the server (e.g., user dashboards, personalized feeds).
+3. **Avoiding Frequent Server Requests:** If the data changes frequently and fetching it on the server would lead to unnecessary re-renders.
+4. **Third-Party API Calls from the Client:** If you need to fetch data from an external API that does not support server-side fetching (e.g., some authentication flows).
+5. **Reducing Server Load:** CSR shifts the load to the client, reducing the burden on the server.
+
+## How to Use CSR in Next.js?
+
+Client-Side Rendering (CSR) in Next.js means fetching and rendering data only on the client-side rather than pre-rendering it on the server. This is done using React hooks like `useState` and `useEffect`. CSR is useful when:
+
+- The data is user-specific or personalized.
+- You want to reduce the load on the server.
+- The data changes frequently (e.g., real-time data).
+- SEO is not a priority (as the content is rendered dynamically in the browser).
+
+### Example
+
+Let's create a simple Next.js page that fetches user data from an API using CSR.
+
+**Steps to Implement CSR in Next.js**
+
+1. Use React's `useState` to manage the state.
+2. Use `useEffect` to fetch data when the component mounts.
+3. Render the fetched data on the client.
+
+```jsx
+"use client";
+import { useState, useEffect } from "react";
+
+export default function Users() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUsers();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <div>
+      <h1>User List</h1>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            <strong>{user.name}</strong> - {user.email}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+- `useState([])` → Initializes users as an empty array and loading as true.
+- `useEffect` Hook → Runs once when the component mounts to fetch user data.
+- **Fetch Request** → Calls the API (jsonplaceholder.typicode.com/users) and updates the state.
+- **Conditional Rendering** → Displays "Loading..." until the data is fetched.
+- **Render Data** → Loops through the users array and displays the list.
+
+## Combination
+
+| Rendering Type                                  | When to Use                                            | Example                                               |
+| ----------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
+| **CSR (Client-Side Rendering)**                 | User-specific, frequently updated data, interactive UI | Dashboards, Chat apps                                 |
+| **SSR (Server-Side Rendering) + CSR**           | SEO-sensitive, personalized data                       | News articles with user comments                      |
+| **SSG (Static Site Generation) + CSR**          | Static content with dynamic client-side updates        | Blog with real-time comments                          |
+| **ISR (Incremental Static Regeneration) + CSR** | Mix of static and dynamic content                      | E-commerce product pages with real-time stock updates |
+
+### SSR for Blog Posts + CSR for Comments
+
+```jsx
+// pages/blog/[id].js
+import { useState, useEffect } from "react";
+
+// Fetch post data on the server (SSR)
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  const post = await res.json();
+
+  return { props: { post } };
+}
+
+export default function BlogPost({ post }) {
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch comments on the client side (CSR)
+  useEffect(() => {
+    async function fetchComments() {
+      const res = await fetch(
+        `https://jsonplaceholder.typicode.com/posts/${post.id}/comments`
+      );
+      const data = await res.json();
+      setComments(data);
+      setLoading(false);
+    }
+    fetchComments();
+  }, [post.id]);
+
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+
+      <h2>Comments</h2>
+      {loading ? (
+        <p>Loading comments...</p>
+      ) : (
+        comments.map((comment) => (
+          <div key={comment.id}>
+            <strong>{comment.name}</strong>: {comment.body}
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+```
+
+- SSR (`getServerSideProps`) pre-renders blog content for SEO.
+- CSR (`useEffect`) fetches comments dynamically on the client side.
+- This ensures faster initial loading while allowing dynamic updates.
+
+| Combination   | Best Use Case                            | Example                               |
+| ------------- | ---------------------------------------- | ------------------------------------- |
+| **SSR + CSR** | SEO-friendly pages with real-time data   | Blogs with live comments              |
+| **SSG + CSR** | Static pages with dynamic updates        | Product pages with live stock updates |
+| **ISR + CSR** | Partially static, but updated frequently | News articles with real-time likes    |
+
+# Static Site Generation
+
+Static Site Generation (SSG) allows you to pre-render pages at build time, meaning the HTML is generated once and served to users as a static file. This makes your website faster and more SEO-friendly.
+
+## What is `getStaticProps`?
+
+`getStaticProps` is a special Next.js function used to fetch data at build time and pass it as props to a page component. This is useful for content that doesn’t change frequently, such as blog posts, product pages, or documentation.
+
+### Key Features:
+
+- Runs only at build time – It does not execute on every request.
+- Used for fetching external or local data – e.g., from APIs, databases, or local files.
+- Improves performance and SEO – Since pages are pre-generated, they load instantly.
+- Supports revalidation (`revalidate`) – Allows rebuilding the page at a set interval without needing a full site rebuild.
 
 ### Example
 
 ```jsx
-export async function getServerSideProps() {
-  // Fetching data from an API at request time
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts/1");
-  const data = await res.json();
+import React from "react";
 
-  return {
-    props: { post: data }, // Will be passed as props to the component
-  };
-}
-
-const ServerSidePage = ({ post }) => {
+const Home = ({ posts }) => {
   return (
     <div>
-      <h1>Server-Side Rendered Page</h1>
-      <h2>{post.title}</h2>
-      <p>{post.body}</p>
+      <h1>Blog Posts</h1>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <h2>{post.title}</h2>
+            <p>{post.body}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
-```
 
-- `getServerSideProps` is a special function in Next.js that runs on the server before the page is delivered.
-- It fetches data at the time of the request and returns it as props.
-- The page is rendered with fresh data on every request.
-- it fetches data on each request.
-
-### Trade-Offs
-
-1. **Slower Page Loads Compared to Static Pages:** Since pages are generated on the server at request time, there is more processing overhead.
-2. **Higher Server Load:** SSR puts more load on the server since every request triggers a new data fetch and page generation.
-3. **Caching is Harder:** Since SSR pages change on every request, caching them is difficult compared to SSG. CDNs (like Vercel or Cloudflare) work better with static pages than server-rendered pages.
-4. **Increased Complexity:** Implementing SSR requires handling server logic, database connections, and authentication on the server. This can make the code harder to maintain.
-
-## Static Site Generation
-
-SSG means that the HTML for a page is pre-generated at build time and served as a static file. The content remains the same until the site is rebuilt.
-
-### How SSG Works
-
-1. At build time, Next.js fetches the required data.
-2. It pre-generates the HTML with this data.
-3. The static HTML files are stored on a CDN or a server.
-4. When a user requests the page, the static file is served instantly.
-
-### When to Use SSG
-
-- Pages with static content that do not need frequent updates.
-- Blog posts, marketing pages, documentation, landing pages.
-- Improved performance since pre-generated HTML loads instantly.
-
-### Example
-
-```jsx
+// getStaticProps fetches data at build time
 export async function getStaticProps() {
-  // Fetching data at build time
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts/1");
-  const data = await res.json();
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await res.json();
 
   return {
-    props: { post: data }, // Will be passed as props to the component
+    props: { posts }, // Pass the data to the component as props
+    revalidate: 10, // (optional) Rebuild the page every 10 seconds
   };
 }
 
-const StaticSitePage = ({ post }) => {
+export default Home;
+```
+
+### Benefits of `getStaticProps`
+
+- **Fast Loading**: Since pages are generated ahead of time, they load instantly.
+- **SEO-Friendly**: Pre-rendered content helps with search engine indexing.
+- **Efficient**: The API call is made only once at build time instead of every request.
+- **Incremental Static Regeneration (ISR)**: With `revalidate`, you can update pages without rebuilding the whole site.
+
+### When to Use `getStaticProps`?
+
+| Use Case                                | Should You Use `getStaticProps`? |
+| --------------------------------------- | -------------------------------- |
+| **Blog posts**                          | ✅ Yes                           |
+| **Product pages**                       | ✅ Yes                           |
+| **User dashboards**                     | ❌ No (Use `getServerSideProps`) |
+| **Real-time data (e.g., stock prices)** | ❌ No (Use client-side fetching) |
+
+## What is `getStaticPaths`?
+
+When working with static site generation (SSG), sometimes you need to create multiple pages dynamically based on external data. This is where `getStaticPaths` comes in!
+
+`getStaticPaths` is a special Next.js function used to pre-generate dynamic pages at build time. It works **together with** `getStaticProps` to generate static pages for each dynamic route (e.g., `/posts/[id]` for individual blog posts).
+
+### Key Features
+
+- Pre-generates pages dynamically based on available data.
+- Works with `getStaticProps` to fetch data for each dynamic page.
+- Improves performance by serving static pages instead of generating them on request.
+- Supports Incremental Static Regeneration (ISR) for automatic page updates.
+
+### Example
+
+Let’s say we have a list of blog posts, and each post has its own dynamic page (`/posts/[id]`). We will:
+
+1. Fetch all blog post IDs using `getStaticPaths` to generate dynamic routes.
+2. Fetch post details using `getStaticProps` for each page.
+3. Render the blog post page with static content.
+
+```jsx
+import React from "react";
+
+const Post = ({ post }) => {
   return (
     <div>
-      <h1>Static Site Generated Page</h1>
-      <h2>{post.title}</h2>
+      <h1>{post.title}</h1>
       <p>{post.body}</p>
     </div>
   );
 };
+
+// Generate all possible paths dynamically
+export async function getStaticPaths() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await res.json();
+
+  const paths = posts.map((post) => ({
+    params: { id: post.id.toString() }, // Must be a string
+  }));
+
+  return {
+    paths, // Defines the pages to generate
+    fallback: "blocking", // Handle non-prebuilt pages
+  };
+}
+
+// Fetch post data based on the dynamic route
+export async function getStaticProps({ params }) {
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+  );
+  const post = await res.json();
+
+  return {
+    props: { post },
+    revalidate: 10, // Update every 10 seconds (ISR)
+  };
+}
+
+export default Post;
 ```
 
-- `getStaticProps` runs at build time and fetches data.
-- The page is pre-generated and served as a static file.
-- Every user gets the same HTML, improving performance.
+**Generating Dynamic Routes with `getStaticPaths`**
 
-## Differences
+- Fetch all blog post IDs from an API.
+- Convert each post ID into a dynamic route (`/posts/1`, `/posts/2`, etc.).
+- Return an array of `params` that Next.js uses to pre-generate pages.
+- The `fallback: "blocking"` setting allows Next.js to generate new pages on demand if they weren’t prebuilt.
 
-| Feature                | SSR (Server-Side Rendering)                              | SSG (Static Site Generation)              |
-| ---------------------- | -------------------------------------------------------- | ----------------------------------------- |
-| When HTML is Generated | On every request (runtime)                               | At build time (before deployment)         |
-| Performance            | Slower due to real-time generation                       | Faster since pages are pre-built          |
-| Use Case               | Dynamic data that changes often                          | Static data that rarely updates           |
-| SEO Friendly?          | ✅ Yes (search engines see fresh content)                | ✅ Yes (pre-generated content is indexed) |
-| User Personalization?  | ✅ Yes (user-specific data possible-**Authentication** ) | ❌ No (same content for all users)        |
+**Fetching Data for Each Page with `getStaticProps`**
 
-## `getServerSideProps`
+- `params.id` contains the dynamic route parameter (e.g., `1`, `2`).
+- Fetch the specific blog post from the API.
+- Return the post data as props to render the page.
+- `revalidate: 10` enables Incremental Static Regeneration (ISR).
 
-It runs on the server at request time, meaning that every time a user requests a page, the data is fetched and the page is dynamically generated before being sent to the client.
+### Handling Fallback Options in `getStaticPaths`
 
-### How Works
+| Option       | Behavior                                                                       |
+| ------------ | ------------------------------------------------------------------------------ |
+| `false`      | Returns a 404 for pages not generated at build time.                           |
+| `true`       | Shows a loading state while generating the page on-demand.                     |
+| `"blocking"` | Waits until the new page is generated before serving it (recommended for SEO). |
 
-1. A user requests a page (e.g., `/products`).
-2. The server runs `getServerSideProps` before rendering the page.
-3. It fetches data from an API, database, or any external source.
-4. The data is passed as `props` to the page component.
-5. The page is rendered and sent to the user.
+### Benefits of `getStaticPaths`
 
-### When to
+- **Pre-generates dynamic pages** for better performance.
+- **Reduces server load** by serving static files.
+- **Supports Incremental Static Regeneration (ISR)** to update content without rebuilding the site.
+- **SEO-friendly** since pages are fully rendered before being indexed.
 
-**✅ Use getServerSideProps when:**
+### When to Use `getStaticPaths`?
 
-- The data changes frequently and needs to be fresh on every request (e.g., news articles, stock prices).
-- You need personalized content based on the user’s session or authentication (e.g., user dashboard).
-- SEO is important, and you need server-rendered pages for search engines.
+| Use Case                                 | Should You Use `getStaticPaths`?  |
+| ---------------------------------------- | --------------------------------- |
+| **Blog post pages**                      | ✅ Yes                            |
+| **Product detail pages**                 | ✅ Yes                            |
+| **User profiles**                        | ✅ Yes, but only for public users |
+| **Live data pages (e.g., stock prices)** | ❌ No (Use `getServerSideProps`)  |
 
-**❌ Avoid using getServerSideProps when:**
+### Conclusion
 
-- The data does not change often (use Static Site Generation (SSG) instead).
-- The page is slow due to API response time (SSR can cause performance issues).
-- The page does not require real-time updates (use Incremental Static Regeneration (ISR) instead).
+- Use `getStaticPaths` to pre-generate dynamic routes at build time.
+- Use `getStaticProps` to fetch data for each page.
+- Combine with ISR (`revalidate`) for automatic updates.
+- Set `fallback: "blocking"` for on-demand page generation.
 
-## `getStaticProps`
+## Incremental Static Regeneration
 
-`getStaticProps` is a special Next.js function used for Static Site Generation (SSG). It fetches data at build time and pre-renders the page as static HTML. This approach makes pages super fast since they don’t need to fetch data on every request.
+Incremental Static Regeneration (ISR) is a Next.js feature that allows you to update static pages after deployment without needing to rebuild the entire website.
 
-- **Data Fetching at Build Time:** The API request happens only once during build time.
-- **Super Fast Page Loads:** Since the page is pre-built, it loads instantly without extra API calls.
-- **SEO-Friendly:** The full page is rendered as HTML before being served to users.
+With ISR, you can:
 
-### How Works
+- Pre-generate static pages at build time.
+- Update them automatically in the background without redeploying.
+- Serve fast, pre-built pages while keeping them fresh with automatic revalidation.
 
-1. Next.js runs getStaticProps at build time.
-2. It fetches data from an API, database, or CMS.
-3. The page is pre-rendered into a static HTML file.
-4. When users visit the page, the static HTML is instantly served (no waiting for API calls)
+### How ISR Works
 
-## 💡 When to Use SSR vs. SSG vs. CSR?
+ISR works with getStaticProps, using the revalidate option.
 
-| Feature            | SSR (getServerSideProps)   | SSG (getStaticProps) | CSR (Client-Side Rendering) |
-| ------------------ | -------------------------- | -------------------- | --------------------------- |
-| Page Load Speed    | Slower                     | Fast                 | Fast after initial load     |
-| SEO Optimized?     | ✅ Yes                     | ✅ Yes               | ❌ No                       |
-| Personalized Data? | ✅ Yes                     | ❌ No                | ✅ Yes                      |
-| Server Load        | High                       | Low                  | None                        |
-| Best Use Cases     | Dashboards, Real-time Data | Blogs, Landing Pages | Web Apps, User Interactions |
+### Lifecycle of ISR:
 
-## Dynamic Static Pages
+1. **First Request**: The page is served from the cache (static HTML).
+2. **After revalidate Time Expires:**
+   -The next request triggers a background regeneration.
 
-getStaticPaths is a special Next.js function used along with getStaticProps to generate dynamic static pages at build time.
+- The old page is served while the new one is built.
+- Once ready, the new page replaces the old one.
 
-- It tells Next.js which dynamic routes should be pre-rendered as static HTML.
-- Works best for SSG (Static Site Generation) where data doesn't change frequently.
+3. **Subsequent Requests:** Serve the updated static page.
+
+### How ISR Works in Action
+
+1. A user visits `/posts/1`.
+2. The page is served from the static cache.
+3. After 10 seconds, another visitor requests `/posts/1`.
+4. Next.js fetches fresh data in the background and updates the page.
+5. All future requests get the new version of `/posts/1`.
