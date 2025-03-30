@@ -29,6 +29,10 @@
 - [How Helps in SEO](#how-helps-in-seo)
   - [Rendering](#rendering)
   - [Image Optimization](#image-optimization-1)
+- [Styling](#styling)
+  - [Modules](#modules)
+  - [Global Styles](#global-styles)
+  - [Tailwind CSS](#tailwind-css)
 
 # Introduction
 
@@ -1006,3 +1010,122 @@ In CSR, data fetching response json, but in SSR data fetching response html.
 ## Image Optimization
 
 Optimized images reduce page load time, improving user experience and SEO.
+
+# Styling
+
+## Modules
+
+CSS Modules allow you to write styles that are scoped locally to the component where they are imported. This avoids conflicts between class names and ensures styles do not unexpectedly affect other parts of your application. CSS Module files must have the `.module.css` extension.
+
+1. Create a file `Button.module.css` inside the `styles` or `components` folder:
+
+```jsx
+.button {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+```
+
+2. Now, create a React component `Button.js` and import the CSS Module.
+
+```jsx
+// components/Button.js
+import styles from "../styles/Button.module.css";
+
+export default function Button({ label }) {
+  return <button className={styles.button}>{label}</button>;
+}
+```
+
+### What Happens Under the Hood?
+
+- Next.js converts the class names into unique, locally scoped names like `Button_button__3fg6d`.
+- This prevents class name conflicts across different components.
+- The styles are automatically applied to the correct component.
+
+## Global Styles
+
+In Next.js, global styles apply to the entire application and are not scoped to individual components. The best way to include global styles is by importing a CSS file inside `pages/_app.js`.
+
+This is useful for:
+
+- Defining base styles (e.g., typography, colors, spacing).
+- Applying styles to layout components (e.g., headers, footers).
+- Importing third-party CSS libraries.
+
+1. First, create a global stylesheet file `styles/globals.css` inside the `styles` directory.
+
+```jsx
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+}
+```
+
+2. Import Global Styles in `_app.js`
+
+Next.js only allows global styles to be imported inside `pages/_app.js`.
+
+```jsx
+// pages/_app.js
+import "../styles/globals.css";
+
+export default function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+```
+
+### How Global Styles Work in Next.js
+
+- Next.js compiles and applies `globals.css` to every page.
+- You cannot import global CSS inside a component (e.g., inside `Button.js`)—it must be inside `_app.js`.
+- All elements that match global styles (like `button`, `h1`, etc.) will be affected across the entire application.
+
+## Tailwind CSS
+
+1. Install Tailwind CSS
+
+```shell
+npm install -D tailwindcss postcss autoprefixer
+```
+
+2. Generate Tailwind Configuration Files
+
+```shell
+npx tailwindcss init -p
+```
+
+3. Configure Tailwind
+
+Open `tailwind.config.js` and update the `content` section to include Next.js files:
+
+```jsx
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
+
+4. Import Tailwind CSS in `_app.js`
+
+```css
+/* styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
