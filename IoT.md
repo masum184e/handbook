@@ -6,7 +6,10 @@
     - [Chip](#processoresp-wroom32)
     - [Pin](#power-and-control-pins)
     - [Wi-Fi Module](#wi-fi-module)
+      - [Send Email](#send-email)\
+      - [WhatsApp Bot](#whatsapp-bot)
     - [Modes](#modes)
+    - [Hall Effect](#hall-effect)
   - [Arduino Uno](#arduino-uno)
     - [Components](#components)
     - [Pins](#pins)
@@ -34,6 +37,8 @@
   - [Motor Shield\*](#motor-shield)
   - [HC-05 Bluetooth\*](#hc-05-bluetooth)
   - [Relay Module\*](#relay-module)
+  - [OLED Display\*](#oled-display)
+  - [GSM Module\*](#gsm-module)
 
 # Introduction
 
@@ -318,6 +323,7 @@ The EN (Enable) button is connected to the reset pin (EN) of the ESP32. It acts 
 
 - ADC (Analog-to-Digital Converter) is a module that converts an analog voltage signal into a digital value.
 - The ESP32 has two ADC peripherals: ADC1 and ADC2.
+- Computer only understand digital data, then how will it process analog data. Here come ADC pin, this pin read analog data but convert it as digital data as computer can understand.
 
 | **Feature**           | **ADC1**                                          | **ADC2**                                             |
 | --------------------- | ------------------------------------------------- | ---------------------------------------------------- |
@@ -423,6 +429,12 @@ An analog signal is a continuous signal that represents physical measurements. T
 6. Pressure Sensors
 7. Force Sensors
 8. Moisture Sensors
+
+- we control electricity, higher electricity produce higher output.
+- suppose a device required 4s electricity to perform it's operation.
+- if we supply 2s electricity and turn off 2s, it will perform with it's half power.
+- pwm function with this principle and 2s is called duty cycle.
+- each pin of arduino is 8 resolution bit(it will consume 8bit space in the memory) which will store value 0-255
 
 ## Description
 
@@ -932,6 +944,107 @@ void smtpCallback(SMTP_Status status) {
 }
 ```
 
+### WhatsApp Bot
+
+You can use services like CallMeBot to send WhatsApp messages from your ESP32, even though the ESP32 itself doesn’t have native support for WhatsApp.
+
+#### How to Get Your WhatsApp API Key from CallMeBot
+
+1. Save +34 644 70 71 65 in your phone contacts as CallMeBot.
+2. Open WhatsApp and send this exact message to the bot:
+
+```
+I allow callmebot to send me messages
+```
+
+3. After a few seconds, you’ll receive a message with your API key.
+
+#### Controlling
+
+```cpp
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+// Your Wi-Fi credentials
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
+
+// Replace with your phone number (international format) and API key from CallMeBot
+String phoneNumber = "+1234567890"; // e.g., +919876543210
+String apiKey = "YOUR_API_KEY";
+String message = "Hello from ESP32 via WhatsApp bot!";
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi connected!");
+  sendWhatsAppMessage();
+}
+
+void loop() {
+  // Nothing here
+}
+
+void sendWhatsAppMessage() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+
+    // Encode the message to be URL-safe
+    String encodedMessage = urlencode(message);
+
+    String url = "https://api.callmebot.com/whatsapp.php?phone=" + phoneNumber +
+                 "&text=" + encodedMessage +
+                 "&apikey=" + apiKey;
+
+    http.begin(url);
+    int httpResponseCode = http.GET();
+
+    if (httpResponseCode > 0) {
+      Serial.println("WhatsApp message sent successfully!");
+      String response = http.getString();
+      Serial.println(response);
+    } else {
+      Serial.print("Error sending message. HTTP error code: ");
+      Serial.println(httpResponseCode);
+    }
+
+    http.end();
+  } else {
+    Serial.println("WiFi not connected");
+  }
+}
+
+// Helper function to URL-encode special characters
+String urlencode(String str) {
+  String encoded = "";
+  char c;
+  char code0, code1;
+  for (int i = 0; i < str.length(); i++) {
+    c = str.charAt(i);
+    if (isalnum(c)) {
+      encoded += c;
+    } else {
+      code1 = (c & 0xf) + '0';
+      if ((c & 0xf) > 9) code1 = (c & 0xf) - 10 + 'A';
+      c = (c >> 4) & 0xf;
+      code0 = c + '0';
+      if (c > 9) code0 = c - 10 + 'A';
+      encoded += '%';
+      encoded += code0;
+      encoded += code1;
+    }
+  }
+  return encoded;
+}
+```
+
 ## Modes
 
 ### Active Mode
@@ -1031,6 +1144,29 @@ void loop() {
 ```
 
 ### Comparison of Power Consumption
+
+## Hall Effect
+
+The Hall Effect is the generation of a small voltage difference across an electrical conductor when a magnetic field is applied perpendicular to the flow of current. In microcontrollers, a Hall sensor is used to detect the presence and strength of a magnetic field.
+
+The ESP32 has a built-in Hall sensor, which is located between GPIO36 (VP) and GPIO39 (VN). This internal sensor measures changes in the magnetic field near the chip.
+
+⚠️ Note: The internal Hall sensor is not super accurate, but it's enough for basic magnetic field detection (e.g., detecting if a magnet is near).
+
+### Controlling
+
+```cpp
+int hallValue = hallRead();
+Serial.print("Hall sensor value: ");
+Serial.println(hallValue);
+delay(500);
+```
+
+It returns a value based on the strength and polarity of the magnetic field near the chip.
+
+- Positive values → one magnetic polarity.
+- Negative values → opposite polarity.
+- Near 0 → little to no magnetic field.
 
 # Arduino Uno
 
@@ -1414,11 +1550,26 @@ String myString = "Hello, Arduino!";
 
 # Components
 
+## Circuit
+
+Circuit is a path between power source and electric devices. Positive side have more power than negative side.
+
+## Breadboard
+
+Power line have a two line, positive one with red color and negative one with black color. This are vertically shorted, all the point produces same voltage that one pin supplied.
+
+Other rows with sign a, b, c, d, e are horizontally sorted.
+
+Divider have no pin. Don't place any device on the divider.
+
 ## LED
 
 A Light Emitting Diode (LED) is a semiconductor device that emits light when an electric current passes through it. It is a unidirectional component, meaning it allows current to flow in one direction (from the anode to the cathode).
 
-- diod set the path(positive to negative) of electricity.
+- diod set the path(positive-long to negative-short) of electricity.
+- positive portion accept more voltage than negative portion.
+- the voltage difference should be 5V.
+- It can activate with 50mA but board produce 500mA, that's why **register** must be use with it.
 
 ### Controlling
 
@@ -1449,7 +1600,7 @@ The vertical connection of the center part means a single vertical line in a bre
 
 ## Buzzer
 
-A buzzer is a simple component used to produce sound. Buzzers can be either active or passive:
+A buzzer is a simple electro-mechanical component used to produce sound. Buzzers can be either active or passive:
 
 - **Active Buzzer**: Emits a constant tone when powered. Requires only HIGH/LOW signals.
 - **Passive Buzzer**: Needs a PWM (Pulse Width Modulation) signal to produce varying tones.
@@ -1734,6 +1885,8 @@ ESP32 has analog-to-digital converters (ADC) that read analog input values and c
 
 ### Controlling
 
+- `map(var, a, b, c, d)` - convert the value of var from a-b range to c-d range
+
 ```cpp
 #define POT_PIN 34 // GPIO34 for potentiometer output
 
@@ -1901,9 +2054,11 @@ void loop() {
 
 An LCD (Liquid Crystal Display) is an electronic display module used to display text, numbers, and custom characters.
 
+There is a changes among crystal in the presence of light. There hava a backlight in the back of the display. When electriciy supplies in the liquid, the portion supplies electricity dark up and we can display character.
+
 One of the most commonly used LCD modules is the 16x2 LCD, which:
 
-- Has 16 columns and 2 rows for text.
+- Has 16 columns and 2 rows for text, in toal 32 character can be displayed.
 - Uses the Hitachi HD44780 controller.
 - Can operate in 4-bit or 8-bit mode.
 - Requires an I2C module to reduce the number of GPIO connections.
@@ -1929,6 +2084,12 @@ A 16x2 LCD has 16 pins:
 | 11-14 | D4-D7 | Data Lines (Used in 4-bit or 8-bit mode)               |
 | 15    | LED+  | Backlight Power (5V)                                   |
 | 16    | LED-  | Backlight Ground (GND)                                 |
+
+- RS is used to send command to display. We can send command when the value is LOW. We can send data when the value is HIGH.
+- Send command means something like which row should i select to show data.
+- RW should be HIGH to read data. To show data value should be LOW.
+- EN should be HIGH to show data.
+- D4-D7 is enough to show data.
 
 ### Hardware Setup
 
@@ -1995,6 +2156,14 @@ void loop() {
 
 An I2C LCD is a character LCD that uses the I2C (Inter-Integrated Circuit) communication protocol instead of parallel communication. This significantly reduces the number of GPIO pins required to interface the LCD with microcontrollers like the ESP32.
 
+When two device communicate between each other, there have some protocol. Every device have different protocol as it build by different company. Serial Communication uses UART(Universal Asynchronous Receiver Transmitter) protocol. It can do both recieve and send data but the data baud rate of both devices must be same. Sometime serial monitor show some gibric value, why? Because there have differnces between baud rate set by program and baud rate set in monitor. We only show proper value, when both are same.
+
+The benefit of I2C protocol is we can connect multiple i2c device with only two pin called SDA, SCL. To make all the i2c device, each one of them have an address. We access the device through that address.
+
+But if everyone communicate with each other, then it will be mess. That's why i2c have master who make other device his slave and decide which slave should communicate to which other slave. Each slave have8bit address, one use to determine weather it is use for recieve or send. SDA(Serial Data) pin is used to exchange data. SCL(Serial Clock) is used to send clock signal. Slave can't activated without clock which doesn't allow data communication.
+
+If there have a i2c communication between arduino and any other device, arduino act as master and that device act as slave.
+
 ### Structure
 
 I2C LCDs have a small PCF8574 I2C adapter soldered on the back. This adapter allows the LCD to communicate using the I2C bus, reducing the number of required GPIOs.
@@ -2010,6 +2179,14 @@ I2C LCDs have a small PCF8574 I2C adapter soldered on the back. This adapter all
 2. **GND:** Connect to the ESP32's `GND`.
 3. **SDA:** Connect to ESP32 GPIO 21
 4. **SCL:** Connect to ESP32 GPIO 22
+
+During circuit setup short two pin with female to female jumper of the LED of i2c adapter.
+
+### Extract I2C Device Address
+
+```cpp
+
+```
 
 ### Controlling
 
@@ -2075,6 +2252,10 @@ A single-digit 7-segment display typically has 10 pins:
 - **g:** Connect to ESP32 GPIO 21
 - **dp:** Not Used
 - **COM:** Connect to the ESP32's `GND`.
+
+If display is common cathode, then connect both common to GND, if its common annode, then connect it with 5V.
+
+If display is common cathode, then a-g pin should be supplies 5V. If display is common annode then a-g pin should be connect with GND
 
 NOTE: Since each segment is an LED, resistors (220Ω - 1KΩ) should be used in series with each segment to limit the current.
 
@@ -2209,6 +2390,10 @@ An LDR (Light Dependent Resistor) sensor, also known as a photoresistor, is a li
 
 - When light intensity increases, LDR resistance decreases, and the voltage at the analog pin increases.
 - When light intensity decreases, LDR resistance increases, and the voltage at the analog pin decreases.
+- Light is nothing but photon particle.
+- When this particle jumps on the LDR, there have a collision between the particle and register.
+- This collision reduces resistance, and decreases electricity.
+- Less light result low collision, higher ressistance, lower electricity.
 
 ### Structure
 
@@ -2479,6 +2664,18 @@ Motor shields usually include:
 
 Making `EN_A`, `EN_B` low will pause the motor.
 
+| IN1  | IN2  | Rotation |
+| ---- | ---- | -------- |
+| LOW  | LOW  | OFF      |
+| HIGH | LOW  | FORWARD  |
+| LOW  | HIGH | BACKWARD |
+| HIGH | HIGH | OFF      |
+
+To control the speed:
+
+- sacrifice 5V jumper.
+- connect `EN_A`, `EN_B` with PWM pin.
+
 ### Hardware Setup
 
 - **IN1** - GPIO 18
@@ -2490,6 +2687,8 @@ Making `EN_A`, `EN_B` low will pause the motor.
 - **GND** - GND
 
 ### Controlling
+
+Why input pins are declared as output inside setup function. Because this are output for arduino. This are input pin for motor driver.
 
 ```cpp
 #define IN1 18
@@ -3069,3 +3268,146 @@ void loop() {
     delay(5000);  // Keep it OFF for 5 seconds
 }
 ```
+
+## OLED Display
+
+OLED stands for Organic Light Emitting Diode. Unlike traditional LCDs that need a backlight, each pixel in an OLED emits its own light. This gives:
+
+- High contrast and sharpness
+- Wide viewing angles
+- Low power consumption (especially when displaying mostly black)
+
+### Characterstics
+
+- **Self-Emissive:** Each pixel emits its own light (no backlight needed).
+- **High Contrast Ratio:** Perfect blacks and vivid colors due to pixel-level lighting.
+- **Wide Viewing Angle:** Colors and brightness are consistent from all angles.
+- **Fast Response Time:** Excellent for fast-moving visuals (e.g., gaming, videos).
+- **Thin and Flexible:** Can be made on plastic substrates → foldable or curved screens.
+- **Low Power Consumption (in dark mode):** Only lit pixels consume power.
+- **High Brightness and Color Saturation:** Rich and vibrant display output.
+
+### Structure
+
+### Hardware Setup
+
+- **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+- **GND:** Connect to the ESP32's `GND`.
+- **SDA:** Connect to Arduino A4
+- **SCL:** Connect to Arduino A5
+
+### Controlling
+
+Install:
+
+- Adafruit SSD1306 (for controlling the OLED)
+- Adafruit GFX (for drawing graphics/text)
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1  // Reset pin (not used with I2C)
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  Serial.begin(115200);
+
+  // Initialize display
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  // 0x3C is the I2C address
+    Serial.println(F("SSD1306 allocation failed"));
+    while (true);
+  }
+
+  display.clearDisplay();
+
+  // Display static text
+  display.setTextSize(1);              // Text size
+  display.setTextColor(SSD1306_WHITE); // Text color
+  display.setCursor(0, 0);             // Start at top-left
+  display.println("Hello from ESP32!");
+  display.display();                   // Push to display
+}
+
+void loop() {
+  // Nothing needed in loop for this example
+}
+```
+
+## GSM Module
+
+A GSM module (like SIM800L, SIM900A) allows microcontrollers (like ESP32 or Arduino) to connect to cellular networks and perform functions such as:
+
+- Sending/receiving SMS
+- Making/receiving calls
+- Accessing mobile internet (GPRS/EDGE)
+
+### Characterstics
+
+- **Communication:** Via AT commands using UART (Serial)
+- **Network:** Uses GSM cellular network (2G/3G/4G depending on the module)
+- **SIM Support:** Requires a SIM card to function (like a phone)
+- **Power Hungry:** Needs regulated power supply (usually 12V or 5V 2A)
+- **Real-time Messaging:** Can send/receive SMS instantly
+- **Remote Operation:** Works anywhere with GSM signal coverage
+
+### Structure
+
+### Hardware Setup
+
+- **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+- **GND:** Connect to the ESP32's `GND`.
+- **TX:** Connect to ESP32 GPIO 16
+- **RX:** Connect to ESP32 GPIO 17
+
+### Controlling
+
+```cpp
+#include <HardwareSerial.h>
+
+HardwareSerial gsmSerial(2); // Use UART2 on ESP32
+
+void setup() {
+  Serial.begin(115200);              // Debug via USB
+  gsmSerial.begin(9600, SERIAL_8N1, 16, 17); // RX, TX
+
+  Serial.println("Initializing GSM...");
+
+  delay(1000);
+  sendSMS("+1234567890", "Hello from ESP32 + SIM800L!");
+}
+
+void loop() {
+  // Nothing here
+}
+
+void sendSMS(String number, String text) {
+  gsmSerial.println("AT");             // Check module
+  delay(1000);
+
+  gsmSerial.println("AT+CMGF=1");      // Set text mode
+  delay(1000);
+
+  gsmSerial.print("AT+CMGS=\"");
+  gsmSerial.print(number);
+  gsmSerial.println("\"");
+  delay(1000);
+
+  gsmSerial.print(text);               // SMS body
+  gsmSerial.write(26);                 // CTRL+Z to send
+  delay(5000);                         // Wait for confirmation
+}
+```
+
+### Common AT Commands
+
+- `AT` - Test communication (should respond with OK)
+- `AT+CSQ` - Signal quality
+- `AT+CCID` - Get SIM card ID
+- `AT+CREG?` - Check network registration
+- `AT+CMGF=1` - Set SMS text mode
+- `AT+CMGS="number"` - Send SMS
+- `AT+CMGR=index` - Read received SMS
