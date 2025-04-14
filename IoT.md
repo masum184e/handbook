@@ -8,6 +8,9 @@
     - [Wi-Fi Module](#wi-fi-module)
       - [Send Email](#send-email)\
       - [WhatsApp Bot](#whatsapp-bot)
+    - [Bluetooth](#bluetooth)
+      - [Classic Bluetooth](#classic-bluetooth)
+      - [Bluetooth Low Energy](#bluetooth-low-energy)
     - [Modes](#modes)
     - [Hall Effect](#hall-effect)
     - [Memory Management](#memory-management)
@@ -1050,6 +1053,141 @@ String urlencode(String str) {
     }
   }
   return encoded;
+}
+```
+
+## Bluetooth
+
+### Classic Bluetooth
+
+Classic Bluetooth (BT) on ESP32 is the original Bluetooth standard used for:
+
+- Audio (headsets, speakers)
+- File transfers
+- Serial data (SPP - Serial Port Profile)
+
+ESP32 supports Bluetooth SPP, which allows it to emulate a virtual serial port over Bluetooth, just like HC-05 or HC-06 modules.
+
+#### Characterstics
+
+- **SPP (Serial Port Profile):** Makes Bluetooth act like a serial (UART) port
+- **BluetoothSerial.h:** Arduino library for BT SPP
+- **Device role:** ESP32 can act as a Master or Slave (mostly Slave for phones)
+- **Pairing:** BT pairing is needed for first-time connections
+
+#### Controlling
+
+```cpp
+#include "BluetoothSerial.h"  // Include the BluetoothSerial library
+
+BluetoothSerial SerialBT;     // Create a BluetoothSerial object
+
+void setup() {
+  Serial.begin(115200);              // USB serial monitor
+  SerialBT.begin("ESP32_BT_Device"); // Start Bluetooth with name
+  Serial.println("✅ Bluetooth started. Pair with 'ESP32_BT_Device'");
+}
+
+void loop() {
+  // Send message every 2 seconds
+  SerialBT.println("Hello from ESP32!");
+  delay(2000);
+
+  // Read incoming data from Bluetooth
+  if (SerialBT.available()) {
+    String incoming = SerialBT.readString();
+    Serial.print("📥 Received via BT: ");
+    Serial.println(incoming);
+
+    // Echo it back
+    SerialBT.print("Echo: ");
+    SerialBT.println(incoming);
+  }
+}
+```
+
+### Bluetooth Low Energy
+
+BLE is a wireless communication protocol designed for low-power, short-range communication. Unlike Classic Bluetooth, which is always connected and streaming, BLE only wakes up when needed, making it ideal for IoT and battery-powered devices.
+
+#### Characterstics
+
+- Dual-mode (Classic + BLE)
+- BLE Server (Peripheral)
+- BLE Client (Central)
+- Multiple services and characteristics
+- Secure pairing and bonding
+
+#### Terminology
+
+- **Peripheral:** Device that advertises and waits for a central (e.g., ESP32 BLE server)
+- **Central:** Device that connects to the peripheral (e.g., smartphone)
+- **GATT:** Generic Attribute Profile (data structure)
+- **Service:** Group of characteristics (e.g., Heart Rate Service)
+- **Characteristic:** Data value with optional notifications
+
+#### Controlling
+
+```cpp
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
+
+// UUIDs for the custom BLE service and characteristic
+#define SERVICE_UUID        "91bad492-b950-4226-aa2b-4ede9fa42f59"
+#define CHARACTERISTIC_UUID "0d563a58-196a-48ce-ace2-dfec78acc814"
+
+BLECharacteristic *pCharacteristic;
+bool deviceConnected = false;
+
+class MyServerCallbacks : public BLEServerCallbacks {
+  void onConnect(BLEServer* pServer) {
+    deviceConnected = true;
+    Serial.println("✅ Device connected");
+  }
+
+  void onDisconnect(BLEServer* pServer) {
+    deviceConnected = false;
+    Serial.println("❌ Device disconnected");
+  }
+};
+
+void setup() {
+  Serial.begin(115200);
+
+  // 1. Initialize BLE
+  BLEDevice::init("ESP32_BLE");
+
+  // 2. Create BLE Server
+  BLEServer *pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new MyServerCallbacks());
+
+  // 3. Create Service
+  BLEService *pService = pServer->createService(SERVICE_UUID);
+
+  // 4. Create Characteristic
+  pCharacteristic = pService->createCharacteristic(
+                      CHARACTERISTIC_UUID,
+                      BLECharacteristic::PROPERTY_NOTIFY |
+                      BLECharacteristic::PROPERTY_READ
+                    );
+
+  // 5. Start the service
+  pService->start();
+
+  // 6. Start advertising
+  pServer->getAdvertising()->start();
+  Serial.println("🚀 BLE server is now advertising...");
+}
+
+void loop() {
+  if (deviceConnected) {
+    // Send message via BLE notification
+    pCharacteristic->setValue("Hello from ESP32!");
+    pCharacteristic->notify(); // Notify client
+    Serial.println("📤 Sent notification");
+    delay(2000); // Send every 2 seconds
+  }
 }
 ```
 
@@ -3584,29 +3722,35 @@ It have 6 pin and 2 LED.
 **Arduino Code:**
 
 ```cpp
-#include <SoftwareSerial.h>
-
-SoftwareSerial BTSerial(10, 11); // RX, TX
+#define RXD2 16  // ESP32 UART2 RX
+#define TXD2 17  // ESP32 UART2 TX
 
 void setup() {
-    Serial.begin(9600);        // Serial Monitor baud rate
-    BTSerial.begin(9600);      // HC-05 Bluetooth baud rate
+  Serial.begin(115200);             // USB serial for debug
+  Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2); // UART2 to HC-05
 
-    Serial.println("HC-05 Bluetooth Module Ready!");
+  pinMode(2, OUTPUT);               // Built-in LED or relay
+  Serial.println("📡 Waiting for Bluetooth data (via HC-05)...");
 }
 
 void loop() {
-    // Send data from Serial Monitor to HC-05
-    if (Serial.available()) {
-        char data = Serial.read();
-        BTSerial.write(data);   // Send to Bluetooth
-    }
+  if (Serial2.available()) {
+    String command = Serial2.readStringUntil('\n');
+    command.trim();
 
-    // Receive data from HC-05 and print on Serial Monitor
-    if (BTSerial.available()) {
-        char receivedData = BTSerial.read();
-        Serial.write(receivedData); // Print received data
+    Serial.print("📥 Received via HC-05: ");
+    Serial.println(command);
+
+    if (command == "ON") {
+      digitalWrite(2, HIGH);
+      Serial2.println("✅ LED ON");
+    } else if (command == "OFF") {
+      digitalWrite(2, LOW);
+      Serial2.println("✅ LED OFF");
+    } else {
+      Serial2.println("❓ Unknown Command");
     }
+  }
 }
 ```
 
