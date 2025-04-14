@@ -10,6 +10,14 @@
       - [WhatsApp Bot](#whatsapp-bot)
     - [Modes](#modes)
     - [Hall Effect](#hall-effect)
+    - [Memory Management](#memory-management)
+      - [Flash Memory](#flash-memory)
+      - [MicroSD Card](#microsd-card)
+      - [Google Sheets](#google-sheets)
+      - [Firebase](#firebase)
+    - [Device to Device Communication](#device-to-device-communication)
+      - [ESP-NOW](#esp-now)
+      - [ESP-MESH](#esp-mesh)
   - [Arduino Uno](#arduino-uno)
     - [Components](#components)
     - [Pins](#pins)
@@ -1167,6 +1175,630 @@ It returns a value based on the strength and polarity of the magnetic field near
 - Positive values → one magnetic polarity.
 - Negative values → opposite polarity.
 - Near 0 → little to no magnetic field.
+
+## Memory Management
+
+### Flash Memory
+
+Flash memory in the ESP32 is a non-volatile storage medium, meaning it retains data even after power-off. It can be used for both read and write data.
+
+Most ESP32 development boards come with 4MB to 16MB of external SPI Flash connected via the SPI interface.
+
+Flash Writing Restrictions:
+
+- Flash must be erased before it’s written.
+- Data is written in 4 KB sectors.
+- Frequent writing wears Flash out over time (limited write cycles).
+
+#### Flash Memory Partitioning
+
+ESP32 divides Flash into sections using a partition table. This defines how Flash is organized:
+
+| Name       | Type | Subtype    | Offset  | Size   | Description                    |
+| ---------- | ---- | ---------- | ------- | ------ | ------------------------------ |
+| bootloader | app  | bootloader | 0x1000  | 0x8000 | ESP32 bootloader               |
+| app0       | app  | factory    | 0x10000 | 1MB    | Main firmware application      |
+| nvs        | data | nvs        | 0x9000  | 0x6000 | Non-volatile key-value storage |
+| spiffs     | data | spiffs     | ...     | ...    | Filesystem storage (optional)  |
+
+The actual layout may vary based on your project and can be customized in the partition.csv file.
+
+#### Types of Data Stored in Flash
+
+1. **Program Code:** The application is stored in Flash and loaded into IRAM/DRAM during execution.
+
+2. **NVS (Non-Volatile Storage):** A key-value storage for config settings, WiFi credentials, etc.
+
+3. **SPIFFS / LittleFS:** Used to store files (HTML, images, data logs) in a filesystem format.
+
+4. **Custom Data (Raw or Binary):** You can define a custom partition to store structured or raw data (e.g., sensor logs).
+
+#### Controlling
+
+```cpp
+#include <Preferences.h>
+
+Preferences preferences;
+
+void setup() {
+  Serial.begin(115200);
+
+  // Open Preferences with namespace "myApp"
+  preferences.begin("myApp", false);  // false = read/write mode // true = read
+
+  // Read the stored counter
+  int counter = preferences.getInt("counter", 0); // default = 0 if not found
+  Serial.println("Current counter: " + String(counter));
+
+  // Increment and save the counter
+  counter++;
+  preferences.putInt("counter", counter);
+  Serial.println("New counter saved: " + String(counter));
+
+  // Done
+  preferences.end();
+}
+
+void loop() {
+  // Nothing needed here
+}
+```
+
+`Preferences` used the following format to store the data.
+
+```
+namespace{
+  key1: value1
+  key2: value2
+}
+```
+
+Example:
+
+```
+myApp{
+  counter: 0
+}
+```
+
+- `namespace` name can be max 15 character.
+- `preferences.clear();` - remove entire namespace.
+- `preferences.remove("counter");` - remove specific key.
+- `preferences.isKey("key");` - Check if a key exists.
+
+### MicroSD Card
+
+Using a microSD card gives your ESP32 access to large external storage — ideal for data logging, storing images, HTML files, etc.
+
+The ESP32 communicates with the SD card using the SPI protocol or the SDMMC (4-bit native) interface. SPI is more common and easier to wire.
+
+**What You Need**
+
+1. ESP32 board
+2. MicroSD card module (with level shifter) OR directly connect microSD card (ESP32 is 3.3V logic)
+3. microSD card (Formatted as FAT32)
+4. Wires (for SPI connection)
+
+**How to format as FAT32:**
+
+1. [Install SD Card Formatter](https://www.sdcard.org/downloads/formatter)
+2. Format the SD Card form windows hard-drive.
+3. Select FAT32 as File System from the new pop up window and hit the Start button.
+
+#### Hardware Setup
+
+1. **VCC:** Connect to the ESP32's `VIN` (5V) pin.
+2. **GND:** Connect to the ESP32's `GND`.
+3. **CS:** - Connect to the ESP32's GPIO 5 (any GPIO)
+4. **MOSI:** - Connect to the ESP32's GPIO 23
+5. **MISO:** - Connect to the ESP32's GPIO 19
+6. **SCK:** - Connect to the ESP32's GPIO 18
+
+#### Controlling
+
+```cpp
+#include <SPI.h>
+#include <SD.h>
+
+#define CS_PIN 5  // Chip select pin for SD card
+
+void setup() {
+  Serial.begin(115200);
+  if (!SD.begin(CS_PIN)) {
+    Serial.println("Card Mount Failed");
+    return;
+  }
+
+  // Check card type
+  uint8_t cardType = SD.cardType();
+  if (cardType == CARD_NONE) {
+    Serial.println("No SD card attached");
+    return;
+  }
+
+  Serial.println("SD Card initialized.");
+
+  // Write data to file
+  File file = SD.open("/log.txt", FILE_WRITE);
+  if (file) {
+    file.println("ESP32 writing to SD card!");
+    file.close();
+    Serial.println("Data written successfully.");
+  } else {
+    Serial.println("Failed to open file for writing");
+  }
+
+  // Read data from file
+  file = SD.open("/log.txt");
+  if (file) {
+    Serial.println("Reading from file:");
+    while (file.available()) {
+      Serial.write(file.read());
+    }
+    file.close();
+  } else {
+    Serial.println("Failed to open file for reading");
+  }
+}
+
+void loop() {
+  // Nothing to do here
+}
+```
+
+### Google Sheets
+
+```
+ESP32 → HTTP POST → IFTTT Webhook → Google Sheets
+```
+
+#### Steps
+
+1. **Create an IFTTT Account**
+
+- Go to [https://ifttt.com](https://ifttt.com)
+- Sign Up
+
+2. **Create a New Applet**
+
+- Trigger ("If This"):
+  - Visit https://ifttt.com/create
+  - Click "+ This"
+  - Search and select Webhooks
+  - Choose "Receive a web request"
+  - Event Name: log_event (you can choose any name)
+- Action ("Then That"):
+  - Click "+ That"
+  - Search for Google Sheets
+  - Choose "Add row to spreadsheet"
+  - Connect your Google account
+  - Set:
+    - Spreadsheet name: ESP32_Log
+    - Formatted row (leave default or customize):
+    ```
+    Value1, Value2, Value3, {{OccurredAt}}
+    ```
+
+3. **Get Your Webhook Key**
+
+- Go to: https://ifttt.com/maker_webhooks
+- Click Documentation (top right)
+- Copy your Webhook URL:
+
+```c
+https://maker.ifttt.com/trigger/log_event/with/key/YOUR_IFTTT_KEY
+```
+
+#### Controlling
+
+```cpp
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+// Replace with your WiFi credentials
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
+
+// Replace with your IFTTT event name and key
+const char* IFTTT_EVENT_NAME = "log_event";
+const char* IFTTT_KEY = "YOUR_IFTTT_KEY";
+
+// Helper to send data
+void sendToIFTTT(String val1, String val2, String val3) {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+
+    String url = "https://maker.ifttt.com/trigger/" + String(IFTTT_EVENT_NAME) + "/with/key/" + String(IFTTT_KEY);
+    String payload = "{\"value1\":\"" + val1 + "\",\"value2\":\"" + val2 + "\",\"value3\":\"" + val3 + "\"}";
+
+    http.begin(url);
+    http.addHeader("Content-Type", "application/json");
+
+    int httpResponseCode = http.POST(payload);
+
+    if (httpResponseCode > 0) {
+      Serial.println("✅ Data sent to IFTTT!");
+      Serial.println(http.getString());
+    } else {
+      Serial.print("❌ Error sending request. Code: ");
+      Serial.println(httpResponseCode);
+    }
+
+    http.end();
+  } else {
+    Serial.println("🚫 WiFi not connected");
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // Connect to WiFi
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\n📶 WiFi connected");
+
+  // Simulated sensor data
+  String temp = "26.5";
+  String humidity = "58";
+  String device = "ESP32_Node_1";
+
+  sendToIFTTT(device, temp, humidity);
+}
+
+void loop() {
+  // Send every 60 seconds or on an event
+}
+```
+
+### Firebase
+
+Firebase Realtime Database is a cloud-hosted NoSQL database. Data is stored as JSON and synchronized in real-time to all connected clients.
+
+#### Steps
+
+1. **Create a Firebase Project**
+
+- Go to https://console.firebase.google.com/
+- Click "Add project"
+- Follow the setup wizard (no need to enable Google Analytics)
+
+2. **Enable Realtime Database**
+
+- In Firebase Console, go to Build > Realtime Database
+- Click “Create Database”
+- Select your location
+- Choose Start in test mode (you can secure it later)
+- Test Rule (for testing only):
+
+```json
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+```
+
+3. **Get Database URL and API Key**
+
+- Database URL → Found in Realtime Database tab, looks like:
+
+```
+https://your-project-id-default-rtdb.firebaseio.com/
+```
+
+- Web API Key:
+  - Go to Project Settings > General
+  - Scroll to “Your apps”
+  - Copy the Web API Key
+
+#### Controlling
+
+Install **Firebase ESP32 Client**
+
+```cpp
+#include <WiFi.h>
+#include <Firebase_ESP_Client.h>
+
+// Provide the token generation process info.
+#include <addons/TokenHelper.h>
+
+// Your Wi-Fi credentials
+#define WIFI_SSID "YourWiFiSSID"
+#define WIFI_PASSWORD "YourWiFiPassword"
+
+// Firebase project credentials
+#define API_KEY "YOUR_FIREBASE_WEB_API_KEY"
+#define DATABASE_URL "https://your-project-id.firebaseio.com/"
+
+// Firebase objects
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
+
+void setup() {
+  Serial.begin(115200);
+
+  // Connect to WiFi
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to WiFi...");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConnected!");
+
+  // Configure Firebase
+  config.api_key = API_KEY;
+  config.database_url = DATABASE_URL;
+
+  // Anonymous sign in
+  auth.user.email = "";
+  auth.user.password = "";
+
+  // Assign the callback function for token generation
+  config.token_status_callback = tokenStatusCallback;
+
+  // Initialize Firebase
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+
+  // Log data to Firebase
+  logData();
+}
+
+void loop() {
+  // You can call logData() periodically here if needed
+}
+
+void logData() {
+  float temp = 26.7;
+  float humidity = 55.4;
+
+  // Create a unique path based on time or device
+  String path = "/ESP32_Logs";
+
+  Serial.println("Sending data to Firebase...");
+
+  // Upload temperature
+  if (Firebase.RTDB.setFloat(&fbdo, path + "/temperature", temp)) {
+    Serial.println("Temperature uploaded: " + String(temp));
+  } else {
+    Serial.println("Error: " + fbdo.errorReason());
+  }
+
+  // Upload humidity
+  if (Firebase.RTDB.setFloat(&fbdo, path + "/humidity", humidity)) {
+    Serial.println("Humidity uploaded: " + String(humidity));
+  } else {
+    Serial.println("Error: " + fbdo.errorReason());
+  }
+}
+```
+
+## Device to Device Communication
+
+### ESP-NOW
+
+ESP-NOW is a fast, connectionless, peer-to-peer communication protocol developed by Espressif. It allows multiple ESP devices to communicate directly using Wi-Fi radio, without needing a router or internet.
+
+Think of it like Bluetooth or LoRa but built into ESP32’s Wi-Fi hardware.
+
+#### Features
+
+- **Protocol type**: Proprietary protocol by Espressif
+- **Network type**: Peer-to-peer (like a mesh or star topology)
+- **Wi-Fi needed?**: ❌ No internet or router required
+- **Range**: Same as Wi-Fi (typically 50-100 meters line-of-sight)
+- **Speed**: Fast (low-latency, ~2ms)
+- **Power efficient**: Yes
+- **Data encryption**: Supported using LTK (Long Term Key)
+- **Data size**: Max 250 bytes per message
+- **Max peers**: ESP32: up to 20 peers (unencrypted), 10 (encrypted)
+
+#### How ESP-NOW Works
+
+- ESP devices use their Wi-Fi hardware to send/receive messages in a connectionless way.
+- Each device has a MAC address (unique hardware ID).
+- To send data, you must register the peer’s MAC address.
+- The sender sends a packet directly to the receiver (like a walkie-talkie).
+
+#### Controlling
+
+**Receiver Code:**
+
+```cpp
+#include <esp_now.h>
+#include <WiFi.h>
+
+// Callback function to handle received data
+void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  Serial.print("📩 Data received: ");
+  Serial.println((char *)incomingData);
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // Set device as Wi-Fi Station
+  WiFi.mode(WIFI_STA);
+  Serial.println("📡 Receiver Started");
+
+  // Init ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("❌ Error initializing ESP-NOW");
+    return;
+  }
+
+  // Register receive callback
+  esp_now_register_recv_cb(OnDataRecv);
+}
+
+void loop() {
+  // Nothing needed here — waits for messages
+}
+```
+
+**Sender Code:**
+
+```cpp
+#include <esp_now.h>
+#include <WiFi.h>
+
+// Replace with receiver's MAC address
+uint8_t receiverMac[] = {0x24, 0x6F, 0x28, 0xAA, 0xBB, 0xCC};  // Change to actual MAC
+
+void setup() {
+  Serial.begin(115200);
+
+  // Set device as Wi-Fi Station
+  WiFi.mode(WIFI_STA);
+
+  // Init ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("❌ Error initializing ESP-NOW");
+    return;
+  }
+
+  // Register peer (receiver)
+  esp_now_peer_info_t peerInfo = {};
+  memcpy(peerInfo.peer_addr, receiverMac, 6);
+  peerInfo.channel = 0;
+  peerInfo.encrypt = false;
+
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("❌ Failed to add peer");
+    return;
+  }
+
+  Serial.println("🚀 Sending...");
+
+  // Send a test message
+  const char* message = "Hello from ESP32 Sender!";
+  esp_err_t result = esp_now_send(receiverMac, (uint8_t *)message, strlen(message) + 1);
+
+  if (result == ESP_OK) {
+    Serial.println("✅ Sent successfully");
+  } else {
+    Serial.println("❌ Send failed");
+  }
+}
+
+void loop() {
+  // Send again every 5 seconds
+  delay(5000);
+  const char* message = "Another message!";
+  esp_now_send(receiverMac, (uint8_t *)message, strlen(message) + 1);
+}
+```
+
+#### How to get MAC Address
+
+```cpp
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  Serial.print("MAC Address: ");
+  Serial.println(WiFi.macAddress());
+}
+
+void loop() {}
+```
+
+### ESP-MESH
+
+ESP-MESH (or Wi-Fi Mesh Networking) is a networking protocol that allows multiple ESP32 nodes to connect and communicate without a traditional Wi-Fi router, using a self-forming and self-healing mesh network.
+
+Think of it as a decentralized Wi-Fi network, where each node can:
+
+- Communicate with others
+- Act as both client and relay
+- Forward messages to a root node (like a gateway or server)
+
+#### Features
+
+- **Self-forming**: Nodes automatically discover and connect to the mesh
+- **Self-healing**: If a node goes offline, others re-route around it
+- **Tree topology**: One root node, others form branches/leaves
+- **Long range**: Data can hop through multiple devices (extends network reach)
+- **Internet support**: Root node can connect to Wi-Fi/internet and relay data
+- **Supported by ESP32**: Yes (fully supported by Espressif’s SDK)
+- **Max nodes**: Up to 1000 nodes per network (in practice, fewer is more stable)
+
+#### How it works
+
+```
+   [Internet]
+       |
+   [Root Node - ESP32]
+      /      \
+ [Node A]   [Node B]
+             |
+          [Node C]
+```
+
+- Only the root node connects to the internet.
+- Other nodes relay data between one another and to the root.
+- Messages are routed automatically by the mesh protocol.
+
+#### Controlling
+
+Because ESP-MESH is built into the ESP-IDF, this is the best approach for full mesh capability. Below is an overview using ESP-IDF.
+
+If you want Arduino-only versions, alternatives like painlessMesh (Arduino library) are easier to use.
+
+Install `painlessMesh`
+
+**1️Common Code for All Devices (auto forms mesh)**
+
+```cpp
+#include <painlessMesh.h>
+
+#define   MESH_PREFIX     "myMeshNetwork"
+#define   MESH_PASSWORD   "meshpassword"
+#define   MESH_PORT       5555
+
+Scheduler userScheduler;
+painlessMesh mesh;
+
+void receivedCallback(uint32_t from, String &msg) {
+  Serial.printf("📩 Received from %u msg: %s\n", from, msg.c_str());
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  mesh.setDebugMsgTypes(ERROR | STARTUP | CONNECTION); // Debug
+
+  mesh.init(MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT);
+  mesh.onReceive(&receivedCallback);
+}
+
+void loop() {
+  mesh.update();
+}
+```
+
+**Sending a Message (in loop or on condition)**
+
+```cpp
+void loop() {
+  mesh.update();
+
+  static unsigned long lastSend = 0;
+  if (millis() - lastSend > 5000) {
+    lastSend = millis();
+    String msg = "Hello from node!";
+    mesh.sendBroadcast(msg);
+    Serial.println("📤 Sent broadcast: " + msg);
+  }
+}
+```
 
 # Arduino Uno
 
