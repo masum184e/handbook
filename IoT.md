@@ -6,6 +6,11 @@
     - [Chip](#processoresp-wroom32)
     - [Pin](#power-and-control-pins)
     - [Wi-Fi Module](#wi-fi-module)
+      - [STA](#sta)
+      - [AP](#ap)
+      - [Static IP Address](#static-ip-address)
+      - [Password Protection](#password-protection)
+      - [Control Server From Anywhere](#control-server-from-anywhere)
       - [Send Email](#send-email)
       - [WhatsApp Bot\*](#whatsapp-bot)
     - [Bluetooth](#bluetooth)
@@ -682,6 +687,8 @@ void fetchData() {
 
 In Access Point Mode (AP), the ESP32 creates its own Wi-Fi network. Devices such as smartphones or laptops can connect to this network to communicate directly with the ESP32. This is especially useful when there’s no existing Wi-Fi network available, or if you want to create a standalone system.
 
+We want ESP32 to act as local server in a local network. Which makes it as IoT device. ESP32 will act as a server and mobile, laptop will act as client. Server & client will be connected through same router.
+
 #### How It Works
 
 1. **ESP32 as an AP:**
@@ -928,7 +935,208 @@ void loop() {
 }
 ```
 
-### Send Email
+### Static IP Address
+
+Setting a static IP address on an ESP32 means assigning a fixed IP to your board so it doesn't change every time it connects to your Wi-Fi network.
+
+Normally, ESP32 uses DHCP to get an IP from your router.
+
+#### Controlling
+
+```cpp
+#include <WiFi.h>
+
+// Replace with your network credentials
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
+
+// Set your desired static IP, gateway, subnet
+IPAddress local_IP(192.168.1.123);
+IPAddress gateway(192.168.1.1);
+IPAddress subnet(255.255.255.0);
+IPAddress primaryDNS(8.8.8.8);   // optional
+IPAddress secondaryDNS(8.8.4.4); // optional
+
+void setup() {
+  Serial.begin(115200);
+
+  // Configure static IP BEFORE WiFi.begin
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+    Serial.println("⚠️ Failed to configure static IP");
+  }
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+
+  Serial.println("\n✅ Connected to WiFi");
+  Serial.print("📡 ESP32 IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+  // nothing here
+}
+```
+
+### Password Protection
+
+To protect a web server on an ESP32 with a password, you'll need to implement basic HTTP authentication. This involves checking credentials (username and password) sent by the browser in the `Authorization` header of the HTTP request. If they’re not provided (or are incorrect), you send a response requesting authentication.
+
+#### How HTTP Authentication Works
+
+When a client (e.g., a browser) accesses a protected route:
+
+1. The ESP32 checks for the `Authorization` header.
+2. If it's missing or incorrect, the ESP32 responds with a `401 Unauthorized` status and includes a `WWW-Authenticate` header.
+3. The browser then shows a login prompt to the user.
+4. If the user enters correct credentials, the browser resends the request with the proper `Authorization` header.
+5. ESP32 decodes this header (Base64) and checks the username/password.
+
+##### Controlling
+
+```cpp
+#include <WiFi.h>
+
+// WiFi credentials
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
+
+// Login credentials
+const char* http_username = "admin";
+const char* http_password = "esp32";
+
+// Create server on port 80
+WiFiServer server(80);
+
+void setup() {
+  Serial.begin(115200);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi connected");
+  Serial.println("IP address: " + WiFi.localIP().toString());
+
+  server.begin();
+}
+
+void loop() {
+  WiFiClient client = server.available(); // check for new client
+  if (client) {
+    Serial.println("New Client Connected");
+
+    String currentLine = "";
+    String request = "";
+    bool isAuth = false;
+
+    unsigned long timeout = millis() + 1000;
+    while (client.connected() && millis() < timeout) {
+      if (client.available()) {
+        char c = client.read();
+        request += c;
+
+        // End of headers is two line breaks
+        if (request.endsWith("\r\n\r\n")) {
+          break;
+        }
+      }
+    }
+
+    // Check for Authorization header
+    int authIndex = request.indexOf("Authorization: Basic ");
+    if (authIndex != -1) {
+      int start = authIndex + strlen("Authorization: Basic ");
+      int end = request.indexOf("\r\n", start);
+      String encoded = request.substring(start, end);
+
+      // Compare with expected base64: admin:esp32 = YWRtaW46ZXNwMzI=
+      if (encoded == "YWRtaW46ZXNwMzI=") {
+        isAuth = true;
+      }
+    }
+
+    if (!isAuth) {
+      client.println("HTTP/1.1 401 Unauthorized");
+      client.println("WWW-Authenticate: Basic realm=\"ESP32 Login\"");
+      client.println("Content-Type: text/html");
+      client.println("Connection: close");
+      client.println();
+      client.println("<h1>401 Unauthorized</h1>");
+    } else {
+      // Authorized, send protected content
+      client.println("HTTP/1.1 200 OK");
+      client.println("Content-Type: text/html");
+      client.println("Connection: close");
+      client.println();
+      client.println("<!DOCTYPE html><html>");
+      client.println("<head><title>ESP32 Auth</title></head>");
+      client.println("<body><h1>Welcome, authorized user!</h1></body>");
+      client.println("</html>");
+    }
+
+    delay(1);
+    client.stop();
+    Serial.println("Client Disconnected.");
+  }
+}
+```
+
+### Control Server From Anywhere
+
+Ngrok creates a secure tunnel from a public internet URL to your local ESP32 server running on a private network (your Wi-Fi). This makes it possible to access your ESP32’s web interface from anywhere — even if you’re behind NAT or don’t have a static IP.
+
+#### How ngrok Works with ESP32
+
+ESP32 is usually not directly accessible from the internet. ngrok helps with that:
+
+1. ESP32 runs a local web server.
+2. A computer (e.g., laptop, Raspberry Pi) on the same local network runs `ngrok`, which opens a tunnel to the ESP32.
+3. ngrok gives you a public HTTPS URL (like `https://xyz.ngrok.io`) that forwards traffic to the ESP32.
+4. Anyone with the link can access the ESP32 web server via ngrok — even from outside your home.
+
+#### Setup ngrok
+
+On your computer (same network as ESP32):
+
+1. Go to https://ngrok.com/download and download for your OS.
+2. Unzip and install it.
+3. Sign up for a free account at ngrok.com.
+4. Get your auth token from your dashboard.
+5. In terminal, run:
+
+```shell
+ngrok config add-authtoken YOUR_AUTH_TOKEN
+```
+
+#### Forwared HTTP Traffic to ESP32
+
+Let’s say your ESP32’s IP is `192.168.1.123`. Run:
+
+```shell
+Let’s say your ESP32’s IP is 192.168.1.123. Run:
+```
+
+This command starts a tunnel from a public ngrok URL to port 80 on your ESP32.
+
+You’ll see output like:
+
+```shell
+Forwarding   https://abc123.ngrok.io -> http://192.168.1.123:80
+```
+
+Now, open `https://abc123.ngrok.io` in any browser, anywhere in the world, and it will connect to your ESP32's web server!
+
+### Send Email1
 
 **Install ESP-Mail-Client library to communicate with an SMTP server**
 
