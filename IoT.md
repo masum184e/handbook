@@ -6,21 +6,21 @@
     - [Chip](#processoresp-wroom32)
     - [Pin](#power-and-control-pins)
     - [Wi-Fi Module](#wi-fi-module)
-      - [Send Email](#send-email)\
-      - [WhatsApp Bot](#whatsapp-bot)
+      - [Send Email](#send-email)
+      - [WhatsApp Bot\*](#whatsapp-bot)
     - [Bluetooth](#bluetooth)
       - [Classic Bluetooth](#classic-bluetooth)
-      - [Bluetooth Low Energy](#bluetooth-low-energy)
+      - [Bluetooth Low Energy\*](#bluetooth-low-energy)
     - [Modes](#modes)
-    - [Hall Effect](#hall-effect)
+    - [Hall Effect\*](#hall-effect)
     - [Memory Management](#memory-management)
       - [Flash Memory](#flash-memory)
-      - [MicroSD Card](#microsd-card)
-      - [Google Sheets](#google-sheets)
-      - [Firebase](#firebase)
+      - [MicroSD Card\*](#microsd-card)
+      - [Google Sheets\*](#google-sheets)
+      - [Firebase\*](#firebase)
     - [Device to Device Communication](#device-to-device-communication)
-      - [ESP-NOW](#esp-now)
-      - [ESP-MESH](#esp-mesh)
+      - [ESP-NOW\*](#esp-now)
+      - [ESP-MESH\*](#esp-mesh)
   - [Arduino Uno](#arduino-uno)
     - [Components](#components)
     - [Pins](#pins)
@@ -858,6 +858,76 @@ void loop() {
 }
 ```
 
+**Another Way:**
+
+```cpp
+#include <WiFi.h>
+#include <WebServer.h>
+
+const char* ssid = "Your_SSID";        // 🔁 Replace with your WiFi SSID
+const char* password = "Your_PASSWORD"; // 🔁 Replace with your WiFi password
+
+WebServer server(80); // Web server runs on port 80
+
+#define LED_PIN 2
+
+void handleRoot() {
+  // Send HTML page to client
+  server.send(200, "text/html", R"rawliteral(
+    <!DOCTYPE html><html>
+    <head><title>ESP32 LED</title></head>
+    <body>
+      <h1>ESP32 LED Control</h1>
+      <p><a href="/on"><button>Turn ON</button></a></p>
+      <p><a href="/off"><button>Turn OFF</button></a></p>
+    </body>
+    </html>
+  )rawliteral");
+}
+
+void handleOn() {
+  digitalWrite(LED_PIN, HIGH);
+  server.sendHeader("Location", "/"); // Redirect to homepage
+  server.send(303);
+}
+
+void handleOff() {
+  digitalWrite(LED_PIN, LOW);
+  server.sendHeader("Location", "/");
+  server.send(303);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\n✅ Connected!");
+  Serial.print("🔗 IP Address: ");
+  Serial.println(WiFi.localIP()); // Print the IP address
+
+  // Route handlers
+  server.on("/", handleRoot);
+  server.on("/on", handleOn);
+  server.on("/off", handleOff);
+
+  server.begin();
+  Serial.println("🌐 Web server started");
+}
+
+void loop() {
+  server.handleClient(); // Handle web requests
+}
+```
+
 ### Send Email
 
 **Install ESP-Mail-Client library to communicate with an SMTP server**
@@ -1110,6 +1180,19 @@ void loop() {
 
 BLE is a wireless communication protocol designed for low-power, short-range communication. Unlike Classic Bluetooth, which is always connected and streaming, BLE only wakes up when needed, making it ideal for IoT and battery-powered devices.
 
+It uses 2.4GHz frequency like bluetooth classic but different module system.
+
+The key differences between BLE & Bluetooth classic is it stay in sleep mode without spending any energy untill a connection has been build. It has been actived after building a connection. Even after building a connection after few millisecond connection has been destroyed by exchanging data.
+
+**Steps:**
+
+1. Build BLE Server
+2. Build BLE Service
+3. Build Characterstics on Services
+4. Build Descriptor on Characterstics
+5. Turn ON the services
+6. Start advertising
+
 #### Characterstics
 
 - Dual-mode (Classic + BLE)
@@ -1127,6 +1210,8 @@ BLE is a wireless communication protocol designed for low-power, short-range com
 - **Characteristic:** Data value with optional notifications
 
 #### Controlling
+
+**Server:**
 
 ```cpp
 #include <BLEDevice.h>
@@ -1188,6 +1273,165 @@ void loop() {
     Serial.println("📤 Sent notification");
     delay(2000); // Send every 2 seconds
   }
+}
+```
+
+**Client:**
+
+```cpp
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEScan.h>
+#include <BLEClient.h>
+#include <BLEAddress.h>
+#include <BLEAdvertisedDevice.h>
+
+// UUIDs - must match the server's
+#define SERVICE_UUID        "91bad492-b950-4226-aa2b-4ede9fa42f59"
+#define CHARACTERISTIC_UUID "0d563a58-196a-48ce-ace2-dfec78acc814"
+
+static BLEAdvertisedDevice* myDevice;
+static bool doConnect = false;
+static bool connected = false;
+static BLERemoteCharacteristic* pRemoteCharacteristic;
+
+class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
+  void onResult(BLEAdvertisedDevice advertisedDevice) {
+    Serial.print("🔍 Found device: ");
+    Serial.println(advertisedDevice.toString().c_str());
+
+    // Check if the advertised device has the correct service UUID
+    if (advertisedDevice.haveServiceUUID() &&
+        advertisedDevice.getServiceUUID().equals(BLEUUID(SERVICE_UUID))) {
+      Serial.println("✅ Target device found. Will try to connect...");
+      myDevice = new BLEAdvertisedDevice(advertisedDevice);
+      doConnect = true;
+    }
+  }
+};
+
+static void notifyCallback(
+  BLERemoteCharacteristic* pBLERemoteCharacteristic,
+  uint8_t* pData, size_t length, bool isNotify) {
+  Serial.print("📩 Notification received: ");
+  Serial.println(std::string((char*)pData, length));
+}
+
+void connectToServer() {
+  Serial.println("🔗 Connecting to BLE server...");
+
+  BLEClient* pClient = BLEDevice::createClient();
+
+  // Connect to the server
+  pClient->connect(myDevice);
+  Serial.println("🎉 Connected to server!");
+
+  // Get the remote service
+  BLERemoteService* pRemoteService = pClient->getService(SERVICE_UUID);
+  if (pRemoteService == nullptr) {
+    Serial.println("❌ Failed to find service.");
+    return;
+  }
+
+  // Get the remote characteristic
+  pRemoteCharacteristic = pRemoteService->getCharacteristic(CHARACTERISTIC_UUID);
+  if (pRemoteCharacteristic == nullptr) {
+    Serial.println("❌ Failed to find characteristic.");
+    return;
+  }
+
+  // Read the initial value
+  if (pRemoteCharacteristic->canRead()) {
+    std::string value = pRemoteCharacteristic->readValue();
+    Serial.print("📖 Initial read: ");
+    Serial.println(value.c_str());
+  }
+
+  // Subscribe to notifications
+  if (pRemoteCharacteristic->canNotify()) {
+    pRemoteCharacteristic->registerForNotify(notifyCallback);
+  }
+
+  connected = true;
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("📡 Starting BLE client...");
+
+  BLEDevice::init("");
+  BLEScan* pBLEScan = BLEDevice::getScan();
+  pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
+  pBLEScan->setActiveScan(true);
+  pBLEScan->start(10, false);
+}
+
+void loop() {
+  if (doConnect && !connected) {
+    connectToServer();
+    doConnect = false;
+  }
+
+  delay(1000); // Wait before next loop
+}
+```
+
+- `pCharacteristic->addDescription(new BLE2902());` - set BLE Descriptor.
+
+#### BLE Characteristic Properties and Uses
+
+| **Property**                               | **Description**                                                     | **Common Use Cases**                                                   |
+| ------------------------------------------ | ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `READ`                                     | Client can read the value from the server (ESP32).                  | Reading sensor values (e.g., temperature, battery level, device info). |
+| `WRITE`                                    | Client can write a new value to the server.                         | Sending commands from app to ESP32 (e.g., toggle LED, change mode).    |
+| `WRITE_NR` <br> _(Write Without Response)_ | Client writes without expecting a reply (faster, less reliable).    | Fast or frequent updates (e.g., joystick, real-time commands).         |
+| `NOTIFY`                                   | Server sends data updates automatically when value changes, no ACK. | Push sensor updates from ESP32 to phone app (e.g., heart rate, speed). |
+| `INDICATE`                                 | Like NOTIFY, but requires an acknowledgment from the client.        | Critical data that must be acknowledged (e.g., medical devices).       |
+| `BROADCAST`                                | Allows the characteristic to be broadcast (advertised).             | Rarely used—used for public data like beacon IDs.                      |
+| `AUTH_SIGNED_WRITE`                        | Write operations must be signed with authentication.                | Secure data transfer (e.g., financial, sensitive data).                |
+| `EXTENDED_PROPERTIES`                      | Allows for extended behaviors defined in spec.                      | Advanced features (rarely used in basic apps).                         |
+
+### Dabble
+
+Dabble is a mobile app by STEMpedia that lets you use your smartphone as a Bluetooth controller — like a gamepad, terminal, sensor dashboard, etc.
+
+The `Dabble.h` library allows your ESP32 to communicate with the Dabble app using Serial over Bluetooth Classic.
+
+`Dabble` uses Bluetooth Classic, so iOS is not supported (Android only).
+
+#### Controlling
+
+Install `Dabble` by `STEMpedia`.
+
+```cpp
+#define CUSTOM_SETTINGS
+#define INCLUDE_GAMEPAD_MODULE  // Use gamepad from the Dabble app
+
+#include <DabbleESP32.h>
+
+#define LED_PIN 2  // GPIO2 (built-in LED)
+
+void setup() {
+  Serial.begin(115200);           // Serial monitor
+  Dabble.begin("ESP32-Dabble");   // Initialize Bluetooth with name
+  pinMode(LED_PIN, OUTPUT);
+  Serial.println("✅ Dabble ready. Open the app and connect.");
+}
+
+void loop() {
+  Dabble.processInput();  // Required in every loop()
+
+  if (GamePad.isUpPressed()) {
+    digitalWrite(LED_PIN, HIGH);
+    Serial.println("🔆 LED ON (Up Pressed)");
+  }
+
+  if (GamePad.isDownPressed()) {
+    digitalWrite(LED_PIN, LOW);
+    Serial.println("💤 LED OFF (Down Pressed)");
+  }
+
+  delay(100);  // Slight delay for stability
 }
 ```
 
@@ -1486,6 +1730,19 @@ void loop() {
 
 ### Google Sheets
 
+IFTTT stands for "If This Then That" — it's a free web-based service that helps different apps, devices, and services work together automatically.
+
+It allow us to use multiple webservices with same protocol. From IoT perspective, IFTTT is like an Aplet which perform specific task like plugin.
+
+There have two kind of services in IFTT
+
+1. Trigger - request to access any services.
+2. Action - perform the requested task.
+
+**Trigger:**
+
+- It allow to request from outside ofr
+
 ```
 ESP32 → HTTP POST → IFTTT Webhook → Google Sheets
 ```
@@ -1624,6 +1881,8 @@ Firebase Realtime Database is a cloud-hosted NoSQL database. Data is stored as J
 
 3. **Get Database URL and API Key**
 
+- Visit `Project Settings > Services` Account and Download Private Key.
+- Visit `Project Settiong > Database Secrets` and extract private key.
 - Database URL → Found in Realtime Database tab, looks like:
 
 ```
@@ -1725,7 +1984,7 @@ void logData() {
 
 ESP-NOW is a fast, connectionless, peer-to-peer communication protocol developed by Espressif. It allows multiple ESP devices to communicate directly using Wi-Fi radio, without needing a router or internet.
 
-Think of it like Bluetooth or LoRa but built into ESP32’s Wi-Fi hardware.
+Think of it like Bluetooth or LoRa but built into ESP32’s Wi-Fi hardware. With this protocol short packet transmission has been performed without wifi connection, radio communication has been established between devices. Each packat can transfer maximum 250 byte data.
 
 #### Features
 
@@ -1858,6 +2117,8 @@ Think of it as a decentralized Wi-Fi network, where each node can:
 - Act as both client and relay
 - Forward messages to a root node (like a gateway or server)
 
+`ESP-MESH` protocol doesn't allow to connect all the node with central connection. Only a single node can be connected with wifi, other nodes connected with each other and exchange data. If any node has been compromised, other nodes will re-connect with each other. With this way huge distance can be covered to estabilish communication.
+
 #### Features
 
 - **Self-forming**: Nodes automatically discover and connect to the mesh
@@ -1890,7 +2151,10 @@ Because ESP-MESH is built into the ESP-IDF, this is the best approach for full m
 
 If you want Arduino-only versions, alternatives like painlessMesh (Arduino library) are easier to use.
 
-Install `painlessMesh`
+Install `painlessMesh`:
+
+- Download the `AsyncTCP` library from `https://github.com/me-no-dev/AsyncTCP`.
+- Select `Sketch > Include Library > Add .Zip` and include the library.
 
 **1️Common Code for All Devices (auto forms mesh)**
 
@@ -1935,6 +2199,81 @@ void loop() {
     mesh.sendBroadcast(msg);
     Serial.println("📤 Sent broadcast: " + msg);
   }
+}
+```
+
+- Mesh network will be execute at port `MESH_PORT`.
+- scheduler is used to perform a define task within a fixed time.
+
+## Multitasking
+
+Unlike traditional Arduino boards, the ESP32 has two cores and an RTOS (Real-Time Operating System) built-in — specifically FreeRTOS.
+
+This means:
+
+- It can run multiple tasks (threads) in parallel
+- Tasks are managed by the FreeRTOS scheduler
+- You can define priorities, delays, and core affinity (run on core 0 or 1)
+
+### Cores
+
+- **Core 0** Typically handles WiFi, BT
+- **Core 1** Usually for user sketch code
+
+Task is defined by either `xTaskCreatePinnedToCore()` or `xTaskCreatePinnedToCore()`.
+
+### Controlling
+
+```cpp
+#define LED1 2      // Built-in LED (GPIO 2)
+#define LED2 4      // External LED on GPIO 4
+
+// Task 1 - Blink LED1 every 1s
+void TaskBlink1(void *parameter) {
+  while (true) {
+    digitalWrite(LED1, !digitalRead(LED1));
+    Serial.println("💡 LED1 toggled (Task 1)");
+    vTaskDelay(1000 / portTICK_PERIOD_MS); // Delay 1s
+  }
+}
+
+// Task 2 - Blink LED2 every 300ms
+void TaskBlink2(void *parameter) {
+  while (true) {
+    digitalWrite(LED2, !digitalRead(LED2));
+    Serial.println("✨ LED2 toggled (Task 2)");
+    vTaskDelay(300 / portTICK_PERIOD_MS); // Delay 300ms
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+
+  // Create Task 1 on Core 0
+  xTaskCreatePinnedToCore(
+    TaskBlink1,      // Function
+    "BlinkTask1",    // Name
+    1000,            // Stack size
+    NULL,            // Parameter
+    1,               // Priority
+    NULL,            // Task handle
+    0);              // Core 0
+
+  // Create Task 2 on Core 1
+  xTaskCreatePinnedToCore(
+    TaskBlink2,
+    "BlinkTask2",
+    1000,
+    NULL,
+    1,
+    NULL,
+    1); // Core 1
+}
+
+void loop() {
+  // Empty. Tasks are running independently!
 }
 ```
 
