@@ -871,28 +871,37 @@ function create_jwt($user_email) {
 }
 ?>
 ```
+
 # REST API
+
 RESTful APIs (Representational State Transfer) use standard HTTP methods to perform operations on resources.
+
 ## Methods
+
 ### PUT
+
 - update an entire resource with new data
 - If a field is missing, it may get removed.
+
 ### PATCH
+
 - Updates only the specified fields of a resource.
 - More efficient than `PUT` when only some fields need modification.
+
 ## Summary of REST API Methods
 
-| HTTP Method | Purpose                    | Idempotent | Example             |
-|------------|----------------------------|------------|---------------------|
-| **GET**    | Retrieve data              | ✅         | `GET /users/123`   |
-| **POST**   | Create new resource        | ❌         | `POST /users`      |
-| **PUT**    | Update entire resource     | ✅         | `PUT /users/123`   |
-| **PATCH**  | Partially update resource  | ❌         | `PATCH /users/123` |
-| **DELETE** | Remove resource            | ✅         | `DELETE /users/123`|
-| **OPTIONS**| Check available methods    | ✅         | `OPTIONS /users`   |
-| **HEAD**   | Get headers only           | ✅         | `HEAD /users/123`  |
+| HTTP Method | Purpose                   | Idempotent | Example             |
+| ----------- | ------------------------- | ---------- | ------------------- |
+| **GET**     | Retrieve data             | ✅         | `GET /users/123`    |
+| **POST**    | Create new resource       | ❌         | `POST /users`       |
+| **PUT**     | Update entire resource    | ✅         | `PUT /users/123`    |
+| **PATCH**   | Partially update resource | ❌         | `PATCH /users/123`  |
+| **DELETE**  | Remove resource           | ✅         | `DELETE /users/123` |
+| **OPTIONS** | Check available methods   | ✅         | `OPTIONS /users`    |
+| **HEAD**    | Get headers only          | ✅         | `HEAD /users/123`   |
 
 **Idempotency** means that making multiple identical requests has the same effect as making a single request. In simpler terms, an idempotent operation produces the same result no matter how many times it is performed.
+
 # Laravel
 
 ## Project Structure
@@ -1166,4 +1175,164 @@ Create controller with following command:
 
 ```shell
 php artisan make:controller PageController
+```
+
+## Authentication
+
+### Login
+
+```php
+  public function login(Request $request)
+    {
+        \Log::info('Request data: ', $request->all());
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        if (Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'success' => true,
+                'redirect' => '/dashboard'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid email or password'
+        ]);
+    }
+```
+
+### Registration
+
+```php
+public function registration(Request $request)
+{
+    \Log::info('Registration Request: ', $request->all());
+
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users',
+        'password' => 'required|confirmed|min:6',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'message' => $validator->errors()->first()
+        ]);
+    }
+
+    // Create the user
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => \Hash::make($request->password),
+    ]);
+
+    // Log in the new user
+    Auth::login($user);
+
+    return response()->json([
+        'success' => true,
+        'redirect' => '/dashboard'
+    ]);
+}
+```
+
+### Authenticated User
+
+1. Using the `Auth` Facade
+
+```php
+$user = Auth::user();
+```
+
+2. Using the `auth()` Helper
+
+```php
+$user = auth()->user();
+```
+
+3. In Blade Templates
+
+```php
+<p>Welcome, {{ Auth::user()->name }}!</p>
+```
+
+Or using the `auth()` helper:
+
+```php
+<p>Your email: {{ auth()->user()->email }}</p>
+```
+
+4. Check for Authenticated User
+
+```php
+if (Auth::check()) {
+    $user = Auth::user();
+    // Safe to access $user->name etc.
+}
+```
+
+### Log Out
+
+```php
+public function logout(Request $request)
+{
+    Auth::logout(); // Logs the user out
+
+    $request->session()->invalidate();     // Optional: clears the session
+    $request->session()->regenerateToken(); // Optional: regenerates CSRF token
+
+    return redirect('/'); // Redirect to home or login page
+}
+```
+
+#### For API Logout (e.g., Laravel Sanctum)
+
+If you're using tokens:
+
+```php
+public function logout(Request $request)
+{
+    $request->user()->currentAccessToken()->delete();
+    return response()->json(['message' => 'Logged out']);
+}
+```
+
+Or log out all tokens (all devices):
+
+```php
+$request->user()->tokens()->delete();
+```
+
+## Protected Route
+
+### Controller
+
+```php
+Route::middleware('auth')->post('/posts', [PostController::class, 'store']);
+```
+
+### View
+
+```php
+public function index()
+{
+    if (!Auth::check()) {
+        return redirect('/login');
+    }
+
+    $posts = Post::all();
+    return view('posts.index', compact('posts'));
+}
 ```
