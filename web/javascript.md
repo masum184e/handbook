@@ -785,32 +785,33 @@ It's not a constructor, so we don't use `new Math()`. Instead, we call the metho
 ## Components
 
 1. **Parser**
-    - The JavaScript engine first parses the JavaScript code into a data structure called an **Abstract Syntax Tree (AST)**.
-    - The parser analyzes the syntax of the code to ensure it’s valid.
+
+   - The JavaScript engine first parses the JavaScript code into a data structure called an **Abstract Syntax Tree (AST)**.
+   - The parser analyzes the syntax of the code to ensure it’s valid.
 
 2. **Interpreter**
 
-    - The engine initially uses an interpreter to convert the AST into bytecode and executes it directly.
-    - This is fast to start execution but can be inefficient for repetitive operations.
+   - The engine initially uses an interpreter to convert the AST into bytecode and executes it directly.
+   - This is fast to start execution but can be inefficient for repetitive operations.
 
 3. **JIT Compiler (Just-In-Time Compiler)**
 
-    - Modern engines (like Google Chrome's V8) use a Just-In-Time (JIT) compiler to optimize code during runtime.
-    - The JIT compiler converts frequently used code (hot code) into machine code for faster execution.
-    - Optimization: The engine identifies repeated code patterns and optimizes them dynamically.
+   - Modern engines (like Google Chrome's V8) use a Just-In-Time (JIT) compiler to optimize code during runtime.
+   - The JIT compiler converts frequently used code (hot code) into machine code for faster execution.
+   - Optimization: The engine identifies repeated code patterns and optimizes them dynamically.
 
 4. **Garbage Collector**
 
-    - The garbage collector automatically manages memory by removing objects that are no longer in use, freeing up space.
+   - The garbage collector automatically manages memory by removing objects that are no longer in use, freeing up space.
 
 5. **Execution Stack (Call Stack)**
 
-    - JavaScript has a single-threaded execution model with an execution stack (also called the call stack) where functions are pushed and popped as they are executed.
+   - JavaScript has a single-threaded execution model with an execution stack (also called the call stack) where functions are pushed and popped as they are executed.
 
 6. **Event Loop and Callback Queue**
 
-    - JavaScript uses an event loop to handle asynchronous code (e.g., `setTimeout`, HTTP requests, promises).
-    - The engine places callback functions in a queue and executes them when the call stack is empty.
+   - JavaScript uses an event loop to handle asynchronous code (e.g., `setTimeout`, HTTP requests, promises).
+   - The engine places callback functions in a queue and executes them when the call stack is empty.
 
 ## Step-by-Step Process
 
@@ -818,105 +819,128 @@ It's not a constructor, so we don't use `new Math()`. Instead, we call the metho
 2. **Parsing:** The code is parsed into an Abstract Syntax Tree (AST) to understand its structure.
 3. **Compilation:**
 
-    - Code is first interpreted into bytecode for quick execution.
-    - The JIT compiler further optimizes the bytecode into machine code for better performance.
+   - Code is first interpreted into bytecode for quick execution.
+   - The JIT compiler further optimizes the bytecode into machine code for better performance.
 
 4. **Execution:**
 
-    - The engine executes the code, pushing and popping functions from the call stack.
-    - If there’s asynchronous code, the event loop manages it.
+   - The engine executes the code, pushing and popping functions from the call stack.
+   - If there’s asynchronous code, the event loop manages it.
 
 5. **Garbage Collection:** Memory cleanup is performed in the background.
 
+## Dependencies
 
-## Dependencies 
 Two critical dependencies of Node.js are:
 
 1. V8 Engine – Executes JavaScript code.
 2. Libuv – Provides an asynchronous, event-driven I/O model.
 
 ### V8 Engine
+
 1. **Compilation to Machine Code**
 
-    - V8 uses a Just-In-Time (JIT) compiler that converts JavaScript into optimized machine code instead of interpreting it line-by-line.
+   - V8 uses a Just-In-Time (JIT) compiler that converts JavaScript into optimized machine code instead of interpreting it line-by-line.
+
 2. **Memory Management**
 
-    - V8 includes a garbage collector to automatically free unused memory.
+   - V8 includes a garbage collector to automatically free unused memory.
+
 3. **Optimizations**
 
-    - V8 optimizes JavaScript execution through inline caching, hidden classes, and other techniques.
+   - V8 optimizes JavaScript execution through inline caching, hidden classes, and other techniques.
+
 4. **Execution of JavaScript APIs**
 
-    - It supports JavaScript features like `Array`, `Promise`, and `Map`.
+   - It supports JavaScript features like `Array`, `Promise`, and `Map`.
 
 ### Libuv
+
 1. **Event Loop**
 
-    - Libuv implements the event loop, which allows Node.js to handle multiple asynchronous tasks efficiently in a single thread.
+   - Libuv implements the event loop, which allows Node.js to handle multiple asynchronous tasks efficiently in a single thread.
+
 2. **Thread Pool**
 
-    - For tasks that cannot be performed asynchronously (e.g., file I/O), libuv uses a thread pool to offload blocking operations.
+   - For tasks that cannot be performed asynchronously (e.g., file I/O), libuv uses a thread pool to offload blocking operations.
+
 3. **Timers**
 
-    - Libuv provides support for functions like setTimeout and setInterval.
+   - Libuv provides support for functions like setTimeout and setInterval.
+
 4. **File System I/O**
 
-    Libuv enables non-blocking file system operations.
+   Libuv enables non-blocking file system operations.
+
 5. **Networking**
 
-    - Libuv supports TCP, UDP, and DNS functionalities.
+   - Libuv supports TCP, UDP, and DNS functionalities.
+
 6. **Child Processes**
 
-    Libuv helps Node.js spawn child processes using its threading capabilities.
+   Libuv helps Node.js spawn child processes using its threading capabilities.
 
 # Runtime
 
 ![Runtime](jsruntime.png)
 
 ## Components
+
 1. **JavaScript Engine**
 
-    - Responsible for parsing and executing JavaScript code.
-    - Examples: V8 Engine (Chrome), SpiderMonkey (Firefox), JavaScriptCore (Safari).
-3. **Call Stack**
+   - Responsible for parsing and executing JavaScript code.
+   - Examples: V8 Engine (Chrome), SpiderMonkey (Firefox), JavaScriptCore (Safari).
 
-    -A stack-like data structure where function calls are pushed and popped as the code executes.
-    - Follows a Last In, First Out (LIFO) approach.
-4. Web APIs
+2. **Call Stack**
 
-    - Provided by the browser to handle tasks like DOM manipulation, setTimeout, HTTP requests (AJAX, fetch), and more.
-    - Examples:
-      - setTimeout (Timers API)
-      - fetch or XMLHttpRequest (Networking API)
-      - Event listeners for user interaction.
-5. **Callback Queue**
+   -A stack-like data structure where function calls are pushed and popped as the code executes.
 
-    - A queue that holds callback functions (from asynchronous operations) that are ready to be executed.
-6. **Event Loop**
+   - Follows a Last In, First Out (LIFO) approach.
 
-    - A mechanism that continuously checks whether the call stack is empty.
-    - If the call stack is empty, it moves callbacks from the callback queue to the call stack for execution.
-7. **Microtask Queue**
+3. Web APIs
 
-    - Handles higher-priority asynchronous tasks, such as `Promise` callbacks or `MutationObserver`.
-    - Microtasks are executed before tasks in the callback queue.
+   - Provided by the browser to handle tasks like DOM manipulation, setTimeout, HTTP requests (AJAX, fetch), and more.
+   - Examples:
+     - setTimeout (Timers API)
+     - fetch or XMLHttpRequest (Networking API)
+     - Event listeners for user interaction.
+
+4. **Callback Queue**
+
+   - A queue that holds callback functions (from asynchronous operations) that are ready to be executed.
+
+5. **Event Loop**
+
+   - A mechanism that continuously checks whether the call stack is empty.
+   - If the call stack is empty, it moves callbacks from the callback queue to the call stack for execution.
+
+6. **Microtask Queue**
+
+   - Handles higher-priority asynchronous tasks, such as `Promise` callbacks or `MutationObserver`.
+   - Microtasks are executed before tasks in the callback queue.
+
 ## How Runtime Works
+
 1. **Synchronous Code Execution**
 
-    - JavaScript executes synchronous code line by line using the call stack.
+   - JavaScript executes synchronous code line by line using the call stack.
+
 2. **Web APIs**
 
-    - If asynchronous code (e.g., `setTimeout`, `fetch`) is encountered, the task is offloaded to the browser's Web APIs.
+   - If asynchronous code (e.g., `setTimeout`, `fetch`) is encountered, the task is offloaded to the browser's Web APIs.
+
 3. **Callback Queue and Microtask Queue**
 
-    - Once the asynchronous task is complete, the browser places the callback in either the callback queue (for `setTimeout` and events) or the microtask queue (for Promises).
+   - Once the asynchronous task is complete, the browser places the callback in either the callback queue (for `setTimeout` and events) or the microtask queue (for Promises).
+
 4. **Event Loop**
 
-    - The event loop checks whether the call stack is empty.
-    - If it is, it first processes any tasks in the microtask queue, and then processes tasks in the callback queue.
+   - The event loop checks whether the call stack is empty.
+   - If it is, it first processes any tasks in the microtask queue, and then processes tasks in the callback queue.
+
 5. **Execution of Callbacks**
 
-    -Callbacks are moved to the call stack and executed.
+   -Callbacks are moved to the call stack and executed.
 
 # Prototype
 
@@ -1574,3 +1598,85 @@ console.log(account.getBalance()); // Output: 1200
 - The `_balance` property is conventionally treated as private (though it can still be accessed directly). This encapsulates the balance from direct modification.
 - `deposit()`, `withdraw()`, and `getBalance()` methods provide controlled ways to interact with \_balance.
 - The user of the `BankAccount` class doesn't need to know how the balance is updated internally—they just use the methods
+
+# Ajax
+
+AJAX stands for Asynchronous JavaScript and XML. It's a technique used in web development to send and receive data from a server asynchronously (in the background) without reloading the entire web page.
+
+## How Does AJAX Work?
+
+1. A user event occurs (like clicking a button).
+2. JavaScript creates an XMLHttpRequest object (or uses fetch()).
+3. The request is sent to a server-side script (like PHP, Node.js, etc.).
+4. The server processes the request and sends back a response (usually in JSON).
+5. JavaScript handles the response and updates the HTML content.
+
+## Methods
+
+### GET
+
+```js
+function getData() {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1", true);
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      const data = response.body;
+      return data;
+    }
+  };
+
+  xhr.send();
+}
+```
+
+**Modern Approach:**
+
+```js
+function getData() {
+  fetch("https://jsonplaceholder.typicode.com/posts/1")
+    .then((response) => response.json())
+    .then((data) => {
+      return data.body;
+    })
+    .catch((error) => console.error("Error:", error));
+}
+```
+
+### POST
+
+```js
+function sendData() {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "server.php", true);
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      const data = response.body;
+      return data;
+    }
+  };
+
+  xhr.send("name=" + encodeURIComponent(formData));
+}
+```
+
+**Modern Approach:**
+
+```js
+fetch("api.php", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(formData),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log("Response:", data);
+  });
+```
