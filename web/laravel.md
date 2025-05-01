@@ -33,6 +33,18 @@
   - [Routing](#routing)
   - [Views](#views)
   - [Controller](#controller)
+  - [Authentication](#authentication)
+    - [Login](#login)
+    - [Registration](#registration)
+    - [Authenticated User](#authenticated-user)
+    - [Log Out](#log-out)
+    - [`rememberToken()`](#remembertoken)
+  - [Protected Route](#protected-route)
+    - [Controller](#controller)
+    - [View](#view)
+  - [Form Validation](#form-validation)
+    - [`old()` function](#old-function)
+  - [Middleware](#middleware)
 
 # Basic
 
@@ -1315,6 +1327,16 @@ Or log out all tokens (all devices):
 $request->user()->tokens()->delete();
 ```
 
+### `rememberToken()`
+
+It is used in migrations to add a special column named remember_token to a table, which is used for the "remember me" authentication feature.
+
+When users log in and check a "Remember Me" box, Laravel keeps them logged in even after closing the browser by storing a token in the database and a cookie in the user's browser.
+
+```php
+$table->rememberToken();
+```
+
 ## Protected Route
 
 ### Controller
@@ -1336,3 +1358,78 @@ public function index()
     return view('posts.index', compact('posts'));
 }
 ```
+
+## Form Validation
+
+### `old()` function
+
+It is used to retrieve input data that was flashed to the session during the previous request, typically after form validation fails and the page is redirected back.
+
+When a form is submitted and validation fails, Laravel redirects the user back to the form and flashes the input data to the session. The `old()` function helps repopulate the form fields with the previous input so the user doesn’t have to retype everything.
+
+**Syntax:**
+
+```php
+old('input_name', 'default_value')
+```
+
+- `old()` only works if the session is available (i.e., in web middleware).
+- Laravel automatically flashes input on validation failure if you use `$request->validate()` or `FormRequest`.
+
+## Middleware
+
+### Create Middleware
+
+```shell
+php artisan make:middleware CheckAge
+```
+
+**Define Logic:**
+
+```php
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class CheckAge
+{
+    public function handle(Request $request, Closure $next)
+    {
+        if ($request->age <= 18) {
+            return redirect('home')->with('error', 'You must be over 18!');
+        }
+
+        return $next($request); // Let the request pass through
+    }
+}
+```
+
+### Register Middleware
+
+- Option A: Global Middleware (runs on every request)
+
+  - Add to `app/Http/Kernel.php` in the `$middleware` array.
+
+- Option B: Route Middleware (recommended for selective usage)
+  - Add this to `$routeMiddleware` in `Kernel.php`:
+
+```php
+'check.age' => \App\Http\Middleware\CheckAge::class,
+```
+
+### Use Middleware
+
+```php
+Route::get('/restricted-area', function () {
+    return 'Welcome to the restricted area!';
+})->middleware('check.age');
+```
+
+### Built-in Middleware
+
+- `auth` - Ensures user is authenticated
+- `guest` - Ensures user is not authenticated
+- `throttle` - Rate-limits requests
+- `verified` - Ensures user has verified their email
+- `can:permission` - Authorization via policies or gates
