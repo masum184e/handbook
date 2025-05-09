@@ -12,9 +12,9 @@ Unified Modeling Language (UML) is a standardized visual language used to model 
 
 - [Structural Diagram](#structural-diagram)
   - [Class Diagram](#class-diagram)
-  - Component Diagram
+  - [Component Diagram](#component-diagram)
   - Composite Structure Diagram
-  - Deployment Diagram
+  - [Deployment Diagram](#deployment-diagram)
   - Package Diagram
   - [Object Diagram](#object-diagram)
   - Profile Diagram
@@ -129,6 +129,201 @@ It describe the structure of a system by showing its classes, attributes, method
                                   +------------------+
                                   | + manageBooks()    |
                                   +------------------+
+```
+
+### Component Diagram
+
+It is a structural diagram that shows how components are connected and how they interact to form larger software systems. It visualizes the organization and dependencies among a set of components.
+
+**What is a Component?**
+
+A component represents a modular part of a system that encapsulates its contents and defines its behavior in terms of provided and required interfaces. In simpler terms, components are self-contained units that can be replaced independently.
+
+#### Components
+
+1. **Component:**
+
+- A self-contained module with well-defined functionality, like a class, module, or microservice.
+- Represented as a rectangle with the stereotype «component».
+  ```
+  +------------------------+
+  |      «component»       |
+  |    Book Management     |
+  +------------------------+
+  ```
+
+2. **Interface:**
+
+- Defines how components communicate—what services they provide and require.
+- Types:
+  - Provided Interface (lollipop-○): what a component offers.
+  - Required Interface (socket-◐): what a component needs.
+
+3. **Relationships:**
+
+- Dependency (dashed arrow): One component depends on another.
+- Association (solid line): A structural link.
+- Assembly Connector: Connects required to provided interfaces.
+
+4. **Ports:**
+
+- Interaction point on the boundary of a component.
+- Represented as small square on the component’s edge.
+
+5. **Artifacts:**
+
+- A physical file or piece of code/data
+- Real-world outputs like executable files or data.
+- Shown as rectangles with «artifact».
+
+6. **Nodes:**
+
+- Physical/virtual environments where components run.
+- Shown as 3D boxes.
+
+**Example:**
+
+```
+                    +--------------------------+
+                    |   «component»            |
+                    |   UserInterface          |
+                    |                          |
+                    |   ◐ searchBooks()        |
+                    |   ◐ borrowBook()         |
+                    |   ◐ returnBook()         |
+                    +----------◼--------------+
+                               |
+                               ▼
+                    +--------------------------+
+                    |   «component»            |
+                    |   BookService            |
+                    |   ○ searchBooks()        |
+                    |   ◐ getBookDetails()     |
+                    |   ◐ updateAvailability() |
+                    +----------◼--------------+
+                               |
+                               ▼
+                    +--------------------------+
+                    |   «component»            |
+                    |   LoanService            |
+                    |   ○ borrowBook()         |
+                    |   ○ returnBook()         |
+                    |   ◐ calculateFines()     |
+                    +----------◼--------------+
+                               |
+                               ▼
+                    +--------------------------+
+                    |   «component»            |
+                    |   NotificationService    |
+                    |   ○ sendDueAlert()       |
+                    |   ○ sendOverdueNotice()  |
+                    +--------------------------+
+
+           (All components read/write to:)
+
+                    +--------------------------+
+                    |   «artifact»             |
+                    |   LibraryDB.sql          |
+                    +--------------------------+
+```
+
+### Deployment Diagram
+
+It is used to show the physical deployment of artifacts (software components) on hardware nodes.
+
+It visualizes:
+
+- Nodes (hardware or software devices)
+- Artifacts (executable files, libraries, components)
+- The relationships among them (e.g., communication paths)
+
+#### Components
+
+| Element                | Symbol                 | Description                                                     |
+| ---------------------- | ---------------------- | --------------------------------------------------------------- |
+| **Node**               | 3D box                 | A physical entity (e.g., server, computer) that hosts software  |
+| **Artifact**           | Rectangle with dog-ear | A physical piece of information (e.g., .jar file, .dll, script) |
+| **Communication Path** | Solid line             | Shows communication between nodes                               |
+| **Dependency**         | Dashed arrow           | Shows dependency between artifacts or nodes                     |
+
+**Example:**
+
+```
++------------------------------------------------------+
+|                  <<device>>                          |
+|               Client Machine                         |
+|------------------------------------------------------|
+|  +-------------------------------------------------+ |
+|  |              <<artifact>>                       | |
+|  |              Web Browser                        | |
+|  |- Used by students/librarians                    | |
+|  |- Accesses the system via HTTP                   | |
+|  +------------------------------------------------+| |
++------------------------------------------------------+
+                    ||
+                    ||  HTTP/HTTPS
+                    \/
++------------------------------------------------------+
+|                   <<device>>                         |
+|                   Web Server                         |
+|------------------------------------------------------|
+|  +-------------------------------------------------+ |
+|  |                <<artifact>>                     | |
+|  |              LibraryWebApp.war                  | |
+|  |- Handles UI rendering                           | |
+|  |- Accepts HTTP requests from clients             | |
+|  |- Forwards requests to the application server    | |
+|  +-------------------------------------------------+ |
++------------------------------------------------------+
+                    ||
+                    ||  Internal API Calls (e.g., REST)
+                    \/
++------------------------------------------------------+
+|                     <<device>>                       |
+|                   Application Server                 |
+|------------------------------------------------------|
+|  +-------------------------------------------------+ |
+|  |                  <<artifact>>                   | |
+|  |                  LMSLogic.jar                   | |
+|  |- Core business logic                            | |
+|  |- Processes book issue/return, fines, user auth  | |
+|  +-------------------------------------------------+ |
+|                                                      |
+|  +-------------------------------------------------+ |
+|  |                 <<artifact>>                    | |
+|  |                    ORM.jar                      | |
+|  |- Handles database access (ORM Layer)            | |
+|  +-------------------------------------------------+ |
++------------------------------------------------------+
+                    ||
+                    ||  JDBC/SQL
+                    \/
++------------------------------------------------------+
+|                    <<device>>                        |
+|                  Database Server                     |
+|------------------------------------------------------|
+|  +-------------------------------------------------+ |
+|  |              <<artifact>>                       | |
+|  |            LibraryDB (MySQL)                    | |
+|  |- Stores books, users, transactions, fines       | |
+|  |- Central persistent data storage                | |
+|  +-------------------------------------------------+ |
++------------------------------------------------------+
+                    /\
+                    ||
+                    ||  HTTPS / API / Background Sync
++------------------------------------------------------+
+|                     <<device>>                       |
+|                 Mobile App Device                    |
+|------------------------------------------------------|
+|  +-------------------------------------------------+ |
+|  |               <<artifact>>                      | |
+|  |              LibraryApp.apk                     | |
+|  |- Mobile client for accessing LMS features       | |
+|  |- May work in online/offline mode                | |
+|  +-------------------------------------------------+ |
++------------------------------------------------------+
+
 ```
 
 ### Object Diagram
