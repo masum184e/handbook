@@ -32,6 +32,7 @@
   - [Math Object](#math-object)
 - [Engine](#engine)
 - [Runtime](#runtime)
+- [Execution Model](#execution-model)
 - [Prototype](#prototype)
 - [Thread](#thread)
 - [Execution Context](#execution-context)
@@ -43,12 +44,22 @@
 - [Class](#class)
 - [Constructor](#constructor)
 - [OOP](#oop)
+  - [Encapsulation](#encapsulation)
+  - [Inheritance](#inheritance)
+  - [Polymorphism](#polymorphism)
+  - [Abstraction](#abstraction)
+- [Ajax](#ajax)
+  - [How Does AJAX Work?](#how-does-ajax-work)
+  - [Methods](#methods)
 
 # Javascript
 
 **Dynamic Typing:** JavaScript is a dynamically typed language, meaning you don't need to declare variable types explicitly. The type is determined at runtime.
+
 **Interpreted Language:** Unlike compiled languages like C or Java, JavaScript code is interpreted by the browser in real-time, which makes development and debugging more flexible and fast.
+
 **Prototype-based Object Orientation:** JavaScript uses prototypes rather than classical inheritance models (like in Java or C++). This means objects can inherit properties directly from other objects.
+
 **First-class Functions:** Functions in JavaScript are first-class citizens, meaning they can be treated like any other variable. They can be passed as arguments, returned from other functions, and assigned to variables.
 
 - high-level
@@ -75,6 +86,26 @@ Javascript first introduced in 1995 as `LiveScript`, but during development it c
 - Promises
 - Let and Const
 - Rest and Spread Operators
+
+### Features Introduced in ECMAScript 2025
+
+#### Enhanced Set Methods
+
+- Adds mathematical-style set operations: `.union()`, `.intersection()`, `.difference()`, `.symmetricDifference()`
+- Utility checks like `.isSubsetOf()`, `.isSupersetOf()`, and .`isDisjointFrom()`.
+
+#### JSON Modules and Import Attributes
+
+- Support for JSON modules, allowing direct import of JSON files as modules.
+- Import attributes provide structured metadata alongside imports
+
+#### `Promise.try()` Utility
+
+- A convenient method that simplifies Promise chains, making it easier to start them without explicitly constructing a new Promise
+
+#### New Typed Array: `Float16Array`
+
+Adds support for 16-bit floating-point numbers, useful for certain graphics or performance-sensitive applications
 
 ## Array
 
@@ -782,6 +813,8 @@ It's not a constructor, so we don't use `new Math()`. Instead, we call the metho
 
 # Engine
 
+<img src="./../images/web/v8engine.png" />
+
 ## Components
 
 1. **Parser**
@@ -893,7 +926,7 @@ Two critical dependencies of Node.js are:
 
 2. **Call Stack**
 
-   -A stack-like data structure where function calls are pushed and popped as the code executes.
+   - A stack-like data structure where function calls are pushed and popped as the code executes.
 
    - Follows a Last In, First Out (LIFO) approach.
 
@@ -901,8 +934,8 @@ Two critical dependencies of Node.js are:
 
    - Provided by the browser to handle tasks like DOM manipulation, setTimeout, HTTP requests (AJAX, fetch), and more.
    - Examples:
-     - setTimeout (Timers API)
-     - fetch or XMLHttpRequest (Networking API)
+     - `setTimeout` (Timers API)
+     - `fetch` or `XMLHttpRequest` (Networking API)
      - Event listeners for user interaction.
 
 4. **Callback Queue**
@@ -940,7 +973,142 @@ Two critical dependencies of Node.js are:
 
 5. **Execution of Callbacks**
 
-   -Callbacks are moved to the call stack and executed.
+   - Callbacks are moved to the call stack and executed.
+
+# Execution Model
+
+JavaScript has a single-threaded runtime — meaning only one operation runs at any moment.
+However, JavaScript can handle asynchronous tasks efficiently by delegating work to the Web API and using the event loop to manage callbacks.
+
+The execution model has three main parts:
+
+1. **Call Stack** – Where synchronous code is executed line by line.
+2. **Web APIs** – Provided by the browser (or Node.js APIs) for async tasks like timers, HTTP requests, file I/O, etc.
+3. **Callback Queue / Microtask Queue** – Holds functions waiting to be executed when the stack is empty.
+4. **Event Loop** – Constantly checks if the stack is empty, then moves queued functions into it.
+
+## Synchronous Execution
+
+- Code runs top to bottom.
+- Each line blocks the next line until it finishes.
+- Only the call stack is involved.
+
+```js
+console.log("1: Start");
+
+function multiply(a, b) {
+  return a * b;
+}
+
+console.log("2: Multiply result =", multiply(2, 5));
+
+console.log("3: End");
+```
+
+### Step-by-step
+
+1. `console.log("1: Start")` → pushed to call stack → executed → removed.
+2. `multiply(2, 5)`:
+
+   - Call `multiply` → push to stack.
+   - Return `10` → remove `multiply` from stack.
+
+3. `console.log("2: Multiply result =", 10)` → executed.
+4. `console.log("3: End")` → executed.
+
+**Output:**
+
+```
+1: Start
+2: Multiply result = 10
+3: End
+```
+
+Nothing waits in the background — one step must finish before the next starts.
+
+## Asynchronous Execution
+
+- **Web APIs** to do work in the background.
+- **Callback Queue** to store functions when ready.
+- **Event Loop** to insert them into the stack when it's free.
+
+```js
+console.log("1: Start");
+
+setTimeout(() => {
+  console.log("2: Timeout finished");
+}, 2000);
+
+console.log("3: End");
+```
+
+### Step-by-step:
+
+1. `console.log("1: Start")` → executed immediately.
+2. `setTimeout` is called:
+
+   - The `setTimeout` function is pushed to the call stack.
+   - The browser's Web API starts a 2-second timer in the background.
+   - `setTimeout` finishes → removed from stack.
+
+3. `console.log("3: End")` → executed.
+4. Meanwhile, the timer counts down in Web API land.
+5. After 2 seconds, the callback `() => console.log("2: Timeout finished")` is sent to the Callback Queue.
+6. Event Loop checks: Is the call stack empty? Yes → moves callback into stack.
+7. Callback executes → prints `"2: Timeout finished"`.
+
+**Output:**
+
+```
+1: Start
+3: End
+2: Timeout finished
+```
+
+## Microtasks vs Macrotasks
+
+JavaScript has two queues for async tasks:
+
+1. Macrotask Queue – `setTimeout`, `setInterval`, I/O callbacks.
+2. Microtask Queue – Promises, `queueMicrotask()`.
+
+Microtasks always run before macrotasks when the call stack is free.
+
+### Example – Promise vs Timeout
+
+```js
+console.log("1: Start");
+
+setTimeout(() => {
+  console.log("2: Timeout");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("3: Promise resolved");
+});
+
+console.log("4: End");
+```
+
+**Output:**
+
+```
+1: Start
+4: End
+3: Promise resolved
+2: Timeout
+```
+
+### Step-by-step:
+
+1. `"1: Start"` → executed.
+2. `setTimeout` → sends task to macrotask queue (0ms delay, but still queued).
+3. `Promise.then` → sends task to microtask queue.
+4. `"4: End"` → executed.
+5. Call stack empty → Event Loop checks microtasks first:
+   - `"3: Promise resolved"` → executed.
+6. Then moves to macrotasks:
+   - `"2: Timeout"` → executed.
 
 # Prototype
 
@@ -950,10 +1118,10 @@ It is a mechanism by which objects inherit properties and methods from other obj
 
 1. **Prototype Chain**: Every JavaScript object has an internal link to another object called its prototype. This chain of linked objects continues until it reaches an object with a `null` prototype, known as the end of the prototype chain. When a property or method is accessed on an object, JavaScript will look for it on the object itself first, then on its prototype, and so forth, traversing up the chain until it finds the property or reaches the end of the chain.
 
-2. **Prototype Property** (**proto** and **.prototype**):
+2. **Prototype Property** (**`proto`** and **`.prototype`**):
 
-- **proto**: Every JavaScript object has a hidden **proto** property, which points to its prototype.
-- **.prototype**: Only functions (constructor functions) have the **.prototype** property. This property allows you to add properties and methods that should be inherited by all instances created from the constructor.
+   - **`proto`**: Every JavaScript object has a hidden **`proto`** property, which points to its prototype.
+   - **`.prototype`**: Only functions (constructor functions) have the **`.prototype`** property. This property allows you to add properties and methods that should be inherited by all instances created from the constructor.
 
 3. **Inheritance in JavaScript**: By using prototypes, objects can share properties and methods without duplicating them for each instance. This is memory-efficient and allows methods to be updated or modified once on the prototype, affecting all instances that inherit from it.
 
@@ -1074,6 +1242,8 @@ const square=squareNumber(root);
 
 Memory is allocated for variables and functions. Variables are set to `undefined`([Hoisting](#hoisting)), and functions are stored the function body.
 
+It occurs in the heap memory.
+
 **Explaination:**
 
 - Global Execution Context
@@ -1087,6 +1257,8 @@ Memory is allocated for variables and functions. Variables are set to `undefined
 
 - Code is executed line by line
 - variables are assigned their actual values(replacing `undefined`)
+
+It occurs in the call stack.
 
 **Explaination:**
 
@@ -1224,7 +1396,7 @@ fetchData();
 processData("completed");
 ```
 
-Callback function solve this problem by ensuring the execution of argument function before completion the parente function.
+Callback function solve this problem by ensuring the execution of argument function before completion the parent function.
 
 ```js
 const fetchData = (callback) => {
@@ -1363,48 +1535,48 @@ Promise.all([promise1, promise2]).then((data) => {
 Promises can be chained to run asynchronouse task sequenially which resolve callback hell.
 
 1.  **Convert Functions to Return Promises**
+
     For each function that uses a callback, refactor it to return a Promise instead.
 
-    ````js
-    const takeOrder=(orderNumber)=>{
-        return new Promise((resolve)=>{
-            console.log(`Take Order ${orderNumber}`)
-            resolve(orderNumber);
-        })
-    }
-    const processOrder=(orderNumber)=>{
-        return new Promise((resolve)=>{
-            console.log(`Proces Order Start ${orderNumber}`);
+    ```js
+    const takeOrder = (orderNumber) => {
+      return new Promise((resolve) => {
+        console.log(`Take Order ${orderNumber}`);
+        resolve(orderNumber);
+      });
+    };
+    const processOrder = (orderNumber) => {
+      return new Promise((resolve) => {
+        console.log(`Proces Order Start ${orderNumber}`);
 
-                setTimeout(()=>{
-                    console.log(`Proceed Order ${orderNumber}`);
-                    resolve(orderNumber)
-                },3000);
-            })
-
-        }
-        const completeOrder=(orderNumber)=>{
-            return new Promise((resolve)=>{
-                console.log(`Completed Order ${orderNumber}`);
-                resolve(orderNumber);
-            })
-        }
-        ```
-
-    ````
+        setTimeout(() => {
+          console.log(`Proceed Order ${orderNumber}`);
+          resolve(orderNumber);
+        }, 3000);
+      });
+    };
+    const completeOrder = (orderNumber) => {
+      return new Promise((resolve) => {
+        console.log(`Completed Order ${orderNumber}`);
+        resolve(orderNumber);
+      });
+    };
+    ```
 
 2.  **Chain the Promises**
+
     Once the functions return Promises, chain them using `.then()` and `.catch()` method.
-    `js
-takeOrder(1)
-    .then(orderNumber=>processOrder(orderNumber))
-    .then((orderNumber)=>completeOrder(orderNumber))
-    .catch(()=>console.log("Error Occurred"))
-takeOrder(2)
-    .then(orderNumber=>processOrder(orderNumber))
-    .then((orderNumber)=>completeOrder(orderNumber))
-    .catch(()=>console.log("Error Occurred"))
-`
+
+    ```js
+    takeOrder(1)
+      .then((orderNumber) => processOrder(orderNumber))
+      .then((orderNumber) => completeOrder(orderNumber))
+      .catch(() => console.log("Error Occurred"));
+    takeOrder(2)
+      .then((orderNumber) => processOrder(orderNumber))
+      .then((orderNumber) => completeOrder(orderNumber))
+      .catch(() => console.log("Error Occurred"));
+    ```
 
 # async/await
 
@@ -1481,11 +1653,6 @@ var Parent = function (name = "masum", dob = "june") {
 ```
 
 # OOP
-
-- [Encapsulation](#encapsulation)
-- [Inheritance](#inheritance)
-- [Polymorphism](#polymorphism)
-- [Abstraction](#abstraction)
 
 ## Encapsulation
 
