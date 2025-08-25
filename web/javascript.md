@@ -12,13 +12,17 @@
   - [Don’t Repeat Yourself](#dry-dont-repeat-yourself)
   - [We Enjoy Typing](#wet-write-everything-twice--we-enjoy-typing)
   - [Comparison of DRY and WET](#comparison-of-dry-and-wet)
+- [Browser vs NodeJS](#browser-vs-nodejs)
+
 ## 2. Fundamentals
 
 - [Data Types](#data-types)
   - [Primitive Data Types](#primitive-data-types)
   - [Non-Primitive Data Types](#non-primitive-reference-data-types)
   - [Value vs Reference](#key-difference-value-vs-reference)
-- [Variables](#variable-declaration)
+- [Variables](#variables)
+  - [Variable Environments](#variable-environments)
+  - [Variables](#variable-declaration)
   - [Hoisting](#hoisting)
   - [Temporal Dead Zone](#temporal-dead-zone)
   - [Scope](#scope)
@@ -30,7 +34,7 @@
     - [Basic Example of Clousure](#basic-example-of-clousure)
     - [Closure with Private Variables](#closure-with-private-variables)
     - [Closure in Loops](#closure-in-loops)
-- [Operators](#operator)
+- [Operators](#operators)
   - [`typeof`](#typeof)
   - [Truthy & Falsy](#truthy-and-falsy)
 
@@ -38,6 +42,8 @@
 
 - [Loops](#loops)
   - [Differences between `for...of` and `for...in`](#differences-between-forof-and-forin)
+- []()
+  - []()
 - [Expression and Statement](#expression-and-statement)
   - [Expression](#expression)
   - [Statement](#statement)
@@ -311,6 +317,11 @@ It can executes after triggering an event(input is not an event) that's why it c
 - It can be text typed in a box, numbers entered, choices made, etc.
 - Input is often collected because of an event, but it’s the actual value the user provides.
 
+## Fun Facts
+
+- Atom, Brackets are build on top of Javascript
+- Visual Studio Code is build on Typescript
+
 # ECMAScript
 
 It is the standard that defines JavaScript, providing guidelines for its implementation and the syntax that modern JavaScript adheres to. It is the specification of scripting language which set rules.
@@ -350,7 +361,9 @@ Javascript first introduced in 1995 as `LiveScript`, but during development it c
 Adds support for 16-bit floating-point numbers, useful for certain graphics or performance-sensitive applications
 
 # DRY vs WET
+
 ## DRY (Don’t Repeat Yourself)
+
 DRY is a principle that encourages avoiding duplication of code or logic. If something is repeated in multiple places, it should be abstracted into a single place (function, module, class, etc.).
 
 - Reduce redundancy
@@ -372,8 +385,11 @@ greet("Alice");
 greet("Bob");
 greet("Charlie");
 ```
+
 Now if we want to change the greeting, we only change it in one place.
+
 ## WET (Write Everything Twice / We Enjoy Typing)
+
 WET is the opposite of DRY. It’s when code is duplicated instead of abstracted. Sometimes people use WET intentionally for simplicity, or because over-abstraction can make code harder to read.
 
 ```js
@@ -381,14 +397,92 @@ console.log("Hello, Alice!");
 console.log("Hello, Bob!");
 console.log("Hello, Charlie!");
 ```
+
 If we want to change "Hello" to "Hi", we must update every line manually, which is error-prone.
+
 ## Comparison of DRY and WET
+
 | Aspect       | DRY                         | WET                                     |
 | ------------ | --------------------------- | --------------------------------------- |
 | Approach     | Reuse code / abstract logic | Duplicate code                          |
 | Maintenance  | Easy, changes in one place  | Hard, multiple changes needed           |
 | Risk of Bugs | Low                         | High                                    |
 | Example      | Functions, classes, modules | Repeated print statements, copied logic |
+
+# Browser vs NodeJS
+
+## JavaScript in the Browser
+
+JavaScript was originally designed to run inside web browsers to make websites interactive.
+When you open a webpage, the browser downloads the HTML, CSS, and JavaScript, then runs the JavaScript inside the browser engine (like V8 in Chrome, SpiderMonkey in Firefox).
+
+### Features in Browser JavaScript
+
+1. DOM Manipulation
+
+- Can interact with the Document Object Model (DOM), i.e., change HTML elements, styles, attributes.
+- Example: Changing a button’s text or listening for clicks.
+
+2. BOM (Browser Object Model)
+
+- Access to `window`, `navigator`, `screen`, `location`, etc.
+- Example: Redirecting users to another page with `window.location`.
+
+3. Limited File Access
+
+- For security, browser JS cannot directly read/write local files (except via `<input type="file">` or APIs like IndexedDB).
+
+4. Networking
+
+- Can make HTTP requests using fetch or XMLHttpRequest.
+- Example: Fetching API data.
+
+5. Security Sandbox
+
+- Runs in a restricted environment (sandbox), preventing access to the operating system directly.
+
+## JavaScript in Node.js
+
+Node.js is a runtime environment that allows JavaScript to run outside the browser, built on Google’s V8 engine.
+It is often used for backend development, file systems, servers, and more.
+
+### Features in Node.js
+
+1. No DOM/BOM
+
+- Node.js does not have document, window, or alert, because it does not run inside a browser.
+
+2. File System Access
+
+- Can read, write, and manipulate files with the fs module.
+
+3. Modules (CommonJS/ESM)
+
+- Code is organized into reusable modules using require() or import.
+
+4. Networking & Servers
+
+- Can create web servers (using built-in http or frameworks like Express).
+
+5. Access to OS
+
+- Can use os, path, process modules for system-level operations.
+
+6. Event-driven architecture
+
+- Uses event loop, async I/O, and callbacks extensively.
+
+## Differences between Browser JS vs Node.js
+
+| Feature         | Browser JS                       | Node.js                           |
+| --------------- | -------------------------------- | --------------------------------- |
+| **Environment** | Runs in browser sandbox          | Runs in server/OS environment     |
+| **DOM/BOM**     | Available (`document`, `window`) | Not available                     |
+| **File System** | Restricted (no direct access)    | Full access via `fs` module       |
+| **Modules**     | ES Modules (`import/export`)     | CommonJS (`require`) + ES Modules |
+| **Networking**  | `fetch`, WebSockets              | `http`, `https`, `net`, Express   |
+| **Use Case**    | Frontend (UI, user interactions) | Backend (servers, APIs, scripts)  |
+| **Security**    | Runs in sandbox                  | Access to OS/system resources     |
 
 # Data Types
 
@@ -515,13 +609,71 @@ console.log(obj2.value); // 20
 | **Comparison**  | By value (`===`)                                         | By reference (`===`)                          |
 | **Size**        | Fixed                                                    | Dynamic                                       |
 
-# Variable Declaration
+# Variables
+
+## Variable Environments
+
+In JavaScript, every execution context (like global code, a function, or a block) has an associated Variable Environment.
+
+A Variable Environment is a special internal object where all the variables and function declarations of that context are stored.
+
+When JavaScript code runs:
+
+1. The Execution Context is created.
+2. Inside it, the Variable Environment is created to keep track of variables defined with `var`, `let`, and `const`.
+3. This environment helps JavaScript engines know where and how to find variables during execution.
+
+### Components of Variable Environment
+
+The Variable Environment is closely related to Lexical Environments. Both together form the scope chain.
+
+1. Variable Declarations (var, let, const)
+
+- Stored differently:
+  - `var → Stored in Variable Environment (function-scoped).
+  - `let & `const` → Stored in Lexical Environment (block-scoped), but conceptually part of execution context too.
+
+2. Function Declarations
+
+- Stored in Variable Environment and hoisted.
+
+3. Scope Chain
+
+- Variable Environment links to its outer environment reference, allowing inner functions to access variables from outer scopes (closures).
+
+### Variable Environment vs Lexical Environment
+
+- Variable Environment:
+  - Holds variables declared with var (function-scoped).
+  - Created when execution context is created.
+- Lexical Environment:
+  - Holds let and const (block-scoped).
+  - Depends on where code is written (lexical scope).
+
+📌 But in modern JS discussions, people often use Lexical Environment as a more general term. The Variable Environment is just a specific part of it.
+
+## Variable Declaration
 
 - Updating/re-assigning `const` variable create `TypeError: Assignment to constant variable.` error.
+
   ```js
   const a = "hello";
   a = "hi";
   ```
+
+  - It creates a constant reference to a value. if the value is an object or array, you can mutate its contents (because the reference stays the same).
+
+    ```js
+    const x = 10;
+    x = 20; // ❌ Error: Assignment to constant variable
+
+    const arr = [1, 2, 3];
+    arr.push(4); // ✅ Allowed
+    arr = [5, 6]; // ❌ Error
+    ```
+
+  - Primitive `const`, `let`, `var` store in stack, Non-primitive store in stack.
+
 - A variable with same name can be declare twice with `var` but not with `let` and `const`, it will create `SyntaxError: Identifier 'a' has already been declared`.
 
   ```JS
@@ -794,7 +946,10 @@ for (let i = 1; i <= 3; i++) {
 // Output: 1 2 3
 ```
 
-# Operator
+# Operators
+
+- `++a` increase first then return.
+- `a++` return first then increase.
 
 ## `typeof`
 
@@ -864,6 +1019,22 @@ A `falsy` value is any value that is considered `false` when encountered a boole
 # Expression and Statement
 
 Expression produce value, statement perform an action
+
+**Function Statement:**
+
+```js
+function name() {
+  // code
+}
+```
+
+**Function Expression:**
+
+```js
+const name = () => {
+  // code
+};
+```
 
 ## Expression
 
@@ -3064,6 +3235,14 @@ REPL is accessible in environments like Node.js, the browser console, or other J
 If you have Node.js installed, you can access its REPL environment by simply typing node in your command line or terminal.
 
 In most browsers, you can open the developer console (usually via F12 or Ctrl+Shift+J/Cmd+Option+J) to access a JavaScript REPL. Here, you can type JavaScript code and get instant feedback just like in Node.js.
+
+## Special REPL Commands
+
+- `.help` → Show all commands.
+- `.exit` → Exit REPL.
+- `.clear` → Reset REPL context.
+- `.save filename.js` → Save current session into a file.
+- `.load filename.js` → Load a file into REPL.
 
 # `new` Keyword
 
