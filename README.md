@@ -1,9 +1,15 @@
 Welcome to my learning repository! This repository is a collection of my knowledge, resources across various fields of software development. Here, I have organized my notes, code samples into different categories for easy reference.
 
 ## Contents
-
+- Software Engineering
+  - Software Architecture
+  - Software Metrics
+  - Software Security
+  - Software Testing
 - [Artificial Intellegence](https://github.com/masum184e/handbook/tree/main/ai)
   - [LangChain](https://github.com/masum184e/handbook/blob/main/ai/LangChain.ipynb)
+  - OpenCV
+  - LangGraph
   - [Data Science](https://github.com/masum184e/handbook/tree/main/ai/data-science)
     - [Data Science](https://github.com/masum184e/handbook/blob/main/ai/data-science/DataScience.ipynb)
     - [R](https://github.com/masum184e/handbook/blob/main/ai/data-science/R.md)
@@ -22,6 +28,7 @@ Welcome to my learning repository! This repository is a collection of my knowled
 - [Database](https://github.com/masum184e/programming_notes/tree/main/database)
   - [MySQL](https://github.com/masum184e/handbook/blob/main/database/mysql.md)
   - [MongoDB](https://github.com/masum184e/handbook/blob/main/database/mongodb.md)
+  - Redis
 - [Mobile App](https://github.com/masum184e/programming_notes/tree/main/mobile)
   - [Android](https://github.com/masum184e/programming_notes/blob/main/mobile/android.md)
   - [Java](https://github.com/masum184e/programming_notes/blob/main/mobile/java.md)
@@ -30,12 +37,17 @@ Welcome to my learning repository! This repository is a collection of my knowled
   - [React](https://github.com/masum184e/programming_notes/blob/main/web/react.md)
   - [NodeJS](https://github.com/masum184e/handbook/blob/main/web/nodejs.md)
   - [ExpressJS](https://github.com/masum184e/handbook/blob/main/web/express.md)
-  - [PHP](https://github.com/masum184e/handbook/blob/main/web/php.md)
+  - NextJS
+  - Laravel
+- BlockChain
 - [IoT](https://github.com/masum184e/handbook/blob/main/IoT.md)
 - [Design Pattern](https://github.com/masum184e/handbook/blob/main/design_pattern.md)
 - [Git](https://github.com/masum184e/handbook/blob/main/git.md)
 - [OOP](https://github.com/masum184e/handbook/blob/main/oop.md)
-
+- Distributed System
+- Dev Ops
+- REST API Design
+- System Design
 ## Contact
 
 For any questions or collaboration, you can reach out to me on [LinkedIn](https://www.linkedin.com/in/masum1834e).
