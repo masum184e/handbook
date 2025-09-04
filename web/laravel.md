@@ -1,922 +1,211 @@
-# Contents
+- [Installation](#installation)
+  - [Composer](#composer)
+  - [Laravel Installer](#laravel-installer)
+  - [Comparision Table](#comparision-table)
+  - [Common Post-Installation Steps](#common-post-installation-steps)
+- [Project Structure](#project-structure)
+  - [app](#app)
+  - [bootstrap](#bootstrap)
+  - [config](#config)
+  - [database](#database)
+  - [public](#public)
+  - [resources](#resources)
+  - [routes](#routes)
+  - [storage](#storage)
+  - [tests](#tests)
+  - [vendor](#vendor)
+  - [.env](#env)
+  - [artisan](#artisan)
+  - [composer.json](#composerjson)
+- [Service Providers and Configuration Files](#service-providers-and-configuration-files)
+  - [Service Providers](#service-providers)
+  - [Configuration Files](#configuration-files)
+  - [How Service Providers and Config Files Work Together](#how-service-providers-and-config-files-work-together)
+- [Environment Variables](#environment-variables)
+  - [How Laravel Uses `.env`](#how-laravel-uses-env)
+  - [Database Configuration](#database-configuration)
+  - [Accessing `.env` Values in Code](#accessing-env-values-in-code)
+- [Laravel Request Lifecycle](#laravel-request-lifecycle)
+  - [Entry Point](#step-1-entry-point--publicindexphp)
+  - [Bootstrap Laravel](#step-2-bootstrap-laravel--bootstrapappphp)
+  - [Kernel Handling](#step-3-kernel-handling--apphttpkernel)
+  - [Service Providers Boot](#step-4-service-providers-boot)
+  - [Middleware](#step-5-middleware-before)
+  - [Routing](#step-6-routing)
+  - [Controller](#step-7-controller--action-execution)
+  - [Response Preparation](#step-8-response-preparation)
+  - [Middleware](#step-9-middleware-after)
+  - [Send Response to Browser](#step-10-send-response-to-browser)
+  - [Example](#example-of-request-lifecycle)
+- [Composer](#composer)
+  - [Why Laravel Uses Composer](#why-laravel-uses-composer)
+  - [Basic Composer Commands](#basic-composer-commands)
+  - [Key Composer Files in Laravel](#key-composer-files-in-laravel)
+  - [How Autoloading Works in Laravel](#how-autoloading-works-in-laravel)
+- [Fundamentals](#fundamentals)
+  - [How Laravel Request Flows in MVC](#how-laravel-request-flows-in-mvc)
+- [Routing](#routing)
+  - [Basic Route Types](#basic-route-types)
+  - [Naming Routes](#naming-routes)
+  - [Redirect Routes](#redirect-routes)
+  - [View Routes](#view-routes)
+  - [Grouping Routes](#grouping-routes)
+- [Blade Syntax](#blade-syntax)
+  - [Static File](#static-file)
+  - [How Laravel Integrates HTML, CSS, and JS](#how-laravel-integrates-html-css-and-js)
+  - [Conditional Rendering](#if--conditional-rendering)
+  - [Looping Through Data](#foreach--looping-through-data)
+  - [Include Another Blade Template](#include--include-another-blade-template)
+  - [Blade Layouts](#blade-layouts)
+- [Controllers](#controllers)
+  - [Creating a Controller](#creating-a-controller)
+  - [Resource Controller](#resource-controller)
+  - [Routing to Controllers](#routing-to-controllers)
+  - [How Routes are Generated](#how-routes-are-generated)
+  - [API Controller](#api-controller)
+  - [Key Differences Between `--resource` and `--api`](#key-differences-between---resource-and---api)
+- [Models & Eloquent ORM](#models--eloquent-orm)
+  - [Creating a Model](#creating-a-model)
+  - [Creating Model with Migrations](#creating-model-with-migrations)
+  - [Configuring Model Properties](#configuring-model-properties)
+  - [Using the Model](#using-the-model)
+  - [Full Flow of Migrations](#full-flow-of-migrations)
+  - [Relationships](#relationships)
+    - [One-to-One](#one-to-one)
+    - [One-to-Many](#one-to-many)
+    - [Many-to-Many](#many-to-many)
+    - [HasManyThrough](#hasmanythrough)
+    - [Polymorphic relationships](#polymorphic-relationships)
+- [Migrations](#migrations)
+  - [Creating a Migration](#creating-a-migration)
+  - [Migration File Structure](#migration-file-structure)
+  - [Running Migrations](#running-migrations)
+  - [Rolling Back Migrations](#rolling-back-migrations)
+  - [Example of Adding a New Column](#example-of-adding-a-new-column)
 
-- [Basic](#basic)
-  - [Constant](#constants)
-  - [Scope](#scope)
-  - [Build in Functions](#build-in-functions)
-  - [Anonymous Functions](#anonymous-functions)
-  - [Closures](#closures)
-  - [Array](#array)
-- [JSON](#json)
-- [Standard PHP Library](#standard-php-library)
-  - [SplStack](#splstack-stack)
-  - [SplQueue](#splqueue-queue)
-  - [SplDoublyLinkedList](#spldoublylinkedlist)
-- [Form Handling](#form-handling)
-  - [superglobals](#common-superglobals)
-    - [$\_GET](#_get)
-    - [$\_POST](#_post)
-    - [$\_REQUEST](#_request)
-    - [$\_SERVER](#_server)
-  - [Validation VS Sanitization](#validation-vs-sanitization)
-  - [File Uploading](#file-uploading)
-- [Database Interaction (MySQL)](#database-interaction-mysql)
-  - [Database Connection](#database-connection)
-  - [CRUD](#crud)
-- [`.htaccess`](#htaccess)
-  - [Why](#why-implement-htaccess)
-  - [Configurations](#configurations)
-- [Laravel](#laravel)
-  - [Migrations](#migrations)
-  - [Model](#model)
-  - [Seeders](#seeders)
-  - [Routing](#routing)
-  - [Views](#views)
-  - [Controller](#controller)
-  - [Authentication](#authentication)
-    - [Login](#login)
-    - [Registration](#registration)
-    - [Authenticated User](#authenticated-user)
-    - [Log Out](#log-out)
-    - [`rememberToken()`](#remembertoken)
-  - [Protected Route](#protected-route)
-    - [Controller](#controller)
-    - [View](#view)
-  - [Form Validation](#form-validation)
-    - [`old()` function](#old-function)
-  - [Middleware](#middleware)
+# Installation
 
-# Basic
+## Composer
 
-**PHP Tags:** PHP code is embedded within HTML using special tags. PHP code starts with `<?php` and ends with `?>`.
+Using Composer’s `create-project` command:
 
-**Variables:** Variables in PHP start with a dollar sign (`$`) followed by the variable name.
-
-**Echo and Print:** `echo` and `print` are used to output data. Both can display text or variables, though `echo` is slightly faster and allows multiple parameters.
-
-**`foreach` Loop**
-The `foreach` loop is designed specifically for iterating over arrays. It goes through each element of an array, making it particularly useful for associative arrays.
-
-```php
-$fruits = ["apple", "banana", "cherry"];
-
-foreach ($fruits as $fruit) {
-    echo "Fruit: $fruit\n";
-}
+```bash
+composer create-project laravel/laravel myapp
 ```
 
-```php
-$person = ["name" => "John", "age" => 30, "city" => "New York"];
+- `laravel/laravel` → Laravel’s official skeleton package
 
-foreach ($person as $key => $value) {
-    echo "$key: $value\n";
-}
-```
+This command:
 
-**Pass by Reference:** pass arguments by reference using the `&` symbol, so changes made to the parameter inside the function affect the original variable.
+- Downloads the Laravel framework and dependencies
+- Sets up folder structure
+- Creates `.env` file for environment settings
 
-```php
-function addFive(&$num) {
-    $num += 5;
-}
-
-$number = 10;
-addFive($number); // Pass $number by reference
-echo "New value: $number";
-```
-
-## Constants
-
-define constants using either the `define()` function or the `const` keyword.
-
-```php
-define("CONSTANT_NAME", value, case_insensitivity);
-const PI = 3.14159;
-```
-
-### Magic Constants
-
-PHP also has magic constants that provide information about the file, line number, and other context-specific details. These constants change based on where they are used within the code.
-
-Some commonly used magic constants include:
-
-1. `__LINE__`: The current line number in the file.
-2. `__FILE__`: The full path and filename of the file.
-3. `__DIR__`: The directory of the file.
-4. `__FUNCTION__`: The function name.
-5. `__CLASS__`: The class name.
-6. `__METHOD__`: The class method name.
-
-## Scope
-
-**Static Scope:** In PHP, variables within functions are typically destroyed after the function executes. Static variables, however, retain their values between function calls. You can declare a variable as static by using the static keyword.
-
-```php
-function testStaticScope() {
-    static $counter = 0; // Declared as static
-    $counter++;
-    echo "Counter: $counter\n";
-}
-
-testStaticScope(); // Output: Counter: 1
-testStaticScope(); // Output: Counter: 2
-testStaticScope(); // Output: Counter: 3
-```
-
-**Global Scope:** PHP also provides a `$GLOBALS` superglobal array, which allows access to global variables from anywhere in the code, even inside functions, without needing the `global` keyword.
-
-```php
-$globalVariable = "I'm global!";
-
-function testGlobalScope() {
-    echo $GLOBALS['globalVariable']; // Accessing global variable using $GLOBALS
-}
-
-testGlobalScope(); // Output: I'm global!
-```
-
-## Build-in Functions
-
-### String
-
-- `strlen()`: Returns the length of a string.
-- `str_replace()`: Replaces occurrences of a substring within a string.
-- `strpos()`: Finds the position of the first occurrence of a substring in a string.
-
-### Array
-
-- `array_push()`: Adds one or more elements to the end of an array.
-- `array_pop()`: Removes the last element from an array.
-- `count()`: Returns the number of elements in an array.
-
-### Date
-
-- `date()`: Formats a local date and time.
-- `time()`: Returns the current Unix timestamp.
-- `strtotime()`: Parses an English textual datetime into a Unix timestamp.
-
-## Anonymous Functions
-
-An anonymous function is simply a function without a name. It’s often assigned to a variable so you can reuse or call it multiple times if needed. Anonymous functions are commonly used in scenarios where the function is used only in a specific place, like within a callback.
-
-```php
-$sayHello = function($name) {
-    return "Hello, $name!";
-};
-
-// Using the function
-echo $sayHello("Alice"); // Output: Hello, Alice!
-```
-
-## Closures
-
-In PHP, a closure is a special kind of anonymous function that can capture variables from its surrounding scope, allowing it to "remember" values even after it has been called. This is done using the `use` keyword.
-
-Closures are helpful when you need to use a variable that was defined outside the function but only within the function’s scope.
-
-```php
-// Define a variable outside the function
-$message = "Good Morning";
-
-// Create a closure that uses the $message variable
-$greet = function($name) use ($message) {
-    return "$message, $name!";
-};
-
-// Using the closure
-echo $greet("Alice"); // Output: Good Morning, Alice!
-```
-
-```php
-$count = 1;
-
-// Closure to increment $count
-$incrementCount = function() use (&$count) {
-    $count++;
-};
-
-// Call the closure multiple times
-$incrementCount();
-$incrementCount();
-echo $count; // Output: 3
-```
-
-## Array
-
-There are three primary types of arrays:
-
-1. **Indexed Arrays**: Arrays with numerical indices, starting at zero by default.
-2. **Associative Arrays**: Arrays with custom keys (strings) instead of numerical indices.
-   . **Multidimensional Arrays**: Arrays that contain one or more arrays within them.
-
-### Sorting Functions
-
-- `sort()`: Sorts an indexed array in ascending order.
-- `rsort()`: Sorts an indexed array in descending order.
-- `asort()`: Sorts an associative array by value in ascending order, preserving keys.
-- `ksort()`: Sorts an associative array by key in ascending order.
-- `arsort()`: Sorts an associative array by value in descending order, preserving keys.
-- `krsort()`: Sorts an associative array by key in descending order.
-
-### Merging Arrays
-
-- `array_merge()`: Merges two or more arrays, appending values from later arrays.
-- `array_merge_recursive()`: Similar to `array_merge()`, but it merges nested arrays recursively.
-
-### Array Filtering
-
-- `array_filter()`: Filters elements of an array based on a callback function. Only elements for which the callback returns `true` are kept.
-
-### Array Mapping
-
-- `array_map()`: Applies a callback function to each element in one or more arrays, returning a new array with the results.
-
-### Array Searching
-
-- `in_array()`: Checks if a value exists in an array.
-- `array_search()`: Searches for a specific value and returns the first corresponding key.
-
-### Array Reduction
-
-- `array_reduce()`: Reduces an array to a single value by applying a callback function.
-
-# JSON
-
-## Encoding JSON
-
-To convert a PHP array or object into JSON format, you use the `json_encode()` function. This function takes a PHP array or object as input and returns a JSON-encoded string.
-
-`json_encode()` automatically handles nested arrays and objects, converting them into valid JSON format.
-
-## Decoding JSON
-
-To convert a JSON string back into a PHP array or object, use the `json_decode()` function. By default, `json_decode()` converts JSON into a PHP object, but you can specify a second parameter as true to get an associative array instead.
-
-## Handling JSON Errors
-
-Both json_encode() and json_decode() can sometimes encounter errors. You can use json_last_error() and json_last_error_msg() to check for issues.
-
-```php
-// Malformed JSON string
-$jsonData = '{"name":"Alice","age":25,"city":"New York"'; // Missing closing brace
-
-$data = json_decode($jsonData);
-
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo "JSON Error: " . json_last_error_msg(); // Output: JSON Error: Syntax error
-}
-```
-
-# Standard PHP Library
-
-## SplStack (Stack)
-
-```php
-$stack = new SplStack();
-
-// Push elements onto the stack
-$stack->push("first");
-$stack->push("second");
-$stack->push("third");
-
-// Pop elements off the stack
-echo $stack->pop(); // Output: third
-echo $stack->pop(); // Output: second
-echo $stack->pop(); // Output: first
-```
-
-- `$stack->push()` adds elements to the stack.
-- `$stack->pop()` removes and returns the top element.
-
-## SplQueue (Queue)
-
-```php
-$queue = new SplQueue();
-
-// Enqueue elements into the queue
-$queue->enqueue("first");
-$queue->enqueue("second");
-$queue->enqueue("third");
-
-// Dequeue elements from the queue
-echo $queue->dequeue(); // Output: first
-echo $queue->dequeue(); // Output: second
-echo $queue->dequeue(); // Output: third
-```
-
-- `$queue->enqueue()` adds elements to the end of the queue.
-- `$queue->dequeue()` removes and returns elements from the front of the queue.
-
-## SplDoublyLinkedList
-
-```php
-$list = new SplDoublyLinkedList();
-
-// Adding elements to the list
-$list->push("first");
-$list->push("second");
-$list->push("third");
-
-// Traverse the list forwards
-$list->rewind();
-while ($list->valid()) {
-    echo $list->current() . "\n"; // Output: first, second, third
-    $list->next();
-}
-
-// Traverse the list backwards
-$list->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO);
-foreach ($list as $item) {
-    echo $item . "\n"; // Output: third, second, first
-}
-```
-
-- `$list->push()` adds elements to the end of the list.
-- `rewind()` and `next()` allow for forward traversal.
-
-## Summary of Key SPL Data Structures
-
-1. **SplStack**: LIFO stack.
-2. **SplQueue**: FIFO queue.
-3. **SplDoublyLinkedList**: Doubly linked list allowing bidirectional traversal.
-4. **SplFixedArray**: Array with a fixed size.
-5. **SplHeap**: Priority-based sorting with `SplMinHeap` and `SplMaxHeap`.
-6. **SplObjectStorage**: Stores objects as keys with optional associated data.
-7. **SplPriorityQueue**: Queue with element priorities.
-
-# Form Handling
-
-## Common superglobals
-
-### `$_GET`
-
-The `$_GET` superglobal is used to collect data sent via URL parameters, typically from a form submission using the GET method or from a URL query string. Data sent via GET is visible in the URL, which makes it suitable for non-sensitive data, like search queries or pagination.
-
-```html
-<form action="handleForm.php" method="get">
-  Name: <input type="text" name="name" /> Age: <input type="text" name="age" />
-  <input type="submit" value="Submit" />
-</form>
-```
-
-```php
-<?php
-// handleForm.php
-// Retrieve the values passed in the URL
-$name = $_GET['name']; // "Alice"
-$age = $_GET['age'];   // "25"
-
-echo "Name: " . $name . "<br>"; // Output: Name: Alice
-echo "Age: " . $age;            // Output: Age: 25
-?>
-```
-
-### `$_POST`
-
-The `$_POST` superglobal collects data submitted through a form using the POST method. Unlike GET, data sent with POST is not visible in the URL, making it more suitable for sensitive data like passwords or large text inputs.
-
-```html
-<form action="handleForm.php" method="post">
-  Name: <input type="text" name="name" /> Age: <input type="text" name="age" />
-  <input type="submit" value="Submit" />
-</form>
-```
-
-```php
-<?php
-// handleForm.php
-// Retrieve form data submitted via POST
-$name = $_POST['name'];
-$age = $_POST['age'];
-
-echo "Name: " . $name . "<br>"; // Output: Name: (user input)
-echo "Age: " . $age;            // Output: Age: (user input)
-?>
-```
-
-### `$_REQUEST`
-
-The `$_REQUEST` superglobal is a combination of `$_GET`, `$_POST`, and `$_COOKIE`. It contains data from both GET and POST requests, as well as cookie data, if available. It can be convenient if you don’t know the method used to send data, but it’s usually recommended to use `$_GET` or `$_POST` directly to avoid ambiguity.
-
-```php
-<?php
-// handleForm.php
-// Retrieve data regardless of the method used (GET or POST)
-$name = $_REQUEST['name'];
-$age = $_REQUEST['age'];
-
-echo "Name: " . $name . "<br>";
-echo "Age: " . $age;
-?>
-```
-
-### `$_SERVER`
-
-The $\_SERVER superglobal contains server and environment information, providing details about the server, the request, and the client making the request. It includes information like the client’s IP address, the request method, script location, and more. $\_SERVER is used to access server-level data rather than form data.
-
-### Common Values
-
-- `$_SERVER['REQUEST_METHOD']` – The request method used (GET, POST, etc.).
-- `$_SERVER['SERVER_NAME']` – The name of the server.
-- `$_SERVER['REMOTE_ADDR']` – The IP address of the client.
-- `$_SERVER['HTTP_USER_AGENT']` – Information about the client’s browser.
-- `$_SERVER['PHP_SELF']` – The filename of the currently executing script.
-- `$_SERVER['REQUEST_URI']` – The URI used to access the page.
-
-## Validation VS Sanitization
-
-### Validation
-
-Validation is the process of checking if the input data meets certain criteria or expectations
-
-- Checking if input is empty.
-- Verifying if an email is in the correct format.
-- Validating if a string contains only specific characters (e.g., only letters and numbers).
-- Ensuring that numbers are within a particular range.
-
-- `filter_var($email, FILTER_VALIDATE_EMAIL)` checks if `$email` is in a valid email format.
-- `filter_var($age, FILTER_VALIDATE_INT, ["options" => ["min_range" => 18, "max_range" => 100]])` ensures that `$age` is an integer between 18 and 100.
-
-### Sanitization
-
-Sanitization involves cleaning the input data by removing or encoding unwanted characters. This helps prevent security issues such as SQL injection, XSS (Cross-Site Scripting), and other attacks.
-
-- `filter_var($username, FILTER_SANITIZE_STRING)` removes HTML tags and special characters from `$username`, which helps prevent XSS attacks.
-- `filter_var($url, FILTER_SANITIZE_URL)` removes any characters that would make the URL invalid.
-
-### XSS Protection
-
-We use `htmlspecialchars()` to prevent XSS (Cross-Site Scripting) by encoding any special characters that could potentially execute JavaScript if output directly into HTML.
-
-### Example
-
-```php
-<?php
-// Validate and sanitize user inputs from $_POST superglobal
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Step 1: Retrieve data
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $age = $_POST['age'];
-
-    // Step 2: Sanitize and Validate 'name'
-    $name = filter_var($name, FILTER_SANITIZE_STRING);  // Sanitizing name (removes any HTML tags)
-
-    if (empty($name)) {
-        echo "Name is required.<br>";
-    } else {
-        // Validate name (checks that it only contains letters and spaces)
-        if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
-            echo "Only letters and spaces are allowed in the name.<br>";
-        }
-    }
-
-    // Step 3: Sanitize and Validate 'email'
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);  // Sanitizing email (removes unwanted characters)
-
-    if (empty($email)) {
-        echo "Email is required.<br>";
-    } else {
-        // Validate email (checks if it is a valid email format)
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo "Invalid email format.<br>";
-        }
-    }
-
-    // Step 4: Sanitize and Validate 'age'
-    $age = filter_var($age, FILTER_SANITIZE_NUMBER_INT);  // Sanitizing age (removes any non-numeric characters)
-
-    if (empty($age)) {
-        echo "Age is required.<br>";
-    } else {
-        // Validate age (checks if the age is a valid number and greater than zero)
-        if (!filter_var($age, FILTER_VALIDATE_INT) || $age <= 0) {
-            echo "Age must be a positive number.<br>";
-        }
-    }
-
-    // Step 5: Output the sanitized and validated data
-    if (!empty($name) && !empty($email) && !empty($age)) {
-        echo "Name: " . htmlspecialchars($name) . "<br>";  // htmlspecialchars for XSS protection
-        echo "Emacl: " . htmlspecialchars($email) . "<br>"; // htmlspecialchars for XSS protection
-        echo "Age: " . htmlspecialchars($age) . "<br>";     // htmlspecialchars for XSS protection
-    }
-}
-?>
-```
-
-## File Uploading
-
-### Steps
-
-1. **Create an HTML Form**: The form should include `enctype="multipart/form-data"` in the `<form>` tag, and a file input field, so users can select a file to upload.
-2. **\_Access the File Using `$_FILES`**: When the form is submitted, PHP populates the `$_FILES` array with information about the uploaded file.
-3. **Validate the Uploaded File**: Check the file size, type, and any errors to ensure it meets requirements.
-4. **Move the File to a Directory**: Use `move_uploaded_file()` to save the uploaded file to a specific location on the server.
-
-```html
-<form action="upload.php" method="post" enctype="multipart/form-data">
-  <label for="file">Choose a file:</label>
-  <input type="file" name="file" id="file" required />
-  <input type="submit" value="Upload" />
-</form>
-```
-
-```php
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
-    $file = $_FILES['file'];
-
-    // Allowed file types (MIME types)
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    // Maximum file size (2 MB)
-    $maxFileSize = 2 * 1024 * 1024; // 2 MB in bytes
-
-    // Check for file upload errors
-    if ($file['error'] !== 0) {
-        echo "Error occurred during file upload. Error code: " . $file['error'];
-        exit;
-    }
-
-    // Validate file size
-    if ($file['size'] > $maxFileSize) {
-        echo "File is too large. Maximum allowed size is 2 MB.";
-        exit;
-    }
-
-    // Validate file type
-    if (!in_array($file['type'], $allowedTypes)) {
-        echo "Invalid file type. Only JPEG, PNG, and GIF files are allowed.";
-        exit;
-    }
-
-    // Generate a unique name for the file (to avoid overwriting)
-    $uploadDirectory = 'uploads/';
-    $uniqueName = uniqid() . '-' . basename($file['name']);
-    $destination = $uploadDirectory . $uniqueName;
-
-    // Ensure the upload directory exists
-    if (!is_dir($uploadDirectory)) {
-        mkdir($uploadDirectory, 0755, true);
-    }
-
-    // Move the uploaded file to the destination directory
-    if (move_uploaded_file($file['tmp_name'], $destination)) {
-        echo "File uploaded successfully!<br>";
-        echo "File Name: " . $uniqueName;
-    } else {
-        echo "Failed to upload file.";
-    }
-} else {
-    echo "No file uploaded.";
-}
-?>
-```
-
-# Database Interaction (MySQL)
-
-## Database Connection
-
-```php
-<?php
-// Step 1: Database credentials
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "test_db";
-
-// Step 2: Create a connection
-$conn = mysqli_connect($servername, $username, $password, $database);
-
-// Step 3: Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-echo "Connected successfully";
-?>
-```
-
-## CRUD
-
-### Create
-
-```php
-<?php
-
-$name = "John Doe";
-$email = "john@example.com";
-$sql = "INSERT INTO users (name, email) VALUES (?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $name, $email); // 'ss' means two string values
-$stmt->execute();
-
-echo "New record created successfully";
-
-$stmt->close();
-$conn->close();
-?>
-```
-
-### Read
-
-```php
-<?php
-
-$sql = "SELECT name, email FROM users";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "Name: " . $row["name"] . " - Email: " . $row["email"] . "<br>";
-    }
-} else {
-    echo "No results found.";
-}
-
-$conn->close();
-?>
-```
-
-### Update
-
-```php
-<?php
-$name = "Jane Doe";
-$email = "jane@example.com";
-$userId = 1;
-$sql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ssi", $name, $email, $userId);
-$stmt->execute();
-
-echo "Record updated successfully";
-
-$stmt->close();
-$conn->close();
-?>
-```
-
-### Delete
-
-```php
-<?php
-
-$userId = 1;
-$sql = "DELETE FROM users WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-
-echo "Record deleted successfully";
-
-$stmt->close();
-$conn->close();
-?>
-```
-
-# `.htaccess`
-
-The `.htaccess` (Hypertext Access) file is a configuration file used by Apache web servers to control various aspects of website behavior. It allows you to override global server settings on a per-directory basis without modifying the main server configuration file (`httpd.conf`).
-
-The `.htaccess` file is useful for implementing security measures, URL redirections, custom error pages, access controls, and other server configurations.
-
-## Why Implement `.htaccess`?
-
-1. Security
-
-- Restrict access to certain files or directories.
-- Prevent directory listing.
-- Block specific IP addresses.
-- Implement authentication.
-
-2. URL Rewriting & Redirection
-
-- Redirect users to another page.
-- Convert dynamic URLs into SEO-friendly URLs.
-- Force HTTPS for secure connections.
-
-3. Custom Error Pages
-
-- Create custom error pages (e.g., 404 Not Found, 500 Internal Server Error).
-
-4. Performance Optimization
-
-- Enable caching to speed up website loading.
-- Compress files using Gzip.
-- Prevent hotlinking of images and other media.
-
-5. Access Control
-
-- Password-protect directories.
-- Allow or deny access based on IP addresses.
-
-## Configurations
-
-### 1. Redirect HTTP to HTTPS
-
-Forcing users to use a secure HTTPS connection:
+**Run the Application**
 
 ```
-RewriteEngine On
-RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+cd myapp
+php artisan serve
 ```
 
-- `RewriteEngine On`: Enables the rewriting engine.
-- `RewriteCond %{HTTPS} !=on`: Checks if the request is not HTTPS.
-- `RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]`: Redirects to HTTPS.
+### Composer
 
-### 2. URL Rewriting
+- Composer is PHP’s dependency manager (like `npm` for JavaScript or `pip` for Python).
+- It installs libraries/packages and manages their versions based on requirements.
 
-Convert URLs like `example.com/page.php?id=10` to `example.com/page/10`:
+### create-project
 
-```
-RewriteEngine On
-RewriteRule ^page/([0-9]+)/?$ page.php?id=$1 [L,QSA]
-```
+- The command `composer create-project` is not Laravel-specific — it’s a general Composer feature.
+- `create-project` is a Composer command that:
 
-- `^page/([0-9]+)/?$` matches URLs like `page/10`.
-- `page.php?id=$1` rewrites it back to the dynamic page.
+  - Downloads a package from Packagist (the PHP package registry) or another repository.
+  - Installs it into a new folder instead of your current directory.
+  - Runs `composer install` automatically after downloading the package.
+  - Allows you to optionally specify a version of the package.
 
-### 3. Redirect Old URL to New URL
+  `"composer create-project"` = “Get me a fresh copy of a package(not only laravel) and set it up in its own folder so I can start working on it.”
 
-Redirect an old page to a new page:
+### laravel/laravel
 
-```
-Redirect 301 /old-page.html https://example.com/new-page.html
-```
+- This is the package name you are telling Composer to download.
+- On Packagist, `laravel/laravel` is not the Laravel framework itself, but the Laravel starter application.
+  - It contains:
+    - Default Laravel folder structure (`app/`, `routes/`, `config/`, etc.)
+    - A `composer.json` that lists `"laravel/framework"` as a dependency.
+  - The actual framework code (routing, Eloquent ORM, queue system, etc.) lives in the `laravel/framework` package, which is installed as part of the process.
 
-301 is a permanent redirect.
+So:
 
-### 4. Block Specific IP Addresses
+- `laravel/laravel` → Skeleton + setup files.
+- `laravel/framework` → The actual Laravel codebase (installed later).
 
-Prevent access from a specific IP:
+### Full process when you run it
 
-```
-Deny from 192.168.1.100
-```
+1. Composer looks for `laravel/laravel` on Packagist.
+2. Downloads the latest release (or specific version if you give one like `laravel/laravel:^11.0`).
+3. Extracts it into a folder named `myapp`.
+4. Reads its `composer.json` file.
+5. Installs all dependencies — including the Laravel framework itself from `laravel/framework`.
+6. Runs any scripts defined in `composer.json` (e.g., generating the `APP_KEY`).
+7. You now have a ready-to-use Laravel app.
 
-To allow only a certain IP:
+## Laravel Installer
 
-```
-Order Deny,Allow
-Deny from all
-Allow from 192.168.1.200
-```
+Laravel provides its own global installer, which speeds up new project creation.
 
-### 5. Password-Protect a Directory
+1. Install Laravel Installer Globally
 
-Create an `.htpasswd` file with the username and encrypted password:
-
-```
-AuthType Basic
-AuthName "Restricted Area"
-AuthUserFile /path/to/.htpasswd
-Require valid-user
+```bash
+composer global require laravel/installer
 ```
 
-### 6. Prevent Directory Listing
+Ensure `~/.composer/vendor/bin` (Mac/Linux) or `%USERPROFILE%\AppData\Roaming\Composer\vendor\bin` (Windows) is in your PATH.
 
-Disable users from viewing a list of files in a directory:
+2. laravel new myapp
 
-```
-Options -Indexes
-```
-
-### 7. Enable Gzip Compression
-
-Reduce page load time by compressing resources:
-
-```
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
-</IfModule>
+```bash
+laravel new myapp
 ```
 
-### 8. Prevent Hotlinking
+- Downloads latest Laravel version
+- Installs dependencies
+- Creates `.env` file
+- Runs `composer install` automatically
 
-Prevent other websites from using your images:
+3. Run the Application
 
 ```
-RewriteEngine On
-RewriteCond %{HTTP_REFERER} !^$
-RewriteCond %{HTTP_REFERER} !^https://example.com/ [NC]
-RewriteRule \.(jpg|jpeg|png|gif)$ - [F]
+cd myapp
+php artisan serve
 ```
 
-This blocks hotlinking of image files unless the request comes from `example.com`.
+## Comparision Table
 
-# REST API
+| Feature                 | Composer Method                           | Laravel Installer Method                |
+| ----------------------- | ----------------------------------------- | --------------------------------------- |
+| Setup Time              | Slower (downloads dependencies each time) | Faster (uses cached files)              |
+| Extra Installation Step | None                                      | Must install Laravel Installer globally |
+| Command Used            | `composer create-project ...`             | `laravel new ...`                       |
+| Recommended For         | First-time Laravel installation           | Frequent Laravel project creation       |
 
-## REST Principles
+## Common Post-Installation Steps
 
-A RESTful API follows six key principles:
+After installation, you usually:
 
-### 1. Client-Server Architecture
+1. Set Environment Variables in .env (DB, mail, etc.)
+2. Generate App Key (if not already done):
 
-- The client and server are separate entities.
-- The client sends requests, and the server processes them and returns responses.
-
-Example: A frontend React app (client) sends an HTTP request to a PHP backend (server) for data.
-
-### 2. Statelessness
-
-- The server does not store any client state between requests.
-- Each request from a client must contain all necessary information.
-
-Example: Every API request must include authentication credentials (e.g., a JWT token), as the server does not remember previous requests.
-
-### 3. Cacheability
-
-- Responses must define whether they can be cached.
-- Caching can improve performance and reduce server load.
-
-Example: Using HTTP headers like Cache-Control: max-age=3600 allows browsers to cache data for an hour.
-
-### 4. Uniform Interface
-
-- A consistent API structure makes it easy to understand and use.
-- Uses standard HTTP methods like GET, POST, PUT, DELETE.
-
-### 5. Layered System
-
-- Clients interact with an API without needing to know about the underlying backend layers.
-- There may be intermediaries like load balancers or proxies.
-
-### 6. Code on Demand (Optional)
-
-- A server can return executable code (like JavaScript) to be run on the client.
-
-## Authentication
-
-### JWT
-
-**Installation:**
-
-```shell
-composer require firebase/php-jwt
+```bash
+php artisan key:generate
 ```
 
-**Generate JWT:**
+3. Migrate Database
 
-```php
-<?php
-require './../vendor/autoload.php';
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
-function create_jwt($user_email) {
-    $issuedAt = time();
-    $expirationTime = $issuedAt + 3600; // Token valid for 1 hour
-    $payload = [
-        'iss' => 'yourdomain.com',   // Issuer
-        'iat' => $issuedAt,          // Issued at
-        'exp' => $expirationTime,    // Expiration time
-        'userEmail' => $user_email
-    ];
-
-    // Encode the payload to create the JWT
-    $jwt = JWT::encode($payload, JWT_SECRET_KEY, 'HS256');
-    return $jwt;
-}
-?>
+```bash
+php artisan migrate
 ```
 
-# REST API
-
-RESTful APIs (Representational State Transfer) use standard HTTP methods to perform operations on resources.
-
-## Methods
-
-### PUT
-
-- update an entire resource with new data
-- If a field is missing, it may get removed.
-
-### PATCH
-
-- Updates only the specified fields of a resource.
-- More efficient than `PUT` when only some fields need modification.
-
-## Summary of REST API Methods
-
-| HTTP Method | Purpose                   | Idempotent | Example             |
-| ----------- | ------------------------- | ---------- | ------------------- |
-| **GET**     | Retrieve data             | ✅         | `GET /users/123`    |
-| **POST**    | Create new resource       | ❌         | `POST /users`       |
-| **PUT**     | Update entire resource    | ✅         | `PUT /users/123`    |
-| **PATCH**   | Partially update resource | ❌         | `PATCH /users/123`  |
-| **DELETE**  | Remove resource           | ✅         | `DELETE /users/123` |
-| **OPTIONS** | Check available methods   | ✅         | `OPTIONS /users`    |
-| **HEAD**    | Get headers only          | ✅         | `HEAD /users/123`   |
-
-**Idempotency** means that making multiple identical requests has the same effect as making a single request. In simpler terms, an idempotent operation produces the same result no matter how many times it is performed.
-
-# Laravel
-
-## Project Structure
+# Project Structure
 
 ```
 project-name/
@@ -935,501 +224,1646 @@ project-name/
 │── composer.json     # Composer dependencies
 ```
 
-## Configuring
+## `app/`
 
-Setup database credentials and run the database migrations
+- **Purpose:** Contains your application’s core code — controllers, models, middleware, jobs, etc.
+- **Subfolders:**
 
-```shell
-php artisan migrate
-```
+  - `Console/` → Artisan commands.
+  - `Exceptions/` → App’s exception handling.
+  - `Http/` → Controllers, middleware, and request handling.
+  - `Models/` → Eloquent models.
+  - `Providers/` → Service providers (bootstrap services for your app).
 
-## Migrations
+- **Example:**
 
-Migrations in Laravel are a way to define database schemas in a structured, version-controlled manner. Instead of manually creating tables in a database, migrations allow you to define the structure using PHP code. It allow to track chnages in the database schema over time.
+  - `app/Http/Controllers/UserController.php` → Handles user-related requests.
 
-### Steps
+## `bootstrap/`
 
-1. Run the following command:
+- **Purpose:** Initializes (bootstraps) the framework before handling requests.
+- **Key File:** `app.php` — loads configuration and registers services.
+- **Example:** When you run `php artisan serve`, Laravel starts here before loading routes and controllers.
 
-```shell
-php artisan make:migration posts
-```
+## `config/`
 
-2. Define the schema
+- **Purpose:** Stores configuration files for services and app settings.
+- **Examples:**
+  - `app.php` → Application name, timezone, locale.
+  - `database.php` → DB connection settings.
+  - `mail.php` → Mail service settings.
+- **Example:**
+  To change timezone:
+  ```
+  'timezone' => 'Asia/Dhaka',
+  ```
+
+## `database/`
+
+- **Purpose:** Contains migrations, seeders, and factories.
+- **Subfolders:**
+
+  - `migrations/` → Version control for database schema.
+  - `seeders/` → Populate DB with initial or sample data.
+  - `factories/` → Generate fake data for testing.
+
+- **Example:** `2025_08_14_000000_create_users_table.php` → Migration file for users table.
+
+## `public/`
+
+- **Purpose:** Web root — only folder directly accessible from the web.
+- **Contents:**
+  - `index.php` → Entry point for all HTTP requests.
+  - Assets (images, CSS, JS) if needed.
+- **Example:** When you visit `http://localhost:8000`, the request hits `public/index.php`.
+
+## `resources/`
+
+- **Purpose:** Contains raw resources (not compiled yet).
+- **Subfolders:**
+  - `views/` → Blade templates.
+  - `lang/` → Language files for localization.
+  - `css/`, `js/` → Frontend assets (used with Vite/Laravel Mix).
+- **Example:** resources/views/welcome.blade.php → Default welcome page.
+
+## `routes/`
+
+- **Purpose:** Defines URL routes for your application.
+- **Files:**
+
+  - `web.php` → Routes for web interface (uses sessions, CSRF).
+  - `api.php` → Routes for API (stateless).
+  - `console.php` → Artisan command routes.
+  - `channels.php` → Broadcast channels.
+
+- **Example:**
 
 ```php
-  public function up(): void
-    {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing primary key
-            $table->string('title');
-            $table->text('content');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->timestamps(); // Creates `created_at` and `updated_at` columns
-        });
-    }
+Route::get('/hello', function () {
+    return 'Hello Laravel';
+});
 ```
 
-3. Run the migration
+## `storage/`
+
+- **Purpose:** Stores generated files — logs, cache, compiled templates, file uploads.
+- **Subfolders:**
+  - `app/` → Application files.
+  - `framework/` → Framework cache, compiled Blade views.
+  - `logs/` → Log files (`laravel.log`).
+- **Example:** Uploaded file saved as storage/app/uploads/profile.png.
+
+## `tests/`
+
+- **Purpose:** Contains automated tests (PHPUnit / Pest).
+- **Subfolders:**
+  - `Feature/` → High-level tests (HTTP requests, full workflows).
+  - `Unit/` → Small, isolated tests for individual functions.
+- **Example:** `tests/Feature/UserTest.php` tests user registration flow.
+
+## `vendor/`
+
+- **Purpose:** Composer dependencies (framework + packages).
+- **Example:** Laravel core is inside `vendor/laravel/framework`.
+
+## `.env`
+
+- **Purpose:** Environment configuration file (database credentials, API keys).
+- **Example:**
+
+```env
+APP_NAME=Laravel
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=mydb
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+## `artisan`
+
+- **Purpose:** CLI tool to run Laravel commands.
+- **Example:**
 
 ```shell
-php artisan migrate
+php artisan route:list
 ```
 
-4. Undo Changes
+## `composer.json`
 
-- If you want to undo the last migration:
+- **Purpose:** Lists project dependencies and autoload rules.
+- **Example:**
 
-```shell
-php artisan migrate:rollback
-```
-
-- To rollback all migrations and start fresh:
-
-```shell
-php artisan migrate:fresh
-```
-
-## Model
-
-A model is a class that interacts with a database table. Laravel uses Eloquent ORM (Object-Relational Mapping) to work with databases efficiently.
-
-### Steps
-
-1. Run the following command
-
-```shell
-php artisan make:model Post
-```
-
-2. Define the model
-
-```php
-class Post extends Model
-{
-    use HasFactory;
-
-    // Define the table name if different from the default (plural form of model name)
-    protected $table = 'posts';
-
-    // Define the primary key (optional, default is 'id')
-    protected $primaryKey = 'id';
-
-    // Enable or disable timestamps (created_at and updated_at)
-    public $timestamps = true;
-
-    // Allow mass assignment (set fillable fields)
-    protected $fillable = ['title', 'content'];
-
-    // If you want to prevent mass assignment on some fields
-    protected $guarded = ['id'];
-
-    // Define date fields explicitly (optional)
-    protected $dates = ['created_at', 'updated_at'];
+```json
+"require": {
+    "php": "^8.1",
+    "laravel/framework": "^10.0"
 }
 ```
 
-### CRUD
+# Service Providers and Configuration Files
 
-#### Create
+## Service Providers
+
+- Service providers are the central place to bootstrap (register and configure) services in Laravel.
+- They tell Laravel how to load components like routes, events, middleware, and custom services.
+- Every major feature in Laravel (auth, queue, events, etc.) is bootstrapped by a service provider.
+
+### Where Are They Defined?
+
+- Default location: `app/Providers/`
+- Laravel registers them in `config/app.php` under the `providers` array.
+
+Example in `config/app.php`:
 
 ```php
-Post::create([
-    'title' => 'Laptop',
-    'content' => 'A high-end gaming laptop'
+'providers' => [
+    /*
+     * Laravel Framework Service Providers...
+     */
+    Illuminate\Auth\AuthServiceProvider::class,
+    Illuminate\Broadcasting\BroadcastServiceProvider::class,
+    // ...
+
+    /*
+     * Application Service Providers...
+     */
+    App\Providers\AppServiceProvider::class,
+    App\Providers\AuthServiceProvider::class,
+    App\Providers\RouteServiceProvider::class,
+],
+```
+
+### Structure of a Service Provider
+
+A service provider class usually has two main methods:
+
+```php
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+
+class MyCustomServiceProvider extends ServiceProvider
+{
+    // Register bindings in the service container
+    public function register()
+    {
+        // For example: bind an interface to a concrete class
+        $this->app->bind('MyService', function () {
+            return new \App\Services\MyService();
+        });
+    }
+
+    // Perform actions after all services have been registered
+    public function boot()
+    {
+        // For example: load custom routes
+        require base_path('routes/custom.php');
+    }
+}
+```
+
+### Registering a Custom Service Provider
+
+1. Create:
+
+```shell
+php artisan make:provider MyCustomServiceProvider
+```
+
+2. Add it to config/app.php → providers array:
+
+```php
+App\Providers\MyCustomServiceProvider::class,
+```
+
+### Example Use Case:
+
+Let’s say you want to create a Currency Converter Service for your app.
+
+- In `register()` → Bind your converter class to the Laravel service container.
+- In `boot()` → You might load currency-related configuration or event listeners.
+
+## Configuration Files
+
+- Stored in the `config/` folder.
+- Contain all application settings (app name, DB, cache, mail, session, etc.).
+- Readable via the `config()` helper.
+
+### Common Configuration Files
+
+| File           | Purpose                                             |
+| -------------- | --------------------------------------------------- |
+| `app.php`      | App name, environment, timezone, providers, aliases |
+| `database.php` | DB connections & settings                           |
+| `mail.php`     | Mail server config                                  |
+| `queue.php`    | Queue driver config                                 |
+| `session.php`  | Session driver and lifetime                         |
+| `services.php` | Third-party service credentials                     |
+
+### Changing the Application Timezone
+
+`config/app.php`
+
+```php
+'timezone' => 'Asia/Dhaka',
+```
+
+Now, all date/time functions will default to Dhaka time.
+
+### Accessing Config Values in Code
+
+```php
+// Get a config value
+$appName = config('app.name');
+
+// Set a config value at runtime
+config(['app.debug' => false]);
+```
+
+### Using Environment Variables in Config
+
+- `.env` file stores sensitive data.
+- Config files pull from `.env` using `env()`.
+
+Example from `config/database.php`:
+
+```php
+'connections' => [
+    'mysql' => [
+        'driver'    => 'mysql',
+        'host'      => env('DB_HOST', '127.0.0.1'),
+        'database'  => env('DB_DATABASE', 'forge'),
+        'username'  => env('DB_USERNAME', 'forge'),
+        'password'  => env('DB_PASSWORD', ''),
+    ],
+],
+```
+
+`.env`
+
+```
+DB_HOST=127.0.0.1
+DB_DATABASE=mydb
+DB_USERNAME=root
+DB_PASSWORD=secret
+```
+
+## How Service Providers and Config Files Work Together
+
+Service Providers can read config values when booting services.
+
+For example, a custom `CurrencyServiceProvider` might read an API key from `config/currency.php`.
+
+Example `config/currency.php`:
+
+```php
+return [
+    'api_key' => env('CURRENCY_API_KEY', 'default-key'),
+];
+```
+
+Example provider:
+
+```php
+public function register()
+{
+    $this->app->singleton('CurrencyService', function ($app) {
+        $apiKey = config('currency.api_key');
+        return new \App\Services\CurrencyConverter($apiKey);
+    });
+}
+```
+
+- Service Providers = Bootstrap Laravel features & custom logic.
+- Configuration Files = Central place for app settings, linked to `.env`.
+- Together, they give Laravel flexibility and scalability.
+
+# Environment Variables
+
+## How Laravel Uses `.env`
+
+- Laravel loads `.env` using the vlucas/phpdotenv package.
+- Values are accessed in config files via:
+  ```php
+  env('KEY_NAME', 'default_value')
+  ```
+- In app code, you normally use:
+  ```php
+  config('app.name'); // Reads from config/app.php, which pulls from .env
+  ```
+
+## Database Configuration
+
+`.env`
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=myapp
+DB_USERNAME=root
+DB_PASSWORD=secret
+```
+
+`config/database.php`
+
+```php
+'connections' => [
+    'mysql' => [
+        'driver' => 'mysql',
+        'host' => env('DB_HOST', '127.0.0.1'),
+        'port' => env('DB_PORT', '3306'),
+        'database' => env('DB_DATABASE', 'forge'),
+        'username' => env('DB_USERNAME', 'forge'),
+        'password' => env('DB_PASSWORD', ''),
+    ],
+],
+```
+
+When Laravel boots, it:
+
+- Reads `.env` → finds `DB_HOST=127.0.0.1`
+- Passes it to `config/database.php`
+- Database connection is set accordingly
+
+## Accessing `.env` Values in Code
+
+While you can call:
+
+```php
+env('APP_NAME');
+```
+
+Laravel best practice is:
+
+```php
+config('app.name'); // Reads from config/app.php
+```
+
+Because config files can be cached with:
+
+```shell
+php artisan config:cache
+```
+
+(Direct `env()` calls won’t work after caching unless inside config files.)
+
+# Laravel Request Lifecycle
+
+A Laravel request goes through these main stages:
+
+```
+Browser / API Client
+        ↓
+public/index.php
+        ↓
+bootstrap/app.php
+        ↓
+HTTP Kernel (App\Http\Kernel)
+        ↓
+Service Providers Booted
+        ↓
+Middleware Applied
+        ↓
+Route Handling (routes/web.php or api.php)
+        ↓
+Controller / Closure Execution
+        ↓
+Response Prepared
+        ↓
+Middleware (After) Applied
+        ↓
+Send Response to Browser
+```
+
+## Step 1: Entry Point → `public/index.php`
+
+- Every HTTP request first hits `public/index.php`.
+- This file:
+  - Loads the Composer autoloader.
+  - Bootstraps the Laravel application by including `bootstrap/app.php`.
+- **Example:** If you visit `http://localhost:8000/users`, the request lands here first.
+
+## Step 2: Bootstrap Laravel → `bootstrap/app.php`
+
+- Creates the application instance (`$app`).
+- Binds important interfaces (HTTP Kernel, Console Kernel, Exception Handler).
+- Returns the app instance to `index.php`.
+
+## Step 3: Kernel Handling → `App\Http\Kernel`
+
+- The HTTP Kernel is responsible for:
+  - Loading service providers (from `config/app.php`).
+  - Running the boot methods of all registered providers.
+  - Applying the global middleware stack.
+- The Kernel has two middleware types:
+  1. Global middleware — runs on every request (e.g., `CheckForMaintenanceMode`, `TrimStrings`).
+  2. Route middleware — applied to specific routes.
+
+## Step 4: Service Providers Boot
+
+- All service providers in `config/app.php` are registered, then booted.
+- This step loads all necessary parts of the framework (routing, database, sessions, etc.).
+
+## Step 5: Middleware (Before)
+
+- Middleware are filters that can run before and after a request.
+- Examples:
+  - `Authenticate` → checks if the user is logged in.
+  - `VerifyCsrfToken` → checks CSRF tokens for form submissions.
+
+## Step 6: Routing
+
+- The router examines the request URI and HTTP method.
+- Matches it to a route in `routes/web.php` or `routes/api.php`.
+- Executes the assigned closure or controller method.
+
+Example `routes/web.php`:
+
+```php
+Route::get('/users', [UserController::class, 'index']);
+```
+
+## Step 7: Controller / Action Execution
+
+- The matched controller method runs.
+- Example:
+
+```php
+class UserController extends Controller
+{
+    public function index()
+    {
+        $users = User::all();
+        return view('users.index', compact('users'));
+    }
+}
+```
+
+## Step 8: Response Preparation
+
+- The controller usually returns:
+  - View response → rendered Blade template.
+  - JSON response → API data.
+  - Redirect → another route.
+- Laravel converts this into an HTTP response object.
+
+## Step 9: Middleware (After)
+
+- “After” middleware runs on the outgoing response.
+- Examples:
+  - Adding security headers.
+  - Logging the request/response.
+
+## Step 10: Send Response to Browser
+
+- The HTTP response is sent back to the client.
+- The browser or API client receives it and displays the result.
+
+## Example of Request Lifecycle
+
+1. User visits `http://localhost:8000/hello`
+2. `public/index.php` → loads Laravel.
+3. `bootstrap/app.php` → creates app instance.
+4. `App\Http\Kernel` → loads service providers & middleware.
+5. Router finds:
+
+   ```php
+   Route::get('/hello', function () {
+       return 'Hello Laravel!';
+   });
+   ```
+
+6. Closure executes, returns `Hello Laravel!`.
+7. Laravel prepares HTTP response.
+8. Middleware (after) modifies response if needed.
+9. Browser displays:
+   ```
+   Hello Laravel!
+   ```
+
+# Composer
+
+Composer is the dependency manager for PHP — similar to `npm` in Node.js or `pip` in Python.
+
+- It installs, updates, and autoloads PHP libraries.
+- It keeps track of packages in a file called `composer.json`.
+- Laravel itself is installed via Composer, and most Laravel features depend on Composer packages.
+
+## Why Laravel Uses Composer
+
+Laravel is made of many smaller packages (like `illuminate/*`) that are maintained separately. Composer:
+
+- Manages dependencies — so you don’t manually download and store libraries.
+- Handles autoloading — you don’t have to manually include files (`require` statements).
+- Ensures version control — works with semantic versioning (`^8.0`, `~1.2`).
+
+## Basic Composer Commands
+
+| Command                           | Description                                               |
+| --------------------------------- | --------------------------------------------------------- |
+| `composer init`                   | Create a `composer.json` file interactively               |
+| `composer install`                | Install dependencies from `composer.json`                 |
+| `composer update`                 | Update dependencies to latest allowed versions            |
+| `composer require vendor/package` | Add a package                                             |
+| `composer remove vendor/package`  | Remove a package                                          |
+| `composer dump-autoload`          | Rebuild autoloader (needed after adding classes manually) |
+
+## Key Composer Files in Laravel
+
+`composer.json`
+
+```json
+{
+  "require": {
+    "php": "^8.1",
+    "laravel/framework": "^10.0",
+    "guzzlehttp/guzzle": "^7.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}
+```
+
+- `require` → runtime dependencies
+- `autoload` → tells Composer how to find your classes (Laravel uses PSR-4 autoloading)
+
+`composer.lock`
+
+- Stores the exact versions installed so your teammates get the same setup.
+- You commit this file to version control.
+
+## How Autoloading Works in Laravel
+
+Composer generates a file:
+
+```bash
+/vendor/autoload.php
+```
+
+Laravel’s entry point:
+
+```php
+require __DIR__.'/../vendor/autoload.php';
+```
+
+This allows Laravel to instantly load all your classes, controllers, and packages based on namespace definitions in `composer.json`.
+
+# Fundamentals
+
+## How Laravel Request Flows in MVC
+
+1. User sends request → example: visits `/users`
+2. Route (`routes/web.php`) → decides which Controller to call
+3. Controller → talks to Model to get data
+4. Model → fetches data from DB
+5. Controller → passes data to View
+6. View → displays the result to the user
+
+# Routing
+
+Routes in Laravel are defined in the file:
+
+```bash
+routes/web.php   → For web (browser-based) requests
+routes/api.php   → For API requests (usually JSON responses)
+```
+
+They map URLs to specific logic (usually inside a controller or a closure function).
+
+## Basic Route Types
+
+- **GET Route:** `Route::get('/user', [UserController::class, 'show']);`
+- **POST Route:** `Route::post('/user', [UserController::class, 'create']);`
+- **PUT/PATCH Route:** `Route::put('/user/{id}', [UserController::class, 'update']);`
+  - PUT → Usually replaces the whole record.
+  - PATCH → Usually updates part of the record.
+- **DELETE Route:** `Route::delete('/user/{id}', [UserController::class, 'show']);`
+- **Optional Parameter:**
+  ```php
+  Route::get('/user/{name?}', function ($name = "Guest") {
+    return "Hello, " . $name;
+  });
+  ```
+  - without `?`, `name` parameter is required.
+  - passing function is called closures function.
+- **Parameter Constraints:**
+  ```php
+  Route::get('/user/{name}/{age}', function ($name, $age) {
+      return "$name is $age years old.";
+  })->where([
+      'name' => '[A-Za-z]+',
+      'age' => '[0-9]+'
+  ]);
+  ```
+  - Restricts `{id}` to only numbers using regex.
+
+## Naming Routes
+
+You can assign a name to a route and refer to it elsewhere (e.g., in redirects or Blade templates).
+
+```php
+Route::get('/dashboard', function () {
+    return "Welcome to Dashboard!";
+})->name('dashboard');
+
+// Using the named route in redirect
+Route::get('/go-dashboard', function () {
+    return redirect()->route('dashboard');
+});
+```
+
+- `{{ route('dashboard') }}` - in blade templates.
+- `route('user.profile', ['id' => 25])` - with parameters.
+
+## Redirect Routes
+
+```php
+Route::redirect('/old-home', '/new-home');
+```
+
+Visiting `/old-home` automatically sends the user to `/new-home`.
+
+## View Routes
+
+Shortcut to directly return a Blade view without a controller.
+
+```php
+Route::view('/welcome', 'welcome');
+```
+
+This will render `resources/views/welcome.blade.php`.
+
+## Grouping Routes
+
+Grouping allows you to apply middleware, prefixes, or namespaces.
+
+- If all routes share a common starting path, you can use `prefix()`.
+- If you want all routes in a group to share a name prefix, use `name()`.
+- You can apply middleware to all routes in the group, use `middleware(['auth])`.
+
+```php
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'isAdmin'])
+    ->group(function () {
+        Route::get('/dashboard', function () {
+            return "Admin Dashboard";
+        })->name('dashboard');
+        Route::get('/users', function () {
+            return "Admin Users List";
+        })->name('users');
+    });
+```
+
+- URL: `/admin/dashboard` → Name: `admin.dashboard`
+- URL: `/admin/users` → Name: `admin.users`
+
+# Blade Syntax
+
+Passing parameter in Blade:
+
+```php
+// Generating URL in Blade:
+{{ route('profile', ['username' => 'JohnDoe']) }}
+```
+
+## Static File
+
+```php
+<!-- resources/views/home.blade.php -->
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<h1 class="title">Welcome</h1>
+```
+
+- Laravel uses `public/` for serving static assets like CSS files.
+- `asset('css/style.css')` generates the correct URL which is stored at `public/css`.
+
+## How Laravel Integrates HTML, CSS, and JS
+
+1. Views (`resources/views/`) → HTML + Blade syntax
+2. Assets:
+
+   - CSS in `public/css/`
+   - JS in `public/js/`
+
+3. Vite (or Laravel Mix) compiles modern CSS/JS frameworks like Tailwind or Vue.
+4. Blade Directives like `@vite` and `@section` make asset loading easy.
+
+**Example with Vite:**
+
+```php
+<!DOCTYPE html>
+<html>
+<head>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
+    <h1>Laravel + Vite</h1>
+</body>
+</html>
+```
+
+## `@if` – Conditional Rendering
+
+The `@if` directive is used to conditionally display content in a Blade template.
+It works like a standard PHP `if` statement but is cleaner and easier to read in views.
+
+```php
+@if ($user->isAdmin())
+    <p>Welcome, Administrator!</p>
+@else
+    <p>Welcome, Regular User!</p>
+@endif
+```
+
+- You can also use `@elseif` for more conditions
+
+## `@foreach` – Looping Through Data
+
+The `@foreach` directive loops over an array or collection.
+
+```php
+<ul>
+@foreach ($products as $product)
+    <li>{{ $product->name }} - ${{ $product->price }}</li>
+@endforeach
+</ul>
+```
+
+- The `{{ }}` syntax is used to escape and print variables.
+
+## `@include` – Include Another Blade Template
+
+`@include` allows you to reuse Blade components by including other view files.
+
+```php
+{{-- main.blade.php --}}
+<div>
+    <h1>Main Page</h1>
+    @include('partials.navbar')
+</div>
+```
+
+## Blade Layouts
+
+In Laravel, Blade layouts let you define a master template (parent layout) that contains common HTML structure, and then have multiple child templates that fill in specific parts of that structure.
+
+It’s like creating a “mold” for your pages so you don’t repeat the same header, footer, or navigation code in every file.
+
+Blade layouts rely on 3 main directives:
+
+1. `@extends` — tells a child template which layout to use.
+2. `@section` — defines the content for a specific area.
+3. `@yield` — creates placeholders in the layout for sections.
+
+### Create the Master Layout – Define a Section Placeholder
+
+`@yield` is used in layout templates to specify where child content should be injected.
+
+```php
+{{-- resources/views/layouts/app.blade.php --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@yield('title')</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    @include('partials.navbar') {{-- Common navbar for all pages --}}
+
+    <div class="container">
+        @yield('content') {{-- Main content placeholder --}}
+    </div>
+
+    <footer>
+        <p>© 2025 My Website</p>
+    </footer>
+</body>
+</html>
+```
+
+- `@yield('title')` and `@yield('content')` are placeholders where child templates will insert content.
+- Works together with `@section`.
+
+### Create a Child Template – Define Content for a Section
+
+`@section` defines the actual content that fills a `@yield` placeholder in the parent layout.
+
+```php
+{{-- resources/views/home.blade.php --}}
+@extends('layouts.app')
+
+@section('title', 'Home Page')
+
+@section('content')
+    <h1>Welcome to My Website</h1>
+    <p>This is the homepage.</p>
+@endsection
+```
+
+- `@extends('layouts.app')` tells Blade that this template uses `layouts/app.blade.php` as its layout.
+- `@section('title', 'Home Page')` sets the title section in one line.
+- `@section('content')` matches the `@yield('content')` from the layout, filling it with actual HTML.
+
+### Putting It All Together
+
+`layouts/app.blade.php`
+
+```php
+<html>
+<head>
+    <title>@yield('title')</title>
+</head>
+<body>
+    @include('partials.navbar')
+
+    <main>
+        @yield('content')
+    </main>
+</body>
+</html>
+```
+
+`home.blade.php`
+
+```php
+@extends('layouts.app')
+
+@section('title', 'Home Page')
+
+@section('content')
+    <h1>Product List</h1>
+    <ul>
+        @foreach ($products as $product)
+            @if ($product->inStock)
+                <li>{{ $product->name }} - ${{ $product->price }}</li>
+            @else
+                <li>{{ $product->name }} - Out of Stock</li>
+            @endif
+        @endforeach
+    </ul>
+@endsection
+```
+
+- The layout provides the skeleton with `@yield` placeholders.
+- The child view fills in the placeholders using `@section`.
+- The partial is included in the layout so it appears across multiple pages.
+
+### How It Works Together
+
+When `home.blade.php` is rendered:
+
+1. Laravel looks at `@extends('layouts.app')`.
+2. It loads `layouts/app.blade.php`.
+3. It replaces `@yield('title')` with "Home Page".
+4. It replaces `@yield('content')` with the HTML from `@section('content')`.
+5. The `@include('partials.navbar')` is inserted from the partial file.
+
+### Extra Blade Layout Features
+
+- `@parent` → Allows a section to append content to the layout’s default content.
+- `@stack` & `@push` → Useful for adding scripts/styles from child views to a layout stack.
+- Nested Layouts → A layout can itself extend another layout.
+
+# Controllers
+
+In Laravel, a controller is a PHP class that groups related request-handling logic into methods.
+It acts as the middleman between your routes and your business logic (models, services, etc.).
+
+## Creating a Controller
+
+You can create controllers in Laravel using Artisan CLI.
+
+```bash
+php artisan make:controller ProductController
+```
+
+This creates a file in:
+
+```bash
+app/Http/Controllers/ProductController.php
+```
+
+It contains a class like:
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class ProductController extends Controller
+{
+    //
+}
+```
+
+## Resource Controller
+
+If you want to create a controller with predefined CRUD methods, use:
+
+```bash
+php artisan make:controller ProductController --resource
+```
+
+This creates methods like:
+
+- `index()` → list all resources
+- `create()` → show create form
+- `store()` → save new resource
+- `show($id)` → show a single resource
+- `edit($id)` → show edit form
+- `update(Request $request, $id)` → update existing resource
+- `destroy($id)` → delete resource
+
+## Routing to Controllers
+
+In `routes/web.php`:
+
+```php
+use App\Http\Controllers\ProductController;
+
+// Single route
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::resource('products', ProductController::class);
+```
+
+- Visiting `http://your-app.test/products` calls `index()`
+- Visiting `http://your-app.test/products/5` calls `show(5)`
+
+## How Routes are Generated
+
+You can see all routes generated by running:
+
+```bash
+php artisan route:list
+```
+
+Example output:
+
+```bash
+GET|HEAD   products              → ProductController@index
+GET|HEAD   products/create       → ProductController@create
+POST       products              → ProductController@store
+GET|HEAD   products/{product}    → ProductController@show
+GET|HEAD   products/{product}/edit → ProductController@edit
+PUT|PATCH  products/{product}    → ProductController@update
+DELETE     products/{product}    → ProductController@destroy
+```
+
+## API Controller
+
+An API Controller is a controller in Laravel designed specifically for handling API requests.
+
+Key differences from normal web controllers:
+
+- Returns JSON responses instead of HTML views.
+- No need for methods like `create()` or `edit()` (because APIs usually don’t serve HTML forms).
+- Often uses `api.php` routes instead of `web.php`.
+- Can be created with the `--api` flag in Artisan, which skips view-related methods.
+
+```BASH
+php artisan make:controller ProductController --api
+```
+
+This will generate a controller without `create()` and `edit()` methods — only the CRUD methods that make sense for APIs.
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class ProductController extends Controller
+{
+    public function index()
+    {
+        $products = [
+            ["id" => 1, "name" => "Laptop", "price" => 1200],
+            ["id" => 2, "name" => "Phone", "price" => 800],
+        ];
+
+        return response()->json($products);
+    }
+}
+```
+
+For APIs, we use `routes/api.php` instead of `routes/web.php`:
+
+```php
+use App\Http\Controllers\ProductController;
+
+Route::apiResource('products', ProductController::class);
+```
+
+## Key Differences Between `--resource` and `--api`
+
+| Feature               | Resource Controller              | API Controller                      |
+| --------------------- | -------------------------------- | ----------------------------------- |
+| `create()` & `edit()` | ✅ Included                      | ❌ Removed                          |
+| Designed for          | Web apps with HTML views         | APIs with JSON responses            |
+| Routes                | `Route::resource()` in `web.php` | `Route::apiResource()` in `api.php` |
+| Response type         | HTML views or JSON               | JSON only                           |
+
+# Models & Eloquent ORM
+
+A model in Laravel is a PHP class that represents a table in your database and provides an abstraction layer for interacting with that table using Eloquent ORM (Object-Relational Mapping).
+
+- Each model maps to one database table.
+- Each model object represents one row in that table.
+- Eloquent lets you interact with the database without writing raw SQL.
+
+## Creating a Model
+
+Laravel’s Artisan command makes it quick:
+
+```bash
+php artisan make:model Product
+```
+
+**Default Content:**
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    // By default, Eloquent assumes:
+    // Table name: 'products'
+    // Primary key: 'id'
+    // Timestamps: 'created_at' & 'updated_at'
+}
+```
+
+## Creating Model with Migrations
+
+Often you create a model along with its table schema:
+
+```bash
+php artisan make:model Product -m
+```
+
+This creates:
+
+- `app/Models/Product.php` (Model)
+- `database/migrations/2025_08_15_000000_create_products_table.php` (Migration)
+
+You then edit the migration to define columns:
+
+```php
+public function up(): void
+{
+    Schema::create('products', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->decimal('price', 8, 2);
+        $table->integer('stock')->default(0);
+        $table->timestamps();
+    });
+}
+```
+
+**Run migration:**
+
+```bash
+php artisan migrate
+```
+
+## Configuring Model Properties
+
+Eloquent provides some important properties you can configure.
+
+### `$table`
+
+If the table name doesn’t follow Laravel’s naming convention (plural of model name):
+
+```php
+protected $table = 'my_products';
+```
+
+### `$primaryKey`
+
+If your primary key is not `id`:
+
+```php
+protected $primaryKey = 'product_id';
+```
+
+### `$timestamps`
+
+If the table doesn’t have `created_at` and `updated_at` columns:
+
+```php
+public $timestamps = false;
+```
+
+### `$fillable`
+
+Defines which columns can be mass assigned:
+
+```php
+protected $fillable = ['name', 'price', 'stock'];
+```
+
+**Example useage:**
+
+```php
+Product::create([
+    'name' => 'Laptop',
+    'price' => 1200.50,
+    'stock' => 10
 ]);
 ```
 
-#### Read
+Without `$fillable`, the above would throw a MassAssignmentException.
 
-**Get All Post**
+### `$guarded`
+
+The opposite of `$fillable` — defines which columns cannot be mass assigned.
 
 ```php
-$posts = Post::all();
+protected $guarded = ['id'];
 ```
 
-**Find a Specific Post by ID**
+## Using the Model
+
+### Insertion
+
+```php
+$product = new Product();
+$product->name = 'Phone';
+$product->price = 800.00;
+$product->stock = 5;
+$product->save();
+```
+
+### Retrieve
+
+```php
+$allProducts = Product::all();
+$singleProduct = Product::find(1);
+$expensive = Product::where('price', '>', 1000)->get();
+```
+
+### Update
+
+```php
+$product = Product::find(1);
+$product->stock = 20;
+$product->save();
+```
+
+### Delete
+
+```php
+Product::destroy(1);
+// or
+$product = Product::find(2);
+$product->delete();
+```
+
+## Full Flow of Migrations
+
+1. **Create model with migration**
+
+```shell
+php artisan make:model Product -m
+```
+
+2. **Migration**
+
+```php
+Schema::create('products', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->decimal('price', 8, 2);
+    $table->integer('stock')->default(0);
+    $table->timestamps();
+});
+```
+
+3. **Model configuration**
+
+```php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    protected $fillable = ['name', 'price', 'stock'];
+}
+```
+
+4. **Using the model**
+
+```php
+// Create
+Product::create([
+    'name' => 'Tablet',
+    'price' => 350.00,
+    'stock' => 15
+]);
+
+// Read
+$products = Product::all();
+
+// Update
+$product = Product::find(1);
+$product->price = 300.00;
+$product->save();
+
+// Delete
+Product::destroy(1);
+```
+
+- Naming conventions matter (table plural, primary key `id`, timestamps).
+- `$fillable` and `$guarded` protect against mass assignment vulnerabilities.
+- You can create models with or without migrations, but usually both are used together.
+
+## Relationships
+
+### One-to-One
+
+A row in one table is related to exactly one row in another table.
+
+Example: A User has one Profile.
+
+**Database Structure:**
+
+```bash
+users
+  id | name | email
+profiles
+  id | user_id | bio | avatar
+```
+
+**Model Definition:**
+`User.php`
+
+```php
+public function profile(){
+    return $this->hasOne(Profile::class);
+}
+```
+
+`Profile.php`
+
+```php
+public function user(){
+    return $this->belongsTo(User::class);
+}
+```
+
+**Usage:**
+
+```php
+$user = User::find(1);
+echo $user->profile->bio; // Access profile info
+
+$profile = Profile::find(1);
+echo $profile->user->name; // Access user info
+```
+
+### One-to-Many
+
+One record in a table can be related to multiple records in another table.
+
+Example: A Post has many Comments.
+
+**Database Structure:**
+
+```bash
+posts
+  id | title | content
+comments
+  id | post_id | body
+```
+
+**Model Definitions:**
+`Post.php`
+
+```php
+public function comments(){
+    return $this->hasMany(Comment::class);
+}
+```
+
+`Comment.php`
+
+```php
+public function post(){
+    return $this->belongsTo(Post::class);
+}
+```
+
+**Usage:**
 
 ```php
 $post = Post::find(1);
+foreach ($post->comments as $comment) {
+    echo $comment->body;
+}
+
+$comment = Comment::find(1);
+echo $comment->post->title;
 ```
 
-#### Update
+### Many-to-Many
 
-```php
-Post::where('id', 1)->update(['title' => "Gaming Laptop"]);
+A record in one table can belong to many records in another table, and vice versa.
+This requires a pivot table.
+
+**Databsae Structure:**
+
+```
+students
+  id | name
+courses
+  id | title
+course_student
+  student_id | course_id
 ```
 
-#### Delete
+**Model Definitions:**
+`Model.php`
 
 ```php
-Post::destroy(1);
-```
-
-### Relationships
-
-1. **One-to-Many**
-
-```php
-public function category(){
-    return $this->belongsTo(Category::class);
+public function courses(){
+    return $this->belongsToMany(Course::class);
 }
 ```
 
-## Seeders
-
-Seeders in Laravel allow you to populate your database with dummy data for testing and development. Instead of manually inserting records, you can automate the process using Laravel's built-in seeder system.
-
-### Steps
-
-1. Run the following command
-
-```shell
-php artisan make:factory PostFactory --model=Post
-```
-
-2. Define the factory
+`Course.php`
 
 ```php
-public function definition(): array{
-    return [
-        'title' => $this->faker->name(),
-        'content' => $this->faker->description()
-    ];
+public function students(){
+  return $this->belongsToMany(Student::class);
 }
 ```
 
-3. Use the factory in seeder
+**Usage:**
 
 ```php
-User::factory(10)->create();
+// Attach relationship
+$student = Student::find(1);
+$student->courses()->attach(2); // Add course_id 2
+
+// Detach relationship
+$student->courses()->detach(2);
+
+// Sync relationships (replace with new set)
+$student->courses()->sync([1, 3]);
+
+// Retrieve
+foreach ($student->courses as $course) {
+    echo $course->title;
+}
 ```
 
-4. Run all seeders
+### HasManyThrough
 
-```shell
-php artisan db:seed
+A “shortcut” relationship to access related models through an intermediate model.
+
+Example: A Country has many Posts through Users.
+
+**Database Structure:**
+
+```
+countries
+  id | name
+users
+  id | country_id | name
+posts
+  id | user_id | title
 ```
 
-Before seeding ensure the `$fillable` attribute frome models.
-
-## Routing
-
-Laravel routes are defined in the `routes/` directory and support various HTTP methods such as `GET`, `POST`, `PUT`, `DELETE`, and more.
-
-### Basic Route
+**Model definitions**
+`Country.php`
 
 ```php
-use Illuminate\Support\Facades\Route;
-
-Route::get('/hello', function () {
-    return "Hello, Laravel!";
-});
+public function posts(){
+    return $this->hasManyThrough(Post::class, User::class);
+}
 ```
 
-### Route with parameter
+- Country → Users (`hasMany`)
+- Users → Posts (`hasMany`)
+- HasManyThrough skips explicitly loading users.
+
+**Usage:**
 
 ```php
-Route::get('/user/{id}', function ($id) {
-    return "User ID: " . $id;
-});
+$country = Country::find(1);
+foreach ($country->posts as $post) {
+    echo $post->title;
+}
 ```
 
-### Route with controller
+### Polymorphic relationships
+
+Allows a model to belong to multiple other models using a single association.
+
+**Database Structure:**
+
+```
+posts
+  id | title
+videos
+  id | title
+comments
+  id | commentable_id | commentable_type | body
+```
+
+**Model Definitions:**
+`Comment.php`
 
 ```php
-use App\Http\Controllers\UserController;
-
-Route::get('/user/{id}', [UserController::class, 'show']);
+public function commentable(){
+    return $this->morphTo();
+}
 ```
 
-## Views
-
-Views are typically stored in the `resources/views/` directory.
-
-### Return a view in routes
+`Post.php`
 
 ```php
-Route::get('/welcome', function () {
-    return view('welcome');
-});
+public function comments(){
+    return $this->morphMany(Comment::class, 'commentable');
+}
 ```
 
-### Pass data to view
+`Video.php`
 
 ```php
-Route::get('/greet', function () {
-    return view('welcome', ['name' => 'John']);
-});
+public function comments(){
+    return $this->morphMany(Comment::class, 'commentable');
+}
 ```
 
-### Blade Syntax
-
-- echo variable with `{{ }}`
-- conditional statement
-  `php
-    @if ($isAdmin)
-    <p>Welcome, Admin!</p>
-@else
-    <p>Welcome, User!</p>
-@endif
-    `
-- Loop
-  ```
-  @foreach($users as $user)
-      <li>{{ $user }}</li>
-  @endforeach
-  ```
-
-## Controller
-
-Create controller with following command:
-
-```shell
-php artisan make:controller PageController
-```
-
-## Authentication
-
-### Login
+**Usage:**
 
 ```php
-  public function login(Request $request)
+$post = Post::find(1);
+$post->comments()->create(['body' => 'Nice post!']);
+
+$video = Video::find(1);
+$video->comments()->create(['body' => 'Great video!']);
+
+// Retrieve polymorphic parent
+$comment = Comment::find(1);
+echo $comment->commentable->title; // Works for both Post or Video
+```
+
+### Summary of Relationsips
+
+| Relationship   | Example                     | Laravel Method(s)       |
+| -------------- | --------------------------- | ----------------------- |
+| One-to-One     | User → Profile              | `hasOne` / `belongsTo`  |
+| One-to-Many    | Post → Comments             | `hasMany` / `belongsTo` |
+| Many-to-Many   | Student ↔ Course            | `belongsToMany`         |
+| HasManyThrough | Country → Posts (via Users) | `hasManyThrough`        |
+| Polymorphic    | Comments on Post & Video    | `morphMany`, `morphTo`  |
+
+# Migrations
+
+- Migrations are version control for your database schema.
+- They allow you to define and modify database tables using PHP instead of manually writing SQL queries.
+- Think of them as the blueprint for your database that can be shared and tracked in version control (like Git).
+
+## Creating a Migration
+
+You can create a migration file using Artisan command:
+
+```bash
+php artisan make:migration create_users_table
+```
+
+- `make:migration` → tells Laravel to create a new migration.
+- `create_users_table` → the name of the migration (follows convention: `create_<table>_table`).
+
+After running this, a new file will be created in:
+
+```bash
+database/migrations/2025_08_16_000000_create_users_table.php
+```
+
+(The timestamp ensures migrations run in order.)
+
+## Migration File Structure
+
+A migration file has two main methods:
+
+```php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        \Log::info('Request data: ', $request->all());
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first()
-            ]);
-        }
-
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'success' => true,
-                'redirect' => '/dashboard'
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid email or password'
-        ]);
-    }
-```
-
-### Registration
-
-```php
-public function registration(Request $request)
-{
-    \Log::info('Registration Request: ', $request->all());
-
-    $validator = Validator::make($request->all(), [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users',
-        'password' => 'required|confirmed|min:6',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'success' => false,
-            'message' => $validator->errors()->first()
-        ]);
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();                      // Auto-increment primary key
+            $table->string('name');            // VARCHAR field
+            $table->string('email')->unique(); // Unique constraint
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();           // For "remember me" sessions
+            $table->timestamps();              // created_at & updated_at
+        });
     }
 
-    // Create the user
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => \Hash::make($request->password),
-    ]);
-
-    // Log in the new user
-    Auth::login($user);
-
-    return response()->json([
-        'success' => true,
-        'redirect' => '/dashboard'
-    ]);
-}
-```
-
-### Authenticated User
-
-1. Using the `Auth` Facade
-
-```php
-$user = Auth::user();
-```
-
-2. Using the `auth()` Helper
-
-```php
-$user = auth()->user();
-```
-
-3. In Blade Templates
-
-```php
-<p>Welcome, {{ Auth::user()->name }}!</p>
-```
-
-Or using the `auth()` helper:
-
-```php
-<p>Your email: {{ auth()->user()->email }}</p>
-```
-
-4. Check for Authenticated User
-
-```php
-if (Auth::check()) {
-    $user = Auth::user();
-    // Safe to access $user->name etc.
-}
-```
-
-### Log Out
-
-```php
-public function logout(Request $request)
-{
-    Auth::logout(); // Logs the user out
-
-    $request->session()->invalidate();     // Optional: clears the session
-    $request->session()->regenerateToken(); // Optional: regenerates CSRF token
-
-    return redirect('/'); // Redirect to home or login page
-}
-```
-
-#### For API Logout (e.g., Laravel Sanctum)
-
-If you're using tokens:
-
-```php
-public function logout(Request $request)
-{
-    $request->user()->currentAccessToken()->delete();
-    return response()->json(['message' => 'Logged out']);
-}
-```
-
-Or log out all tokens (all devices):
-
-```php
-$request->user()->tokens()->delete();
-```
-
-### `rememberToken()`
-
-It is used in migrations to add a special column named remember_token to a table, which is used for the "remember me" authentication feature.
-
-When users log in and check a "Remember Me" box, Laravel keeps them logged in even after closing the browser by storing a token in the database and a cookie in the user's browser.
-
-```php
-$table->rememberToken();
-```
-
-## Protected Route
-
-### Controller
-
-```php
-Route::middleware('auth')->post('/posts', [PostController::class, 'store']);
-```
-
-### View
-
-```php
-public function index()
-{
-    if (!Auth::check()) {
-        return redirect('/login');
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('users'); // rollback action
     }
-
-    $posts = Post::all();
-    return view('posts.index', compact('posts'));
-}
+};
 ```
 
-## Form Validation
+- `up()` → Defines changes to apply (create/modify tables).
+- `down()` → Defines how to reverse changes (rollback).
 
-### `old()` function
+## Running Migrations
 
-It is used to retrieve input data that was flashed to the session during the previous request, typically after form validation fails and the page is redirected back.
-
-When a form is submitted and validation fails, Laravel redirects the user back to the form and flashes the input data to the session. The `old()` function helps repopulate the form fields with the previous input so the user doesn’t have to retype everything.
-
-**Syntax:**
-
-```php
-old('input_name', 'default_value')
-```
-
-- `old()` only works if the session is available (i.e., in web middleware).
-- Laravel automatically flashes input on validation failure if you use `$request->validate()` or `FormRequest`.
-
-## Middleware
-
-### Create Middleware
+After creating a migration, run:
 
 ```shell
-php artisan make:middleware CheckAge
+php artisan migrate
 ```
 
-**Define Logic:**
+This executes all pending migrations and creates/updates tables in your database.
+
+## Rolling Back Migrations
+
+If something goes wrong, you can undo:
+
+```bash
+php artisan migrate:rollback
+```
+
+- Rolls back the last batch of migrations.
+
+To rollback all migrations:
+
+```bash
+php artisan migrate:reset
+```
+
+To rollback and re-run migrations in one go:
+
+```bash
+To rollback and re-run migrations in one go:
+```
+
+## Example of Adding a New Column
+
+If you want to add a column (say `phone`) to an existing `users` table:
+
+```bash
+php artisan make:migration add_phone_to_users_table --table=users
+```
+
+**Generated Migrations:**
 
 ```php
-namespace App\Http\Middleware;
-
-use Closure;
-use Illuminate\Http\Request;
-
-class CheckAge
+public function up(): void
 {
-    public function handle(Request $request, Closure $next)
-    {
-        if ($request->age <= 18) {
-            return redirect('home')->with('error', 'You must be over 18!');
-        }
+    Schema::table('users', function (Blueprint $table) {
+        $table->string('phone')->nullable()->after('email');
+    });
+}
 
-        return $next($request); // Let the request pass through
-    }
+public function down(): void
+{
+    Schema::table('users', function (Blueprint $table) {
+        $table->dropColumn('phone');
+    });
 }
 ```
 
-### Register Middleware
-
-- Option A: Global Middleware (runs on every request)
-
-  - Add to `app/Http/Kernel.php` in the `$middleware` array.
-
-- Option B: Route Middleware (recommended for selective usage)
-  - Add this to `$routeMiddleware` in `Kernel.php`:
+**Run:**
 
 ```php
-'check.age' => \App\Http\Middleware\CheckAge::class,
+php artisan migrate
 ```
 
-### Use Middleware
-
-```php
-Route::get('/restricted-area', function () {
-    return 'Welcome to the restricted area!';
-})->middleware('check.age');
-```
-
-### Built-in Middleware
-
-- `auth` - Ensures user is authenticated
-- `guest` - Ensures user is not authenticated
-- `throttle` - Rate-limits requests
-- `verified` - Ensures user has verified their email
-- `can:permission` - Authorization via policies or gates
+Now `users` table has a `phone` column.
