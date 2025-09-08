@@ -122,6 +122,28 @@ Understanding who your stakeholders are is essential because it helps guide deci
 | **End User (Indirect)**              | May not interact with the API directly but uses applications built with it. Their feedback affects future API changes.      | A customer using a food delivery app that consumes restaurant APIs.              |
 | **Business Stakeholders**            | Focus on ROI, market fit, pricing, and competitive edge. Want the API to support business goals.                            | A CEO or investor looking to monetize the API via subscriptions or partnerships. |
 
+## HTTP Request
+1. `GET`
+- Status Codes:
+  - 200 OK: The request was successful, and the data is returned.
+  - 404 Not Found: The resource was not found.
+2. `POST`
+- Status Codes:
+  - 201 Created: A new resource was successfully created.
+  - 400 Bad Request: Invalid input or missing parameters.
+
+3. `PUT` and `PATCH`
+- Status Codes:
+  - 200 OK: The resource was updated successfully.
+  - 404 Not Found: The resource was not found.
+  - 400 Bad Request: The request body is not valid.
+
+4. `DELETE`   
+- Status Codes:
+  - 204 No Content: The resource was successfully deleted, and there is no content in the response body.
+  - 404 Not Found: The resource to delete was not found.
+
+
 ## HTTP Headers
 
 Headers are extra information sent with requests and responses. They help the client and server understand each other better.
@@ -656,6 +678,139 @@ Explanation: `users` is a resource (noun), HTTP method defines the action.
 
    - Don’t mix plural `/users` and singular `/order` in same design.
 
+### When to Use Singular Resource Names?
+If the API represents a unique, singular resource, it might make sense to use a singular name. For example, an API for a single user profile might use `/profile` instead of `/profiles`.
+# Request & Response Structure
+## Request Structure
+
+The request sent by the client typically consists of the following components:
+
+- **URL:** The endpoint or resource being accessed.
+- **HTTP Method:** The type of action to be performed (`GET`, `POST`, `PUT`, `DELETE`).
+- **Headers:** Contain metadata about the request (e.g., content type, authentication).
+- **Body:** For methods like `POST` or `PUT`, the body contains the actual data being sent, typically in JSON format.
+
+## Response Structure
+
+The server's response will also be in JSON format, containing the result of the request. The response typically includes:
+
+- **Status Code:** Indicates the success or failure of the request (e.g., `200 OK`, `201 Created`, `400 Bad Request`).
+- **Headers:** Provides additional information about the response (e.g., content type, caching).
+- **Body:** Contains the data or message returned by the server.
+
+## Pagination
+Pagination is the process of splitting large sets of data into smaller chunks (pages) so that the client can request and navigate through them efficiently.
+
+There are three common strategies in REST API design:
+### Limit & Offset Pagination
+
+This is the most common and simplest form of pagination.
+
+- limit → how many items to return per request.
+- offset → how many items to skip before starting to return results.
+```bash
+GET /api/v1/products?limit=10&offset=20
+```
+`limit=10` → return 10 products
+`offset=20` → skip the first 20 products, start from the 21st
+
+**Advantages:**
+
+- Easy to implement
+- Familiar and intuitive
+
+**Disadvantages:**
+
+- Inefficient for large offsets (e.g., offset=100000 requires skipping a lot of rows).
+- Data inconsistency if records are inserted/deleted between requests.
+
+
+### Page-based Pagination
+
+This is a variant of limit/offset where instead of offset, you use page numbers.
+```bash
+GET /api/v1/products?page=3&limit=10
+```
+- `page=3` → return the 3rd page
+- `limit=10` → 10 items per page
+
+This internally translates to:
+
+- skip = (page - 1) × limit → (3-1)×10 = 20
+- same as offset=20
+
+**Advantages:**
+
+- User-friendly ("Page 1, Page 2...")
+- Simple for UI navigation
+**Disadvantages:**
+- Suffers from the same large dataset inefficiency as offset
+
+### Cursor-based Pagination (a.k.a. Keyset Pagination)
+
+Instead of numeric offsets, this uses a pointer (cursor) to the last item fetched. The cursor is usually a unique, sequential, or sortable field (like `id` or `created_at`).
+
+```bash
+GET /api/v1/products?limit=10&cursor=21
+```
+- `cursor=21` → start after product with ID=21
+- `limit=10` → return next 10 items
+
+**Advantages:**
+
+- Efficient for large datasets
+- Consistent results even if new records are inserted/deleted
+- Scales well for APIs with continuous scrolling (e.g., Twitter feed)
+
+**Disadvantages:**
+
+- More complex to implement
+- Cursors must be securely encoded (not just raw IDs)
+## Filtering
+
+Filtering allows clients to narrow down results based on specific fields or conditions.
+
+- Use query parameters for filters.
+- Support multiple filters.
+- Use consistent naming.
+- Consider operators for ranges, dates, etc.
+
+```bash
+GET /api/v1/products?category=electronics&minPrice=100&maxPrice=1000&brand=sony
+```
+
+**Operators (Advanced Filtering):**
+
+- `price[gt]=100` → greater than 100
+- `price[lte]=1000` → less than or equal to 1000
+- `created_at[between]=2023-01-01,2023-12-31`
+
+```bash
+GET /api/v1/orders?status=completed&price[gte]=100&price[lte]=500
+```
+## Sorting
+
+Sorting defines the order of returned results.
+
+- Use a `sort` query parameter.
+- Prefix with `-` for descending order.
+- Allow multiple fields.
+```bash
+GET /api/v1/products?sort=-price,name
+```
+- First, sort by price (descending).
+- Then, for items with the same price, sort by name (ascending).
+## Searching
+
+Searching allows clients to perform keyword-based queries across one or multiple fields.
+
+- Use a general `q` parameter for free-text search.
+- Allow field-specific searches if needed.
+- For complex cases, integrate with full-text search (Elasticsearch, PostgreSQL `tsvector`, etc.).
+
+```bash
+GET /api/v1/products?name=macbook&brand=apple
+```
 # Richardson Maturity Model
 
 The Richardson Maturity Model (RMM) is a model developed by Leonard Richardson to evaluate how well a web API follows REST principles. It defines four levels (0 to 3), each building on the previous one, showing the maturity of an API in terms of its RESTful characteristics.

@@ -13,8 +13,63 @@
   - [Intersection Types](#intersection-types)
   - [Readonly properties](#readonly-properties)
   - [Type Aliases](#type-aliases)
+- [Functions]()
+  - [Function Annotations]()
+    - [Function Returning `never`]()
+    - [Optional & Default Parameters]()
+    - [Function Type Alias]()
+    - [Rest Parameter]()
+  - [Function Overloading]()
+  - [`this` in functions]()
+    - [Declaring `this` Type in Functions]()
+    - [Incorrect `this` Usage (Type Safety)Incorrect `this` Usage (Type Safety)]()
+  - [Objects]()
+    - [Object Type Annotations]()
+      - [Readonly Properties]()
+      - [Index Signatures]()
+      - [Function as a Property]()
+    - [Interfaces]()
+      - [Extending Interfaces]()
+      - [Declaration Merging]()
+  - [Class]()
+    - [Class Properties]()
+    - [Access Modifiers]()
+    - [Static Properties & Methods]()
+    - [Getters and Setters]()
+    - [Abstract Methods & Properties]()
+    - [Abstract Class vs Interface]()
+    - [`implements` keyword]()
+- [Generic]()
+  - [Why Use Generics]()
+  - [Generic Functions]()
+    - [Example of Identity Function]()
+    - [Generic Function with Arrays]()
+    - [Generic Function with Multiple Types]()
+    - [Generic Constraints]()
+    - [Default Generic Types]()
+    - [Explicit vs. Inferred Generics]()
+    - [API Response Wrapper]()
+  - [Generic Interface]()
+    - [Generic Property]()
+    - [Generic Method]()
+    - [Multiple Type Parameters]()
+    - [Generic Interface with Constraints]()
+    - [Default Generic Types]()
+    - [Using Generic Interfaces in Functions]()
+- []()
+- []()
+- []()
+- [Modules & Namespaces]()
+  - [Named Export]()
+  - [Default Export]()
+  - [Export All]()
+  - [Import Styles]()
+  - [Namespaces vs. Modules]()
+  - [Re-export]()
 - [Tooling & Ecosystem](#tooling--ecosystem)
   - [Setting Up TypeScript with Node.js](#setting-up-typescript-with-nodejs)
+    - [Adding Development Tools]()
+    - [Running the Project]()
 
 # Basics
 
@@ -282,6 +337,8 @@ Install globally (for all projects):
 npm install -g typescript
 ```
 
+- This installs the `tsc` (TypeScript Compiler) command globally.
+
 Check Installation
 
 ```bash
@@ -360,6 +417,30 @@ and it compiles the whole project based on rules inside `tsconfig.json`.
 
 - Enforces strict checks (like type safety) automatically.
 
+### integrate TypeScript with `npm scripts`
+
+In `package.json`, add a `scripts` section like this:
+
+```json
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "npm run build && node dist/index.js",
+    "dev": "ts-node-dev src/index.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.0",
+    "ts-node-dev": "^2.0.0"
+  }
+}
+```
+
+- `"build": "tsc"` → Runs TypeScript compiler according to your tsconfig.json.
+- `"watch": "tsc --watch"` → Watches for file changes and recompiles automatically.
+
 ### Example Project Structure
 
 ```
@@ -413,11 +494,56 @@ node dist/app.js
 
 Here are some important ones:
 
-- `target`: The JavaScript version to compile to (ES5, ES6, ES2020, etc.).
-- `module`: Module system (`commonjs`, `esnext`, etc.).
-- `rootDir`: Where your TypeScript source files are located.
-- `outDir`: Where compiled JavaScript files will be stored.
-- `strict`: Enables all strict type-checking options.
+1. `target`
+
+- Specifies which version of JavaScript to compile into.
+  - `"ES5"` → older browsers
+  - `"ES6"` or `"ES2015"` → modern JavaScript
+
+2. `module`
+   Defines how modules are compiled.
+   - `"commonjs"` → for Node.js
+   - `"esnext"` → for modern browsers with ES modules
+3. `rootDir`: Where your TypeScript source files are located.
+4. `outDir`: Where compiled JavaScript files will be stored.
+5. `strict`
+
+- Turns on strict type-checking.
+- It enables multiple rules like:
+  - `noImplicitAny`
+  - `strictNullChecks`
+  - `strictBindCallApply`
+
+6. `esModuleInterop`
+   Helps when importing CommonJS modules (like `express`).
+
+```json
+"esModuleInterop": true
+```
+
+Without this, you’d need:
+
+```ts
+import * as express from "express";
+```
+
+With it, you can write:
+
+```ts
+import express from "express";
+```
+
+7. `include` & `exclude`
+
+- Control which files TS should compile.
+
+```json
+"include": ["src/**/*"],
+"exclude": ["node_modules", "dist"]
+```
+
+- `include` → compile all files in `src/`.
+- `exclude` → ignore `node_modules` & `dist/`.
 
 # Types
 
@@ -463,6 +589,27 @@ let variableName: type = value;
 |                      | `Record<K,V>`          | `Record<string, number>`                            | Map keys to values                |                         |
 | **Functions**        | Function type          | `let add: (a:number,b:number)=>number;`             | Explicit function typing          |                         |
 |                      | Constructor type       | `type C<T> = new (...a:any[]) => T;`                | Class constructors                |                         |
+
+### `unknown`
+
+The `unknown` type is similar to `any`, but safer.
+You can assign anything to `unknown`, but before using it, you must check its type.
+
+```ts
+let input: unknown;
+
+input = "Hello";
+input = 42;
+
+// TypeScript requires a type check before using
+if (typeof input === "string") {
+  console.log(input.toUpperCase()); // Safe ✅
+}
+
+// Directly calling input.toUpperCase() would be an error ❌
+```
+
+With `unknown`, TypeScript forces you to narrow down the type before using it.
 
 ## Type Inferences
 
@@ -579,6 +726,41 @@ But if you want a literal type:
 ```ts
 const status = "loading";
 // inferred as "loading" (literal type)
+```
+
+**Object Literals Losing Strictness**
+
+```ts
+let user = { name: "Alice", age: 25 };
+user.location = "USA"; // ❌ Error: Property 'location' does not exist
+```
+
+But if you use any inference:
+
+```ts
+let user: any = {};
+user.name = "Alice"; // ✅
+user.age = 25; // ✅
+user.location = "USA"; // ✅ (but unsafe!)
+```
+
+- TypeScript loses track of structure.
+
+**`null` and `undefined` Issues**
+
+```ts
+let value = null;
+// inferred type: any
+value = 123; // ✅ allowed
+value = "hello"; // ✅ allowed
+```
+
+This can cause confusion because `value` doesn’t stay consistent.
+
+```tss
+let value: number | null = null;
+value = 123;     // ✅
+value = "hi";    // ❌ Error
 ```
 
 ## Union Types
@@ -760,6 +942,93 @@ const category: Category = {
 };
 ```
 
+Type Aliases cannot be reopened or changed later (unlike interfaces).
+
+### Differences between Type Aliases and Interfaces
+
+1. Definition
+
+- A `type` gives a new name to any type (primitive, union, intersection, object, etc.).
+- An `interface` is specifically used to describe the shape of an object (or function, class, etc.).
+
+2. Inheritance
+
+- Interface can be extended using extends:
+
+```ts
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface Point3D extends Point {
+  z: number;
+}
+
+const point: Point3D = { x: 1, y: 2, z: 3 };
+```
+
+- Type aliases can use intersections to achieve similar results:
+
+```ts
+type Point = { x: number; y: number };
+type Point3D = Point & { z: number };
+
+const point: Point3D = { x: 1, y: 2, z: 3 };
+```
+
+3. Declaration Merging
+
+- Interfaces can merge if you declare them multiple times with the same name:
+
+```ts
+interface User {
+  name: string;
+}
+
+interface User {
+  age: number;
+}
+
+const user: User = { name: "Masum", age: 22 }; // ✅ Works
+```
+
+- Type aliases cannot merge. Declaring the same type twice causes an error:
+
+```ts
+type User = { name: string };
+type User = { age: number }; // ❌ Error: Duplicate identifier 'User'
+```
+
+4. Other Type Features
+
+- Type aliases can represent:
+  - Union types `type ID = string | number;`
+  - Tuples `type PointTuple = [number, number];`
+  - Primitive type `type Name = string;`
+- Interfaces cannot represent unions, primitives, or tuples. They are only for object shapes, function types, or classes.
+
+5. When to use which?
+
+- Use `interface`:
+  - When you expect to extend or implement it.
+  - When you want declaration merging.
+  - Mostly for object-oriented programming patterns.
+- Use `type`:
+  - When you need unions, intersections, tuples, or primitives.
+  - For more flexible type compositions.
+
+**Interface vs Type Alias**
+
+| Feature                 | Interface          | Type Alias    |
+| ----------------------- | ------------------ | ------------- |
+| Object shape            | ✅ Yes             | ✅ Yes        |
+| Extend / Inherit        | ✅ Yes (`extends`) | ✅ Yes (`&`)  |
+| Declaration merging     | ✅ Yes             | ❌ No         |
+| Union / Intersection    | ❌ No              | ✅ Yes        |
+| Primitive / Tuple alias | ❌ No              | ✅ Yes        |
+| Flexibility             | Less flexible      | More flexible |
+
 # Functions
 
 ## Function Annotations
@@ -809,8 +1078,19 @@ console.log(welcomeUser("Bob", 30, "USA"));
 ```
 
 - `age?` → optional parameter (Must always come after required parameters, If not provided, it will be `undefined`).
-- `country = "Unknown"` → default parameter.
+- `country = "Unknown"` → default parameter. Unlike optional parameters, default parameters don’t have to be at the end.
 
+```ts
+function greet(name: string = "Guest", age: number): string {
+  return `Hello, my name is ${name} and I am ${age} years old.`;
+}
+
+console.log(greet(undefined, 25)); // ✅ "Hello, my name is Guest and I am 25 years old."
+```
+
+If you want to use the default for `name`, you must explicitly pass `undefined` since `age` is required.
+
+Recommended order: `required → default → optional`
 **Difference Between `optional (?)` vs. `| undefined`**
 
 These look similar but are not exactly the same.
@@ -846,7 +1126,18 @@ function functionName(...paramName: Type[]): ReturnType {
 - `...paramName` → rest parameter, collects all remaining arguments into an array.
 - `Type[]` → type annotation (array of a specific type).
 
-## Function Overloading?
+Pass value with rest parameter not reference.
+
+**Differences between Rest Parameters and Spread Operator**
+
+| Feature            | Rest Parameters (`...`)                   | Spread Operator (`...`)                       |
+| ------------------ | ----------------------------------------- | --------------------------------------------- |
+| **Where used?**    | Function definition                       | Function call, array/object creation          |
+| **What it does?**  | Collects multiple arguments into an array | Expands array/object into individual elements |
+| **Data Direction** | Many → One (arguments → array)            | One → Many (array → arguments/elements)       |
+| **Example**        | `function sum(...nums: number[]) {}`      | `sum(...[1,2,3])`                             |
+
+## Function Overloading
 
 In TypeScript, function overloading allows you to define multiple function signatures (different parameter types/number of parameters) for the same function name.
 
@@ -892,7 +1183,7 @@ console.log(getLength([1, 2, 3])); // 3
 - In TypeScript, we can annotate the type of `this` inside a function for type checking.
 - This prevents bugs where `this` is used incorrectly.
 
-### Declaring this Type in Functions
+### Declaring `this` Type in Functions
 
 In TypeScript, the first parameter of a function can be a special `this` parameter (not counted as a real argument).
 
@@ -1841,7 +2132,7 @@ Instead of fixing a type (like string or number), you use a type placeholder tha
 
 Think of generics as variables for types.
 
-## Why Use Generics?
+## Why Use Generics
 
 Without generics, you have two problems:
 
@@ -1965,7 +2256,7 @@ const userResponse = fetchUser();
 console.log(userResponse.data.name); // ✅ type-safe
 ```
 
-## Generic Interface?
+## Generic Interface
 
 An interface in TypeScript defines the shape of an object.
 When you make it generic, you add type parameters (like `<T>`) so the interface can work with different data types, while staying type-safe.
@@ -3620,3 +3911,6 @@ npm run dev
 6. how `Person.prototype.greet` is correct?
 7. let const sob ki convert hoeye var hoi?
 8. list of `target` and `module` in `tsconfig.json` file
+9. list of uses of function returning `never`
+10. explore method overloading in details
+11. explore Incorrect `this` Usage (Type Safety)
