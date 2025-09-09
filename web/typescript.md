@@ -1500,147 +1500,12 @@ class ClassName {
 }
 ```
 
-## Access Modifiers
+Key Points about `readonly`:
 
-TypeScript introduces access modifiers to control visibility.
+- Cannot be modified after the initial assignment.
+- Can be set only once — either at the time of declaration or inside the constructor.
+- Works with class properties and array types.
 
-- `public` → default, accessible everywhere.
-- `private` → accessible only inside the class.
-- `protected` → accessible inside the class and its subclasses.
-- `readonly` → property cannot be reassigned after initialization.
-
-### Shorthand Property Declaration with Modifiers
-
-Instead of declaring properties separately, you can define them directly in the constructor.
-
-```ts
-class Student {
-  constructor(
-    public name: string,
-    private roll: number,
-    protected batch: string
-  ) {}
-}
-
-const s = new Student("Masum", 101, "2025");
-console.log(s.name); // ✅ public
-// console.log(s.roll); // ❌ private
-// console.log(s.batch);// ❌ protected
-```
-
-## Static Properties & Methods
-
-- Belong to the class itself (not to instances).
-- Accessed with `ClassName.property` or `ClassName.method`.
-
-```ts
-class MathUtil {
-  static PI: number = 3.1416;
-
-  static circleArea(radius: number): number {
-    return this.PI * radius * radius;
-  }
-}
-
-console.log(MathUtil.PI); // 3.1416
-console.log(MathUtil.circleArea(5)); // 78.54
-```
-
-## Getters and Setters
-
-Provide controlled access to private/protected properties.
-
-```ts
-class BankAccount {
-  private _balance: number = 0;
-
-  get balance(): number {
-    return this._balance;
-  }
-
-  set balance(amount: number) {
-    if (amount < 0) {
-      throw new Error("Balance cannot be negative");
-    }
-    this._balance = amount;
-  }
-}
-
-const account = new BankAccount();
-account.balance = 1000; // ✅ calls setter
-console.log(account.balance); // ✅ calls getter → 1000
-```
-
--`get balance()` → behaves like a property when accessed. -`set balance()` → behaves like assignment but with validation logic.
-
-## Abstract Methods & Properties
-
-Used in abstract classes.
-
-Must be implemented by subclasses.
-
-```ts
-abstract class Shape {
-  abstract area(): number; // abstract method
-}
-
-class Circle extends Shape {
-  constructor(private radius: number) {
-    super();
-  }
-  area(): number {
-    return Math.PI * this.radius * this.radius;
-  }
-}
-
-const c = new Circle(5);
-console.log(c.area()); // 78.54
-```
-
-## Abstract Class vs Interface
-
-Both abstract classes and interfaces define a contract, but:
-| Feature | Abstract Class | Interface |
-| --------------------------- | -------------------------------------------- | ----------------------------------------- |
-| Can contain implementation? | ✅ Yes (concrete methods & properties) | ❌ No (only declarations) |
-| Can have fields? | ✅ Yes | ❌ No (only method/property signatures) |
-| Multiple inheritance? | ❌ No (only one abstract class) | ✅ Yes (can implement multiple interfaces) |
-| Use case | Common base with **shared logic** + contract | Pure **shape/structure** definition |
-
-## `implements` keyword
-
-- A class can use the `implements` keyword to enforce a contract defined by an interface.
-- The class must provide concrete implementations for all the methods and properties declared in the interface.
-- Unlike `extends`, `implements` does not bring any implementation — only the shape (structure) must match.
-
-So, `implements` is like a promise: "This class promises to have everything the interface says."
-
-```ts
-interface Person {
-  name: string;
-  age: number;
-  greet(): void;
-}
-
-class Student implements Person {
-  name: string;
-  age: number;
-  roll: number;
-
-  constructor(name: string, age: number, roll: number) {
-    this.name = name;
-    this.age = age;
-    this.roll = roll;
-  }
-
-  greet(): void {
-    console.log(`Hello, my name is ${this.name}, I am ${this.age} years old.`);
-  }
-}
-
-const s = new Student("Alice", 20, 101);
-s.greet(); // Hello, my name is Alice, I am 20 years old.
-```
 
 # Advance Types
 
@@ -2144,8 +2009,9 @@ Generics give you the best of both worlds: flexibility + type safety.
 ## Generic Functions
 
 ```ts
-function identity<T>(value: T): T {
-  return value;
+function functionName<T>(param: T): T {
+  // function body
+  return param;
 }
 ```
 
