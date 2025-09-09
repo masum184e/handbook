@@ -2841,7 +2841,7 @@ export function subtract(a: number, b: number): number {
 - Use `{}` to import specific named exports.
 - You can rename imports with `as`
 - Must import using the exact exported name (case-sensitive).
-
+- You can import specific members or all of them using destructuring syntax.
 ```ts
 import { PI, add, subtract } from "./mathUtils";
 // import { add as sum } from "./mathUtils";
@@ -2865,7 +2865,7 @@ export default function log(message: string): void {
 import log from "./logger";
 ```
 
-## Export All (`export *`)
+## Export All
 
 You can re-export everything from another module.
 
@@ -2892,16 +2892,16 @@ console.log(MathUtils.add(2, 3)); // 5
 2. Import Side Effects Only
 
 ```ts
-// 📂 setup.ts
+// setup.ts
 console.log("Setup done!");
 
-// 📂 main.ts
+// main.ts
 import "./setup"; // runs the file but imports nothing
 ```
 
 ## Namespaces vs. Modules
 
-- Namespaces (old way): Used inside one file/project to organize code.
+- Namespaces (old way): Used inside one file/project to organize code in a global scope.
 - Modules (modern way): Each file is a module. Import/export is used between files.
 
 ### Namespaces
@@ -2913,21 +2913,28 @@ import "./setup"; // runs the file but imports nothing
 Before ES6 import/export, namespaces were the main way to organize TypeScript code.
 
 ```ts
-namespace NamespaceName {
-  export const variableName = "value";
+namespace MathOperations {
+    export function add(a: number, b: number): number {
+        return a + b;
+    }
 
-  export function functionName() {
-    // function body
-  }
-
-  export class ClassName {
-    // class body
-  }
+    export function subtract(a: number, b: number): number {
+        return a - b;
+    }
 }
 ```
 
 - `export` keyword → makes items accessible outside the namespace.
 - Without `export`, items remain private inside the namespace.
+
+In TypeScript, you don’t "import" namespaces in the same way you do with ES6 modules. Instead, you can refer to the exported elements directly after the namespace, assuming they are globally available.
+
+```ts
+console.log(MathUtilities.add(3, 4));  // 7
+console.log(MathUtilities.multiply(3, 4));  // 12
+```
+
+Alternatively, if the namespace is exported from another file, you would include the appropriate reference.
 
 Namespaces are mostly used in older TypeScript projects or when not using module systems like ES6/CommonJS.
 
@@ -2943,7 +2950,18 @@ Namespaces are mostly used in older TypeScript projects or when not using module
 ```ts
 export * from "./module";
 ```
-
+Re-exporting Default Exports
+```ts
+export { default as Car } from './car';  // Re-exporting default export as named
+```
+Re-exporting in Namespaces
+```ts
+namespace AllMath {
+    export { MathOperations }; // Re-exporting the entire MathOperations namespace
+    export { MoreMath };       // Re-exporting the entire MoreMath namespace
+    export { AnotherMath.multiply };
+}
+```
 # Type Declarations
 
 ## Ambient Declarations

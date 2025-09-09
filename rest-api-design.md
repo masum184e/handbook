@@ -183,6 +183,7 @@ These are numeric codes in responses that indicate the result of the request.
   - `401 Unauthorized` → No/invalid authentication
   - `403 Forbidden` → You don’t have permission
   - `404 Not Found` → Resource doesn’t exist
+  - `410 Gone` → Resource removed
 - 5xx – Server Error
   - `500 Internal Server Error` → Generic server failure
   - `503 Service Unavailable` → Server overloaded or down
@@ -680,8 +681,8 @@ Explanation: `users` is a resource (noun), HTTP method defines the action.
 
 ### When to Use Singular Resource Names?
 If the API represents a unique, singular resource, it might make sense to use a singular name. For example, an API for a single user profile might use `/profile` instead of `/profiles`.
-# Request & Response Structure
-## Request Structure
+## Request & Response Structure
+### Request Structure
 
 The request sent by the client typically consists of the following components:
 
@@ -690,13 +691,46 @@ The request sent by the client typically consists of the following components:
 - **Headers:** Contain metadata about the request (e.g., content type, authentication).
 - **Body:** For methods like `POST` or `PUT`, the body contains the actual data being sent, typically in JSON format.
 
-## Response Structure
+### Response Structure
 
 The server's response will also be in JSON format, containing the result of the request. The response typically includes:
 
 - **Status Code:** Indicates the success or failure of the request (e.g., `200 OK`, `201 Created`, `400 Bad Request`).
 - **Headers:** Provides additional information about the response (e.g., content type, caching).
 - **Body:** Contains the data or message returned by the server.
+
+## Path Parameters
+Path parameters (also called URL parameters or route parameters) are used to identify specific resources in an API. They are part of the URL path itself and are usually mandatory.
+
+- Mandatory (usually required to access the resource).
+- Identify specific resource(s).
+- Part of the URL path.
+- Usually represented in curly braces `{}` in API documentation.
+
+When to use:
+
+- To fetch, update, or delete specific resources.
+- When the resource hierarchy is clear: `/users/{userId}/orders/{orderId}`.
+
+## Query Parameters
+Query parameters are used to filter, sort, or paginate resources. They appear after the `?` in the URL and are usually optional.
+
+- Optional (often).
+- Used for filtering, sorting, pagination, or searching.
+- Not part of the resource path; instead, they refine the request.
+- Key-value pairs, separated by `&`.
+
+**Path Parameters vs Query Parameters**
+
+| Feature           | Path Parameter                                    | Query Parameter                                     |
+| ----------------- | ------------------------------------------------- | --------------------------------------------------- |
+| Purpose           | Identify specific resource                        | Filter, sort, or refine resource                    |
+| Mandatory         | Usually yes                                       | Usually optional                                    |
+| Part of URL       | Yes                                               | No (after `?`)                                      |
+| Example URL       | `/users/123`                                      | `/users?role=admin&status=active`                   |
+| Best use case     | Fetch, update, delete single resource             | Filter, sort, paginate resource list                |
+| Impact on caching | Path usually creates new resource URL (cache key) | Same path, different query can be cached separately |
+
 
 ## Pagination
 Pagination is the process of splitting large sets of data into smaller chunks (pages) so that the client can request and navigate through them efficiently.
@@ -1365,6 +1399,38 @@ If you deploy changes to request formats, response structures, authentication, o
 | **Header Versioning**          | `Accept: application/vnd.myapi.v1+json` | Clean URLs, flexible                 | Harder for clients to implement |
 | **Content Negotiation**        | `Accept: application/json; version=1`   | Flexible, aligns with HTTP standards | Less common, more complex       |
 
+Comparison
+
+| Feature              | **URI Versioning** (`/v1/users`)      | **Header Versioning** (`Accept: v2`)       | **Query Param Versioning** (`?version=2`)        |
+| -------------------- | ------------------------------------- | ------------------------------------------ | ------------------------------------------------ |
+| **Clarity**          | ✅ Very clear, explicit                | ❌ Hidden in headers                        | ⚠️ Somewhat clear, but less prominent            |
+| **REST purity**      | ❌ Less RESTful (URI should be stable) | ✅ More RESTful (representation in headers) | ❌ Not ideal (query params aren’t for versioning) |
+| **Caching/CDN**      | ✅ Excellent                           | ⚠️ Needs config                            | ⚠️ Sometimes problematic                         |
+| **Ease of adoption** | ✅ Easy for devs                       | ⚠️ Requires header setup                   | ✅ Easy to use, but messy                         |
+| **Migration**        | ❌ Requires URL change                 | ✅ Only header change                       | ✅ Only param change                              |
+| **Best for**         | Public APIs (third-party devs)        | Internal APIs (enterprise apps)            | Experimental APIs, quick testing                 |
+
+## API Versioning Lifecycle
+1. 2023 → `/v1` released
+```bash
+GET /v1/users/123 → { "id": 123, "name": "Alice" }
+```
+2. 2025 → `/v2` released with breaking changes
+```bash
+GET /v2/users/123 → { "id": 123, "fullName": "Alice Johnson", "email": "alice@example.com" }
+```
+
+3. 2025 (Announcement) → Mark `/v1` deprecated
+- Docs updated with deprecation notice.
+- Responses from `/v1` include headers:
+```bash
+Deprecation: true
+Sunset: Tue, 31 Dec 2026 23:59:59 GMT
+Link: </v2/users/123>; rel="successor-version"
+```
+4. 2026 → `/v1` fully retired.
+- `/v1/users/123` → returns `410 Gone`.
+- All clients must use `/v2`.
 # Changes
 
 ## Non-Breaking Change
