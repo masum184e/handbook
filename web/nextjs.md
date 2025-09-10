@@ -1129,3 +1129,193 @@ module.exports = {
 @tailwind components;
 @tailwind utilities;
 ```
+
+# Error Handling
+In Next.js, errors can occur both:
+
+1. During server-side rendering (SSR) – when pages are generated on the server (via `getServerSideProps`, `getStaticProps`, or middleware).
+
+2. During client-side rendering (CSR) – when React components execute in the browser.
+
+## Handling Errors in Server-Side Rendering
+When rendering pages on the server, errors can occur in data fetching or API calls. Next.js allows handling these inside: `getServerSideProps`, `getStaticProps`, `getStaticPaths`
+
+```ts
+// pages/user/[id].tsx
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface UserPageProps {
+  user: User;
+}
+
+export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
+  context: GetServerSidePropsContext
+) => {
+  try {
+    const id = context.params?.id;
+    if (!id || Array.isArray(id)) {
+      return { notFound: true };
+    }
+
+    const res = await fetch(`https://api.example.com/users/${id}`);
+
+    if (!res.ok) {
+      // API returns 404
+      return { notFound: true };
+    }
+
+    const data: User = await res.json();
+
+    return {
+      props: { user: data },
+    };
+  } catch (error) {
+    console.error('Server Error:', error);
+
+    // Redirect to custom error page
+    return {
+      redirect: {
+        destination: '/500',
+        permanent: false,
+      },
+    };
+  }
+};
+
+const UserPage: React.FC<UserPageProps> = ({ user }) => {
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>Email: {user.email}</p>
+    </div>
+  );
+};
+
+export default UserPage;
+```
+- If the API returns 404, we return `{ notFound: true }`, which shows Next.js’s built-in 404 page.
+- If a server error occurs (e.g., database down), we redirect to a custom `/500` page.
+- This ensures the app doesn’t break and users see a friendly error message.
+
+## Handling Errors in Client-Side Rendering
+Errors can occur inside React components due to:
+
+- Invalid state updates
+- Failed client-side API requests
+- JavaScript runtime errors
+
+To handle these gracefully, Next.js supports React Error Boundaries and custom `_error`.js.
+
+`// components/ErrorBoundary.ts`
+```ts
+// components/ErrorBoundary.tsx
+import React, { ReactNode, ErrorInfo } from "react";
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+export default class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+    // Update state so the next render shows the fallback UI
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Client Error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h2>Something went wrong on the client side.</h2>;
+    }
+
+    return this.props.children;
+  }
+}
+```
+`// pages/index.ts`
+```ts
+// pages/index.tsx
+import React from "react";
+import ErrorBoundary from "../components/ErrorBoundary";
+
+const BuggyComponent: React.FC = () => {
+  throw new Error("Unexpected client-side error!");
+};
+
+const Home: React.FC = () => {
+  return (
+    <ErrorBoundary>
+      <h1>Welcome to Next.js</h1>
+      <BuggyComponent />
+    </ErrorBoundary>
+  );
+};
+
+export default Home;
+```
+- If a client-side error happens (e.g., inside `BuggyComponent`), the Error Boundary catches it.
+- Instead of crashing the whole app, it shows `"Something went wrong on the client side."`
+- This improves UX and avoids blank screens.
+
+## Custom Error
+### Custom 404 Page (`pages/404.js`)
+
+- Next.js serves a default static 404 page when a route is not found.
+- To customize it, simply create `pages/404.js`. This page is statically generated at build time, ensuring fast performance
+
+### Custom 500 Page (`pages/500.js`)
+
+- Next.js provides a default static 500 error page for server-side failures.
+- You can override it by creating a `pages/500.js`. Like the 404 page, it's statically generated with minimal overhead
+
+### Using Custom `_error.ts` or `error.ts` (App Router)
+
+- In the Pages Router (`pages/`), you can create a `pages/_error.ts` file.
+- In the App Router (app/), you can create an `error.ts` file inside a route segment.
+
+`pages/_error.ts`
+```ts
+// pages/_error.tsx
+import { NextPageContext } from "next";
+
+interface ErrorProps {
+  statusCode: number;
+}
+
+const Error = ({ statusCode }: ErrorProps) => {
+  return (
+    <p>
+      {statusCode
+        ? `An error ${statusCode} occurred on the server`
+        : "An error occurred on the client"}
+    </p>
+  );
+};
+
+Error.getInitialProps = ({ res, err }: NextPageContext) => {
+  const statusCode = res?.statusCode ?? err?.statusCode ?? 404;
+  return { statusCode };
+};
+
+export default Error;
+```
