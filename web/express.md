@@ -491,6 +491,213 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
 ```
+## Catching and Responding to Errors
+In an Express.js application, errors can happen in many places (routes, middleware, database queries, etc.). To keep the app reliable and user-friendly, you should catch errors and respond consistently.
+
+There are two main ways to handle errors:
+
+1. Synchronous errors → handled with `try/catch` or by throwing inside routes.
+
+2. Asynchronous errors → handled with `try/catch` in async functions, or by passing the error to `next(err)`.
+
+All errors eventually flow into the error-handling middleware, where you send a proper response.
+### Synchronous errors
+```ts
+const express = require('express');
+const app = express();
+
+// Example route with error handling
+app.get('/divide', (req, res, next) => {
+  try {
+    const { a, b } = req.query;
+    if (!a || !b) {
+      throw new Error('Both a and b are required');
+    }
+    if (b == 0) {
+      throw new Error('Division by zero is not allowed');
+    }
+    const result = Number(a) / Number(b);
+    res.json({ success: true, result });
+  } catch (err) {
+    // Pass error to error-handling middleware
+    next(err);
+  }
+});
+
+// Error-handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(400).json({
+    success: false,
+    message: err.message || 'Unexpected Error',
+  });
+});
+
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+```
+### Asynchronous errors
+Asynchronous operations (like database calls or API requests) need explicit error handling.
+
+```ts
+// Async route with error catching
+app.get('/user/:id', async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    // Simulating DB lookup with async function
+    const user = await fakeDatabaseFind(userId);
+
+    if (!user) {
+      const error = new Error('User not found');
+      error.status = 404;
+      throw error;
+    }
+
+    res.json({ success: true, user });
+  } catch (err) {
+    next(err); // forward to error middleware
+  }
+});
+
+// Fake DB function
+async function fakeDatabaseFind(id) {
+  return id === '1' ? { id: 1, name: 'Alice' } : null;
+}
+```
+## Operational Errors
+These are expected runtime errors that happen during normal operation. They don’t mean the app is broken — just that something went wrong while handling a request.
+
+- Invalid user input (missing required fields, wrong data format).
+- Database connection failure.
+- Requesting a non-existent resource (404).
+- Failed external API call.
+
+These should be caught, logged, and handled gracefully by responding to the client with a proper message and status code.
+## Programmer Errors
+
+These are bugs in the code itself, caused by mistakes in logic, syntax, or incorrect assumptions.
+
+- Using an undefined variable.
+- Forgetting to `await` an async call.
+- Incorrect function parameters.
+- Infinite loops.
+
+These usually mean the app is in an unrecoverable state. The safest approach is often to crash the process and let a process manager (like PM2, Docker, or Kubernetes) restart the app.
+
+# Advanced Features
+## Rate-Limiting
+Rate-limiting restricts the number of requests a client can make to your server in a given time window.
+
+- Protect against Denial-of-Service (DoS) attacks.
+- Prevent abuse of APIs (e.g., too many login attempts).
+- Improve fair usage across users.
+
+```bash
+npm install express-rate-limit
+```
+```ts
+const express = require('express');
+const rateLimit = require('express-rate-limit');
+
+const app = express();
+
+// Define a rate limiter: max 5 requests per minute per IP
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 5,                  // limit each IP to 5 requests per windowMs
+  message: {
+    success: false,
+    message: 'Too many requests from this IP, please try again after a minute.'
+  }
+});
+
+// Apply rate limiter to all routes
+app.use(limiter);
+
+app.get('/', (req, res) => {
+  res.send('Welcome! You have not been rate-limited yet.');
+});
+
+app.listen(3000, () => console.log('Server running at http://localhost:3000'));
+```
+1. Each IP address gets tracked.
+2. If the same IP makes more than 5 requests in 1 minute, Express blocks further requests.
+3. The client gets a 429 Too Many Requests error with the custom message.
+## Clustering
+**What is Clustering?**
+- By default, a Node.js app runs in a single thread.
+- This means it can only use one CPU core, even if your server has many.
+- The cluster module (built into Node.js) lets you spawn multiple worker processes that share the same server port.
+- Each worker runs a copy of your Express app, distributing load across CPU cores.
+
+**Relation to Error Handling**
+
+- If a single worker process crashes due to an error, the master process can detect it and spawn a new worker.
+- This prevents your entire app from going down because of one unhandled error.
+
+```ts
+const cluster = require('cluster');
+const os = require('os');
+const express = require('express');
+
+if (cluster.isMaster) {
+  // Master process
+  const numCPUs = os.cpus().length;
+  console.log(`Master ${process.pid} is running`);
+  console.log(`Forking ${numCPUs} workers...`);
+
+  // Fork workers
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  // Restart worker if it crashes
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died. Restarting...`);
+    cluster.fork();
+  });
+} else {
+  // Worker processes
+  const app = express();
+
+  app.get('/', (req, res) => {
+    res.send(`Hello from worker ${process.pid}`);
+  });
+
+  // Example crash route (simulating an unhandled error)
+  app.get('/crash', () => {
+    throw new Error('Worker crashed!');
+  });
+
+  app.listen(3000, () => {
+    console.log(`Worker ${process.pid} started`);
+  });
+}
+```
+### How This Works
+
+1. Master process runs first.
+  - It creates as many worker processes as CPU cores.
+  - Example: On a 4-core machine → 4 workers are spawned.
+2. Each worker runs the same Express.js app, listening on port `3000`.
+- The OS load balancer distributes incoming requests across workers.
+3. If you visit:
+  - `/` multiple times → you’ll see responses from different workers (`Hello from worker 1234`).
+  - `/crash` → worker throws an error and dies, but the master spawns a new worker.
+
+**Benefits for Error Handling**
+
+- Fault tolerance → If one worker crashes, others continue serving requests.
+- Automatic recovery → Master respawns dead workers.
+- Better load distribution → Errors from heavy traffic (e.g., request overload) are minimized.
+
+**Best Practices**
+
+1. Always use a process manager like PM2 (which uses clustering internally).
+  - Easier than managing cluster code manually.
+2. Still implement error-handling middleware in each worker.
+3. Log crashes and monitor them (don’t just silently restart).
+4. Be careful with shared state — workers do not share memory. Use Redis, DB, or message queues for shared data.
 
 
 # Contents
@@ -502,7 +709,6 @@ app.listen(PORT, () => {
   - [res.json()](#resjson)
   - [res.status()](#resstatus)
 - [Error Handling](#error-handling-middleware)
-- [Rate Limiting vs Throttling](#rate-limiting-vs-throttling)
 
 # `req` Object
 
@@ -674,71 +880,3 @@ app.use((err, req, res, next) => {
 
 The error-handling middleware is added after all other routes and middleware. This ensures that it can catch errors from any part of the app.
 
-# Rate Limiting vs. Throttling
-
-## Rate Limiting
-
-- Sets a maximum number of allowed requests per client in a time window.
-- Example: A client can make up to 100 requests per hour.
-
-## Throttling
-
-- Restricts the rate at which requests are processed.
-- Example: Allow only 10 requests per second per client.
-
-## Why Implement Rate Limiting and Throttling?
-
-- Prevent DoS (Denial of Service) attacks.
-- Ensure fair resource distribution among users.
-- Protect APIs from being overused.
-- Reduce server load and improve stability.
-
-## Implement Rate Limiting
-
-1. **Install the library:**
-
-```bash
-npm install express-rate-limit
-```
-
-2. **Configure the rate limiter:**
-
-```js
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again after 15 minutes.",
-});
-```
-
-3. **Apply the rate limiter:**
-
-```js
-app.use(limiter);
-```
-
-## Implement Throttling
-
-1. **Install the library:**
-
-```bash
-npm install bottleneck
-```
-
-2. **Throttle Request Handling**
-
-```js
-// Wrap route handlers
-const throttledHandler = limiter.wrap(async (req, res) => {
-  res.send("Request processed");
-});
-```
-
-3. **Apply:**
-
-```js
-// Apply to a route
-app.get("/api/throttle", async (req, res) => {
-  throttledHandler(req, res);
-});
-```

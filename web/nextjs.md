@@ -1224,6 +1224,250 @@ export default function MyDocument() {
 | Common use | Layouts, global styles, providers | Meta tags, fonts, `<html>` attributes |
 | Lifecycle  | Per page navigation               | Only on initial page load             |
 
+## Custom Server
+By default, Next.js provides a built-in server (using Node.js) that handles:
+
+- Routing
+- API routes
+- Static files
+- SSR (server-side rendering)
+
+But sometimes you need more control over the server, such as:
+
+- Adding custom routes not handled by Next.js.
+- Adding custom middleware (e.g., authentication, logging).
+- Integrating with an existing backend (e.g., Express, Koa, Fastify).
+- Setting up custom headers or proxies.
+- For this, you can create a custom server instead of relying only on Next.js’s built-in one.
+
+**Important Note (Next.js 13+)**
+
+- In modern versions, Next.js recommends using Middleware, API routes, or Edge Functions instead of custom servers.
+- But for self-hosted apps (not Vercel) or legacy apps, custom servers are still useful.
+
+### Setting Up a Custom Server
+
+- Remove `next start` (default production start).
+- Use `next` as a request handler inside your custom server.
+
+`server.ts`
+```ts
+const express = require('express')
+const next = require('next')
+
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
+const handle = app.getRequestHandler() // Next.js request handler
+
+app.prepare().then(() => {
+  const server = express()
+
+  // Example custom route
+  server.get('/p/:id', (req, res) => {
+    const actualPage = '/post'
+    const queryParams = { id: req.params.id }
+    app.render(req, res, actualPage, queryParams)
+  })
+
+  // API-like route handled by Express
+  server.get('/hello', (req, res) => {
+    res.send('Hello from custom server!')
+  })
+
+  // Default handler (all Next.js pages & static files)
+  server.all('*', (req, res) => {
+    return handle(req, res)
+  })
+
+  server.listen(3000, (err) => {
+    if (err) throw err
+    console.log('🚀 Server running on http://localhost:3000')
+  })
+})
+```
+
+- `next({ dev })` → Initializes Next.js in dev or production mode.
+- `app.prepare()` → Prepares Next.js to handle requests.
+- `handle` → Next.js’s built-in request handler (used for normal pages/static files).
+- `server.get('/p/:id')` → Custom Express route mapping `/p/:id` → Next.js `/post` page.
+- `server.all('*')` → For all other routes, fall back to Next.js default handler.
+
+`pages/post.js`
+```ts
+export default function Post({ id }) {
+  return <h1>Post ID: {id}</h1>
+}
+
+Post.getInitialProps = async ({ query }) => {
+  return { id: query.id }
+}
+```
+### When to Use Custom Server?
+
+**Use it if you need:**
+
+- Custom routing logic (rewrites, redirects, slugs).
+- Middleware (auth, logging, analytics).
+- Integration with Express/Koa backend APIs.
+
+**Avoid it if:**
+
+- You’re deploying to Vercel → Vercel does not support custom servers.
+- You only need rewrites/redirects → Use `next.config.js` instead.
+
+### Differences vs. Default Next.js Server
+| Feature               | Default Server (`next start`) | Custom Server                      |
+| --------------------- | ----------------------------- | ---------------------------------- |
+| Routing               | Automatic (file-based)        | Manual + Next.js handler           |
+| Middleware            | Not supported                 | Fully supported (Express/Koa etc.) |
+| Vercel support        | ✅ Yes                         | ❌ No                               |
+| Deployment complexity | Easy                          | Higher (manage yourself)           |
+
+## Custom Server Configuration
+- `next.config.js` is a configuration file at the root of your Next.js project.
+- It allows you to customize Next.js’s default behavior without modifying the framework itself.
+- Common use cases:
+  - Adding environment variables
+  - Configuring custom webpack settings
+  - Enabling experimental features
+  - Optimizing images, redirects, and rewrites
+  - Setting internationalization (i18n)
+
+Think of it as the central place to tweak how Next.js works.
+
+```ts
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,   // Enable React strict mode
+  swcMinify: true,         // Use SWC for faster builds
+}
+
+module.exports = nextConfig
+```
+This enables React strict mode (catches potential problems) and SWC minification for faster builds.
+
+### Common Custom Configurations
+1. ***Environment Variables:** You can define public and server-side environment variables.
+```ts
+const nextConfig = {
+  env: {
+    CUSTOM_API_URL: 'https://api.example.com',
+  },
+}
+
+module.exports = nextConfig
+```
+- Accessible in your code: `console.log(process.env.CUSTOM_API_URL)`
+- `env` variables are exposed to the browser too. For server-only secrets, use `.env.local`.
+
+2. **Custom Webpack Config:** Modify Webpack to add loaders or plugins.
+```ts
+const nextConfig = {
+  webpack: (config, { isServer }) => {
+    // Example: Add a rule for SVG imports
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    })
+
+    return config
+  },
+}
+
+module.exports = nextConfig
+```
+This lets you import SVGs as React components:
+
+```ts
+import Logo from '@/public/logo.svg'
+export default function Home() {
+  return <Logo />
+}
+```
+3. **Redirects:** Define server-side redirects.
+
+```ts
+const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/old-blog/:slug*',
+        destination: '/new-blog/:slug*',
+        permanent: true,
+      },
+    ]
+  },
+}
+
+module.exports = nextConfig
+```
+
+Visiting `/old-blog/hello-world` → Redirects to `/new-blog/hello-world`.
+4. **Rewrites:** Rewrites allow you to mask an API endpoint with a different URL.
+```ts
+const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://external-api.com/:path*',
+      },
+    ]
+  },
+}
+
+module.exports = nextConfig
+```
+Visiting `/api/users` → Internally fetches from `https://external-api.com/users`.
+
+5. **Headers:** Set custom HTTP headers (e.g., security headers).
+```ts
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+    ]
+  },
+}
+
+module.exports = nextConfig
+```
+
+This applies headers to all routes.
+
+6. **Image Optimization:** Control domains allowed for `<Image />`.
+```ts
+const nextConfig = {
+  images: {
+    domains: ['example.com', 'cdn.example.org'],
+  },
+}
+
+module.exports = nextConfig
+```
+Lets you safely load images from external domains.
+
+7. **Internationalization (i18n):** Enable multiple locales.
+```ts
+const nextConfig = {
+  i18n: {
+    locales: ['en', 'fr', 'de'],
+    defaultLocale: 'en',
+  },
+}
+
+module.exports = nextConfig
+```
+Adds automatic locale-based routing:
+- `/fr/about` → French version
+- `/de/about` → German version
+
 # Error Handling
 
 In Next.js, errors can occur both:
