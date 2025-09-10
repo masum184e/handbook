@@ -1130,7 +1130,102 @@ module.exports = {
 @tailwind utilities;
 ```
 
+# Advance Topics
+
+## `_app.js`
+
+- It is a special Next.js file used to initialize pages.
+- It allows you to persist layout between page changes, keep state, and inject global styles.
+- It wraps every page in your Next.js app.
+- Without `_app.js`, Next.js provides a default one internally.
+  By creating your own, you gain full control over how pages are rendered.
+
+**Common Uses:**
+
+1. Add global CSS (must be imported here).
+2. Persist layouts (like Navbars, Footers).
+3. Wrap pages with providers (e.g., Redux, Context API, Theme provider).
+4. Custom page initialization logic.
+
+```ts
+// pages/_app.js
+import "@/styles/globals.css"; // Global CSS
+import Layout from "@/components/Layout"; // A shared layout component
+
+// The Component prop is the active page being rendered
+// pageProps are props preloaded by getInitialProps, getServerSideProps, etc.
+function MyApp({ Component, pageProps }) {
+  return (
+    <Layout>
+      {/* Every page will be wrapped with Layout */}
+      <Component {...pageProps} />
+    </Layout>
+  );
+}
+
+export default MyApp;
+```
+
+- `Component` → The actual page (e.g., `pages/index.js`, `pages/about.js`).
+- `pageProps` → Props injected by Next.js data-fetching methods.
+- `Layout` → Ensures the same navbar/footer across all pages.
+
+## `_document.js`
+
+- It is used to customize the HTML document structure that Next.js uses to render pages.
+- Unlike `_app.js`, which handles the React tree, `_document.js` controls the HTML & `<head>` part of your app.
+- This file only runs on the server-side (never in the browser).
+- It’s useful for adding things like:
+  - Custom `lang` attribute on `<html>`.
+  - Adding global meta tags.
+  - Adding external fonts, scripts, or analytics.
+  - Setting up custom document structure.
+
+```ts
+// pages/_document.js
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function MyDocument() {
+  return (
+    <Html lang="en">
+      <Head>
+        {/* External fonts or analytics */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+          rel="stylesheet"
+        />
+        <meta
+          name="description"
+          content="My Next.js App with custom document"
+        />
+      </Head>
+      <body>
+        {/* Main content will be injected here */}
+        <Main />
+        {/* Next.js scripts will be injected here */}
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+```
+
+- `<Html>` → The root HTML tag. You can set `lang`, `dir`, etc.
+- `<Head>` → Used for meta tags, links, and external stylesheets.
+- `<Main>` → Where Next.js renders your pages.
+- `<NextScript>` → Injects Next.js scripts for hydration & client-side transitions.
+
+## Differences Between `_app.js` and `_document.js`
+
+| Feature    | `_app.js` (App Component)         | `_document.js` (Document)             |
+| ---------- | --------------------------------- | ------------------------------------- |
+| Runs on    | Client & Server                   | Server only                           |
+| Controls   | Page rendering & layout           | HTML document structure               |
+| Common use | Layouts, global styles, providers | Meta tags, fonts, `<html>` attributes |
+| Lifecycle  | Per page navigation               | Only on initial page load             |
+
 # Error Handling
+
 In Next.js, errors can occur both:
 
 1. During server-side rendering (SSR) – when pages are generated on the server (via `getServerSideProps`, `getStaticProps`, or middleware).
@@ -1138,11 +1233,12 @@ In Next.js, errors can occur both:
 2. During client-side rendering (CSR) – when React components execute in the browser.
 
 ## Handling Errors in Server-Side Rendering
+
 When rendering pages on the server, errors can occur in data fetching or API calls. Next.js allows handling these inside: `getServerSideProps`, `getStaticProps`, `getStaticPaths`
 
 ```ts
 // pages/user/[id].tsx
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
 interface User {
   id: string;
@@ -1176,12 +1272,12 @@ export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
       props: { user: data },
     };
   } catch (error) {
-    console.error('Server Error:', error);
+    console.error("Server Error:", error);
 
     // Redirect to custom error page
     return {
       redirect: {
-        destination: '/500',
+        destination: "/500",
         permanent: false,
       },
     };
@@ -1199,11 +1295,13 @@ const UserPage: React.FC<UserPageProps> = ({ user }) => {
 
 export default UserPage;
 ```
+
 - If the API returns 404, we return `{ notFound: true }`, which shows Next.js’s built-in 404 page.
 - If a server error occurs (e.g., database down), we redirect to a custom `/500` page.
 - This ensures the app doesn’t break and users see a friendly error message.
 
 ## Handling Errors in Client-Side Rendering
+
 Errors can occur inside React components due to:
 
 - Invalid state updates
@@ -1213,6 +1311,7 @@ Errors can occur inside React components due to:
 To handle these gracefully, Next.js supports React Error Boundaries and custom `_error`.js.
 
 `// components/ErrorBoundary.ts`
+
 ```ts
 // components/ErrorBoundary.tsx
 import React, { ReactNode, ErrorInfo } from "react";
@@ -1252,7 +1351,9 @@ export default class ErrorBoundary extends React.Component<
   }
 }
 ```
+
 `// pages/index.ts`
+
 ```ts
 // pages/index.tsx
 import React from "react";
@@ -1273,11 +1374,13 @@ const Home: React.FC = () => {
 
 export default Home;
 ```
+
 - If a client-side error happens (e.g., inside `BuggyComponent`), the Error Boundary catches it.
 - Instead of crashing the whole app, it shows `"Something went wrong on the client side."`
 - This improves UX and avoids blank screens.
 
 ## Custom Error
+
 ### Custom 404 Page (`pages/404.js`)
 
 - Next.js serves a default static 404 page when a route is not found.
@@ -1294,6 +1397,7 @@ export default Home;
 - In the App Router (app/), you can create an `error.ts` file inside a route segment.
 
 `pages/_error.ts`
+
 ```ts
 // pages/_error.tsx
 import { NextPageContext } from "next";
