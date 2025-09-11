@@ -183,6 +183,8 @@ Top-level files are used to configure your application, manage dependencies, run
 
 # Image Optimization
 
+Optimized images reduce page load time, improving user experience and SEO.
+
 ## `<Image>` Component
 
 It automatically optimizes images based on device size, format, and caching.
@@ -280,6 +282,170 @@ Next.js allows showing a blurred version before the full image loads.
   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ..."
 />
 ```
+
+## Automatic image optimization with lazy loading
+
+### Automatic Image Optimization
+
+When you use the `<Image>` component instead of a plain `<img>` tag:
+
+1. Optimized Formats – Images are served in modern formats like WebP when supported.
+
+2. Responsive Sizes – Automatically generates different sizes (`srcset`) for different devices.
+
+3. On-Demand Resizing – Images are processed on the server and cached (CDN friendly).
+
+4. Lazy Loading – Images below the viewport are not loaded until scrolled into view, reducing initial page load time.
+
+### How Lazy Loading Works
+
+- By default, Next.js `<Image>` uses `loading="lazy"` for any image that is not in the initial viewport.
+- That means images below the fold will load only when needed, saving bandwidth.
+- You can override this behavior with `priority={true}` (for critical images like logos or hero banners).
+
+### Example of Lazy Loading with Automatic Image Optimization
+
+```ts
+// pages/index.js
+import Image from "next/image";
+
+export default function Home() {
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>Next.js Automatic Image Optimization</h1>
+
+      {/* Priority image (eager loading for hero/above the fold) */}
+      <Image
+        src="/hero.jpg"
+        alt="Hero banner"
+        width={1200}
+        height={600}
+        priority
+      />
+
+      <p style={{ marginTop: "100vh" }}>
+        Scroll down to load the next image (lazy loading in action) 👇
+      </p>
+
+      {/* Lazy loaded image (default) */}
+      <Image
+        src="/nature.jpg"
+        alt="Beautiful landscape"
+        width={800}
+        height={500}
+      />
+    </div>
+  );
+}
+```
+
+1. `priority` → The hero image loads immediately (good for above-the-fold content).
+
+2. Default behavior (lazy loading) → The second image (`nature.jpg`) won’t load until the user scrolls near it.
+
+3. Optimization → Both images are:
+
+- Resized based on device screen.
+- Served in modern formats (like WebP if supported).
+- Cached automatically.
+
+### Advanced Options
+
+`placeholder="blur"` → Show a blurry preview before the full image loads.
+
+```ts
+<Image
+  src="/nature.jpg"
+  alt="Landscape"
+  width={800}
+  height={500}
+  placeholder="blur"
+  blurDataURL="/nature-blur.jpg"
+/>
+```
+
+`sizes` attribute → Define responsive rules for different screen widths.
+
+```ts
+<Image
+  src="/nature.jpg"
+  alt="Landscape"
+  fill
+  sizes="(max-width: 768px) 100vw, 800px"
+/>
+```
+
+## Configuring external image
+
+By default, Next.js <Image> only optimizes images stored locally in your project (`/public`).
+If you want to use images hosted on external domains (e.g., a CDN, CMS, or API like Unsplash, Cloudinary, Strapi, Sanity), you must explicitly allow those domains in your Next.js config.
+
+This is required because:
+
+- It prevents abuse (e.g., optimizing someone else’s images without permission).
+- Ensures Next.js knows which domains are trusted for optimization.
+
+### Configuring External Image Domains
+
+You configure allowed domains in `next.config.js` under the `images.domains` property.
+
+```ts
+// next.config.js
+module.exports = {
+  images: {
+    domains: ["images.unsplash.com", "res.cloudinary.com"],
+  },
+};
+```
+
+- `images.unsplash.com` → lets you use Unsplash images.
+- `res.cloudinary.com` → allows Cloudinary-hosted images.
+
+**Explaination**
+
+1. The src points to external URLs.
+2. Next.js will:
+
+- Fetch and cache the image on first request.
+- Optimize and serve it in modern formats (WebP/AVIF).
+- Generate responsive sizes automatically.
+
+3. Because we added domains in `next.config.js`, Next.js trusts these sources.
+
+### Advance Configuration
+
+If your images come from multiple subdomains or APIs, you can use `remotePatterns` (more flexible than `domains`).
+
+```ts
+// next.config.js
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "example.com",
+        port: "",
+        pathname: "/images/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.myapp.com",
+        pathname: "/assets/**",
+      },
+    ],
+  },
+};
+```
+
+**Why This Matters**
+
+Without this config, you’ll see an error like:
+
+```bash
+Invalid src prop (https://...) on `next/image`, hostname not configured under images in your `next.config.js`
+```
+
+Configuring domains makes your app secure, optimized, and production-ready.
 
 # Rendering
 
@@ -1007,10 +1173,6 @@ While in next.js pre-renders pages on the server before sending them to the brow
 
 In CSR, data fetching response json, but in SSR data fetching response html.
 
-## Image Optimization
-
-Optimized images reduce page load time, improving user experience and SEO.
-
 # Styling
 
 ## Modules
@@ -1130,6 +1292,507 @@ module.exports = {
 @tailwind utilities;
 ```
 
+## Styled Components
+
+Both Styled-components and Emotion are popular libraries that allow you to write CSS-in-JS, meaning you style your components directly inside JavaScript/TypeScript files using template literals. This makes styles scoped, dynamic, and maintainable in component-based applications like Next.js.
+
+**Why use CSS-in-JS in Next.js?**
+
+- Scoped styles → No CSS class name collisions.
+- Dynamic styling → Styles can depend on props, state, or theme values.
+- SSR (Server-Side Rendering) → Works seamlessly with Next.js to deliver styled HTML on first load.
+- Theme support → Easily apply a global design system (colors, typography, spacing).
+
+### Using Styled-components
+
+```bash
+npm install styled-components
+npm install --save-dev babel-plugin-styled-components
+```
+
+#### Setup for Next.js
+
+Create a `.babelrc` (or extend `next.config.js`) to enable SSR-friendly styled-components:
+
+```json
+{
+  "presets": ["next/babel"],
+  "plugins": ["styled-components"]
+}
+```
+
+#### Example of Styled-components
+
+```tsx
+// pages/index.js
+import styled from "styled-components";
+
+const Button = styled.button`
+  background: ${(props) => (props.primary ? "#0070f3" : "white")};
+  color: ${(props) => (props.primary ? "white" : "#0070f3")};
+  padding: 10px 20px;
+  border: 2px solid #0070f3;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: ${(props) => (props.primary ? "#005bb5" : "#e6f0ff")};
+  }
+`;
+
+export default function Home() {
+  return (
+    <div>
+      <h1>Hello Styled-components</h1>
+      <Button>Default</Button>
+      <Button primary>Primary</Button>
+    </div>
+  );
+}
+```
+
+- `styled.button` creates a styled version of `<button>`.
+- Props (`primary`) are used to toggle styles dynamically.
+- Styles are scoped to `Button`, so they won’t affect other components.
+
+### Using Emotion
+
+```bash
+npm install @emotion/react @emotion/styled
+```
+
+Example of Emotion
+
+```ts
+// pages/index.js
+/** @jsxImportSource @emotion/react */
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+
+const Button = styled.button`
+  background: ${(props) => (props.primary ? "#0070f3" : "white")};
+  color: ${(props) => (props.primary ? "white" : "#0070f3")};
+  padding: 10px 20px;
+  border: 2px solid #0070f3;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: ${(props) => (props.primary ? "#005bb5" : "#e6f0ff")};
+  }
+`;
+
+// Inline CSS with css prop
+const textStyle = css`
+  font-size: 20px;
+  color: #333;
+`;
+
+export default function Home() {
+  return (
+    <div>
+      <h1 css={textStyle}>Hello Emotion</h1>
+      <Button>Default</Button>
+      <Button primary>Primary</Button>
+    </div>
+  );
+}
+```
+
+- Similar to `styled-components`, but with extra flexibility.
+- You can use `css` prop (`<h1 css={textStyle}>`) for inline styles.
+- Works great with TypeScript and theming out of the box.
+
+### Styled-components vs Emotion
+
+| Feature            | Styled-components          | Emotion                                      |
+| ------------------ | -------------------------- | -------------------------------------------- |
+| **Popularity**     | Very popular, older        | Newer but also widely used                   |
+| **Performance**    | Great but slightly heavier | Faster, more lightweight                     |
+| **CSS Prop**       | ❌ No                      | ✅ Yes                                       |
+| **SSR in Next.js** | Requires Babel plugin      | Works smoothly                               |
+| **Ecosystem**      | Large, stable              | More flexible (especially with inline `css`) |
+
+- Use Styled-components if you prefer a stable, widely adopted library with good documentation.
+- Use Emotion if you want performance, flexibility, and css prop support.
+
+# Authentication and Authorization
+
+## `next-auth`
+
+1. Install with `npm install next-auth`
+2. Configure API Route
+
+```ts
+// pages/api/auth/[...nextauth].js
+import NextAuth from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
+
+export default NextAuth({
+  providers: [
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt", // session can be JWT or database
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.id = token.id;
+      return session;
+    },
+  },
+});
+```
+
+3. Add Authentication Hooks
+
+```ts
+// components/AuthButtons.js
+"use client";
+import { signIn, signOut, useSession } from "next-auth/react";
+
+export default function AuthButtons() {
+  const { data: session } = useSession();
+
+  if (session) {
+    return (
+      <div>
+        <p>Signed in as {session.user.email}</p>
+        <button onClick={() => signOut()}>Sign Out</button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <button onClick={() => signIn("github")}>Sign In with GitHub</button>
+    </div>
+  );
+}
+```
+
+4. Protecting Pages - Server Side
+
+```ts
+// pages/dashboard.js
+import { getSession } from "next-auth/react";
+
+export default function Dashboard({ user }) {
+  return <h1>Welcome {user.email} to your dashboard!</h1>;
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: { destination: "/", permanent: false },
+    };
+  }
+
+  return { props: { user: session.user } };
+}
+```
+
+- `getSession(context)` checks the session on the server.
+- If no session → redirect to login.
+- Ensures pages are protected server-side.
+
+## JWT Authentication
+
+### How JWT Authentication Works
+
+1. User logs in → POST credentials to API route.
+2. Server verifies credentials and signs a JWT.
+3. Client stores the JWT (HttpOnly cookie or localStorage).
+4. Client sends token in headers or cookies for protected routes.
+5. Server verifies token on each request.
+
+**Protect Server Side**
+
+```ts
+// pages/dashboard.js
+import jwt from "jsonwebtoken";
+
+export default function Dashboard({ user }) {
+  return (
+    <h1>
+      Welcome {user.email}! Role: {user.role}
+    </h1>
+  );
+}
+
+export async function getServerSideProps({ req }) {
+  const token = req.headers.cookie?.split("=")[1] || "";
+
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    return { props: { user } };
+  } catch (err) {
+    return {
+      redirect: { destination: "/login", permanent: false },
+    };
+  }
+}
+```
+
+## Protecting API Routes
+
+### SSR Protection
+
+Use `getServerSideProps` to check authentication before rendering the page.
+
+```ts
+// pages/dashboard.js
+import { getSession } from "next-auth/react";
+
+export default function Dashboard({ user }) {
+  return <h1>Welcome {user.name}!</h1>;
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { user: session.user },
+  };
+}
+```
+
+- SSR ensures the page is protected on the server.
+- Unauthenticated users are redirected to the login page before the page loads.
+
+### Client-Side Protection
+
+Sometimes, you want to protect components rendered on the client (SPA behavior).
+
+```ts
+// components/ProtectedComponent.js
+"use client";
+import { useSession, signIn } from "next-auth/react";
+import { useEffect } from "react";
+
+export default function ProtectedComponent({ children }) {
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      signIn(); // redirect to login
+    }
+  }, [status]);
+
+  if (status === "loading") return <p>Loading...</p>;
+  if (!session) return null;
+
+  return <>{children}</>;
+}
+```
+
+- Checks session client-side.
+- If unauthenticated → redirects to login.
+- Shows children only if user is logged in.
+
+## Role-Based Access Control
+
+Example with `next-auth`
+
+```ts
+callbacks: {
+  async jwt({ token, user }) {
+    if (user) token.role = user.role; // attach role to JWT
+    return token;
+  },
+  async session({ session, token }) {
+    session.user.role = token.role;
+    return session;
+  },
+}
+```
+
+### Protecting SSR by Role
+
+```ts
+// pages/admin-dashboard.js
+import { getSession } from "next-auth/react";
+
+export default function AdminDashboard() {
+  return <h1>Admin Dashboard - Only Admins Can See This</h1>;
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return { redirect: { destination: "/login", permanent: false } };
+  }
+
+  if (session.user.role !== "admin") {
+    return { redirect: { destination: "/", permanent: false } };
+  }
+
+  return { props: {} };
+}
+```
+
+- First checks if the user is logged in.
+- Then checks if the user’s `role` is `admin`.
+- Redirects unauthorized users.
+
+### Protecting Client Side by Role
+
+```ts
+// components/AdminOnly.js
+"use client";
+import { useSession } from "next-auth/react";
+
+export default function AdminOnly({ children }) {
+  const { data: session } = useSession();
+
+  if (!session || session.user.role !== "admin") return null;
+
+  return <>{children}</>;
+}
+```
+
+- Useful when rendering certain UI elements only for admins.
+- Prevents accidental display of restricted content.
+
+# Deployment
+
+## Environment Variables
+
+- Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser.
+- Variables without `NEXT_PUBLIC_` are server-only and never exposed client-side.
+
+```env
+NEXT_PUBLIC_API_URL=https://api.example.com    # accessible in browser
+DATABASE_URL=postgres://user:pass@host:5432/db   # server-only
+JWT_SECRET=mysecretkey                           # server-only
+```
+
+## Optimizing the build process
+
+### What is `next build`?
+
+`next build` is the Next.js build command that prepares your app for production. It performs:
+
+1. Compiling JavaScript and TypeScript
+
+2. Generating static assets for SSG pages
+
+3. Creating server-side rendered (SSR) pages
+
+4. Optimizing images, CSS, and other assets
+
+5. Tree-shaking and minifying code for production
+
+Optimizing this process ensures faster builds, smaller bundles, and better performance.
+
+### Strategies to Optimize Next.js Build
+
+#### Analyze Bundle Size
+
+Large bundles slow down both build and runtime. Use Webpack bundle analyzer:
+
+```ts
+npm install @next/bundle-analyzer
+```
+
+`next.config.js`:
+
+```ts
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+module.exports = withBundleAnalyzer({});
+```
+
+Run analysis:
+
+```bash
+ANALYZE=true next build
+```
+
+- Helps identify heavy dependencies.
+- Allows code-splitting and dynamic imports for large components.
+
+### Use Dynamic Imports
+
+For large components or libraries, use dynamic imports:
+
+```tsx
+import dynamic from "next/dynamic";
+
+const HeavyComponent = dynamic(() => import("../components/HeavyComponent"), {
+  ssr: false, // optional: render only on client
+});
+```
+
+- Reduces initial JS bundle size.
+- Improves Time to Interactive (TTI).
+
+### Cache Dependencies in CI/CD
+
+In Vercel, Netlify, or GitHub Actions, caching `node_modules` or `.next/cache` speeds up builds.
+
+GitHub Actions Example:
+
+```yaml
+- name: Cache node modules
+  uses: actions/cache@v2
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+```
+
+### Enable SWC Minification
+
+Next.js uses SWC compiler by default. Ensure minification is enabled:
+
+```ts
+// next.config.js
+module.exports = {
+  swcMinify: true,
+};
+```
+
+- Faster than Terser
+- Produces smaller JS bundles
+
+### Static Generation Where Possible
+
+- Use SSG (`getStaticProps`) instead of SSR (`getServerSideProps`) when data is mostly static.
+- SSG allows pre-rendering at build time, reducing runtime server load.
+
+```ts
+export async function getStaticProps() {
+  const res = await fetch("https://api.example.com/posts");
+  const posts = await res.json();
+
+  return { props: { posts }, revalidate: 60 }; // ISR
+}
+```
+
+ISR updates pages incrementally without rebuilding the whole site.
+
 # Advance Topics
 
 ## `_app.js`
@@ -1225,6 +1888,7 @@ export default function MyDocument() {
 | Lifecycle  | Per page navigation               | Only on initial page load             |
 
 ## Custom Server
+
 By default, Next.js provides a built-in server (using Node.js) that handles:
 
 - Routing
@@ -1251,39 +1915,40 @@ But sometimes you need more control over the server, such as:
 - Use `next` as a request handler inside your custom server.
 
 `server.ts`
-```ts
-const express = require('express')
-const next = require('next')
 
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler() // Next.js request handler
+```ts
+const express = require("express");
+const next = require("next");
+
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler(); // Next.js request handler
 
 app.prepare().then(() => {
-  const server = express()
+  const server = express();
 
   // Example custom route
-  server.get('/p/:id', (req, res) => {
-    const actualPage = '/post'
-    const queryParams = { id: req.params.id }
-    app.render(req, res, actualPage, queryParams)
-  })
+  server.get("/p/:id", (req, res) => {
+    const actualPage = "/post";
+    const queryParams = { id: req.params.id };
+    app.render(req, res, actualPage, queryParams);
+  });
 
   // API-like route handled by Express
-  server.get('/hello', (req, res) => {
-    res.send('Hello from custom server!')
-  })
+  server.get("/hello", (req, res) => {
+    res.send("Hello from custom server!");
+  });
 
   // Default handler (all Next.js pages & static files)
-  server.all('*', (req, res) => {
-    return handle(req, res)
-  })
+  server.all("*", (req, res) => {
+    return handle(req, res);
+  });
 
   server.listen(3000, (err) => {
-    if (err) throw err
-    console.log('🚀 Server running on http://localhost:3000')
-  })
-})
+    if (err) throw err;
+    console.log("🚀 Server running on http://localhost:3000");
+  });
+});
 ```
 
 - `next({ dev })` → Initializes Next.js in dev or production mode.
@@ -1293,15 +1958,17 @@ app.prepare().then(() => {
 - `server.all('*')` → For all other routes, fall back to Next.js default handler.
 
 `pages/post.js`
+
 ```ts
 export default function Post({ id }) {
-  return <h1>Post ID: {id}</h1>
+  return <h1>Post ID: {id}</h1>;
 }
 
 Post.getInitialProps = async ({ query }) => {
-  return { id: query.id }
-}
+  return { id: query.id };
+};
 ```
+
 ### When to Use Custom Server?
 
 **Use it if you need:**
@@ -1316,14 +1983,16 @@ Post.getInitialProps = async ({ query }) => {
 - You only need rewrites/redirects → Use `next.config.js` instead.
 
 ### Differences vs. Default Next.js Server
+
 | Feature               | Default Server (`next start`) | Custom Server                      |
 | --------------------- | ----------------------------- | ---------------------------------- |
 | Routing               | Automatic (file-based)        | Manual + Next.js handler           |
 | Middleware            | Not supported                 | Fully supported (Express/Koa etc.) |
-| Vercel support        | ✅ Yes                         | ❌ No                               |
+| Vercel support        | ✅ Yes                        | ❌ No                              |
 | Deployment complexity | Easy                          | Higher (manage yourself)           |
 
 ## Custom Server Configuration
+
 - `next.config.js` is a configuration file at the root of your Next.js project.
 - It allows you to customize Next.js’s default behavior without modifying the framework itself.
 - Common use cases:
@@ -1338,52 +2007,59 @@ Think of it as the central place to tweak how Next.js works.
 ```ts
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,   // Enable React strict mode
-  swcMinify: true,         // Use SWC for faster builds
-}
+  reactStrictMode: true, // Enable React strict mode
+  swcMinify: true, // Use SWC for faster builds
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
+
 This enables React strict mode (catches potential problems) and SWC minification for faster builds.
 
 ### Common Custom Configurations
-1. ***Environment Variables:** You can define public and server-side environment variables.
+
+1. **\*Environment Variables:** You can define public and server-side environment variables.
+
 ```ts
 const nextConfig = {
   env: {
-    CUSTOM_API_URL: 'https://api.example.com',
+    CUSTOM_API_URL: "https://api.example.com",
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
+
 - Accessible in your code: `console.log(process.env.CUSTOM_API_URL)`
 - `env` variables are exposed to the browser too. For server-only secrets, use `.env.local`.
 
 2. **Custom Webpack Config:** Modify Webpack to add loaders or plugins.
+
 ```ts
 const nextConfig = {
   webpack: (config, { isServer }) => {
     // Example: Add a rule for SVG imports
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
-    })
+      use: ["@svgr/webpack"],
+    });
 
-    return config
+    return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
+
 This lets you import SVGs as React components:
 
 ```ts
-import Logo from '@/public/logo.svg'
+import Logo from "@/public/logo.svg";
 export default function Home() {
-  return <Logo />
+  return <Logo />;
 }
 ```
+
 3. **Redirects:** Define server-side redirects.
 
 ```ts
@@ -1391,84 +2067,92 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/old-blog/:slug*',
-        destination: '/new-blog/:slug*',
+        source: "/old-blog/:slug*",
+        destination: "/new-blog/:slug*",
         permanent: true,
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
 
-Visiting `/old-blog/hello-world` → Redirects to `/new-blog/hello-world`.
-4. **Rewrites:** Rewrites allow you to mask an API endpoint with a different URL.
+Visiting `/old-blog/hello-world` → Redirects to `/new-blog/hello-world`. 4. **Rewrites:** Rewrites allow you to mask an API endpoint with a different URL.
+
 ```ts
 const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: 'https://external-api.com/:path*',
+        source: "/api/:path*",
+        destination: "https://external-api.com/:path*",
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
+
 Visiting `/api/users` → Internally fetches from `https://external-api.com/users`.
 
 5. **Headers:** Set custom HTTP headers (e.g., security headers).
+
 ```ts
 const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
         ],
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
 
 This applies headers to all routes.
 
 6. **Image Optimization:** Control domains allowed for `<Image />`.
+
 ```ts
 const nextConfig = {
   images: {
-    domains: ['example.com', 'cdn.example.org'],
+    domains: ["example.com", "cdn.example.org"],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
+
 Lets you safely load images from external domains.
 
 7. **Internationalization (i18n):** Enable multiple locales.
+
 ```ts
 const nextConfig = {
   i18n: {
-    locales: ['en', 'fr', 'de'],
-    defaultLocale: 'en',
+    locales: ["en", "fr", "de"],
+    defaultLocale: "en",
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
+
 Adds automatic locale-based routing:
+
 - `/fr/about` → French version
 - `/de/about` → German version
 
 ## Advanced middleware patterns
+
 - Middleware in Next.js lets you run code before a request is completed.
 - It sits between the request and the response, giving you a chance to:
   - Redirect
@@ -1488,55 +2172,58 @@ You can protect pages by checking authentication tokens or roles.
 
 ```ts
 // middleware.js
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const token = req.cookies.get('token')?.value
-  const url = req.nextUrl
+  const token = req.cookies.get("token")?.value;
+  const url = req.nextUrl;
 
   // Redirect unauthenticated users
-  if (!token && url.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', req.url))
+  if (!token && url.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   // Example role-based protection
-  if (token === 'admin' && url.pathname.startsWith('/user')) {
-    return NextResponse.redirect(new URL('/admin', req.url))
+  if (token === "admin" && url.pathname.startsWith("/user")) {
+    return NextResponse.redirect(new URL("/admin", req.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 // Apply only on selected paths
 export const config = {
-  matcher: ['/dashboard/:path*', '/user/:path*'],
-}
+  matcher: ["/dashboard/:path*", "/user/:path*"],
+};
 ```
+
 ### A/B Testing (Feature Flags)
 
 Split traffic for experimentation.
+
 ```ts
 // middleware.js
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const url = req.nextUrl.clone()
+  const url = req.nextUrl.clone();
 
   // Random A/B bucket
-  const variant = Math.random() < 0.5 ? 'A' : 'B'
+  const variant = Math.random() < 0.5 ? "A" : "B";
 
-  if (url.pathname === '/experiment') {
-    url.pathname = `/experiment-${variant}`
-    return NextResponse.rewrite(url)
+  if (url.pathname === "/experiment") {
+    url.pathname = `/experiment-${variant}`;
+    return NextResponse.rewrite(url);
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/experiment'],
-}
+  matcher: ["/experiment"],
+};
 ```
+
 - Visitors to `/experiment` are randomly assigned to `/experiment-A` or `/experiment-B`.
 - Useful for A/B testing or gradual rollouts.
 
@@ -1546,61 +2233,65 @@ You can personalize experiences based on user location (using headers like `x-ve
 
 ```ts
 // middleware.js
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const country = req.geo?.country || 'US'
-  const url = req.nextUrl.clone()
+  const country = req.geo?.country || "US";
+  const url = req.nextUrl.clone();
 
-  if (url.pathname === '/') {
-    if (country === 'FR') url.pathname = '/fr'
-    else if (country === 'DE') url.pathname = '/de'
-    else url.pathname = '/en'
+  if (url.pathname === "/") {
+    if (country === "FR") url.pathname = "/fr";
+    else if (country === "DE") url.pathname = "/de";
+    else url.pathname = "/en";
 
-    return NextResponse.rewrite(url)
+    return NextResponse.rewrite(url);
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 ```
+
 ### Custom Headers for Security
 
 You can set security headers globally.
+
 ```ts
 // middleware.js
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const res = NextResponse.next()
+  const res = NextResponse.next();
 
-  res.headers.set('X-Frame-Options', 'DENY')
-  res.headers.set('X-Content-Type-Options', 'nosniff')
-  res.headers.set('X-XSS-Protection', '1; mode=block')
+  res.headers.set("X-Frame-Options", "DENY");
+  res.headers.set("X-Content-Type-Options", "nosniff");
+  res.headers.set("X-XSS-Protection", "1; mode=block");
 
-  return res
+  return res;
 }
 
 export const config = {
-  matcher: ['/((?!api).*)'], // Apply only to non-API routes
-}
+  matcher: ["/((?!api).*)"], // Apply only to non-API routes
+};
 ```
+
 ### Chained Middleware (Composability Pattern)
 
 Organize middleware logic into reusable functions.
+
 ```ts
 // middleware.js
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
 
 // Middleware utils
 function withAuth(req) {
-  const token = req.cookies.get('token')?.value
+  const token = req.cookies.get("token")?.value;
   if (!token) {
-    return NextResponse.redirect(new URL('/login', req.url))
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 }
 
 function withLogger(req) {
-  console.log(`[LOG] ${req.method} ${req.nextUrl.pathname}`)
+  console.log(`[LOG] ${req.method} ${req.nextUrl.pathname}`);
 }
 
 // Main middleware
@@ -1609,28 +2300,373 @@ export function middleware(req) {
     withAuth(req) || // If withAuth returns a response, stop
     withLogger(req) ||
     NextResponse.next()
-  )
+  );
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
-}
+  matcher: ["/dashboard/:path*"],
+};
 ```
+
 - Each utility function acts like a mini-middleware.
 - You can compose them together, making middleware cleaner.
 
 ### Key Things to Remember
 
 1. Performance
+
 - Middleware runs at the Edge → keep it lightweight (no heavy computation).
+
 2. Execution Order
+
 - If middleware returns a `Response` (redirect, rewrite, etc.), Next.js stops further processing.
 - If it returns `NextResponse.next()`, request continues.
+
 3. Scoping with `matcher`
+
 - Always limit middleware to specific routes → avoids running it on every request.
+
 4. Limitations
+
 - No Node.js APIs (like `fs`).
 - Runs in Edge runtime, so use Web APIs only.
+
+# SEO and Metadata
+
+## `<Head>` Component
+
+Metadata provides extra information about a web page that is not visible on the page itself but is important for:
+
+- SEO (Search Engine Optimization) → helps search engines understand your page.
+- Social Sharing (Open Graph, Twitter Cards, etc.) → controls how your page appears on platforms like Facebook, LinkedIn, and Twitter.
+- Browser behavior → controls page title, favicon, viewport scaling, etc.
+
+### <Head> Component in Next.js
+
+Next.js provides a special `<Head>` component from the `next/head` module.
+
+It lets you add elements to the `<head>` section of an HTML document, such as:
+
+- Page `<title>`
+- `<meta>` tags (description, keywords, viewport, charset, etc.)
+- Social media metadata (Open Graph, Twitter cards)
+- Favicons, external fonts, or scripts
+
+Unlike plain React where you might use a library like `react-helmet`, Next.js has `<Head>` built-in for better performance and SSR (server-side rendering).
+
+### How <Head> Works
+
+- Any `<Head>` component in your pages will merge into the document `<head>`.
+- If multiple `<Head>` components exist (for example, in `_app.js` and in a page), they are combined.
+- Duplicate `<meta>` tags (like `<title>`) get overridden by the last one defined.
+
+```ts
+// pages/index.js
+import Head from "next/head";
+
+export default function Home() {
+  return (
+    <>
+      <Head>
+        <title>Home | My Next.js App</title>
+        <meta
+          name="description"
+          content="This is the homepage of my Next.js app."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charSet="UTF-8" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <h1>Welcome to My Next.js App</h1>
+      <p>This is the homepage.</p>
+    </>
+  );
+}
+```
+
+- `<title>` → Appears in the browser tab and search engine results.
+- `<meta name="description">` → Helps search engines understand the content (used in search snippets).
+- `<meta name="viewport">` → Makes the website responsive on mobile devices.
+- `<meta charSet="UTF-8">` → Defines character encoding.
+- `<link rel="icon">` → Adds a favicon.
+
+SEO & Social Media Tags
+
+```ts
+// pages/about.js
+import Head from "next/head";
+
+export default function About() {
+  return (
+    <>
+      <Head>
+        <title>About Us | My Next.js App</title>
+        <meta
+          name="description"
+          content="Learn more about our company and team."
+        />
+
+        {/* Open Graph (Facebook, LinkedIn) */}
+        <meta property="og:title" content="About Us | My Next.js App" />
+        <meta
+          property="og:description"
+          content="Learn more about our company and team."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://myapp.com/about" />
+        <meta property="og:image" content="https://myapp.com/og-image.jpg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Us | My Next.js App" />
+        <meta
+          name="twitter:description"
+          content="Learn more about our company and team."
+        />
+        <meta name="twitter:image" content="https://myapp.com/og-image.jpg" />
+      </Head>
+
+      <h1>About Us</h1>
+      <p>This page contains information about our company.</p>
+    </>
+  );
+}
+```
+
+- Open Graph Tags (`og:`) → Control how the page looks when shared on Facebook, LinkedIn, etc.
+- Twitter Cards → Similar but specific to Twitter.
+- `og:image` and `twitter:image` → Show a preview image when shared.
+
+### Best Practices
+
+1. Set defaults in `_app.js` or a custom `<SEO>` component (e.g., default title, favicon, charset, viewport).
+
+2. Override per page → Each page can define its own `<title>`, `<meta>`, and Open Graph data.
+
+3. Avoid duplicate titles → Last one declared in `<Head>` takes priority.
+
+4. Dynamic metadata → Use props or `getStaticProps` / `getServerSideProps` to generate metadata dynamically.
+
+## Dynamic Metadata
+
+Static metadata works fine for simple pages (like `/about`), but dynamic pages (like blogs, product pages, user profiles) need metadata that changes depending on the content.
+
+- `/blog/hello-world` → Title: “Hello World | My Blog”
+- `/blog/nextjs-seo` → Title: “Next.js SEO Guide | My Blog”
+
+If metadata is not dynamic, every page might look the same to search engines and social media, hurting SEO.
+
+### Dynamic Metadata in Pages Router
+
+You can use `getStaticProps`, `getServerSideProps`, or route parameters to inject dynamic values into `<Head>`.
+
+```ts
+// pages/blog/[slug].js
+import Head from "next/head";
+
+// Dummy data
+const posts = {
+  "hello-world": {
+    title: "Hello World",
+    description: "This is the first blog post.",
+    image: "https://example.com/hello-world.png",
+  },
+  "nextjs-seo": {
+    title: "Next.js SEO Guide",
+    description: "Learn how to improve SEO with Next.js.",
+    image: "https://example.com/nextjs-seo.png",
+  },
+};
+
+export default function BlogPost({ post }) {
+  return (
+    <>
+      <Head>
+        <title>{post.title} | My Blog</title>
+        <meta name="description" content={post.description} />
+
+        {/* Open Graph */}
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.description} />
+        <meta property="og:image" content={post.image} />
+        <meta property="og:type" content="article" />
+      </Head>
+
+      <h1>{post.title}</h1>
+      <p>{post.description}</p>
+    </>
+  );
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: Object.keys(posts).map((slug) => ({ params: { slug } })),
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  return {
+    props: {
+      post: posts[params.slug],
+    },
+  };
+}
+```
+
+- Metadata (`title`, `description`, `og:image`) is generated per post.
+- `getStaticProps` fetches post data and passes it into `<Head>`.
+- Each blog page has unique SEO-friendly metadata.
+
+### Dynamic Metadata in App Router
+
+In Next.js 13+, you don’t need `<Head>` anymore. Instead, you use the generateMetadata function in `page.js` or `layout.js`.
+
+```ts
+// app/blog/[slug]/page.js
+
+// Dummy data (in real-world, fetch from DB or API)
+const posts = {
+  "hello-world": {
+    title: "Hello World",
+    description: "This is the first blog post.",
+    image: "https://example.com/hello-world.png",
+  },
+  "nextjs-seo": {
+    title: "Next.js SEO Guide",
+    description: "Learn how to improve SEO with Next.js.",
+    image: "https://example.com/nextjs-seo.png",
+  },
+};
+
+// 1. Generate metadata dynamically
+export async function generateMetadata({ params }) {
+  const post = posts[params.slug];
+
+  return {
+    title: `${post.title} | My Blog`,
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      images: [post.image],
+      type: "article",
+      url: `https://myblog.com/blog/${params.slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [post.image],
+    },
+  };
+}
+
+// 2. Page component
+export default function BlogPost({ params }) {
+  const post = posts[params.slug];
+
+  return (
+    <main>
+      <h1>{post.title}</h1>
+      <p>{post.description}</p>
+    </main>
+  );
+}
+```
+
+- `generateMetadata()` runs server-side and returns metadata for that route.
+- The metadata is automatically inserted into the `<head>` tag.
+- Supports structured metadata like `openGraph` and `twitter` out of the box.
+- No need to manually write `<meta>` tags.
+
+### Best Practices for Dynamic Metadata
+
+1. Always include a unique title + description per page.
+
+2. Add Open Graph & Twitter metadata for better social media previews.
+
+3. Use canonical URLs (`<link rel="canonical">`) to prevent duplicate content issues.
+
+4. Leverage dynamic data from your database or CMS (e.g., WordPress, Sanity, Strapi).
+
+5. Fallback defaults → Always provide default metadata (e.g., in `layout.js`) to avoid missing fields.
+
+## Open Graph & Social Media Meta Tags
+
+Why Do They Matter?
+
+When you share a link on social media (Facebook, LinkedIn, Twitter, WhatsApp, etc.), those platforms use metadata in your HTML `<head>` to generate a preview card.
+
+Without proper metadata:
+
+- Your link may show only the URL (no title, no description, no image).
+- Previews may look generic, hurting engagement.
+
+With Open Graph (OG) and social media tags:
+
+- Each page gets a rich preview with title, description, and image.
+- You control how your site looks on different platforms.
+
+### Open Graph Protocol
+
+- Originally created by Facebook.
+- Used by most platforms (LinkedIn, WhatsApp, Slack, etc.).
+- Defines properties like `og:title`, `og:description`, `og:image`, and `og:url`.
+
+Common Open Graph tags:
+
+```html
+<meta property="og:title" content="My Next.js Blog Post" />
+<meta
+  property="og:description"
+  content="Learn how to use Open Graph in Next.js for SEO and social sharing."
+/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/blog/nextjs-og" />
+<meta property="og:image" content="https://example.com/images/nextjs-og.png" />
+```
+
+### Twitter Cards
+
+- Twitter uses its own meta tags but falls back to Open Graph if missing.
+- `twitter:card` defines the style (e.g., `summary`, `summary_large_image`).
+
+Common Twitter tags:
+
+```html
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="My Next.js Blog Post" />
+<meta
+  name="twitter:description"
+  content="Learn how to use Open Graph in Next.js for SEO and social sharing."
+/>
+<meta name="twitter:image" content="https://example.com/images/nextjs-og.png" />
+<meta name="twitter:site" content="@mytwitterhandle" />
+```
+
+### Best Practices for Social Media Metadata
+
+1. Always include at least:
+
+   - `og:title`
+   - `og:description`
+   - `og:image`
+   - `og:url`
+   - `twitter:card`
+
+2. Use **absolute URLs** for `og:url` and `og:image` (social media bots can’t resolve relative paths).
+
+3. Image recommendations:
+
+   - Open Graph: **1200×630 px**
+   - Twitter Card: **1200×628 px**
+   - Under 5 MB, JPG or PNG preferred.
+
+4. Test with:
+   - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
+   - [Twitter Card Validator](https://cards-dev.twitter.com/validator)
 
 # Error Handling
 
@@ -1833,6 +2869,7 @@ export default Error;
 ```
 
 ## Error Boundaries
+
 In React, Error Boundaries are special components that catch JavaScript errors anywhere in their child component tree.
 Instead of letting the entire React app crash, they display a fallback UI.
 
@@ -1854,6 +2891,7 @@ Since Next.js is built on React, you can use Error Boundaries to provide gracefu
 - Provides a better user experience by showing a custom error screen or fallback instead of a blank page.
 
 ### Create an ErrorBoundary Component
+
 ```ts
 // components/ErrorBoundary.js
 import React from "react";
@@ -1879,7 +2917,9 @@ class ErrorBoundary extends React.Component {
       // Render fallback UI
       return (
         <div className="p-6 text-center">
-          <h2 className="text-red-600 text-xl font-bold">Something went wrong.</h2>
+          <h2 className="text-red-600 text-xl font-bold">
+            Something went wrong.
+          </h2>
           <p>Please try again later.</p>
         </div>
       );
@@ -1891,7 +2931,9 @@ class ErrorBoundary extends React.Component {
 
 export default ErrorBoundary;
 ```
+
 ### Wrap Components with the Error Boundary
+
 ```ts
 // pages/index.js
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -1910,6 +2952,7 @@ export default function HomePage() {
   );
 }
 ```
+
 ### Example of a Faulty Component
 
 ```ts
@@ -1917,31 +2960,37 @@ export default function HomePage() {
 export default function BuggyComponent() {
   // Simulate error
   throw new Error("Oops! This component crashed.");
-  
+
   // Won’t be reached
   return <p>This will not render</p>;
 }
 ```
+
 ### How it Works
 
 1. When BuggyComponent throws an error:
-  - Normally, React would unmount the entire app.
-  - But since it’s wrapped in ErrorBoundary, the error is caught.
+
+- Normally, React would unmount the entire app.
+- But since it’s wrapped in ErrorBoundary, the error is caught.
+
 2. The ErrorBoundary sets hasError = true via getDerivedStateFromError.
 3. The fallback UI is rendered:
+
 ```
 Something went wrong.
 Please try again later.
 ```
+
 ### Best Practices in Next.js
 
 - Use granular error boundaries (wrap only risky parts, not the entire app).
 - Log errors inside `componentDidCatch` to a monitoring service.
 - Combine with Next.js error pages:
 - `pages/_error.js` → handles SSR and runtime errors at the page level.
-Error Boundaries → handle client-side rendering errors in components.
+  Error Boundaries → handle client-side rendering errors in components.
 
 # Proxying API Requests
+
 When you have a Next.js frontend and a separate backend (e.g., running on `http://localhost:5000`), your frontend may need to make API calls to the backend.
 
 **Problem**
@@ -1954,9 +3003,11 @@ When you have a Next.js frontend and a separate backend (e.g., running on `http:
 **Solution → Proxy**
 
 Proxying means:
+
 - The frontend still calls something like `/api/...` from the same Next.js domain.
 - The Next.js dev server forwards that request to the backend (`http://localhost:5000`).
 - This avoids CORS issues and makes development simpler.
+
 ## Ways to Proxy in Next.js
 
 There are two common ways:
@@ -1965,21 +3016,25 @@ There are two common ways:
 2. Creating a custom API route in Next.js that forwards requests (manual proxy).
 
 ### Proxy with `next.config.js`
+
 In `next.config.js`:
+
 ```ts
 // next.config.js
 module.exports = {
   async rewrites() {
     return [
       {
-        source: "/api/:path*",   // when frontend requests /api/*
+        source: "/api/:path*", // when frontend requests /api/*
         destination: "http://localhost:5000/api/:path*", // forward to backend
       },
     ];
   },
 };
 ```
+
 Usage in Frontend
+
 ```ts
 // pages/products.js
 export default function ProductsPage({ products }) {
@@ -1988,7 +3043,9 @@ export default function ProductsPage({ products }) {
       <h1>Products via Proxy</h1>
       <ul>
         {products.map((p) => (
-          <li key={p.id}>{p.name} - ${p.price}</li>
+          <li key={p.id}>
+            {p.name} - ${p.price}
+          </li>
         ))}
       </ul>
     </div>
@@ -2003,6 +3060,7 @@ export async function getServerSideProps() {
   return { props: { products } };
 }
 ```
+
 - Frontend calls `/api/products`.
 - Next.js intercepts and proxies it to `http://localhost:5000/api/products`.
 - No CORS required because the browser thinks it’s talking to the same origin (`localhost:3000`).
@@ -2033,6 +3091,7 @@ export default async function handler(req, res) {
   }
 }
 ```
+
 - Frontend calls `/api/proxy/products`.
 - Next.js API route receives it and forwards the request to `http://localhost:5000/api/products`.
 - You can modify the request/response (add headers, auth tokens, etc.).
