@@ -1468,6 +1468,170 @@ Adds automatic locale-based routing:
 - `/fr/about` → French version
 - `/de/about` → German version
 
+## Advanced middleware patterns
+- Middleware in Next.js lets you run code before a request is completed.
+- It sits between the request and the response, giving you a chance to:
+  - Redirect
+  - Rewrite
+  - Add headers
+  - Authenticate
+  - Log requests
+
+Middleware runs at the Edge Runtime, meaning it’s very fast and close to the user.
+
+- File location: `middleware.js` (or `middleware.ts`) in the root of your project.
+- Runs for every request (unless limited by `matcher`).
+
+### Authentication & Role-Based Access
+
+You can protect pages by checking authentication tokens or roles.
+
+```ts
+// middleware.js
+import { NextResponse } from 'next/server'
+
+export function middleware(req) {
+  const token = req.cookies.get('token')?.value
+  const url = req.nextUrl
+
+  // Redirect unauthenticated users
+  if (!token && url.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', req.url))
+  }
+
+  // Example role-based protection
+  if (token === 'admin' && url.pathname.startsWith('/user')) {
+    return NextResponse.redirect(new URL('/admin', req.url))
+  }
+
+  return NextResponse.next()
+}
+
+// Apply only on selected paths
+export const config = {
+  matcher: ['/dashboard/:path*', '/user/:path*'],
+}
+```
+### A/B Testing (Feature Flags)
+
+Split traffic for experimentation.
+```ts
+// middleware.js
+import { NextResponse } from 'next/server'
+
+export function middleware(req) {
+  const url = req.nextUrl.clone()
+
+  // Random A/B bucket
+  const variant = Math.random() < 0.5 ? 'A' : 'B'
+
+  if (url.pathname === '/experiment') {
+    url.pathname = `/experiment-${variant}`
+    return NextResponse.rewrite(url)
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/experiment'],
+}
+```
+- Visitors to `/experiment` are randomly assigned to `/experiment-A` or `/experiment-B`.
+- Useful for A/B testing or gradual rollouts.
+
+### Geo-Location Based Routing
+
+You can personalize experiences based on user location (using headers like `x-vercel-ip-country`).
+
+```ts
+// middleware.js
+import { NextResponse } from 'next/server'
+
+export function middleware(req) {
+  const country = req.geo?.country || 'US'
+  const url = req.nextUrl.clone()
+
+  if (url.pathname === '/') {
+    if (country === 'FR') url.pathname = '/fr'
+    else if (country === 'DE') url.pathname = '/de'
+    else url.pathname = '/en'
+
+    return NextResponse.rewrite(url)
+  }
+
+  return NextResponse.next()
+}
+```
+### Custom Headers for Security
+
+You can set security headers globally.
+```ts
+// middleware.js
+import { NextResponse } from 'next/server'
+
+export function middleware(req) {
+  const res = NextResponse.next()
+
+  res.headers.set('X-Frame-Options', 'DENY')
+  res.headers.set('X-Content-Type-Options', 'nosniff')
+  res.headers.set('X-XSS-Protection', '1; mode=block')
+
+  return res
+}
+
+export const config = {
+  matcher: ['/((?!api).*)'], // Apply only to non-API routes
+}
+```
+### Chained Middleware (Composability Pattern)
+
+Organize middleware logic into reusable functions.
+```ts
+// middleware.js
+import { NextResponse } from 'next/server'
+
+// Middleware utils
+function withAuth(req) {
+  const token = req.cookies.get('token')?.value
+  if (!token) {
+    return NextResponse.redirect(new URL('/login', req.url))
+  }
+}
+
+function withLogger(req) {
+  console.log(`[LOG] ${req.method} ${req.nextUrl.pathname}`)
+}
+
+// Main middleware
+export function middleware(req) {
+  return (
+    withAuth(req) || // If withAuth returns a response, stop
+    withLogger(req) ||
+    NextResponse.next()
+  )
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*'],
+}
+```
+- Each utility function acts like a mini-middleware.
+- You can compose them together, making middleware cleaner.
+
+### Key Things to Remember
+
+1. Performance
+- Middleware runs at the Edge → keep it lightweight (no heavy computation).
+2. Execution Order
+- If middleware returns a `Response` (redirect, rewrite, etc.), Next.js stops further processing.
+- If it returns `NextResponse.next()`, request continues.
+3. Scoping with `matcher`
+- Always limit middleware to specific routes → avoids running it on every request.
+4. Limitations
+- No Node.js APIs (like `fs`).
+- Runs in Edge runtime, so use Web APIs only.
+
 # Error Handling
 
 In Next.js, errors can occur both:
@@ -1667,3 +1831,213 @@ Error.getInitialProps = ({ res, err }: NextPageContext) => {
 
 export default Error;
 ```
+
+## Error Boundaries
+In React, Error Boundaries are special components that catch JavaScript errors anywhere in their child component tree.
+Instead of letting the entire React app crash, they display a fallback UI.
+
+Error Boundaries:
+
+- Catch rendering errors inside components.
+- Do not catch errors from:
+  - Event handlers
+  - Asynchronous code (like `setTimeout`, `fetch`)
+  - Server-side rendering (SSR)
+  - Errors thrown in the error boundary itself
+
+Since Next.js is built on React, you can use Error Boundaries to provide graceful fallback UI for parts of your application.
+
+**Why Use Error Boundaries in Next.js?**
+
+- Prevents the whole app from breaking due to one faulty component.
+- Useful when dealing with 3rd-party libraries or dynamic UI pieces (charts, media players, etc.).
+- Provides a better user experience by showing a custom error screen or fallback instead of a blank page.
+
+### Create an ErrorBoundary Component
+```ts
+// components/ErrorBoundary.js
+import React from "react";
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state so next render shows fallback UI
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Log error to monitoring service (e.g. Sentry, LogRocket)
+    console.error("Error caught by ErrorBoundary:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // Render fallback UI
+      return (
+        <div className="p-6 text-center">
+          <h2 className="text-red-600 text-xl font-bold">Something went wrong.</h2>
+          <p>Please try again later.</p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export default ErrorBoundary;
+```
+### Wrap Components with the Error Boundary
+```ts
+// pages/index.js
+import ErrorBoundary from "../components/ErrorBoundary";
+import BuggyComponent from "../components/BuggyComponent";
+
+export default function HomePage() {
+  return (
+    <div>
+      <h1>Welcome to Next.js App</h1>
+
+      {/* Wrap only risky components */}
+      <ErrorBoundary>
+        <BuggyComponent />
+      </ErrorBoundary>
+    </div>
+  );
+}
+```
+### Example of a Faulty Component
+
+```ts
+// components/BuggyComponent.js
+export default function BuggyComponent() {
+  // Simulate error
+  throw new Error("Oops! This component crashed.");
+  
+  // Won’t be reached
+  return <p>This will not render</p>;
+}
+```
+### How it Works
+
+1. When BuggyComponent throws an error:
+  - Normally, React would unmount the entire app.
+  - But since it’s wrapped in ErrorBoundary, the error is caught.
+2. The ErrorBoundary sets hasError = true via getDerivedStateFromError.
+3. The fallback UI is rendered:
+```
+Something went wrong.
+Please try again later.
+```
+### Best Practices in Next.js
+
+- Use granular error boundaries (wrap only risky parts, not the entire app).
+- Log errors inside `componentDidCatch` to a monitoring service.
+- Combine with Next.js error pages:
+- `pages/_error.js` → handles SSR and runtime errors at the page level.
+Error Boundaries → handle client-side rendering errors in components.
+
+# Proxying API Requests
+When you have a Next.js frontend and a separate backend (e.g., running on `http://localhost:5000`), your frontend may need to make API calls to the backend.
+
+**Problem**
+
+- Next.js dev server runs at `http://localhost:3000`.
+- Backend runs at `http://localhost:5000`.
+- If frontend directly fetches `http://localhost:5000/api/...`, you run into CORS issues and must configure CORS on the backend.
+- In production, the frontend and backend may even live under different domains (`frontend.com` vs `api.backend.com`).
+
+**Solution → Proxy**
+
+Proxying means:
+- The frontend still calls something like `/api/...` from the same Next.js domain.
+- The Next.js dev server forwards that request to the backend (`http://localhost:5000`).
+- This avoids CORS issues and makes development simpler.
+## Ways to Proxy in Next.js
+
+There are two common ways:
+
+1. Using `next.config.js` rewrites (recommended, built-in).
+2. Creating a custom API route in Next.js that forwards requests (manual proxy).
+
+### Proxy with `next.config.js`
+In `next.config.js`:
+```ts
+// next.config.js
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",   // when frontend requests /api/*
+        destination: "http://localhost:5000/api/:path*", // forward to backend
+      },
+    ];
+  },
+};
+```
+Usage in Frontend
+```ts
+// pages/products.js
+export default function ProductsPage({ products }) {
+  return (
+    <div>
+      <h1>Products via Proxy</h1>
+      <ul>
+        {products.map((p) => (
+          <li key={p.id}>{p.name} - ${p.price}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export async function getServerSideProps() {
+  // Notice: We call /api/products (Next.js server)
+  const res = await fetch("http://localhost:3000/api/products");
+  const products = await res.json();
+
+  return { props: { products } };
+}
+```
+- Frontend calls `/api/products`.
+- Next.js intercepts and proxies it to `http://localhost:5000/api/products`.
+- No CORS required because the browser thinks it’s talking to the same origin (`localhost:3000`).
+
+### Proxy with Next.js API Route (Custom Middleware)
+
+Sometimes you want to add logic before proxying (e.g., authentication, caching, rate-limiting). In that case, you can create your own proxy endpoint in `/pages/api`.
+
+```ts
+// pages/api/proxy/[...path].js
+export default async function handler(req, res) {
+  const { path } = req.query;
+  const backendURL = `http://localhost:5000/api/${path.join("/")}`;
+
+  try {
+    const backendRes = await fetch(backendURL, {
+      method: req.method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: req.method !== "GET" ? JSON.stringify(req.body) : undefined,
+    });
+
+    const data = await backendRes.json();
+    res.status(backendRes.status).json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Proxy error", details: error.message });
+  }
+}
+```
+- Frontend calls `/api/proxy/products`.
+- Next.js API route receives it and forwards the request to `http://localhost:5000/api/products`.
+- You can modify the request/response (add headers, auth tokens, etc.).
+
+### When to Use Which?
+
+- `next.config.js rewrites` → Simple, lightweight, good for local dev to avoid CORS.
+- API route proxy → More control, when you need to add logic (auth, caching, validation).
