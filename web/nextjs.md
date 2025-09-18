@@ -8,13 +8,6 @@
   - [Top-level Folders](#top-level-folders)
   - [Top-level Files](#top-level-files)
   - [Routing Files](#routing-files)
-- [Router](#router)
-  - [`pages` Directory](#pages-directory)
-    - [Routing](#routing)
-    - [Special Files](#special-files)
-  - [`app` Directory](#app-directory)
-    - [Routing](#routing-1)
-    - [Features](#features)
 - [Styling](#styling)
   - [Tailwind CSS](#tailwind-css)
 - [Deployment](#deployment)
@@ -219,7 +212,46 @@ The `pages` directory plays a crucial role in defining the structure of the appl
        );
      }
      ```
+### Data Fetching
+1. `getStaticProps` → Static Site Generation (SSG)
+- Runs at build time.
+- Pre-renders HTML + JSON.
+- Best for content that doesn’t change often.
+- Visiting `/static` will always show the same pre-rendered content until the site is rebuilt.
+2. `getServerSideProps` → Server-Side Rendering (SSR)
+- Runs on every request (Node.js server or Vercel Function).
+- Fetches fresh data each time.
+- Visiting `/server` always returns the latest time (fresh data per request).
+3. `getStaticPaths` (with `getStaticProps`) → Dynamic SSG
 
+- Used with dynamic routes (`[id].tsx`).
+- Pre-renders specific paths.
+4. `getInitialProps` (Legacy)
+
+- Runs on both server and client (not recommended anymore).
+- Still exists for compatibility, but usually replaced with `getStaticProps` or `getServerSideProps`.
+5. CSR via `useEffect`
+6. ISR via `revalidate`
+
+### Components
+In the Pages Router (unlike the App Router), everything is a client component by default.
+
+- All pages/components run in the browser after hydration.
+- Server-side work is done via:
+  - `getServerSideProps` (SSR)
+  - `getStaticProps` (SSG)
+  - API routes (`pages/api/*`).
+So, the "Server Component" concept doesn’t exist here (that’s App Router only).
+But, you can still execute server-side logic via the lifecycle methods.
+
+#### Rendering Modes in pages/
+
+Next.js `pages/` supports four rendering strategies:
+
+1. Static Generation (SSG) → `getStaticProps`
+2. Server-Side Rendering (SSR) → `getServerSideProps`
+3. Client-Side Rendering (CSR) → Fetching data inside `useEffect` in the browser
+4. Incremental Static Regeneration (ISR) → `getStaticProps` + `revalidate`
 ## `app` Directory
 
 With Next.js 13+, a new App Router was introduced, replacing the traditional `pages` directory with a more flexible and powerful routing system using the `app` directory. This new system is built on React Server Components (RSC) and introduces features like layouts, loading states, server actions, and streaming.
@@ -320,6 +352,35 @@ my-next-app/
 3. **Server Components:** Pages are server-rendered by default, but you can use `"use client"` to enable client-side behavior.
 4. **Streming & Suspense:** Next.js supports streaming and React Suspense for loading states and progressive rendering.
 5. **API Routes:** API routes now use `route.js` and support full HTTP methods.
+
+### Data Fetching
+- Uses the `app/` directory instead of `pages/`.
+- File-system routing still applies, but with React Server Components (RSC).
+- Components are Server by default.
+- Client-side interactivity requires `"use client"`.
+- Data fetching is async/await in Server Components (no more `getStaticProps`, `getServerSideProps`).
+- Rendering strategies (SSR, SSG, ISR, CSR) are handled automatically depending on how you fetch data.
+
+### Components
+#### Server Components (default)
+
+- Run only on the server (never shipped to client).
+- Can fetch data directly (use `fetch`, DB queries).
+- Great for performance — smaller JS bundle.
+
+#### Client Components
+
+- Marked with `"use client"`.
+- Can use state, hooks, event handlers.
+- Cannot fetch data with `await` at the top level (must use client-side fetching like `useEffect`).
+#### Rendering
+
+| Mode                        | Trigger                                   | Example                 | Equivalent (Pages Router)           |
+| --------------------------- | ----------------------------------------- | ----------------------- | ----------------------------------- |
+| **Static Rendering (SSG)**  | `fetch(..., { cache: "force-cache" })`    | Pre-rendered at build   | `getStaticProps`                    |
+| **Dynamic Rendering (SSR)** | `fetch(..., { cache: "no-store" })`       | Fresh on every request  | `getServerSideProps`                |
+| **ISR (Revalidation)**      | `fetch(..., { next: { revalidate: N } })` | Updates every N seconds | ISR (`getStaticProps + revalidate`) |
+| **CSR**                     | `"use client"` + `useEffect` fetch        | Rendered on client only | CSR with hooks                      |
 
 # Rendering
 
