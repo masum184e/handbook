@@ -1,38 +1,22 @@
 # Contents
 
 - [Introduction](#introduction)
-  - [Key Features](#key-features)
+  - [Features](#key-features)
   - [Why Use Next.js](#why-use-nextjs)
   - [Comparison](#comparison)
 - [Project Structure](#project-structure)
   - [Top-level Folders](#top-level-folders)
   - [Top-level Files](#top-level-files)
   - [Routing Files](#routing-files)
-- [Image Optimization](#image-optimization)
-- [Rendering](#rendering)
-  - [Client Side Rendering](#client-side-rendering)
-  - [Pre Rendering](#pre-rendering)
-- [Client Side Rendering](#client-side-rendering)
-  - [When to use](#when-to-use-csr-in-nextjs)
-  - [How to use](#how-to-use-csr-in-nextjs)
-  - [Combination](#combination)
-- [Static Site Generation](#static-site-generation)
-  - [What is `getStaticProps`?](#what-is-getstaticprops)
-  - [What is `getStaticPaths`?](#what-is-getstaticpaths)
-  - [Incremental Static Regeneration](#incremental-static-regeneration)
-- [Server Side Rendering](#server-side-rendering)
-  - [What is `getServerSideProps`?](#what-is-getserversideprops)
-  - [How SSR Works](#how-ssr-works)
-  - [When to use SSR](#when-to-use-ssr)
-  - [Key Features of SSR](#key-features-of-ssr)
-  - [Example](#example)
-- [How Helps in SEO](#how-helps-in-seo)
-  - [Rendering](#rendering)
-  - [Image Optimization](#image-optimization-1)
-- [Styling](#styling)
-  - [Modules](#modules)
-  - [Global Styles](#global-styles)
-  - [Tailwind CSS](#tailwind-css)
+- [Router](#router)
+  - [`pages` Directory](#pages-directory)
+    - [Routing](#routing)
+    - [Special Files](#special-files)
+  - [`app` Directory](#app-directory)
+    - [Routing](#routing-1)
+    - [Features](#features)
+- [Deployment](#deployment)
+  - [Environment Variables](#environment-variables)
 
 # Introduction
 
@@ -42,9 +26,9 @@ Next.js is a React framework that enables server-side rendering (SSR) and static
 
 - **Hybrid Rendering (SSR + SSG)** – It allows both Server-Side Rendering (SSR) and Static Site Generation (SSG) for better performance and SEO.
 - **Automatic Code Splitting** – It loads only the necessary JavaScript for each page, improving performance.
-- **File-based Routing** – Each file in the pages/ directory automatically becomes a route.
-- **Built-in API Routes** – You can create backend endpoints using pages/api/.
-- **Optimized Images** – It provides an next/image component for efficient image handling.
+- **File-based Routing** – Each file in the `pages/` directory automatically becomes a route.
+- **Built-in API Routes** – You can create backend endpoints using `pages/api/`.
+- **Optimized Images** – It provides an `next/image` component for efficient image handling.
 - **Incremental Static Regeneration (ISR)** – Updates static content without rebuilding the entire app.
 - **Middleware & Edge Functions** – For handling custom requests before they reach API endpoints.
 
@@ -53,25 +37,16 @@ Next.js is a React framework that enables server-side rendering (SSR) and static
 Next.js is used because it offers better performance, SEO, and developer experience compared to plain React apps. Here’s why:
 
 1. **Improved SEO**
-
    - Traditional React apps use Client-Side Rendering (CSR), where content is generated in the browser. This makes it difficult for search engines to index the page.
    - Next.js uses Server-Side Rendering (SSR) or Static Site Generation (SSG) to deliver pre-rendered HTML, making it SEO-friendly.
-
 2. **Faster Page Loads**
-
    - Since pages are pre-rendered or served from the server, they load faster.
    - Automatic code-splitting ensures users only download what's needed.
-
 3. **Built-in Routing System**
-
-   - No need to install React Router; Next.js handles routing based on the pages/ folder structure.
-
+   - No need to install React Router; Next.js handles routing based on the `pages/` folder structure.
 4. **API Routes (Full Stack Capabilities)**
-
-   - With pages/api/, Next.js can handle backend logic without needing an external server.
-
+   - With `pages/api/`, Next.js can handle backend logic without needing an external server.
 5. **Scalability & Flexibility**
-
    - Supports static generation, server rendering, and hybrid models based on project needs.
 
 ## Comparison
@@ -80,7 +55,7 @@ React is a JavaScript library for building UI components, while Next.js is a fra
 
 ### Fetching Data With - React
 
-```jsx
+```tsx
 import React, { useEffect, useState } from "react";
 
 function App() {
@@ -105,7 +80,7 @@ function App() {
 export default App;
 ```
 
-**⚡ Downsides of React (CSR)**
+**Downsides of React (CSR)**
 
 - The page loads without content initially (bad for SEO).
 - JavaScript must execute before data is displayed.
@@ -113,7 +88,7 @@ export default App;
 
 ### Fetching Data With - Next.js
 
-```jsx
+```tsx
 export async function getServerSideProps() {
   const data = await fetch("https://jsonplaceholder.typicode.com/todos/1").then(
     (res) => res.json()
@@ -134,13 +109,128 @@ export default function Home({ todo }) {
 }
 ```
 
-**✅ Benefits of Next.js (SSR)**
+**Benefits of Next.js (SSR)**
 
 - Pre-rendered content → Better for SEO.
 - No loading state → Content is available immediately.
 - Fast Time to First Paint (TTFP).
 
 # Project Structure
+
+## Top-level Folders
+
+Top-level folders are used to organize your application's code and static assets.
+
+- `app` - App Router
+- `pages` - Pages Router
+- `public` - Static assets to be served
+- `src` - Optional application source folder
+
+## Top-level Files
+
+Top-level files are used to configure your application, manage dependencies, run middleware, integrate monitoring tools, and define environment variables.
+
+- `next.config.js` - Configuration file for Next.js
+- `package.json` - Project dependencies and scripts
+- `instrumentation.ts` - OpenTelemetry and Instrumentation file
+- `middleware.ts` - Next.js request middleware
+- `.env` - Environment variables
+- `.env.local` - Local environment variables
+- `.env.production` - Production environment variables
+- `.env.development` - Development environment variables
+- `.eslintrc.json` - Configuration file for ESLint
+- `.gitignore` - Git files and folders to ignore
+- `next-env.d.ts` - TypeScript declaration file for Next.js
+- `tsconfig.json` - Configuration file for TypeScript
+- `jsconfig.json` - Configuration file for JavaScript
+
+## Routing Files
+
+- `layout` - Layout
+- `page` - Page
+- `loading` - Loading UI
+- `not-found` - Not found UI
+- `error` - Error UI
+- `global-error` - Global error UI
+- `route` - API endpoint
+- `template` - Re-rendered layout
+- `default` - Parallel route fallback page
+
+# Router
+
+## `pages` Directory
+
+The `pages` directory plays a crucial role in defining the structure of the application. It follows a file-based routing system, where each file inside the pages directory automatically becomes a route in your application.
+
+### Routing
+
+- Each `.js`, `.jsx`, `.ts`, or `.tsx` file inside the `pages` directory represents a route.
+- The folder structure determines the URL path.
+- The `pages/api/` directory is special for API routes.
+
+**Example:**
+
+```
+/pages
+  ├── index.js           →  '/'
+  ├── about.js           →  '/about'
+  ├── contact.js         →  '/contact'
+  ├── blog
+  │   ├── index.js       →  '/blog'
+  │   ├── post.js        →  '/blog/post'
+  ├── api
+  │   ├── hello.js       →  '/api/hello'
+```
+
+### Special Files
+
+1. `_app.js`
+
+   - **Custom App Component:** Wraps all pages to maintain global styles, state, or layout.
+
+     ```tsx
+     import "../styles/globals.css";
+
+     export default function MyApp({ Component, pageProps }) {
+       return <Component {...pageProps} />;
+     }
+     ```
+
+2. `_document.js`
+
+   - **Custom HTML Structure:** Used for modifying the <html> and <body> structure.
+
+     ```tsx
+     import { Html, Head, Main, NextScript } from "next/document";
+
+     export default function Document() {
+       return (
+         <Html>
+           <Head>
+             <meta name="description" content="My Next.js App" />
+           </Head>
+           <body>
+             <Main />
+             <NextScript />
+           </body>
+         </Html>
+       );
+     }
+     ```
+
+## `app` Directory
+
+With Next.js 13+, a new App Router was introduced, replacing the traditional `pages` directory with a more flexible and powerful routing system using the `app` directory. This new system is built on React Server Components (RSC) and introduces features like layouts, loading states, server actions, and streaming.
+
+### Routing
+
+- The `app` directory follows a folder-based routing system (like `pages/`).
+- Each folder inside `app/` represents a route, and a `page.js` (or `page.tsx`) file inside it is rendered as the page.
+- Supports Server Components by default (unlike `pages/` which defaults to Client Components).
+- Introduces layouts, loading, and error handling.
+
+**Example:**
+
 ```
 my-next-app/
 │── .next/                        # Auto-generated build output
@@ -220,44 +310,664 @@ my-next-app/
 │── tailwind.config.js             # Tailwind config
 │── tsconfig.json                  # TypeScript config
 ```
-## Top-level folders
 
-Top-level folders are used to organize your application's code and static assets.
+### Features
 
-- `app` - App Router
-- `pages` - Pages Router
-- `public` - Static assets to be served
-- `src` - Optional application source folder
+1. **File-Based Routing:** Each folder is a route, and `page.js` inside defines the actual page.
+2. **Layouts:** Layouts wrap multiple pages inside a route and persist across navigation.
+3. **Server Components:** Pages are server-rendered by default, but you can use `"use client"` to enable client-side behavior.
+4. **Streming & Suspense:** Next.js supports streaming and React Suspense for loading states and progressive rendering.
+5. **API Routes:** API routes now use `route.js` and support full HTTP methods.
 
-## Top-level files
+# Rendering
 
-Top-level files are used to configure your application, manage dependencies, run middleware, integrate monitoring tools, and define environment variables.
+## Client-Side Rendering
 
-- `next.config.js` - Configuration file for Next.js
-- `package.json` - Project dependencies and scripts
-- `instrumentation.ts` - OpenTelemetry and Instrumentation file
-- `middleware.ts` - Next.js request middleware
-- `.env` - Environment variables
-- `.env.local` - Local environment variables
-- `.env.production` - Production environment variables
-- `.env.development` - Development environment variables
-- `.eslintrc.json` - Configuration file for ESLint
-- `.gitignore` - Git files and folders to ignore
-- `next-env.d.ts` - TypeScript declaration file for Next.js
-- `tsconfig.json` - Configuration file for TypeScript
-- `jsconfig.json` - Configuration file for JavaScript
+Client-Side Rendering (CSR) is a method where the browser (client) downloads a minimal HTML file along with JavaScript files. The JavaScript executes in the browser, fetching data from an API, and dynamically rendering content on the page.
 
-## Routing Files
+- When you visit a website using CSR, the browser first loads an empty page with almost no content.
+- Then, it downloads a JavaScript file that builds the page dynamically.
+  -The page loads slowly at first, but once everything is loaded, navigating between pages becomes very fast.
 
-- `layout` - Layout
-- `page` - Page
-- `loading` - Loading UI
-- `not-found` - Not found UI
-- `error` - Error UI
-- `global-error` - Global error UI
-- `route` - API endpoint
-- `template` - Re-rendered layout
-- `default` - Parallel route fallback page
+### Steps
+
+1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
+2. **Server Responds with Minimal HTML:** The server responds with a lightweight HTML and Javscripts file.
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>CSR Example</title>
+     </head>
+     <body>
+       <div id="root"></div>
+       <!-- This is where React inserts the content -->
+       <script src="bundle.js"></script>
+       <!-- JavaScript file that builds the page -->
+     </body>
+   </html>
+   ```
+
+   At this point, the page is still empty! The content is missing because JavaScript hasn’t run yet.
+
+3. **Browser Downloads JavaScript File:**
+
+   - The browser loads bundle.js, which contains the React app.
+   - React runs and fetches the blog post from an API.
+
+4. **JavaScript Fetches Data and Updates the Page:**
+
+   ```tsx
+   import React, { useState, useEffect } from "react";
+
+   function BlogPost() {
+     const [data, setData] = useState(null);
+
+     useEffect(() => {
+       fetch("https://jsonplaceholder.typicode.com/posts/1") // API call
+         .then((response) => response.json())
+         .then((json) => setData(json)); // Set data
+     }, []);
+
+     return (
+       <div>
+         <h1>Client-Side Rendering Example</h1>
+         {data ? <h2>{data.title}</h2> : <p>Loading...</p>}
+       </div>
+     );
+   }
+
+   export default BlogPost;
+   ```
+
+5. **Content is Rendered in the Browser:** The fetched data is used to dynamically generate and update the page's content.
+6. **User Interacts with the Page:** Since the page is now fully loaded in the browser, interactions like clicking buttons or navigating between pages happen instantly without needing a full page reload.
+
+## Pre Rendering
+
+Server-Side Rendering (SSR) is a method where the server processes and renders the full HTML page before sending it to the browser. The browser only has to display the fully rendered content.
+
+- Instead of sending an empty page, the server builds the page first and then sends the full HTML to the browser.
+- The page loads quickly because the browser doesn’t have to wait for JavaScript to fetch the data.
+
+Pre rendering can be done with:
+
+1. Static Side Generation
+2. Server Side Rendering
+
+### Steps
+
+1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
+2. **Server Generates the HTML Page:** The server processes the request, executes any necessary database queries or API calls, and generates the full HTML page.
+   In Next.js, we use `getServerSideProps` to fetch data before the page is sent:
+
+   ```tsx
+   export async function getServerSideProps() {
+     const res = await fetch("https://jsonplaceholder.typicode.com/posts/1"); // API call
+     const data = await res.json();
+
+     return { props: { data } }; // Send data to the page
+   }
+
+   function BlogPost({ data }) {
+     return (
+       <div>
+         <h1>Server-Side Rendering Example</h1>
+         <h2>{data.title}</h2>
+       </div>
+     );
+   }
+
+   export default BlogPost;
+   ```
+
+3. **Server Sends a Fully Rendered Page**
+
+   - The server fetches the blog post first and puts it inside the HTML file.
+   - The fully rendered page (with all the necessary content) is sent to the browser.
+   - The browser receives a complete HTML page, which looks like this:
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>SSR Example</title>
+     </head>
+     <body>
+       <div id="root">
+         <h1>Server-Side Rendering Example</h1>
+         <h2>My Blog Post Title</h2>
+       </div>
+     </body>
+   </html>
+   ```
+
+4. **Browser Displays the Page Instantly:** Since the browser receives a ready-to-display HTML page, the content appears much faster.
+5. **JavaScript Enhancements Load in the Background:** If JavaScript frameworks like React or Vue.js are used, they hydrate (attach interactivity to) the already rendered HTML.
+
+# Client-Side Rendering
+
+Client-Side Rendering (CSR) in Next.js means that the page's content is generated on the user's browser rather than on the server. In CSR, Next.js sends a minimal HTML file and JavaScript bundle to the client, and then React hydrates the page in the browser.
+
+## When to Use CSR in Next.js?
+
+CSR is useful in scenarios where:
+
+1. **User Interactivity is Required:** If your page heavily relies on client-side interactions (e.g., dashboards, interactive forms, charts).
+2. **Data is User-Specific:** If the data being displayed is user-specific and does not need to be pre-rendered on the server (e.g., user dashboards, personalized feeds).
+3. **Avoiding Frequent Server Requests:** If the data changes frequently and fetching it on the server would lead to unnecessary re-renders.
+4. **Third-Party API Calls from the Client:** If you need to fetch data from an external API that does not support server-side fetching (e.g., some authentication flows).
+5. **Reducing Server Load:** CSR shifts the load to the client, reducing the burden on the server.
+
+## How to Use CSR in Next.js?
+
+Client-Side Rendering (CSR) in Next.js means fetching and rendering data only on the client-side rather than pre-rendering it on the server. This is done using React hooks like `useState` and `useEffect`. CSR is useful when:
+
+- The data is user-specific or personalized.
+- You want to reduce the load on the server.
+- The data changes frequently (e.g., real-time data).
+- SEO is not a priority (as the content is rendered dynamically in the browser).
+
+### Example
+
+Let's create a simple Next.js page that fetches user data from an API using CSR.
+
+**Steps to Implement CSR in Next.js**
+
+1. Use React's `useState` to manage the state.
+2. Use `useEffect` to fetch data when the component mounts.
+3. Render the fetched data on the client.
+
+```tsx
+"use client";
+import { useState, useEffect } from "react";
+
+export default function Users() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUsers();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <div>
+      <h1>User List</h1>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            <strong>{user.name}</strong> - {user.email}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+- `useState([])` → Initializes users as an empty array and loading as true.
+- `useEffect` Hook → Runs once when the component mounts to fetch user data.
+- **Fetch Request** → Calls the API (jsonplaceholder.typicode.com/users) and updates the state.
+- **Conditional Rendering** → Displays "Loading..." until the data is fetched.
+- **Render Data** → Loops through the users array and displays the list.
+
+## Combination
+
+| Rendering Type                                  | When to Use                                            | Example                                               |
+| ----------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
+| **CSR (Client-Side Rendering)**                 | User-specific, frequently updated data, interactive UI | Dashboards, Chat apps                                 |
+| **SSR (Server-Side Rendering) + CSR**           | SEO-sensitive, personalized data                       | News articles with user comments                      |
+| **SSG (Static Site Generation) + CSR**          | Static content with dynamic client-side updates        | Blog with real-time comments                          |
+| **ISR (Incremental Static Regeneration) + CSR** | Mix of static and dynamic content                      | E-commerce product pages with real-time stock updates |
+
+### SSR for Blog Posts + CSR for Comments
+
+```tsx
+// pages/blog/[id].js
+import { useState, useEffect } from "react";
+
+// Fetch post data on the server (SSR)
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  const post = await res.json();
+
+  return { props: { post } };
+}
+
+export default function BlogPost({ post }) {
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch comments on the client side (CSR)
+  useEffect(() => {
+    async function fetchComments() {
+      const res = await fetch(
+        `https://jsonplaceholder.typicode.com/posts/${post.id}/comments`
+      );
+      const data = await res.json();
+      setComments(data);
+      setLoading(false);
+    }
+    fetchComments();
+  }, [post.id]);
+
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+
+      <h2>Comments</h2>
+      {loading ? (
+        <p>Loading comments...</p>
+      ) : (
+        comments.map((comment) => (
+          <div key={comment.id}>
+            <strong>{comment.name}</strong>: {comment.body}
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+```
+
+- SSR (`getServerSideProps`) pre-renders blog content for SEO.
+- CSR (`useEffect`) fetches comments dynamically on the client side.
+- This ensures faster initial loading while allowing dynamic updates.
+
+| Combination   | Best Use Case                            | Example                               |
+| ------------- | ---------------------------------------- | ------------------------------------- |
+| **SSR + CSR** | SEO-friendly pages with real-time data   | Blogs with live comments              |
+| **SSG + CSR** | Static pages with dynamic updates        | Product pages with live stock updates |
+| **ISR + CSR** | Partially static, but updated frequently | News articles with real-time likes    |
+
+# Static Site Generation
+
+Static Site Generation (SSG) allows you to pre-render pages at build time, meaning the HTML is generated once and served to users as a static file. This makes your website faster and more SEO-friendly.
+
+## What is `getStaticProps`?
+
+`getStaticProps` is a special Next.js function used to fetch data at build time and pass it as props to a page component. This is useful for content that doesn’t change frequently, such as blog posts, product pages, or documentation.
+
+### Key Features:
+
+- Runs only at build time – It does not execute on every request.
+- Used for fetching external or local data – e.g., from APIs, databases, or local files.
+- Improves performance and SEO – Since pages are pre-generated, they load instantly.
+- Supports revalidation (`revalidate`) – Allows rebuilding the page at a set interval without needing a full site rebuild.
+
+### Example
+
+```tsx
+import React from "react";
+
+const Home = ({ posts }) => {
+  return (
+    <div>
+      <h1>Blog Posts</h1>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <h2>{post.title}</h2>
+            <p>{post.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// getStaticProps fetches data at build time
+export async function getStaticProps() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await res.json();
+
+  return {
+    props: { posts }, // Pass the data to the component as props
+    revalidate: 10, // (optional) Rebuild the page every 10 seconds
+  };
+}
+
+export default Home;
+```
+
+### Benefits of `getStaticProps`
+
+- **Fast Loading**: Since pages are generated ahead of time, they load instantly.
+- **SEO-Friendly**: Pre-rendered content helps with search engine indexing.
+- **Efficient**: The API call is made only once at build time instead of every request.
+- **Incremental Static Regeneration (ISR)**: With `revalidate`, you can update pages without rebuilding the whole site.
+
+### When to Use `getStaticProps`?
+
+| Use Case                                | Should You Use `getStaticProps`? |
+| --------------------------------------- | -------------------------------- |
+| **Blog posts**                          | ✅ Yes                           |
+| **Product pages**                       | ✅ Yes                           |
+| **User dashboards**                     | ❌ No (Use `getServerSideProps`) |
+| **Real-time data (e.g., stock prices)** | ❌ No (Use client-side fetching) |
+
+## What is `getStaticPaths`?
+
+When working with static site generation (SSG), sometimes you need to create multiple pages dynamically based on external data. This is where `getStaticPaths` comes in!
+
+`getStaticPaths` is a special Next.js function used to pre-generate dynamic pages at build time. It works **together with** `getStaticProps` to generate static pages for each dynamic route (e.g., `/posts/[id]` for individual blog posts).
+
+### Key Features
+
+- Pre-generates pages dynamically based on available data.
+- Works with `getStaticProps` to fetch data for each dynamic page.
+- Improves performance by serving static pages instead of generating them on request.
+- Supports Incremental Static Regeneration (ISR) for automatic page updates.
+
+### Example
+
+Let’s say we have a list of blog posts, and each post has its own dynamic page (`/posts/[id]`). We will:
+
+1. Fetch all blog post IDs using `getStaticPaths` to generate dynamic routes.
+2. Fetch post details using `getStaticProps` for each page.
+3. Render the blog post page with static content.
+
+```tsx
+import React from "react";
+
+const Post = ({ post }) => {
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+    </div>
+  );
+};
+
+// Generate all possible paths dynamically
+export async function getStaticPaths() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await res.json();
+
+  const paths = posts.map((post) => ({
+    params: { id: post.id.toString() }, // Must be a string
+  }));
+
+  return {
+    paths, // Defines the pages to generate
+    fallback: "blocking", // Handle non-prebuilt pages
+  };
+}
+
+// Fetch post data based on the dynamic route
+export async function getStaticProps({ params }) {
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+  );
+  const post = await res.json();
+
+  return {
+    props: { post },
+    revalidate: 10, // Update every 10 seconds (ISR)
+  };
+}
+
+export default Post;
+```
+
+**Generating Dynamic Routes with `getStaticPaths`**
+
+- Fetch all blog post IDs from an API.
+- Convert each post ID into a dynamic route (`/posts/1`, `/posts/2`, etc.).
+- Return an array of `params` that Next.js uses to pre-generate pages.
+- The `fallback: "blocking"` setting allows Next.js to generate new pages on demand if they weren’t prebuilt.
+
+**Fetching Data for Each Page with `getStaticProps`**
+
+- `params.id` contains the dynamic route parameter (e.g., `1`, `2`).
+- Fetch the specific blog post from the API.
+- Return the post data as props to render the page.
+- `revalidate: 10` enables Incremental Static Regeneration (ISR).
+
+### Handling Fallback Options in `getStaticPaths`
+
+| Option       | Behavior                                                                       |
+| ------------ | ------------------------------------------------------------------------------ |
+| `false`      | Returns a 404 for pages not generated at build time.                           |
+| `true`       | Shows a loading state while generating the page on-demand.                     |
+| `"blocking"` | Waits until the new page is generated before serving it (recommended for SEO). |
+
+### Benefits of `getStaticPaths`
+
+- **Pre-generates dynamic pages** for better performance.
+- **Reduces server load** by serving static files.
+- **Supports Incremental Static Regeneration (ISR)** to update content without rebuilding the site.
+- **SEO-friendly** since pages are fully rendered before being indexed.
+
+### When to Use `getStaticPaths`?
+
+| Use Case                                 | Should You Use `getStaticPaths`?  |
+| ---------------------------------------- | --------------------------------- |
+| **Blog post pages**                      | ✅ Yes                            |
+| **Product detail pages**                 | ✅ Yes                            |
+| **User profiles**                        | ✅ Yes, but only for public users |
+| **Live data pages (e.g., stock prices)** | ❌ No (Use `getServerSideProps`)  |
+
+### Conclusion
+
+- Use `getStaticPaths` to pre-generate dynamic routes at build time.
+- Use `getStaticProps` to fetch data for each page.
+- Combine with ISR (`revalidate`) for automatic updates.
+- Set `fallback: "blocking"` for on-demand page generation.
+
+## Incremental Static Regeneration
+
+Incremental Static Regeneration (ISR) is a Next.js feature that allows you to update static pages after deployment without needing to rebuild the entire website.
+
+With ISR, you can:
+
+- Pre-generate static pages at build time.
+- Update them automatically in the background without redeploying.
+- Serve fast, pre-built pages while keeping them fresh with automatic revalidation.
+
+### How ISR Works
+
+ISR works with getStaticProps, using the revalidate option.
+
+### Lifecycle of ISR:
+
+1. **First Request**: The page is served from the cache (static HTML).
+2. **After revalidate Time Expires:**
+   -The next request triggers a background regeneration.
+
+- The old page is served while the new one is built.
+- Once ready, the new page replaces the old one.
+
+3. **Subsequent Requests:** Serve the updated static page.
+
+### How ISR Works in Action
+
+1. A user visits `/posts/1`.
+2. The page is served from the static cache.
+3. After 10 seconds, another visitor requests `/posts/1`.
+4. Next.js fetches fresh data in the background and updates the page.
+5. All future requests get the new version of `/posts/1`.
+
+# Server Side Rendering
+
+Server-Side Rendering (SSR) in Next.js refers to the process where a webpage is pre-rendered on the server at request time. This means that every time a user requests a page, the server generates the HTML dynamically before sending it to the client. This helps improve performance, SEO, and ensures that data is always up-to-date.
+
+## What is `getServerSideProps`?
+
+Use `getServerSideProps` when data is frequently changing such news update, use `getStaticProps` when data is not frequently changing such showing details of a product, post etc. it store the data in the cache after very first render.
+
+## How SSR Works
+
+1. A request is made to the server.
+2. The server fetches the required data.
+3. The HTML is generated on the server with the fetched data.
+4. The fully rendered HTML is sent to the browser.
+5. The browser displays the content.
+
+## When to Use SSR
+
+- Pages that need real-time data (e.g., stock prices, news updates, user-specific content).
+- Content that changes frequently and cannot be cached effectively.
+- Personalization based on request parameters or authentication.
+
+## Key Features of SSR
+
+1. **Real-time Data Fetching** – Data is fetched at request time, ensuring fresh content for each request.
+2. **Improved SEO** – Since the page is rendered on the server, search engines can easily index the content.
+3. **Slower Initial Load** – SSR can be slower than static generation because it requires generating the page at every request.
+
+## Example
+
+```tsx
+// pages/users.js
+
+export async function getServerSideProps() {
+  // Fetch data from an API
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users = await response.json();
+
+  // Return data as props to be used in the component
+  return {
+    props: { users },
+  };
+}
+
+const UsersPage = ({ users }) => {
+  return (
+    <div>
+      <h1>Users List</h1>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            {user.name} - {user.email}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default UsersPage;
+```
+
+- `getServerSideProps` is a special function in Next.js that runs on the server before the page is delivered.
+- It fetches data at the time of the request and returns it as props.
+- The page is rendered with fresh data on every request.
+- it fetches data on each request.
+
+**Fetching Single User:**
+
+```tsx
+// pages/users/[id].js
+
+export async function getServerSideProps(context) {
+  const { id } = context.params; // Get the ID from the URL
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/users/${id}`
+  );
+  const user = await response.json();
+
+  return {
+    props: { user }, // Pass the fetched user as props
+  };
+}
+
+const UserPage = ({ user }) => {
+  return (
+    <div>
+      <h1>User Details</h1>
+      <p>
+        <strong>Name:</strong> {user.name}
+      </p>
+      <p>
+        <strong>Email:</strong> {user.email}
+      </p>
+      <p>
+        <strong>Phone:</strong> {user.phone}
+      </p>
+      <p>
+        <strong>Website:</strong> {user.website}
+      </p>
+    </div>
+  );
+};
+
+export default UserPage;
+```
+
+# Data Fetching
+
+## Pages Directory
+
+- Uses `getStaticProps`, `getServerSideProps`, and `getInitialProps` for data fetching.
+- Data fetching happens outside the component and is passed as props.
+- Supports Static Site Generation (SSG) and Server-Side Rendering (SSR).
+
+1. **SSG:** Fetching data at build time (fast, great for SEO).
+2. **SSR:** Fetching data on every request (dynamic data).
+3. **CSR:** Interactive pages that fetch data after the initial render.
+
+## App Directory
+
+- Uses React Server Components (RSC) by default.
+- Fetches data directly in components (no `getStaticProps` or `getServerSideProps`).
+- Supports streaming and Suspense for better performance.
+- Automatic caching and revalidation with `fetch()`.
+
+1. **Server Side Fetching:** Fetching data in Server Components (fast, no extra client-side requests).
+2. **Client Side Fetching:** When using React hooks
+
+# API Routes
+
+Next.js allows you to create serverless API routes inside the `pages/api/` directory. These routes act like backend endpoints (similar to Express routes) but are built into Next.js without needing an extra server.
+
+## How it Works
+
+- The file `pages/api/todos.ts` becomes available at: `http://localhost:3000/api/todos`
+- When a request comes in:
+  - If it's a GET request, it returns all todos.
+  - If it's a POST request, it creates a new todo.
+  - If it’s another HTTP method (like `PUT` or `DELETE`), it responds with 405 Method Not Allowed.
+
+## Key Points
+
+1. `pages/api/*` files are server-side only, never shipped to the client.
+2. Each file maps to a route.
+
+- `pages/api/todos.ts` → `/api/todos`
+- `pages/api/users/[id].ts` → `/api/users/:id` (dynamic API route)
+
+3. `req` = HTTP request (`req.method`, `req.body`, `req.query`).
+4. `res` = HTTP response (`res.status()`, `res.json()`, `res.end()`).
+5. Works great with frontend requests (e.g., using `fetch` from React components).
+
+## Key Points of Mongodb connection
+
+- Serverless functions can re-run often, so caching MongoDB connection avoids multiple connections.
+- Always use `await dbConnect()` at the start of an API route before querying DB.
 
 # Image Optimization
 
@@ -267,7 +977,7 @@ Optimized images reduce page load time, improving user experience and SEO.
 
 It automatically optimizes images based on device size, format, and caching.
 
-```jsx
+```tsx
 <Image
   src="/example.jpg"
   alt="Example Image"
@@ -285,10 +995,9 @@ It automatically optimizes images based on device size, format, and caching.
 - Automatic width/height handling – Prevents layout shift (important for Core Web Vitals).
 - CDN optimization – If deployed on Vercel, images are cached and served globally.
 
-
 Instead of setting a fixed width and height, use `layout="responsive"` to make the image adjust dynamically.
 
-```jsx
+```tsx
 <Image
   src="/my-image.jpg"
   alt="Responsive Image"
@@ -302,7 +1011,7 @@ Instead of setting a fixed width and height, use `layout="responsive"` to make t
 
 Instead of defining width and height, you can use layout="fill" (or fill in Next.js 13+) to make images responsive.
 
-```jsx
+```tsx
 <Image
   src="/example.jpg"
   alt="Responsive Image"
@@ -318,7 +1027,7 @@ Instead of defining width and height, you can use layout="fill" (or fill in Next
 
 If images are hosted externally (CDN, API), Next.js allows defining allowed domains in `next.config.js`
 
-```js
+```ts
 module.exports = {
   images: {
     remotePatterns: [
@@ -335,7 +1044,7 @@ module.exports = {
 
 WebP and AVIF formats reduce file size while maintaining quality. Next.js automatically converts images.
 
-```jsx
+```tsx
 <Image
   src="/example.jpg"
   alt="Optimized Image"
@@ -353,7 +1062,7 @@ WebP and AVIF formats reduce file size while maintaining quality. Next.js automa
 
 Next.js allows showing a blurred version before the full image loads.
 
-```jsx
+```tsx
 <Image
   src="/example.jpg"
   alt="Blurred Image"
@@ -528,722 +1237,6 @@ Invalid src prop (https://...) on `next/image`, hostname not configured under im
 
 Configuring domains makes your app secure, optimized, and production-ready.
 
-# Rendering
-
-## Client-Side Rendering
-
-Client-Side Rendering (CSR) is a method where the browser (client) downloads a minimal HTML file along with JavaScript files. The JavaScript executes in the browser, fetching data from an API, and dynamically rendering content on the page.
-
-- When you visit a website using CSR, the browser first loads an empty page with almost no content.
-- Then, it downloads a JavaScript file that builds the page dynamically.
-  -The page loads slowly at first, but once everything is loaded, navigating between pages becomes very fast.
-
-### Steps
-
-1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
-2. **Server Responds with Minimal HTML:** The server responds with a lightweight HTML and Javscripts file.
-
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>CSR Example</title>
-     </head>
-     <body>
-       <div id="root"></div>
-       <!-- This is where React inserts the content -->
-       <script src="bundle.js"></script>
-       <!-- JavaScript file that builds the page -->
-     </body>
-   </html>
-   ```
-
-   At this point, the page is still empty! The content is missing because JavaScript hasn’t run yet.
-
-3. **Browser Downloads JavaScript File:**
-
-   - The browser loads bundle.js, which contains the React app.
-   - React runs and fetches the blog post from an API.
-
-4. **JavaScript Fetches Data and Updates the Page:**
-
-   ```jsx
-   import React, { useState, useEffect } from "react";
-
-   function BlogPost() {
-     const [data, setData] = useState(null);
-
-     useEffect(() => {
-       fetch("https://jsonplaceholder.typicode.com/posts/1") // API call
-         .then((response) => response.json())
-         .then((json) => setData(json)); // Set data
-     }, []);
-
-     return (
-       <div>
-         <h1>Client-Side Rendering Example</h1>
-         {data ? <h2>{data.title}</h2> : <p>Loading...</p>}
-       </div>
-     );
-   }
-
-   export default BlogPost;
-   ```
-
-5. **Content is Rendered in the Browser:** The fetched data is used to dynamically generate and update the page's content.
-6. **User Interacts with the Page:** Since the page is now fully loaded in the browser, interactions like clicking buttons or navigating between pages happen instantly without needing a full page reload.
-
-## Pre Rendering
-
-Server-Side Rendering (SSR) is a method where the server processes and renders the full HTML page before sending it to the browser. The browser only has to display the fully rendered content.
-
-- Instead of sending an empty page, the server builds the page first and then sends the full HTML to the browser.
-- The page loads quickly because the browser doesn’t have to wait for JavaScript to fetch the data.
-
-Pre rendering can be done with:
-
-1. Static Side Generation
-2. Server Side Rendering
-
-### Steps
-
-1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
-2. **Server Generates the HTML Page:** The server processes the request, executes any necessary database queries or API calls, and generates the full HTML page.
-   In Next.js, we use `getServerSideProps` to fetch data before the page is sent:
-
-   ```jsx
-   export async function getServerSideProps() {
-     const res = await fetch("https://jsonplaceholder.typicode.com/posts/1"); // API call
-     const data = await res.json();
-
-     return { props: { data } }; // Send data to the page
-   }
-
-   function BlogPost({ data }) {
-     return (
-       <div>
-         <h1>Server-Side Rendering Example</h1>
-         <h2>{data.title}</h2>
-       </div>
-     );
-   }
-
-   export default BlogPost;
-   ```
-
-3. **Server Sends a Fully Rendered Page**
-
-   - The server fetches the blog post first and puts it inside the HTML file.
-   - The fully rendered page (with all the necessary content) is sent to the browser.
-   - The browser receives a complete HTML page, which looks like this:
-
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>SSR Example</title>
-     </head>
-     <body>
-       <div id="root">
-         <h1>Server-Side Rendering Example</h1>
-         <h2>My Blog Post Title</h2>
-       </div>
-     </body>
-   </html>
-   ```
-
-4. **Browser Displays the Page Instantly:** Since the browser receives a ready-to-display HTML page, the content appears much faster.
-5. **JavaScript Enhancements Load in the Background:** If JavaScript frameworks like React or Vue.js are used, they hydrate (attach interactivity to) the already rendered HTML.
-
-# Client-Side Rendering
-
-Client-Side Rendering (CSR) in Next.js means that the page's content is generated on the user's browser rather than on the server. In CSR, Next.js sends a minimal HTML file and JavaScript bundle to the client, and then React hydrates the page in the browser.
-
-## When to Use CSR in Next.js?
-
-CSR is useful in scenarios where:
-
-1. **User Interactivity is Required:** If your page heavily relies on client-side interactions (e.g., dashboards, interactive forms, charts).
-2. **Data is User-Specific:** If the data being displayed is user-specific and does not need to be pre-rendered on the server (e.g., user dashboards, personalized feeds).
-3. **Avoiding Frequent Server Requests:** If the data changes frequently and fetching it on the server would lead to unnecessary re-renders.
-4. **Third-Party API Calls from the Client:** If you need to fetch data from an external API that does not support server-side fetching (e.g., some authentication flows).
-5. **Reducing Server Load:** CSR shifts the load to the client, reducing the burden on the server.
-
-## How to Use CSR in Next.js?
-
-Client-Side Rendering (CSR) in Next.js means fetching and rendering data only on the client-side rather than pre-rendering it on the server. This is done using React hooks like `useState` and `useEffect`. CSR is useful when:
-
-- The data is user-specific or personalized.
-- You want to reduce the load on the server.
-- The data changes frequently (e.g., real-time data).
-- SEO is not a priority (as the content is rendered dynamically in the browser).
-
-### Example
-
-Let's create a simple Next.js page that fetches user data from an API using CSR.
-
-**Steps to Implement CSR in Next.js**
-
-1. Use React's `useState` to manage the state.
-2. Use `useEffect` to fetch data when the component mounts.
-3. Render the fetched data on the client.
-
-```jsx
-"use client";
-import { useState, useEffect } from "react";
-
-export default function Users() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await fetch(
-          "https://jsonplaceholder.typicode.com/users"
-        );
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchUsers();
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
-
-  return (
-    <div>
-      <h1>User List</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            <strong>{user.name}</strong> - {user.email}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-```
-
-- `useState([])` → Initializes users as an empty array and loading as true.
-- `useEffect` Hook → Runs once when the component mounts to fetch user data.
-- **Fetch Request** → Calls the API (jsonplaceholder.typicode.com/users) and updates the state.
-- **Conditional Rendering** → Displays "Loading..." until the data is fetched.
-- **Render Data** → Loops through the users array and displays the list.
-
-## Combination
-
-| Rendering Type                                  | When to Use                                            | Example                                               |
-| ----------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
-| **CSR (Client-Side Rendering)**                 | User-specific, frequently updated data, interactive UI | Dashboards, Chat apps                                 |
-| **SSR (Server-Side Rendering) + CSR**           | SEO-sensitive, personalized data                       | News articles with user comments                      |
-| **SSG (Static Site Generation) + CSR**          | Static content with dynamic client-side updates        | Blog with real-time comments                          |
-| **ISR (Incremental Static Regeneration) + CSR** | Mix of static and dynamic content                      | E-commerce product pages with real-time stock updates |
-
-### SSR for Blog Posts + CSR for Comments
-
-```jsx
-// pages/blog/[id].js
-import { useState, useEffect } from "react";
-
-// Fetch post data on the server (SSR)
-export async function getServerSideProps(context) {
-  const { id } = context.params;
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-  const post = await res.json();
-
-  return { props: { post } };
-}
-
-export default function BlogPost({ post }) {
-  const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch comments on the client side (CSR)
-  useEffect(() => {
-    async function fetchComments() {
-      const res = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${post.id}/comments`
-      );
-      const data = await res.json();
-      setComments(data);
-      setLoading(false);
-    }
-    fetchComments();
-  }, [post.id]);
-
-  return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.body}</p>
-
-      <h2>Comments</h2>
-      {loading ? (
-        <p>Loading comments...</p>
-      ) : (
-        comments.map((comment) => (
-          <div key={comment.id}>
-            <strong>{comment.name}</strong>: {comment.body}
-          </div>
-        ))
-      )}
-    </div>
-  );
-}
-```
-
-- SSR (`getServerSideProps`) pre-renders blog content for SEO.
-- CSR (`useEffect`) fetches comments dynamically on the client side.
-- This ensures faster initial loading while allowing dynamic updates.
-
-| Combination   | Best Use Case                            | Example                               |
-| ------------- | ---------------------------------------- | ------------------------------------- |
-| **SSR + CSR** | SEO-friendly pages with real-time data   | Blogs with live comments              |
-| **SSG + CSR** | Static pages with dynamic updates        | Product pages with live stock updates |
-| **ISR + CSR** | Partially static, but updated frequently | News articles with real-time likes    |
-
-# Static Site Generation
-
-Static Site Generation (SSG) allows you to pre-render pages at build time, meaning the HTML is generated once and served to users as a static file. This makes your website faster and more SEO-friendly.
-
-## What is `getStaticProps`?
-
-`getStaticProps` is a special Next.js function used to fetch data at build time and pass it as props to a page component. This is useful for content that doesn’t change frequently, such as blog posts, product pages, or documentation.
-
-### Key Features:
-
-- Runs only at build time – It does not execute on every request.
-- Used for fetching external or local data – e.g., from APIs, databases, or local files.
-- Improves performance and SEO – Since pages are pre-generated, they load instantly.
-- Supports revalidation (`revalidate`) – Allows rebuilding the page at a set interval without needing a full site rebuild.
-
-### Example
-
-```jsx
-import React from "react";
-
-const Home = ({ posts }) => {
-  return (
-    <div>
-      <h1>Blog Posts</h1>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <h2>{post.title}</h2>
-            <p>{post.body}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-// getStaticProps fetches data at build time
-export async function getStaticProps() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await res.json();
-
-  return {
-    props: { posts }, // Pass the data to the component as props
-    revalidate: 10, // (optional) Rebuild the page every 10 seconds
-  };
-}
-
-export default Home;
-```
-
-### Benefits of `getStaticProps`
-
-- **Fast Loading**: Since pages are generated ahead of time, they load instantly.
-- **SEO-Friendly**: Pre-rendered content helps with search engine indexing.
-- **Efficient**: The API call is made only once at build time instead of every request.
-- **Incremental Static Regeneration (ISR)**: With `revalidate`, you can update pages without rebuilding the whole site.
-
-### When to Use `getStaticProps`?
-
-| Use Case                                | Should You Use `getStaticProps`? |
-| --------------------------------------- | -------------------------------- |
-| **Blog posts**                          | ✅ Yes                           |
-| **Product pages**                       | ✅ Yes                           |
-| **User dashboards**                     | ❌ No (Use `getServerSideProps`) |
-| **Real-time data (e.g., stock prices)** | ❌ No (Use client-side fetching) |
-
-## What is `getStaticPaths`?
-
-When working with static site generation (SSG), sometimes you need to create multiple pages dynamically based on external data. This is where `getStaticPaths` comes in!
-
-`getStaticPaths` is a special Next.js function used to pre-generate dynamic pages at build time. It works **together with** `getStaticProps` to generate static pages for each dynamic route (e.g., `/posts/[id]` for individual blog posts).
-
-### Key Features
-
-- Pre-generates pages dynamically based on available data.
-- Works with `getStaticProps` to fetch data for each dynamic page.
-- Improves performance by serving static pages instead of generating them on request.
-- Supports Incremental Static Regeneration (ISR) for automatic page updates.
-
-### Example
-
-Let’s say we have a list of blog posts, and each post has its own dynamic page (`/posts/[id]`). We will:
-
-1. Fetch all blog post IDs using `getStaticPaths` to generate dynamic routes.
-2. Fetch post details using `getStaticProps` for each page.
-3. Render the blog post page with static content.
-
-```jsx
-import React from "react";
-
-const Post = ({ post }) => {
-  return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.body}</p>
-    </div>
-  );
-};
-
-// Generate all possible paths dynamically
-export async function getStaticPaths() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await res.json();
-
-  const paths = posts.map((post) => ({
-    params: { id: post.id.toString() }, // Must be a string
-  }));
-
-  return {
-    paths, // Defines the pages to generate
-    fallback: "blocking", // Handle non-prebuilt pages
-  };
-}
-
-// Fetch post data based on the dynamic route
-export async function getStaticProps({ params }) {
-  const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${params.id}`
-  );
-  const post = await res.json();
-
-  return {
-    props: { post },
-    revalidate: 10, // Update every 10 seconds (ISR)
-  };
-}
-
-export default Post;
-```
-
-**Generating Dynamic Routes with `getStaticPaths`**
-
-- Fetch all blog post IDs from an API.
-- Convert each post ID into a dynamic route (`/posts/1`, `/posts/2`, etc.).
-- Return an array of `params` that Next.js uses to pre-generate pages.
-- The `fallback: "blocking"` setting allows Next.js to generate new pages on demand if they weren’t prebuilt.
-
-**Fetching Data for Each Page with `getStaticProps`**
-
-- `params.id` contains the dynamic route parameter (e.g., `1`, `2`).
-- Fetch the specific blog post from the API.
-- Return the post data as props to render the page.
-- `revalidate: 10` enables Incremental Static Regeneration (ISR).
-
-### Handling Fallback Options in `getStaticPaths`
-
-| Option       | Behavior                                                                       |
-| ------------ | ------------------------------------------------------------------------------ |
-| `false`      | Returns a 404 for pages not generated at build time.                           |
-| `true`       | Shows a loading state while generating the page on-demand.                     |
-| `"blocking"` | Waits until the new page is generated before serving it (recommended for SEO). |
-
-### Benefits of `getStaticPaths`
-
-- **Pre-generates dynamic pages** for better performance.
-- **Reduces server load** by serving static files.
-- **Supports Incremental Static Regeneration (ISR)** to update content without rebuilding the site.
-- **SEO-friendly** since pages are fully rendered before being indexed.
-
-### When to Use `getStaticPaths`?
-
-| Use Case                                 | Should You Use `getStaticPaths`?  |
-| ---------------------------------------- | --------------------------------- |
-| **Blog post pages**                      | ✅ Yes                            |
-| **Product detail pages**                 | ✅ Yes                            |
-| **User profiles**                        | ✅ Yes, but only for public users |
-| **Live data pages (e.g., stock prices)** | ❌ No (Use `getServerSideProps`)  |
-
-### Conclusion
-
-- Use `getStaticPaths` to pre-generate dynamic routes at build time.
-- Use `getStaticProps` to fetch data for each page.
-- Combine with ISR (`revalidate`) for automatic updates.
-- Set `fallback: "blocking"` for on-demand page generation.
-
-## Incremental Static Regeneration
-
-Incremental Static Regeneration (ISR) is a Next.js feature that allows you to update static pages after deployment without needing to rebuild the entire website.
-
-With ISR, you can:
-
-- Pre-generate static pages at build time.
-- Update them automatically in the background without redeploying.
-- Serve fast, pre-built pages while keeping them fresh with automatic revalidation.
-
-### How ISR Works
-
-ISR works with getStaticProps, using the revalidate option.
-
-### Lifecycle of ISR:
-
-1. **First Request**: The page is served from the cache (static HTML).
-2. **After revalidate Time Expires:**
-   -The next request triggers a background regeneration.
-
-- The old page is served while the new one is built.
-- Once ready, the new page replaces the old one.
-
-3. **Subsequent Requests:** Serve the updated static page.
-
-### How ISR Works in Action
-
-1. A user visits `/posts/1`.
-2. The page is served from the static cache.
-3. After 10 seconds, another visitor requests `/posts/1`.
-4. Next.js fetches fresh data in the background and updates the page.
-5. All future requests get the new version of `/posts/1`.
-
-# Server Side Rendering
-
-Server-Side Rendering (SSR) in Next.js refers to the process where a webpage is pre-rendered on the server at request time. This means that every time a user requests a page, the server generates the HTML dynamically before sending it to the client. This helps improve performance, SEO, and ensures that data is always up-to-date.
-
-## What is `getServerSideProps`?
-
-Use `getServerSideProps` when data is frequently changing such news update, use `getStaticProps` when data is not frequently changing such showing details of a product, post etc. it store the data in the cache after very first render.
-
-## How SSR Works
-
-1. A request is made to the server.
-2. The server fetches the required data.
-3. The HTML is generated on the server with the fetched data.
-4. The fully rendered HTML is sent to the browser.
-5. The browser displays the content.
-
-## When to Use SSR
-
-- Pages that need real-time data (e.g., stock prices, news updates, user-specific content).
-- Content that changes frequently and cannot be cached effectively.
-- Personalization based on request parameters or authentication.
-
-## Key Features of SSR
-
-1. **Real-time Data Fetching** – Data is fetched at request time, ensuring fresh content for each request.
-2. **Improved SEO** – Since the page is rendered on the server, search engines can easily index the content.
-3. **Slower Initial Load** – SSR can be slower than static generation because it requires generating the page at every request.
-
-## Example
-
-```jsx
-// pages/users.js
-
-export async function getServerSideProps() {
-  // Fetch data from an API
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users = await response.json();
-
-  // Return data as props to be used in the component
-  return {
-    props: { users },
-  };
-}
-
-const UsersPage = ({ users }) => {
-  return (
-    <div>
-      <h1>Users List</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            {user.name} - {user.email}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default UsersPage;
-```
-
-- `getServerSideProps` is a special function in Next.js that runs on the server before the page is delivered.
-- It fetches data at the time of the request and returns it as props.
-- The page is rendered with fresh data on every request.
-- it fetches data on each request.
-
-**Fetching Single User:**
-
-```jsx
-// pages/users/[id].js
-
-export async function getServerSideProps(context) {
-  const { id } = context.params; // Get the ID from the URL
-  const response = await fetch(
-    `https://jsonplaceholder.typicode.com/users/${id}`
-  );
-  const user = await response.json();
-
-  return {
-    props: { user }, // Pass the fetched user as props
-  };
-}
-
-const UserPage = ({ user }) => {
-  return (
-    <div>
-      <h1>User Details</h1>
-      <p>
-        <strong>Name:</strong> {user.name}
-      </p>
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
-      <p>
-        <strong>Phone:</strong> {user.phone}
-      </p>
-      <p>
-        <strong>Website:</strong> {user.website}
-      </p>
-    </div>
-  );
-};
-
-export default UserPage;
-```
-
-# Router
-
-## `pages` directory
-
-The `pages` directory plays a crucial role in defining the structure of the application. It follows a file-based routing system, where each file inside the pages directory automatically becomes a route in your application.
-
-### Routing
-
-- Each `.js`, `.jsx`, `.ts`, or `.tsx` file inside the `pages` directory represents a route.
-- The folder structure determines the URL path.
-- The `pages/api/` directory is special for API routes.
-
-**Example:**
-
-```
-/pages
-  ├── index.js           →  '/'
-  ├── about.js           →  '/about'
-  ├── contact.js         →  '/contact'
-  ├── blog
-  │   ├── index.js       →  '/blog'
-  │   ├── post.js        →  '/blog/post'
-  ├── api
-  │   ├── hello.js       →  '/api/hello'
-```
-
-### Special File
-
-1. **`_app.js` - Custom App Component:** Wraps all pages to maintain global styles, state, or layout.
-
-```jsx
-import "../styles/globals.css";
-
-export default function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
-```
-
-2. **`_document.js` - Custom HTML Structure:** Used for modifying the <html> and <body> structure.
-
-```jsx
-import { Html, Head, Main, NextScript } from "next/document";
-
-export default function Document() {
-  return (
-    <Html>
-      <Head>
-        <meta name="description" content="My Next.js App" />
-      </Head>
-      <body>
-        <Main />
-        <NextScript />
-      </body>
-    </Html>
-  );
-}
-```
-
-## `app` router
-
-With Next.js 13+, a new App Router was introduced, replacing the traditional `pages` directory with a more flexible and powerful routing system using the `app` directory. This new system is built on React Server Components (RSC) and introduces features like layouts, loading states, server actions, and streaming.
-
-### How Work
-
-- The `app` directory follows a folder-based routing system (like `pages/`).
-- Each folder inside `app/` represents a route, and a `page.js` (or `page.tsx`) file inside it is rendered as the page.
-- Supports Server Components by default (unlike `pages/` which defaults to Client Components).
-- Introduces layouts, loading, and error handling.
-
-#### Structure
-
-```
-/app
-  ├── layout.js        →  Root layout for all pages
-  ├── page.js          →  '/'
-  ├── about
-  │   ├── page.js      →  '/about'
-  ├── blog
-  │   ├── page.js      →  '/blog'
-  │   ├── [id]
-  │   │   ├── page.js  →  '/blog/:id' (Dynamic Route)
-  ├── loading.js       →  Loading state for all routes
-  ├── error.js         →  Error handling for all routes
-  ├── api
-  │   ├── route.js     →  API route at '/api'
-```
-
-### Features
-
-1. **File-Based Routing:** Each folder is a route, and `page.js` inside defines the actual page.
-2. **Layouts:** Layouts wrap multiple pages inside a route and persist across navigation.
-3. **Server Components:** Pages are server-rendered by default, but you can use `"use client"` to enable client-side behavior.
-4. **Streming & Suspense:** Next.js supports streaming and React Suspense for loading states and progressive rendering.
-5. **API Routes:** API routes now use `route.js` and support full HTTP methods.
-
-# Data Fetching
-
-## Pages Directory
-
-- Uses `getStaticProps`, `getServerSideProps`, and `getInitialProps` for data fetching.
-- Data fetching happens outside the component and is passed as props.
-- Supports Static Site Generation (SSG) and Server-Side Rendering (SSR).
-
-1. **SSG:** Fetching data at build time (fast, great for SEO).
-2. **SSR:** Fetching data on every request (dynamic data).
-3. **CSR:** Interactive pages that fetch data after the initial render.
-
-## App Directory
-
-- Uses React Server Components (RSC) by default.
-- Fetches data directly in components (no `getStaticProps` or `getServerSideProps`).
-- Supports streaming and Suspense for better performance.
-- Automatic caching and revalidation with `fetch()`.
-
-1. **Server Side Fetching:** Fetching data in Server Components (fast, no extra client-side requests).
-2. **Client Side Fetching:** When using React hooks
-
 # How Helps in SEO
 
 ## Rendering
@@ -1262,7 +1255,7 @@ CSS Modules allow you to write styles that are scoped locally to the component w
 
 1. Create a file `Button.module.css` inside the `styles` or `components` folder:
 
-```jsx
+```tsx
 .button {
   background-color: #0070f3;
   color: white;
@@ -1277,7 +1270,7 @@ CSS Modules allow you to write styles that are scoped locally to the component w
 
 2. Now, create a React component `Button.js` and import the CSS Module.
 
-```jsx
+```tsx
 // components/Button.js
 import styles from "../styles/Button.module.css";
 
@@ -1304,7 +1297,7 @@ This is useful for:
 
 1. First, create a global stylesheet file `styles/globals.css` inside the `styles` directory.
 
-```jsx
+```tsx
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -1317,7 +1310,7 @@ body {
 
 Next.js only allows global styles to be imported inside `pages/_app.js`.
 
-```jsx
+```tsx
 // pages/_app.js
 import "../styles/globals.css";
 
@@ -1350,7 +1343,7 @@ npx tailwindcss init -p
 
 Open `tailwind.config.js` and update the `content` section to include Next.js files:
 
-```jsx
+```tsx
 // tailwind.config.js
 module.exports = {
   content: [
@@ -1395,7 +1388,7 @@ npm install --save-dev babel-plugin-styled-components
 
 Create a `.babelrc` (or extend `next.config.js`) to enable SSR-friendly styled-components:
 
-```json
+```tson
 {
   "presets": ["next/babel"],
   "plugins": ["styled-components"]
@@ -1754,8 +1747,11 @@ export default function AdminOnly({ children }) {
 
 - Useful when rendering certain UI elements only for admins.
 - Prevents accidental display of restricted content.
+
 # Performance Optimization
+
 ## Lazy Loading
+
 - Lazy loading (or dynamic importing) is a way to defer loading of non-critical code until it’s actually needed.
 - Useful for:
   - Heavy components (charts, maps, editors, video players)
@@ -1765,6 +1761,7 @@ export default function AdminOnly({ children }) {
 ### How Next.js Supports Lazy Loading
 
 Next.js provides a built-in function `next/dynamic` to load components lazily.
+
 ```ts
 import dynamic from "next/dynamic";
 
@@ -1775,7 +1772,7 @@ By default:
 
 - `Chart` will not be included in the initial JavaScript bundle.
 - It will be loaded only when rendered.
-`pages/dashboard.ts`
+  `pages/dashboard.ts`
 
 ```ts
 import dynamic from "next/dynamic";
@@ -1798,12 +1795,14 @@ export default function Dashboard() {
   );
 }
 ```
+
 1. The initial load only includes Dashboard’s basic UI (small bundle).
 2. The `Chart` code is split into a separate bundle.
 3. When the Dashboard renders `<Chart />`, Next.js dynamically fetches that bundle.
 4. The user sees `"Loading chart..."` until the Chart is ready.
 
 ## Prefetching
+
 - Prefetching means downloading resources (like code or data) for future navigation before the user explicitly requests them.
 - This makes navigations faster because Next.js already has the JavaScript bundle and/or data ready.
 
@@ -1815,6 +1814,7 @@ export default function Dashboard() {
 Result: The next page loads almost instantly when the user clicks.
 
 **Prefetching Page Bundles**
+
 ```ts
 import Link from "next/link";
 
@@ -1829,6 +1829,7 @@ export default function Home() {
   );
 }
 ```
+
 1. When `<Link>` is visible in the viewport, Next.js prefetches `about.js` in the background.
 
 2. When the user clicks, navigation is instant—no waiting for network fetch.
@@ -1837,12 +1838,15 @@ export default function Home() {
 
 - Prefetch is enabled by default in production (not in dev mode).
 - You can disable it if you don’t want background prefetching:
+
 ```tsx
 <Link href="/about" prefetch={false}>
   Go to About
 </Link>
 ```
+
 ## Preloading
+
 - While prefetching handles the JS bundle, preloading data means fetching server-side or client-side data ahead of time so it’s ready when needed.
 - Useful for:
   - Pages that need API data
@@ -1853,23 +1857,29 @@ export default function Home() {
 There are multiple strategies depending on where the data lives:
 
 1. Using `getStaticProps` with Link prefetch
+
 - If a page uses Static Generation (`getStaticProps`), Next.js can also prefetch the JSON data along with the JS bundle.
 
 `pages/blog/[id].js`
+
 ```tsx
 export async function getStaticProps({ params }) {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${params.id}`);
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+  );
   const post = await res.json();
 
   return { props: { post } };
 }
 
 export async function getStaticPaths() {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=5`);
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts?_limit=5`
+  );
   const posts = await res.json();
 
   return {
-    paths: posts.map(p => ({ params: { id: p.id.toString() } })),
+    paths: posts.map((p) => ({ params: { id: p.id.toString() } })),
     fallback: false,
   };
 }
@@ -1883,7 +1893,9 @@ export default function BlogPost({ post }) {
   );
 }
 ```
+
 `pages/index.js`
+
 ```tsx
 import Link from "next/link";
 
@@ -1892,7 +1904,7 @@ export default function Home({ posts }) {
     <div>
       <h1>Blog</h1>
       <ul>
-        {posts.map(post => (
+        {posts.map((post) => (
           <li key={post.id}>
             {/* Prefetches both JS + JSON data */}
             <Link href={`/blog/${post.id}`}>{post.title}</Link>
@@ -1904,11 +1916,14 @@ export default function Home({ posts }) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5");
+  const res = await fetch(
+    "https://jsonplaceholder.typicode.com/posts?_limit=5"
+  );
   const posts = await res.json();
   return { props: { posts } };
 }
 ```
+
 - When `Home` renders, Next.js prefetches both:
 
 1. `blog/[id].js` JS bundle
@@ -1923,7 +1938,7 @@ For client-side fetching, you can preload queries before rendering a component.
 ```tsx
 import useSWR, { preload } from "swr";
 
-const fetcher = url => fetch(url).then(r => r.json());
+const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Dashboard() {
   // Preload the data
@@ -1938,12 +1953,14 @@ export default function Dashboard() {
   return <div>Welcome, {data.name}!</div>;
 }
 ```
+
 - `preload()` fetches the data in advance.
 - When `<Dashboard />` renders, SWR already has the data → no spinner.
 
 3. Preloading Components with `next/dynamic`
 
 - You can also preload heavy components before user action:
+
 ```tsx
 import dynamic from "next/dynamic";
 
@@ -1961,14 +1978,15 @@ export default function Dashboard() {
   );
 }
 ```
+
 ### Prefetching vs Preloading Data
+
 | Feature                | Prefetching                                  | Preloading Data                             |
 | ---------------------- | -------------------------------------------- | ------------------------------------------- |
 | **What it loads**      | Page JS bundles (+ static JSON if available) | API data, components, or resources          |
 | **When it happens**    | When link/component enters viewport          | When you explicitly trigger preload         |
-| **Default in Next.js** | ✅ Enabled with `<Link>` in production        | ❌ Manual (SWR, React Query, preload())      |
+| **Default in Next.js** | ✅ Enabled with `<Link>` in production       | ❌ Manual (SWR, React Query, preload())     |
 | **Goal**               | Faster navigation to new page                | Faster rendering with ready data/components |
-
 
 - Prefetching: Automatic with `<Link>` → speeds up page navigation.
 - Preloading Data: Manual (via `getStaticProps`, SWR, or `preload`) → avoids loading spinners.
@@ -1979,7 +1997,9 @@ export default function Dashboard() {
 ### Performance Challenges in SSR
 
 - Every request triggers:
+
 1. Server fetch → render React → send HTML + JSON → hydrate on client.
+
 - Bottlenecks:
   - Expensive DB/API queries
   - Unnecessary recomputation
@@ -2002,8 +2022,12 @@ export default function Dashboard() {
 export async function getServerSideProps() {
   // Parallel fetching
   const [headlines, weather] = await Promise.all([
-    fetch("https://newsapi.org/v2/top-headlines?country=us").then(r => r.json()),
-    fetch("https://api.weatherapi.com/v1/current.json?q=New York").then(r => r.json())
+    fetch("https://newsapi.org/v2/top-headlines?country=us").then((r) =>
+      r.json()
+    ),
+    fetch("https://api.weatherapi.com/v1/current.json?q=New York").then((r) =>
+      r.json()
+    ),
   ]);
 
   return {
@@ -2016,7 +2040,9 @@ export default function News({ headlines, weather }) {
     <div>
       <h1>Top Headlines</h1>
       <ul>
-        {headlines.articles.map((a, i) => <li key={i}>{a.title}</li>)}
+        {headlines.articles.map((a, i) => (
+          <li key={i}>{a.title}</li>
+        ))}
       </ul>
 
       <h2>Weather in New York: {weather.current.temp_c}°C</h2>
@@ -2024,11 +2050,13 @@ export default function News({ headlines, weather }) {
   );
 }
 ```
+
 - `Promise.all` → avoids sequential fetches.
 - Page served fresh per request.
 - Can be paired with server/CDN caching to reduce load.
 
 ### Performance Challenges in CSR
+
 - Slower first paint (empty HTML shell at start).
 - Extra network requests after page load.
 - Bad for SEO if search engines can’t wait for hydration.
@@ -2044,7 +2072,7 @@ export default function News({ headlines, weather }) {
 ```ts
 import useSWR from "swr";
 
-const fetcher = url => fetch(url).then(res => res.json());
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Dashboard() {
   // SWR caches and reuses data
@@ -2064,20 +2092,23 @@ export default function Dashboard() {
   );
 }
 ```
+
 - Uses SWR to cache API data.
 - Prevents redundant fetches with `dedupingInterval`.
 - Only user-specific data is fetched on client.
 
 ### When to Use SSR vs CSR (Performance Trade-offs)
+
 | Feature           | Server-Side Rendering (SSR)  | Client-Side Rendering (CSR)      |
 | ----------------- | ---------------------------- | -------------------------------- |
 | **First Load**    | Faster (HTML pre-rendered)   | Slower (empty shell first)       |
-| **SEO**           | ✅ Great for SEO              | ❌ Not SEO-friendly               |
+| **SEO**           | ✅ Great for SEO             | ❌ Not SEO-friendly              |
 | **Freshness**     | Always fresh                 | Depends on client fetch          |
 | **Server Load**   | Higher (compute per request) | Lower (server just serves shell) |
 | **Best Use Case** | Public pages, SEO content    | User-specific dashboards, apps   |
 
 Next.js allows mixing SSR + CSR:
+
 - Use SSR for initial render (SEO + fast paint).
 - Use CSR for interactive updates.
 
@@ -2091,26 +2122,34 @@ export async function getServerSideProps() {
 }
 
 export default function Posts({ initialPosts }) {
-  const { data } = useSWR("/api/posts", url => fetch(url).then(r => r.json()), {
-    fallbackData: initialPosts,
-    refreshInterval: 10000, // Keep data fresh
-  });
+  const { data } = useSWR(
+    "/api/posts",
+    (url) => fetch(url).then((r) => r.json()),
+    {
+      fallbackData: initialPosts,
+      refreshInterval: 10000, // Keep data fresh
+    }
+  );
 
   return (
     <div>
       <h1>Latest Posts</h1>
       <ul>
-        {data.map(p => <li key={p.id}>{p.title}</li>)}
+        {data.map((p) => (
+          <li key={p.id}>{p.title}</li>
+        ))}
       </ul>
     </div>
   );
 }
 ```
+
 - Page first renders with SSR (fast + SEO).
 - SWR then hydrates with fresh data in background (CSR).
 - The user sees fast + always up-to-date content.
 
 ## Optimizing Fonts
+
 **Why Fonts Matter for Performance**
 
 - Custom fonts can block text rendering → causing FOIT (Flash of Invisible Text) or FOUT (Flash of Unstyled Text).
@@ -2132,12 +2171,26 @@ const inter = Inter({
   display: "swap", // Fallback text until font loads
 });
 ```
+
 - No extra network call to Google Fonts → fonts are bundled and served from your app.
 - Automatic `font-display: swap` ensures fallback text is shown → improves perceived speed and avoids layout shift.
 
 ##
+
 ##
+
 # Deployment
+
+## Vercel
+
+Handles serverless API routes, ISR (Incremental Static Regeneration), and Edge Functions out-of-the-box.
+
+- Vercel installs dependencies (npm install)
+- Builds Next.js (npm run build)
+- Deploys:
+  - Static pages (SSG) → served via CDN
+  - API routes → deployed as serverless functions
+  - Middleware → deployed as edge functions
 
 ## Environment Variables
 
@@ -2256,20 +2309,26 @@ export async function getStaticProps() {
 
 ISR updates pages incrementally without rebuilding the whole site.
 
-# Internationalization  
+# Internationalization
+
 Next.js has built-in internationalization support (since v10) that allows you to configure multiple languages (locales) for your app without needing third-party routing libraries.
+
 ## Key Concepts
 
 1. Locales – The languages you want to support (e.g., `en`, `fr`, `es`).
 2. Default Locale – The fallback language when no locale is specified.
 3. Locale Detection – Next.js can automatically detect a user’s preferred language from the browser settings.
 4. Localized Routing – URLs are prefixed with the locale, e.g., `/about` → `/fr/about`.
-  - English: `https://example.com/en/about`
-  - French: `https://example.com/fr/about`
+
+- English: `https://example.com/en/about`
+- French: `https://example.com/fr/about`
+
 ## Configuration of Internationalization
+
 ### 1. Configure `next.config.js`
 
 You configure i18n inside your Next.js config file:
+
 ```ts
 // next.config.ts
 module.exports = {
@@ -2295,6 +2354,7 @@ module.exports = {
 Next.js automatically prefixes routes with the locale.
 
 For example, if you have a page `pages/about.js`:
+
 - `http://localhost:3000/en/about` → English
 - `http://localhost:3000/fr/about` → French
 - `http://localhost:3000/es/about` → Spanish
@@ -2302,6 +2362,7 @@ For example, if you have a page `pages/about.js`:
 ### 3. Switching Locales in Code
 
 You can switch between locales using the Next.js router:
+
 ```ts
 // pages/index.js
 import { useRouter } from "next/router";
@@ -2337,20 +2398,23 @@ Next.js does not handle translations itself—you need to provide them. Common a
 Example: Simple JSON-based translations
 
 `/locales/en/common.json`
-```json
+
+```tson
 {
   "welcome": "Welcome to our website!"
 }
 ```
 
 `/locales/fr/common.json`
-```json
+
+```tson
 {
   "welcome": "Bienvenue sur notre site!"
 }
 ```
 
 `/components/Welcome.js`
+
 ```tsx
 import { useRouter } from "next/router";
 import en from "../locales/en/common.json";
@@ -2363,7 +2427,9 @@ export default function Welcome() {
   return <h1>{t.welcome}</h1>;
 }
 ```
+
 ## Localizing Pages
+
 After you configure i18n in next.config.js, the next step is making your pages and components display localized content depending on the active locale.
 
 Localization involves:
@@ -2375,6 +2441,7 @@ Localization involves:
 ### Key Concepts of Localizing Pages
 
 1. Localized Routing – URLs are tied to the locale.
+
 - Example: `/en/about` vs `/fr/about`.
 
 2. Per-locale Content – Each locale can have different static props, translations, or even layouts.
@@ -2389,6 +2456,7 @@ Next.js passes the `locale` to your data fetching functions (`getStaticProps` or
 This allows you to load translations dynamically.
 
 `pages/index.js`
+
 ```ts
 import en from "../locales/en/home.json";
 import fr from "../locales/fr/home.json";
@@ -2412,8 +2480,10 @@ export async function getStaticProps({ locale }) {
   };
 }
 ```
+
 `/locales/en/home.json`
-```json
+
+```tson
 {
   "title": "Welcome!",
   "description": "This is our English homepage."
@@ -2421,6 +2491,7 @@ export async function getStaticProps({ locale }) {
 ```
 
 `/locales/fr/home.json`
+
 ```josn
 {
   "title": "Bienvenue!",
@@ -2437,6 +2508,7 @@ export async function getStaticProps({ locale }) {
 Let’s create a Welcome component that works in all languages.
 
 `components/Welcome.js`
+
 ```ts
 import { useRouter } from "next/router";
 import en from "../locales/en/common.json";
@@ -2451,14 +2523,16 @@ export default function Welcome() {
 ```
 
 `/locales/en/common.json`
-```json
+
+```tson
 {
   "greeting": "Hello, user!"
 }
 ```
 
 `/locales/fr/common.json`
-```json
+
+```tson
 {
   "greeting": "Bonjour, utilisateur!"
 }
@@ -2477,14 +2551,21 @@ import Link from "next/link";
 export default function Navbar() {
   return (
     <nav>
-      <Link href="/" locale="en">English</Link> |{" "}
-      <Link href="/" locale="fr">Français</Link>
+      <Link href="/" locale="en">
+        English
+      </Link>{" "}
+      |{" "}
+      <Link href="/" locale="fr">
+        Français
+      </Link>
     </nav>
   );
 }
 ```
+
 - `locale="en"` → Forces navigation in English.
 - If you omit `locale`, Next.js uses the current locale.
+
 ### 4. Localizing Dynamic Pages
 
 Dynamic routes (`[id].js`) also support locales.
@@ -2504,11 +2585,14 @@ export async function getStaticPaths({ locales }) {
   return { paths, fallback: false };
 }
 ```
+
 This ensures localized paths like:
+
 - `/en/blog/hello`
 - `/fr/blog/bonjour`
 
 ## Managing Translations
+
 Once you enable i18n in next.config.js, the next big task is managing your actual translations.
 This includes:
 
@@ -2518,6 +2602,7 @@ This includes:
 4. Choosing between built-in/manual or external libraries (like `next-i18next`)
 
 ### Strategies for Managing Translations
+
 #### 1. Manual JSON Files (Simple Approach)
 
 - Store translations in `/locales/{lang}/{namespace}.json`.
@@ -2533,6 +2618,7 @@ This includes:
 1. Organizing Translation Files
 
 A common convention is:
+
 ```
 /locales
   /en
@@ -2567,8 +2653,10 @@ export default function Home() {
   );
 }
 ```
+
 `/locales/en/home.json`
-```json
+
+```tson
 {
   "title": "Welcome to our website",
   "description": "This is the English version of the homepage."
@@ -2576,7 +2664,8 @@ export default function Home() {
 ```
 
 `/locales/fr/home.json`
-```json
+
+```tson
 {
   "title": "Bienvenue sur notre site",
   "description": "Ceci est la version française de la page d'accueil."
@@ -2592,6 +2681,7 @@ export default function Home() {
 Instead of duplicating strings across pages, use a `common.json`.
 
 `components/Navbar.js`
+
 ```tsx
 import { useRouter } from "next/router";
 import en from "../locales/en/common.json";
@@ -2610,7 +2700,8 @@ export default function Navbar() {
 ```
 
 `/locales/en/common.json`
-```json
+
+```tson
 {
   "home": "Home",
   "about": "About"
@@ -2618,15 +2709,18 @@ export default function Navbar() {
 ```
 
 `/locales/fr/common.json`
-```json
+
+```tson
 {
   "home": "Accueil",
   "about": "À propos"
 }
 ```
+
 4. Switching Translations at Runtime
 
 You can switch locale programmatically:
+
 ```tsx
 import { useRouter } from "next/router";
 
@@ -2671,6 +2765,7 @@ export default function Home() {
   );
 }
 ```
+
 # Advance Topics
 
 ## `_app.js`
@@ -3208,8 +3303,11 @@ export const config = {
 
 - No Node.js APIs (like `fs`).
 - Runs in Edge runtime, so use Web APIs only.
-# Testing 
+
+# Testing
+
 ## Jest
+
 Jest is a popular JavaScript testing framework maintained by Facebook. It is widely used in React and Next.js projects because it:
 
 - Has built-in test runner and assertion library.
@@ -3225,9 +3323,11 @@ In Next.js, we mainly use Jest for:
 - (For end-to-end tests, tools like Playwright or Cypress are more common.)
 
 **Setting up Jest in Next.js**
+
 ```bash
 npm install --save-dev jest @testing-library/react @testing-library/jest-dom @testing-library/user-event babel-jest identity-obj-proxy
 ```
+
 - `jest` → test runner
 - `@testing-library/react` → utilities to render and test React components
 - `@testing-library/jest-dom` → custom DOM matchers like `toBeInTheDocument()`
@@ -3236,58 +3336,67 @@ npm install --save-dev jest @testing-library/react @testing-library/jest-dom @te
 - `identity-obj-proxy` → handles CSS module imports in tests
 
 **Configure Jest:** Add `jest.config.js` in your project root:
+
 ```ts
-const nextJest = require('next/jest')
+const nextJest = require("next/jest");
 
 const createJestConfig = nextJest({
-  dir: './', // Path to Next.js app
-})
+  dir: "./", // Path to Next.js app
+});
 
 const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   moduleNameMapper: {
     // Handle CSS imports (with CSS modules)
-    '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
+    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
     // Handle image imports
-    '^.+\\.(png|jpg|jpeg|gif|webp|avif|svg)$': '<rootDir>/__mocks__/fileMock.js',
+    "^.+\\.(png|jpg|jpeg|gif|webp|avif|svg)$":
+      "<rootDir>/__mocks__/fileMock.js",
   },
-  testEnvironment: 'jest-environment-jsdom',
-}
+  testEnvironment: "jest-environment-jsdom",
+};
 
-module.exports = createJestConfig(customJestConfig)
+module.exports = createJestConfig(customJestConfig);
 ```
+
 **Setup Jest DOM utilities (`jest.setup.js`):**
+
 ```ts
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 ```
 
 **Mock static assets:** Create a `__mocks__/fileMock.js` file:
+
 ```ts
-module.exports = 'test-file-stub'
+module.exports = "test-file-stub";
 ```
+
 ### Writing a Unit Test (Function Example)
 
 Suppose we have a utility function in `utils/math.js`:
+
 ```ts
 export function add(a, b) {
-  return a + b
+  return a + b;
 }
 ```
 
 Now, create a test file `utils/math.test.js`:
+
 ```ts
-import { add } from './math'
+import { add } from "./math";
 
-describe('add function', () => {
-  test('adds two positive numbers', () => {
-    expect(add(2, 3)).toBe(5)
-  })
+describe("add function", () => {
+  test("adds two positive numbers", () => {
+    expect(add(2, 3)).toBe(5);
+  });
 
-  test('adds negative numbers', () => {
-    expect(add(-2, -3)).toBe(-5)
-  })
-})
+  test("adds negative numbers", () => {
+    expect(add(-2, -3)).toBe(-5);
+  });
+});
 ```
+
 - `describe` groups related tests.
 - `test` defines a single test case.
 - `expect` and matchers (`toBe`, `toEqual`, etc.) assert the result.
@@ -3295,31 +3404,33 @@ describe('add function', () => {
 ### Writing a Unit Test (React Component Example)
 
 Suppose we have a simple component in `components/Button.js`:
+
 ```tsx
 export default function Button({ label, onClick }) {
-  return <button onClick={onClick}>{label}</button>
+  return <button onClick={onClick}>{label}</button>;
 }
 ```
 
 Now test it in `components/Button.test.js`:
+
 ```ts
-import { render, screen, fireEvent } from '@testing-library/react'
-import Button from './Button'
+import { render, screen, fireEvent } from "@testing-library/react";
+import Button from "./Button";
 
-describe('Button component', () => {
-  test('renders with correct label', () => {
-    render(<Button label="Click Me" onClick={() => {}} />)
-    expect(screen.getByText('Click Me')).toBeInTheDocument()
-  })
+describe("Button component", () => {
+  test("renders with correct label", () => {
+    render(<Button label="Click Me" onClick={() => {}} />);
+    expect(screen.getByText("Click Me")).toBeInTheDocument();
+  });
 
-  test('calls onClick when clicked', () => {
-    const handleClick = jest.fn()
-    render(<Button label="Click Me" onClick={handleClick} />)
+  test("calls onClick when clicked", () => {
+    const handleClick = jest.fn();
+    render(<Button label="Click Me" onClick={handleClick} />);
 
-    fireEvent.click(screen.getByText('Click Me'))
-    expect(handleClick).toHaveBeenCalledTimes(1)
-  })
-})
+    fireEvent.click(screen.getByText("Click Me"));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
 ```
 
 - `render` mounts the component in a virtual DOM.
@@ -3331,24 +3442,29 @@ describe('Button component', () => {
 ### Running Tests
 
 Add this script to `package.json`:
-```json
+
+```tson
 "scripts": {
   "test": "jest"
 }
 ```
 
 Run tests:
+
 ```bash
 npm test
 ```
 
 Use watch mode:
+
 ```bash
 npm test -- --watch
 ```
+
 ## React Testing Library
+
 React Testing Library
- is a lightweight testing utility that helps test React components by focusing on user interactions and behavior rather than implementation details.
+is a lightweight testing utility that helps test React components by focusing on user interactions and behavior rather than implementation details.
 
 Instead of checking internal state or class names, RTL encourages testing what the user sees and does:
 
@@ -3358,9 +3474,11 @@ Instead of checking internal state or class names, RTL encourages testing what t
 - Making assertions about expected outcomes
 
 This makes your tests more robust, readable, and closer to real-world usage.
+
 ### Setting up RTL in Next.js
 
 If you already set up Jest (as we discussed earlier), you just need:
+
 ```bash
 npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
 ```
@@ -3370,48 +3488,55 @@ npm install --save-dev @testing-library/react @testing-library/jest-dom @testing
 - `@testing-library/user-event` → simulates realistic user actions (typing, clicking, tabbing, etc.)
 
 In `jest.setup.js`:
+
 ```bash
 import '@testing-library/jest-dom'
 ```
+
 ### Testing a Simple Component
 
 Suppose we have `components/Greeting.js`:
+
 ```ts
 export default function Greeting({ name }) {
-  return <h1>Hello, {name}!</h1>
+  return <h1>Hello, {name}!</h1>;
 }
 ```
-Test: `components/Greeting.test.js`
-```tsx
-import { render, screen } from '@testing-library/react'
-import Greeting from './Greeting'
 
-describe('Greeting component', () => {
-  test('renders greeting with the given name', () => {
-    render(<Greeting name="Alice" />)
-    expect(screen.getByText('Hello, Alice!')).toBeInTheDocument()
-  })
-})
+Test: `components/Greeting.test.js`
+
+```tsx
+import { render, screen } from "@testing-library/react";
+import Greeting from "./Greeting";
+
+describe("Greeting component", () => {
+  test("renders greeting with the given name", () => {
+    render(<Greeting name="Alice" />);
+    expect(screen.getByText("Hello, Alice!")).toBeInTheDocument();
+  });
+});
 ```
 
 - `render` mounts the component into a virtual DOM.
 - `screen.getByText` queries by visible text (like a user would).
 - `toBeInTheDocument` asserts the element is present.
+
 ### Using `user-event` for More Realistic Actions
 
 `fireEvent` is fine, but `user-event` simulates real user behavior (typing, tabbing, pasting, etc.).
 
 `components/LoginForm.js`:
+
 ```tsx
-import { useState } from 'react'
+import { useState } from "react";
 
 export default function LoginForm({ onSubmit }) {
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState("");
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    onSubmit(username)
-  }
+    e.preventDefault();
+    onSubmit(username);
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -3423,54 +3548,62 @@ export default function LoginForm({ onSubmit }) {
       />
       <button type="submit">Login</button>
     </form>
-  )
+  );
 }
 ```
-Test: `components/LoginForm.test.js`
-```ts
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import LoginForm from './LoginForm'
 
-describe('LoginForm component', () => {
-  test('submits the entered username', async () => {
-    const mockSubmit = jest.fn()
-    render(<LoginForm onSubmit={mockSubmit} />)
+Test: `components/LoginForm.test.js`
+
+```ts
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import LoginForm from "./LoginForm";
+
+describe("LoginForm component", () => {
+  test("submits the entered username", async () => {
+    const mockSubmit = jest.fn();
+    render(<LoginForm onSubmit={mockSubmit} />);
 
     // Type into input
-    await userEvent.type(screen.getByLabelText(/username/i), 'Alice')
+    await userEvent.type(screen.getByLabelText(/username/i), "Alice");
 
     // Click submit
-    await userEvent.click(screen.getByRole('button', { name: /login/i }))
+    await userEvent.click(screen.getByRole("button", { name: /login/i }));
 
     // Assert callback was called
-    expect(mockSubmit).toHaveBeenCalledWith('Alice')
-    expect(mockSubmit).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(mockSubmit).toHaveBeenCalledWith("Alice");
+    expect(mockSubmit).toHaveBeenCalledTimes(1);
+  });
+});
 ```
+
 - `getByLabelText(/username/i)` → queries input by its label (better than getByText for forms).
 - `userEvent.type` simulates typing text.
 - `getByRole('button', { name: /login/i })` → queries button by role + name.
 - `jest.fn()` mocks the submit handler so we can assert calls.
+
 ### Query Types in RTL
 
 RTL provides different query methods depending on how a user would interact:
+
 - `getBy...` → throws an error if not found (good for required elements).
 - `queryBy...` → returns `null` if not found (good for optional elements).
 - `findBy...` → async, waits for element to appear (useful for async components).
 - Variants: `ByText`, `ByRole`, `ByLabelText`, `ByPlaceholderText`, etc.
+
 ```ts
 // Required element
-screen.getByRole('button', { name: /submit/i })
+screen.getByRole("button", { name: /submit/i });
 
 // Optional element
-expect(screen.queryByText(/error/i)).toBeNull()
+expect(screen.queryByText(/error/i)).toBeNull();
 
 // Async element
-expect(await screen.findByText(/welcome/i)).toBeInTheDocument()
+expect(await screen.findByText(/welcome/i)).toBeInTheDocument();
 ```
+
 ## End-to-End Testing
+
 E2E testing simulates real user workflows by running tests in a real browser. Instead of testing isolated functions or components, E2E tests cover the entire flow:
 
 - Visiting pages in a Next.js app
@@ -3478,25 +3611,30 @@ E2E testing simulates real user workflows by running tests in a real browser. In
 - Navigating between pages
 - Checking authentication and protected routes
 - Verifying API calls work with UI
+
 ### Cypress for E2E Testing
 
 Cypress
- is a JavaScript-based framework that runs tests in the browser with an interactive UI.
+is a JavaScript-based framework that runs tests in the browser with an interactive UI.
 
 1. Install Cypress: `npm install --save-dev cypress`
 
 2. Add Script in `package.json`
-```json
+
+```tson
 "scripts": {
   "e2e": "cypress open"
 }
 ```
+
 3. Open Cypress Test Runner: `npm run e2e`
+
 - This launches Cypress’ UI where you can select and run tests.
 
 4. Example: E2E Test for a Login Page
 
 Suppose you have a login page at `/login`:
+
 ```tsx
 export default function Login() {
   return (
@@ -3505,69 +3643,79 @@ export default function Login() {
       <input type="password" placeholder="Password" />
       <button type="submit">Login</button>
     </form>
-  )
+  );
 }
 ```
 
 Cypress test in `cypress/e2e/login.cy.js`:
+
 ```tsx
-describe('Login Page', () => {
-  it('allows a user to log in', () => {
-    cy.visit('/login') // open login page
+describe("Login Page", () => {
+  it("allows a user to log in", () => {
+    cy.visit("/login"); // open login page
 
-    cy.get('input[placeholder="Username"]').type('alice')
-    cy.get('input[placeholder="Password"]').type('mypassword')
+    cy.get('input[placeholder="Username"]').type("alice");
+    cy.get('input[placeholder="Password"]').type("mypassword");
 
-    cy.get('button[type="submit"]').click()
+    cy.get('button[type="submit"]').click();
 
     // Assert redirected or success message
-    cy.url().should('include', '/dashboard')
-  })
-})
+    cy.url().should("include", "/dashboard");
+  });
+});
 ```
+
 - `cy.visit('/login')` → opens the Next.js route in the browser.
 - `cy.get(...)` → selects input fields by placeholder.
 - `.type()` and `.click()` simulate user actions.
 - `cy.url().should(...)` asserts navigation worked.
+
 ### Playwright for E2E Testing
 
 Playwright is a Node.js framework from Microsoft that supports Chromium, Firefox, and WebKit. It’s more script-driven and works great in CI pipelines.
 
 1. Install Playwright
+
 ```bash
 npm install --save-dev @playwright/test
 npx playwright install
 ```
+
 2. Add Script in `package.json`
-```json
+
+```tson
 "scripts": {
   "e2e": "playwright test"
 }
 ```
+
 3. Example: E2E Test for a Login Page
 
 Test file: `tests/login.spec.js`
+
 ```tsx
-import { test, expect } from '@playwright/test'
+import { test, expect } from "@playwright/test";
 
-test('user can log in', async ({ page }) => {
-  await page.goto('http://localhost:3000/login')
+test("user can log in", async ({ page }) => {
+  await page.goto("http://localhost:3000/login");
 
-  await page.fill('input[placeholder="Username"]', 'alice')
-  await page.fill('input[placeholder="Password"]', 'mypassword')
+  await page.fill('input[placeholder="Username"]', "alice");
+  await page.fill('input[placeholder="Password"]', "mypassword");
 
-  await page.click('button[type="submit"]')
+  await page.click('button[type="submit"]');
 
   // Assert navigation
-  await expect(page).toHaveURL(/.*dashboard/)
-})
+  await expect(page).toHaveURL(/.*dashboard/);
+});
 ```
+
 - `page.goto()` → navigates to the Next.js app running locally.
 - `page.fill()` → types into inputs.
 - `page.click()` → simulates button click.
 - `expect(page).toHaveURL(...)` → verifies navigation happened.
 
 ### Cypress vs Playwright
+
 | Feature       | Cypress                                            | Playwright                                   |
 | ------------- | -------------------------------------------------- | -------------------------------------------- |
 | **Setup**     | Easy, has GUI                                      | CLI-driven, script-based                     |
@@ -3585,11 +3733,13 @@ Since Next.js apps need a server running:
 
 2. Run Cypress or Playwright in another: `npm run e2e`
 
-
 In CI/CD pipelines, you typically:
+
 - Build and start Next.js (`npm run build && npm start`)
 - Run tests against `http://localhost:3000`
+
 ## API routes Testing
+
 Next.js allows you to write API routes inside the `pages/api` folder, for server-side logic such as fetching data, handling forms, or performing authentication.
 
 - Testing these routes is essential to ensure:
@@ -3603,9 +3753,11 @@ Unlike React components, API routes are pure Node.js functions, so we can test t
 **Setting Up for API Testing**
 
 1. Install dependencies
+
 ```bash
 npm install --save-dev jest supertest
 ```
+
 - `jest` → test runner
 - `supertest` → helps test HTTP endpoints programmatically
 
@@ -3614,50 +3766,55 @@ npm install --save-dev jest supertest
 ### Testing a Simple API Route
 
 Suppose we have an API route: `pages/api/hello.js`
+
 ```ts
 export default function handler(req, res) {
-  if (req.method === 'GET') {
-    res.status(200).json({ message: 'Hello World' })
+  if (req.method === "GET") {
+    res.status(200).json({ message: "Hello World" });
   } else {
-    res.status(405).json({ error: 'Method Not Allowed' })
+    res.status(405).json({ error: "Method Not Allowed" });
   }
 }
 ```
+
 Test: `__tests__/api/hello.test.js`
+
 ```ts
-import handler from '../../pages/api/hello'
-import { createMocks } from 'node-mocks-http'
+import handler from "../../pages/api/hello";
+import { createMocks } from "node-mocks-http";
 
-describe('/api/hello API Endpoint', () => {
-  test('returns 200 and a message on GET', async () => {
-    const { req, res } = createMocks({ method: 'GET' })
+describe("/api/hello API Endpoint", () => {
+  test("returns 200 and a message on GET", async () => {
+    const { req, res } = createMocks({ method: "GET" });
 
-    await handler(req, res)
+    await handler(req, res);
 
-    expect(res._getStatusCode()).toBe(200)
-    expect(res._getJSONData()).toEqual({ message: 'Hello World' })
-  })
+    expect(res._getStatusCode()).toBe(200);
+    expect(res._getJSONData()).toEqual({ message: "Hello World" });
+  });
 
-  test('returns 405 on non-GET', async () => {
-    const { req, res } = createMocks({ method: 'POST' })
+  test("returns 405 on non-GET", async () => {
+    const { req, res } = createMocks({ method: "POST" });
 
-    await handler(req, res)
+    await handler(req, res);
 
-    expect(res._getStatusCode()).toBe(405)
-    expect(res._getJSONData()).toEqual({ error: 'Method Not Allowed' })
-  })
-})
+    expect(res._getStatusCode()).toBe(405);
+    expect(res._getJSONData()).toEqual({ error: "Method Not Allowed" });
+  });
+});
 ```
 
 - `node-mocks-http` or similar libraries allow us to mock `req` and `res` objects.
 - `_getStatusCode()` returns the response status.
 - `_getJSONData()` parses JSON response body.
 - This test doesn’t need a running server, making it fast and isolated.
+
 ### Testing API Routes with `supertest`
 
 If you want to test the API with a running server:
 
 1. Install `supertest` if not already:
+
 ```bash
 npm install --save-dev supertest
 ```
@@ -3665,55 +3822,62 @@ npm install --save-dev supertest
 2. Suppose you have a Next.js custom server (using Express) or use `next-connect`:
 
 `server.js`:
+
 ```ts
-const express = require('express')
-const next = require('next')
-const helloHandler = require('./pages/api/hello').default
+const express = require("express");
+const next = require("next");
+const helloHandler = require("./pages/api/hello").default;
 
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
-const server = express()
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
+const server = express();
 
-server.get('/api/hello', helloHandler)
-server.all('*', (req, res) => handle(req, res))
+server.get("/api/hello", helloHandler);
+server.all("*", (req, res) => handle(req, res));
 
-module.exports = server
+module.exports = server;
 ```
+
 Test: `__tests__/api/hello.supertest.test.js`
-```ts
-import request from 'supertest'
-import server from '../../server'
 
-describe('GET /api/hello', () => {
-  it('returns 200 and a JSON message', async () => {
-    const res = await request(server).get('/api/hello')
-    expect(res.status).toBe(200)
-    expect(res.body).toEqual({ message: 'Hello World' })
-  })
-})
+```ts
+import request from "supertest";
+import server from "../../server";
+
+describe("GET /api/hello", () => {
+  it("returns 200 and a JSON message", async () => {
+    const res = await request(server).get("/api/hello");
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ message: "Hello World" });
+  });
+});
 ```
+
 - `supertest` sends real HTTP requests to your server.
 - Useful for integration testing, e.g., when testing middleware, authentication, or database interaction.
 - The test mimics a real user request.
+
 ### Best Practices for API Testing
 
 1. Separate logic from the handler
 
 - Move core business logic to plain functions and call them in API routes.
 - Makes unit testing easier.
+
 ```ts
 // utils/greet.js
 export function greet(name) {
-  return `Hello ${name}`
+  return `Hello ${name}`;
 }
 ```
+
 ```ts
 // pages/api/hello.js
-import { greet } from '../../utils/greet'
+import { greet } from "../../utils/greet";
 
 export default function handler(req, res) {
-  res.status(200).json({ message: greet('World') })
+  res.status(200).json({ message: greet("World") });
 }
 ```
 
@@ -4499,3 +4663,9 @@ export default async function handler(req, res) {
 
 - `next.config.js rewrites` → Simple, lightweight, good for local dev to avoid CORS.
 - API route proxy → More control, when you need to add logic (auth, caching, validation).
+
+# Question
+
+1. Slower time to first paint (TTFP).
+2. No loading state → Content is available immediately.
+3. Fast Time to First Paint (TTFP).
