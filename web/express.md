@@ -1,119 +1,257 @@
 # Contents
 
+- [Introduction](#introduction)
+  - [Why Use Express.js?](#why-use-expressjs)
+- [Static Files](#static-files)
+  - [How It Works](#how-it-works)
 - [Routing](#routing)
-- [req object](#req-object)
-  - [Parsing Bodies](#parsing-request-bodies)
-- [res object](#res-object)
-  - [res.send()](#ressend)
-  - [res.json()](#resjson)
-  - [res.status()](#resstatus)
+  - [Route parameters](#route-parameters)
+  - [Query strings](#query-strings)
+  - [Grouping Routes](#grouping-routes)
 - [Middleware](#middleware)
+  - [Features](#key-features)
   - [Types of Middleware](#types-of-middleware)
-  - [Built in Middleware](#built-in-middleware)
-- [Error Handling](#error-handling-middleware)
-- [Rate Limiting vs Throttling](#rate-limiting-vs-throttling)
-- [Views](#view-engine)
+  - [How Middleware Works](#how-middleware-works)
+  - [Built-In Middleware](#built-in-middleware)
+  - [Third-Party Middleware](#third-party-middleware)
+    - [Morgan (HTTP request logger)](#morgan-http-request-logger)
+    - [CORS (Cross-Origin Resource Sharing)](#cors-cross-origin-resource-sharing)
+    - [Helmet (Security)](#helmet-security)
+  - [Middleware Execution Order](#middleware-execution-order)
+- [Response](#response)
+  - [Redirection](#redirection)
+  - [Setting Headers](#setting-headers)
+- [Template Engine](#template-engine)
+  - [Rendering HTML](#rendering-html)
+    - [Dynamic Variables](#dynamic-variables)
+    - [Loops](#loops)
+    - [Conditionals](#conditionals)
+    - [Data Passing](#data-passing)
+- [Error Handling](#error-handling)
+  - [404 Handler](#404-handler)
+  - [Global Error Handler](#global-error-handler)
+  - [Catching and Responding to Errors](#catching-and-responding-to-errors)
+    - [Synchronous errors](#synchronous-errors)
+    - [Asynchronous errors](#asynchronous-errors)
+
+# Introduction
+
+Express is a web framework built on top of Node.js’ HTTP module, designed to make development faster and more straightforward.
+
+It streamlines tasks such as:
+
+- **Routing:** Managing how your app responds to different requests
+- **Middleware:** Running functions before sending responses
+- **Request & Response Handling:** Simplifying the processing of client requests and server responses
+- **Serving Static Files:** Easily delivering images, CSS, JavaScript, and other assets
+- **Error Handling:** Managing and responding to errors efficiently
+
+## Why Use Express.js?
+
+Without Express, building a server in Node.js requires writing a lot of **boilerplate code**:
+
+- Parsing URLs manually
+- Writing conditional statements for routing (e.g., `if (req.url === "/home")`)
+- Handling different request methods (`GET`, `POST`, etc.)
+- Managing responses
+
+Express simplifies all of this, allowing you to focus on your application logic rather than low-level details by managing the **boilerplate**.
+
+# Static Files
+
+Static files are files that don’t change dynamically on the server side.
+
+- HTML files (web pages)
+- CSS files (styling)
+- JavaScript files (frontend scripts)
+- Images (JPG, PNG, SVG, GIF)
+- Fonts / PDFs / Docs
+
+Instead of writing routes for every file (like `/about.html`, `/style.css`), Express provides a built-in middleware `express.static` to serve them automatically.
+
+## How It Works
+
+1. Put your static files in a folder (commonly named public).
+
+2. Use the middleware:
+
+   ```ts
+   // Serve static files from the "public" directory
+   app.use(express.static("public"));
+
+   // Example route
+   app.get("/", (req: Request, res: Response) => {
+     res.sendFile(__dirname + "/public/index.html");
+   });
+   ```
+
+3. Now Express will serve files directly from that folder.
 
 # Routing
 
-A route is a combination of:
+Routing in Express.js defines how your server responds to client requests at different endpoints (URLs) and HTTP methods.
+
+Each route has:
 
 1. **HTTP Method**: Such as `GET`, `POST`, `PUT`, or `DELETE`.
 2. **Path**: The endpoint or route URL.
 3. **Callback Function**: Code to execute when the route is matched.
 
-```js
+```ts
 app.METHOD(PATH, HANDLER);
 ```
 
-# `req` Object
+## Route parameters
 
-**Common Properties of req:**
-1 `req.method`: The HTTP method of the request (e.g., GET, POST, PUT, DELETE). 2. `req.url`: The full URL of the request. 3. `req.query`: An object containing the query string parameters. 4. `req.params`: An object containing route parameters (e.g., from dynamic routes). 5. `req.body`: Contains data sent in the body of the request (available after parsing middleware like `body-parser`). 6. `req.headers`: An object containing the headers of the request. 7. `req.cookies`: Contains cookies sent by the client (if cookie-parser middleware is used).
+Dynamic values in the URL path, defined using a colon (`:`).
 
-## Parsing Request Bodies
+```ts
+// GET /users/123
+app.get("/users/:id", (req: Request, res: Response) => {
+  const userId: string = req.params.id; // Extract :id from URL
+  res.send(`You requested user with ID: ${userId}`);
+});
+```
 
-When clients send data in an HTTP request (e.g., through forms or APIs), that data often resides in the request body. Express does not parse the request body automatically; instead, middleware is required to handle and parse it.
+Useful for identifying resources (user IDs, product IDs, etc.).
 
-### Common Types of Request Bodies
+- `res.json()` - Automatically sets `Content-Type: application/json`.
+- `res.send()` - Automatically sets `Content-Type` based on input:
 
-1. **JSON:** Often used in APIs where data is sent in JSON format.
-2. **URL-encoded:** Common in form submissions where key-value pairs are URL-encoded.
-3. **Raw/Plain Text:** Used when sending raw text data.
-4. **Multipart:** Used for file uploads and complex data, typically with `multipart/form-data`.
+## Query strings
 
-# `res` Object
+Key-value pairs added after a `?` in the URL.
 
-**Common Methods of res:**
+```ts
+// GET /search?name=Alice&age=25
+app.get("/search", (req: Request, res: Response) => {
+  const name: string | undefined = req.query.name as string;
+  const age: string | undefined = req.query.age as string;
 
-1. `res.status(code)`: Sets the HTTP status code for the response.
-2. `res.send(body)`: Sends a response body of various types (e.g., string, object, Buffer).
-3. `res.json(obj)`: Sends a JSON response.
-4. `res.redirect(url)`: Redirects the client to a different URL.
-5. `res.render(view, data)`: Renders a view template with optional data.
-6. `res.set(header, value)`: Sets a specific response header.
-7. `res.end()`: Ends the response process.
+  res.send(`Searching for user. Name: ${name}, Age: ${age}`);
+});
+```
 
-## `res.send()`
+Useful for filtering, searching, sorting, or optional parameters.
 
-The `res.send()` method sends a response body to the client. The body can be a string, Buffer, or object. If an object is passed, it is automatically converted to JSON unless `Content-Type` is set manually.
+## Grouping Routes
 
-**Key Points:**
-
-- Ends the response process.
-- Automatically sets Content-Type based on the data type.
-
-## `res.json()`
-
-The `res.json()` method sends a JSON-formatted response to the client. It's similar to `res.send()`, but it explicitly sets the `Content-Type` header to `application/json`.
-
-**Key Points:**
-
-- Automatically serializes JavaScript objects or arrays to JSON.
-- Best practice for APIs returning structured data.
-
-## `res.status()`
-
-The `res.status()` method sets the HTTP status code for the response. It can be chained with other methods like `res.send()` or `res.json()`.
-
-**Key Points:**
-
-- Should be called before sending a response body.
-- Useful for indicating the outcome of a request (e.g., 200 for success, 404 for not found, 500 for server errors).
+- `express.Router()` lets you create modular route handlers.
+- Instead of writing all routes in `index.ts`, you can split them into separate files (e.g., `userRoutes.ts`, `productRoutes.ts`).
+- This keeps the code clean, organized, and scalable.
 
 # Middleware
 
-It refers to functions that execute during the lifecycle of a request to the server. Middleware functions can perform various tasks, such as modifying the request and response objects, executing code, ending the request-response cycle, or passing control to the next middleware function in the stack.
+In Express.js, middleware are functions that run during the request-response lifecycle.
+
+These functions can:
+
+- Modify the `request` and resp`onse objects
+- Execute code or perform operations
+- End the request-response cycle
+- Pass control to the next middleware function in the stack
+
+In short, middleware process incoming requests before they reach your route handlers, allowing you to handle tasks like logging, authentication, or data parsing in a centralized way.
 
 ## Key Features
 
 1. **Function Signature:**
-   ```js
+
+   ```ts
    function middleware(req, res, next) {
      // Your custom logic here
      next(); // Call the next middleware in the stack
    }
    ```
 
-- `req`: The request object.
-- `res`: The response object.
-- `next`: A function to pass control to the next middleware.
+   - `req`: The request object.
+   - `res`: The response object.
+   - `next()` → A function that calls the next middleware.
+     - If you don’t call `next()`, the request will hang (no response).
 
-2. **Stacking:** Middleware functions are stacked and executed in the order they are defined in the application.
+2. **Stacking:**
+
+   - Middleware functions are stacked and executed in the order they are defined in the application.
 
 3. **Tasks Middleware Can Perform:**
 
-- Execute any code.
-- Modify the request (`req`) or response (`res`) objects.
-- End the request-response cycle (e.g., sending a response).
-- Call the `next()` function to pass control to the next middleware.
+   - Execute any code.
+   - Modify the request (`req`) or response (`res`) objects.
+   - End the request-response cycle (e.g., sending a response).
+   - Call the `next()` function to pass control to the next middleware.
 
-## Types of Middleware
+## Types of Middleware in Express
 
-- **Application-level middleware:** Defined directly in your app.
-- **Router-level middleware:** Attached to specific `routes` or routers.
-- **Built-in middleware:** Provided by Express, such as `express.json()` and `express.static()`.
-- **Third-party middleware:** Middleware provided by external libraries (e.g., `body-parser`, `cookie-parser`).
+Middleware functions are executed in the order they are defined. They can run for every request, specific routes, or handle errors.
+
+### 1. Application-level middleware
+
+Defined globally with `app.use()`, runs for every request.
+
+```ts
+import express, { Request, Response, NextFunction } from "express";
+const app = express();
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(`${req.method} request → ${req.url}`);
+  next(); // Continue to the next middleware or route handler
+});
+```
+
+### 2. Built-in middleware
+
+Express provides ready-to-use middleware like `express.json()` and `express.static()`.
+
+```ts
+// Parses incoming JSON request bodies
+app.use(express.json());
+```
+
+### 3. Router-level middleware
+
+Runs only on specific routes or routers.
+
+```ts
+app.get(
+  "/about",
+  (req: Request, res: Response, next: NextFunction) => {
+    console.log("Middleware specific to /about");
+    next();
+  },
+  (req: Request, res: Response) => {
+    res.send("About Page");
+  }
+);
+```
+
+### 4. Third-party middleware
+
+Installed via npm, e.g., `cookie-parser`, `morgan`, `cors`.
+
+```ts
+import morgan from "morgan";
+app.use(morgan("dev")); // Logs HTTP requests
+```
+
+### 5. Error-handling middleware
+
+Special middleware with 4 parameters. Must be placed after all routes.
+
+```ts
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error("Error:", err.message);
+  res.status(500).send("Something went wrong!");
+});
+```
+
+### Middleware Flow
+
+1. Incoming request → application-level middleware
+2. Passes through built-in/third-party middleware
+3. Runs router-level middleware (if any)
+4. Executes route handler
+5. If errors occur → handled by error-handling middleware
+6. Sends response back to client
 
 ## How Middleware Works
 
@@ -121,192 +259,368 @@ When a request is sent to the server, Express processes it through the middlewar
 
 ## Built-In Middleware
 
-- `express.json()` - Parses incoming JSON payloads and makes the data available in `req.body`.
-  ```js
-  app.use(express.json());
-  ```
-- `express.urlencoded()` - Parses incoming requests with (`Content-Type: application/x-www-form-urlencoded`) URL-encoded payloads (Content-Type: application/x-www-form-urlencoded`) (like form submissions) and makes the data available in req.body.
-  ```js
-  app.use(express.json());
-  ```
-- `express.static()` - Serves static files like images, CSS, and JavaScript.
-  ```js
-  app.use(express.static(path.join(__dirname, "public")));
-  ```
-- `express.text()` - Parses incoming requests with text payloads and makes the text available in `req.body`.
-  ```js
-  app.use(express.text());
-  ```
-- `express.raw()` - Parses incoming requests with binary payloads and makes the raw buffer available in `req.body`.
-  ```js
-  app.use(express.raw({ type: "application/octet-stream" }));
-  ```
+- `express.json()`
 
-# Error-handling Middleware
+  - Parses incoming JSON payloads and makes the data available in `req.body`.
 
-It is used to catch and handle errors in an application. It ensures that the app doesn't crash and provides a mechanism for handling errors gracefully by sending appropriate responses to the client.
+    ```ts
+    app.use(express.json());
+    ```
 
-**Arguments:**
+- `express.urlencoded()`
 
-1. `err` - The error object, which contains details about the error.
-2. `req` - The request object.
-3. `res` - The response object.
-4. `next` - A callback to pass control to the next middleware.
+  - Parses incoming requests with URL-encoded payloads (`Content-Type: application/x-www-form-urlencoded`) (like form submissions) and makes the data available in req.body.
 
-The key difference is the presence of the `err` parameter.
+    ```ts
+    app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
+    ```
 
-**Key Characteristics**
+    - Takes an option:
+      - `{ extended: true }` → allows nested objects using `qs` library.
+      - `{ extended: false }` → only supports simple key-value pairs.
 
-1. Error-handling middleware must have four parameters.
-2. It should be registered after all other routes and middleware in the app.
+- `express.static()`
 
-## Setup
+  - Serves static files like images, CSS, and JavaScript.
 
-### 1. Route that introduces an error
+    ```ts
+    app.use(express.static(path.join(__dirname, "public")));
+    ```
 
-```js
-app.get("/error", (req, res, next) => {
-  const error = new Error("Something went wrong!");
-  error.status = 500;
-  next(error);
+- `express.text()`
+
+  - Parses incoming requests with text payloads and makes the text available in `req.body`.
+
+    ```ts
+    app.use(express.text());
+    ```
+
+- `express.raw()`
+
+  - Parses incoming requests with binary payloads and makes the raw buffer available in `req.body`.
+
+    ```ts
+    app.use(express.raw({ type: "application/octet-stream" }));
+    ```
+
+## Third-Party Middleware
+
+### Morgan (HTTP request logger)
+
+- Logs HTTP requests in the console (or a file).
+- Useful for debugging and monitoring.
+
+```ts
+app.use(morgan("dev"));
+```
+
+Logs incoming HTTP requests in a short colored format.
+
+```bash
+GET /users 200 12ms
+POST /login 201 25ms
+```
+
+**Format options**
+
+When you call `morgan()`, you must provide a format argument.
+This defines how logs are displayed.
+
+- Built-in strings:
+  - `"combined"` → Apache-style logs (with referrer & user-agent)
+  - `"common"` → Shorter Apache-style logs
+  - `"dev"` → Color-coded concise logs
+  - `"short"` → Shorter than common
+  - `"tiny"` → Minimal output
+- Or, you can pass a formatting function: `(tokens, req, res) => string`
+
+### CORS (Cross-Origin Resource Sharing)
+
+- Controls which domains can access your API.
+- By default, browsers block requests from different origins.
+- `cors()` middleware allows you to enable or restrict access.
+
+```ts
+app.use(cors()); // Allow all origins
+app.use(cors({ origin: "https://example.com" })); // Restrict to specific domain
+```
+
+### Helmet (Security)
+
+- Sets HTTP headers to secure your app from common attacks.
+- Examples of headers it sets:
+  - `X-DNS-Prefetch-Control`
+  - `X-Frame-Options`
+  - `Strict-Transport-Security`
+- Simple way to improve security best practices.
+
+```ts
+app.use(helmet());
+```
+
+- Adds multiple security-related HTTP headers automatically.
+- Helps prevent common attacks like clickjacking, XSS, and MIME-sniffing.
+
+## Middleware Execution Order
+
+- Middleware functions in Express execute in the order they are added in your code.
+- The request flows top to bottom until:
+  1. A response is sent (`res.send`, `res.json`, etc.), or
+  2. `next()` is called to pass control to the next middleware.
+
+# Response
+
+## Redirection
+
+- `res.redirect()` tells the client (browser or HTTP client) to make a new request to a different URL.
+- It sends an HTTP 3xx status code along with the `Location` header.
+- Express automatically sets 302 Found by default if no status code is provided.
+
+**Syntax:**
+
+```ts
+res.redirect([statusCode], path);
+```
+
+- `statusCode` → Optional. The HTTP status code for the redirect (default: 302).
+- `path` → The URL or route to redirect to.
+
+### Common Status Codes for Redirects
+
+| Code | Meaning                                   |
+| ---- | ----------------------------------------- |
+| 301  | Moved Permanently                         |
+| 302  | Found (temporary, default)                |
+| 307  | Temporary Redirect (preserve HTTP method) |
+| 308  | Permanent Redirect (preserve HTTP method) |
+
+#### 301 – Moved Permanently
+
+**Meaning:** The resource has been moved permanently to a new URL.
+
+**Browser behavior:**
+
+- Search engines update their index to the new URL.
+- Browsers may cache the redirection aggressively.
+
+**HTTP Method handling:**
+
+- Some clients may change non-GET methods (like `POST`) to `GET` when following a 301 (this is not strictly correct but is common).
+
+**Use case:** When a page or resource has a permanent new home (e.g., changing domain name).
+
+#### 302 – Found (Temporary Redirect, old default)
+
+**Meaning:** The resource is temporarily at another URL.
+
+**Browser behavior:**
+
+- Search engines generally do not update their index (they keep the old URL).
+- Browsers treat it as temporary.
+
+**HTTP Method handling:**
+
+- Historically, many clients convert `POST` → `GET`, which is not ideal.
+
+**Use case:** Short-term redirects (e.g., A/B testing, maintenance).
+
+#### 307 – Temporary Redirect (method preserved)
+
+**Meaning:** Resource temporarily resides at a different URL, but…
+
+**HTTP Method handling:**
+
+- Unlike 302, it guarantees the same HTTP method and body are preserved.
+- Example: A `POST` request remains a `POST` request after redirection.
+
+**Use case:** When the redirect is temporary, but you want to make sure the request method and data are not lost (e.g., login `POST` requests).
+
+#### 308 – Permanent Redirect (method preserved)
+
+**Meaning:** Resource has been permanently moved, like 301.
+
+**HTTP Method handling:**
+
+- Like 307, it preserves the HTTP method and body.
+- Example: A `PUT` or `POST` request stays the same after redirection.
+
+**Use case:** Permanent changes where the request method must be preserved (e.g., moving an API endpoint to a new path).
+
+## Setting Headers
+
+- `res.set()` allows you to manually set HTTP headers on the response.
+- Headers provide metadata about the response (e.g., content type, caching, authentication).
+
+```ts
+res.set(field: string | object, value?: string | string[]): this
+```
+
+- `field` → Name of the header (or an object with multiple headers).
+- `value` → Value of the header (optional if using object).
+- Returns: the response object so you can chain methods like `.status()` and `.send()`.
+
+**Example**
+
+```ts
+res.set({
+  "X-App-Version": "1.0.0",
+  "Cache-Control": "no-store",
+  "X-Powered-By": "Express",
 });
 ```
 
-This route explicitly creates an error and passes it to the next middleware using `next(error)`.
+**Common Use Cases**
 
-### 2. Error-handling middleware
+- Setting `Content-Type` (text, JSON(`res.set("Content-Type", "application/json");`), HTML)
+- Adding security headers (custom or for CORS)
+- Controlling caching (`Cache-Control`)
+- Setting custom headers for APIs (like `X-Rate-Limit`)
 
-```js
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  const statusCode = err.status || 500;
-  const message = err.message || "Internal Server Error";
-  res.status(statusCode).json({
-    error: {
-      message: message,
-      status: statusCode,
-    },
+# Template Engine
+
+A template engine generates HTML pages dynamically by combining static templates with data from the server.
+
+Popular engines for Express:
+
+- **EJS** → Embedded JavaScript, simple syntax, widely used.
+- **Pug** → Indentation-based, concise syntax.
+- **Handlebars** → Logic-less templates, clean separation of concerns.
+
+**Benefits**
+
+- Dynamically render content (lists, tables, user data).
+- Separate HTML structure from backend logic.
+- Avoid sending raw HTML strings manually.
+
+**Configuration**
+
+1. `app.set('view engine', 'ejs');` → Tells Express to use EJS for rendering views.
+2. `app.set('views', path.join(__dirname, 'views'));` → Specifies where EJS templates are stored.
+3. `res.render('index', { name: 'John Doe', users });` → renders dynamic HTML with provided data.
+   - `index.ejs` receives `name` and `users` and renders them into HTML.
+
+## Rendering HTML
+
+### Dynamic Variables
+
+```ejs
+<h1>Welcome, <%= user.name %>!</h1>
+```
+
+- `<%= %>` injects escaped content (prevents XSS).
+- Dynamic data `user.name` comes from the server (`res.render('index', { user, products })`).
+
+### Loops
+
+```ejs
+<% products.forEach(product => { %>
+  <li><%= product %></li>
+<% }) %>
+```
+
+- `<% %>` executes JavaScript logic.
+- `<%= %>` outputs the value.
+
+### Conditionals
+
+```ejs
+<% if (products.length === 0) { %>
+  <p>No products available.</p>
+<% } else { %>
+  <ul>...</ul>
+<% } %>
+```
+
+- Can dynamically render content based on data values.
+
+### Data Passing
+
+- Server sends data object as second argument of `res.render()`.
+- Template can access all properties in that object.
+
+# Error Handling
+
+**Why Handle Errors?**
+
+- By default, if a route doesn’t exist, Express will just hang without a clear response.
+- You should explicitly define how your app responds to not found (404) errors and unexpected server errors (500, etc.).
+
+**Express Error Handling Rules**
+
+1. 404 Errors → Add a middleware at the end of your routes to catch unmatched requests.
+
+2. Other Errors → Use a special error-handling middleware with four parameters:
+
+   ```ts
+   (err, req, res, next) => { ... }
+   ```
+
+## 404 Handler
+
+```ts
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: "Resource not found" });
+});
+```
+
+- This middleware is placed after all other routes.
+- If no route matches, Express falls through to this handler.
+- Responds with status 404 Not Found.
+
+## Global Error Handler
+
+```ts
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  res.status(500).json({
+    success: false,
+    message: "Internal Server Error",
+    error: err.message,
   });
 });
 ```
 
-`console.error(err.stack)` logs the error stack trace for debugging purposes.
+- Handles any error thrown in routes or middleware.
+- Must have 4 arguments → (`err`, `req`, `res`, `next`) so Express knows it’s an error handler.
+- It can be placed any where in the code, but must contain 4 arguments.
 
-### 3. Middleware order
+## Catching and Responding to Errors
 
-The error-handling middleware is added after all other routes and middleware. This ensures that it can catch errors from any part of the app.
+In an Express.js application, errors can happen in many places (routes, middleware, database queries, etc.). To keep the app reliable and user-friendly, you should catch errors and respond consistently.
 
-# Rate Limiting vs. Throttling
+There are two main ways to handle errors:
 
-## Rate Limiting
+1. Synchronous errors → handled with `try/catch` or by throwing inside routes.
 
-- Sets a maximum number of allowed requests per client in a time window.
-- Example: A client can make up to 100 requests per hour.
+2. Asynchronous errors → handled with `try/catch` in async functions and by passing the error to `next(err)`.
 
-## Throttling
+All errors eventually flow into the error-handling middleware, where you send a proper response.
 
-- Restricts the rate at which requests are processed.
-- Example: Allow only 10 requests per second per client.
+### Synchronous errors
 
-## Why Implement Rate Limiting and Throttling?
-
-- Prevent DoS (Denial of Service) attacks.
-- Ensure fair resource distribution among users.
-- Protect APIs from being overused.
-- Reduce server load and improve stability.
-
-## Implement Rate Limiting
-
-1. **Install the library:**
-
-```bash
-npm install express-rate-limit
-```
-
-2. **Configure the rate limiter:**
-
-```js
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again after 15 minutes.",
+```ts
+app.get("/sync-error", (req: Request, res: Response) => {
+  throw new Error("Synchronous error occurred!");
 });
 ```
 
-3. **Apply the rate limiter:**
+- Throwing an error inside a route is automatically caught by Express if an error handler exists.
 
-```js
-app.use(limiter);
+### Asynchronous errors
+
+Asynchronous operations (like database calls or API requests) need explicit error handling.
+
+```ts
+app.get(
+  "/async-error",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await Promise.reject(new Error("Async error occurred!"));
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 ```
 
-## Implement Throttling
-
-1. **Install the library:**
-
-```bash
-npm install bottleneck
-```
-
-2. **Throttle Request Handling**
-
-```js
-// Wrap route handlers
-const throttledHandler = limiter.wrap(async (req, res) => {
-  res.send("Request processed");
-});
-```
-
-3. **Apply:**
-
-```js
-// Apply to a route
-app.get("/api/throttle", async (req, res) => {
-  throttledHandler(req, res);
-});
-```
-
-# View Engine
-
-A view engine in Express allows you to render dynamic HTML pages by combining template files with data. It simplifies the process of serving HTML content and is commonly used to generate pages dynamically based on user input, database content, or application logic.
-
-**Set EJS as the view engine**
-
-```js
-app.set("view engine", "ejs");
-```
-
-**Folder Structure:**
-
-```text
-project
-├── views
-│   ├── index.ejs
-│   ├── about.ejs
-├── public
-│   └── css
-│       └── styles.css
-├── app.js
-```
-
-**Render Views and Pass Data**
-
-```js
-app.get("/", (req, res) => {
-  const data = { title: "Home Page", message: "Welcome to our website!" };
-  res.render("index", data);
-});
-```
-
-**`views/index.ejs`:**
-
-```js
-<!DOCTYPE html>
-<html>
-<head>
-  <title><%= title %></title>
-</head>
-<body>
-  <h1><%= message %></h1>
-</body>
-</html>
-```
+- In `async/await` routes, errors must be passed to `next(err)` manually.
+- Otherwise, Express won’t catch them automatically.
