@@ -15,6 +15,8 @@
   - [`app` Directory](#app-directory)
     - [Routing](#routing-1)
     - [Features](#features)
+- [Styling](#styling)
+  - [Tailwind CSS](#tailwind-css)
 - [Deployment](#deployment)
   - [Environment Variables](#environment-variables)
 
@@ -1329,42 +1331,42 @@ export default function MyApp({ Component, pageProps }) {
 
 1. Install Tailwind CSS
 
-```shell
-npm install -D tailwindcss postcss autoprefixer
-```
+   ```shell
+   npm install -D tailwindcss postcss autoprefixer
+   ```
 
 2. Generate Tailwind Configuration Files
 
-```shell
-npx tailwindcss init -p
-```
+   ```shell
+   npx tailwindcss init -p
+   ```
 
 3. Configure Tailwind
 
-Open `tailwind.config.js` and update the `content` section to include Next.js files:
+   Open `tailwind.config.js` and update the `content` section to include Next.js files:
 
-```tsx
-// tailwind.config.js
-module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
-```
+   ```tsx
+   // tailwind.config.js
+   module.exports = {
+     content: [
+       "./pages/**/*.{js,ts,jsx,tsx}",
+       "./components/**/*.{js,ts,jsx,tsx}",
+     ],
+     theme: {
+       extend: {},
+     },
+     plugins: [],
+   };
+   ```
 
 4. Import Tailwind CSS in `_app.js`
 
-```css
-/* styles/globals.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+   ```css
+   /* styles/globals.css */
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+   ```
 
 ## Styled Components
 
