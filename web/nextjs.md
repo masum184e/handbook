@@ -151,367 +151,6 @@ Top-level files are used to configure your application, manage dependencies, run
 - `template` - Re-rendered layout
 - `default` - Parallel route fallback page
 
-# Router
-
-## `pages` Directory
-
-The `pages` directory plays a crucial role in defining the structure of the application. It follows a file-based routing system, where each file inside the pages directory automatically becomes a route in your application.
-
-### Routing
-
-- Each `.js`, `.jsx`, `.ts`, or `.tsx` file inside the `pages` directory represents a route.
-- The folder structure determines the URL path.
-- The `pages/api/` directory is special for API routes.
-
-**Example:**
-
-```
-/pages
-  ├── index.js           →  '/'
-  ├── about.js           →  '/about'
-  ├── contact.js         →  '/contact'
-  ├── blog
-  │   ├── index.js       →  '/blog'
-  │   ├── post.js        →  '/blog/post'
-  ├── api
-  │   ├── hello.js       →  '/api/hello'
-```
-
-### Special Files
-
-1. `_app.js`
-
-   - **Custom App Component:** Wraps all pages to maintain global styles, state, or layout.
-
-     ```tsx
-     import "../styles/globals.css";
-
-     export default function MyApp({ Component, pageProps }) {
-       return <Component {...pageProps} />;
-     }
-     ```
-
-2. `_document.js`
-
-   - **Custom HTML Structure:** Used for modifying the <html> and <body> structure.
-
-     ```tsx
-     import { Html, Head, Main, NextScript } from "next/document";
-
-     export default function Document() {
-       return (
-         <Html>
-           <Head>
-             <meta name="description" content="My Next.js App" />
-           </Head>
-           <body>
-             <Main />
-             <NextScript />
-           </body>
-         </Html>
-       );
-     }
-     ```
-### Data Fetching
-1. `getStaticProps` → Static Site Generation (SSG)
-- Runs at build time.
-- Pre-renders HTML + JSON.
-- Best for content that doesn’t change often.
-- Visiting `/static` will always show the same pre-rendered content until the site is rebuilt.
-2. `getServerSideProps` → Server-Side Rendering (SSR)
-- Runs on every request (Node.js server or Vercel Function).
-- Fetches fresh data each time.
-- Visiting `/server` always returns the latest time (fresh data per request).
-3. `getStaticPaths` (with `getStaticProps`) → Dynamic SSG
-
-- Used with dynamic routes (`[id].tsx`).
-- Pre-renders specific paths.
-4. `getInitialProps` (Legacy)
-
-- Runs on both server and client (not recommended anymore).
-- Still exists for compatibility, but usually replaced with `getStaticProps` or `getServerSideProps`.
-5. CSR via `useEffect`
-6. ISR via `revalidate`
-
-### Components
-In the Pages Router (unlike the App Router), everything is a client component by default.
-
-- All pages/components run in the browser after hydration.
-- Server-side work is done via:
-  - `getServerSideProps` (SSR)
-  - `getStaticProps` (SSG)
-  - API routes (`pages/api/*`).
-So, the "Server Component" concept doesn’t exist here (that’s App Router only).
-But, you can still execute server-side logic via the lifecycle methods.
-
-#### Rendering Modes in pages/
-
-Next.js `pages/` supports four rendering strategies:
-
-1. Static Generation (SSG) → `getStaticProps`
-2. Server-Side Rendering (SSR) → `getServerSideProps`
-3. Client-Side Rendering (CSR) → Fetching data inside `useEffect` in the browser
-4. Incremental Static Regeneration (ISR) → `getStaticProps` + `revalidate`
-## `app` Directory
-
-With Next.js 13+, a new App Router was introduced, replacing the traditional `pages` directory with a more flexible and powerful routing system using the `app` directory. This new system is built on React Server Components (RSC) and introduces features like layouts, loading states, server actions, and streaming.
-
-### Routing
-
-- The `app` directory follows a folder-based routing system (like `pages/`).
-- Each folder inside `app/` represents a route, and a `page.js` (or `page.tsx`) file inside it is rendered as the page.
-- Supports Server Components by default (unlike `pages/` which defaults to Client Components).
-- Introduces layouts, loading, and error handling.
-
-**Example:**
-
-```
-my-next-app/
-│── .next/                        # Auto-generated build output
-│── node_modules/                 # Dependencies
-│── public/                       # Static assets (served from /)
-│   ├── favicon.ico
-│   ├── images/
-│   └── robots.txt
-│
-│── src/                          # Source code (recommended structure)
-│   ├── app/                      # Next.js App Router (v13+)
-│   │   ├── layout.tsx            # Root layout (shared UI)
-│   │   ├── page.tsx              # Home page
-│   │   ├── about/                # Example route
-│   │   │   └── page.tsx
-│   │   ├── dashboard/            # Nested routes
-│   │   │   ├── layout.tsx        # Dashboard layout
-│   │   │   ├── page.tsx
-│   │   │   └── settings/
-│   │   │       └── page.tsx
-│   │   └── api/                  # API routes (server functions)
-│   │       └── hello/route.ts
-│   │
-│   ├── components/               # Reusable UI components
-│   │   ├── ui/                   # Generic UI elements (buttons, cards, etc.)
-│   │   │   └── Button.tsx
-│   │   ├── layout/               # Layout-specific components
-│   │   │   ├── Navbar.tsx
-│   │   │   └── Footer.tsx
-│   │   └── shared/               # Reusable feature components
-│   │       └── LoadingSpinner.tsx
-│   │
-│   ├── features/                 # Feature-based modules
-│   │   ├── auth/
-│   │   │   ├── hooks/            # Auth-specific hooks
-│   │   │   │   └── useAuth.ts
-│   │   │   ├── types.ts          # Auth-specific types
-│   │   │   └── AuthProvider.tsx
-│   │   ├── products/
-│   │   │   ├── ProductCard.tsx
-│   │   │   ├── utils.ts
-│   │   │   └── types.ts
-│   │   └── users/
-│   │       ├── UserCard.tsx
-│   │       └── types.ts
-│   │
-│   ├── lib/                      # Helpers & utility functions
-│   │   ├── fetcher.ts
-│   │   └── constants.ts
-│   │
-│   ├── hooks/                    # Global reusable hooks
-│   │   └── useMediaQuery.ts
-│   │
-│   ├── context/                  # Global React Contexts
-│   │   └── ThemeContext.tsx
-│   │
-│   ├── types/                    # Centralized global types/interfaces
-│   │   ├── api.ts                # API response/request types
-│   │   ├── user.ts               # Shared user types
-│   │   ├── product.ts            # Shared product types
-│   │   └── index.d.ts            # Global ambient types (extends Window, etc.)
-│   │
-│   ├── styles/                   # Styles
-│   │   ├── globals.css
-│   │   ├── variables.css
-│   │   └── tailwind.css
-│   │
-│   └── tests/                    # Unit & integration tests
-│       ├── components/
-│       └── features/
-│
-│── .eslintrc.json                # ESLint config
-│── .gitignore                    # Git ignore rules
-│── next.config.js                 # Next.js config
-│── package.json                   # Dependencies & scripts
-│── postcss.config.js              # PostCSS config (Tailwind, etc.)
-│── tailwind.config.js             # Tailwind config
-│── tsconfig.json                  # TypeScript config
-```
-
-### Features
-
-1. **File-Based Routing:** Each folder is a route, and `page.js` inside defines the actual page.
-2. **Layouts:** Layouts wrap multiple pages inside a route and persist across navigation.
-3. **Server Components:** Pages are server-rendered by default, but you can use `"use client"` to enable client-side behavior.
-4. **Streming & Suspense:** Next.js supports streaming and React Suspense for loading states and progressive rendering.
-5. **API Routes:** API routes now use `route.js` and support full HTTP methods.
-
-### Data Fetching
-- Uses the `app/` directory instead of `pages/`.
-- File-system routing still applies, but with React Server Components (RSC).
-- Components are Server by default.
-- Client-side interactivity requires `"use client"`.
-- Data fetching is async/await in Server Components (no more `getStaticProps`, `getServerSideProps`).
-- Rendering strategies (SSR, SSG, ISR, CSR) are handled automatically depending on how you fetch data.
-
-### Components
-#### Server Components (default)
-
-- Run only on the server (never shipped to client).
-- Can fetch data directly (use `fetch`, DB queries).
-- Great for performance — smaller JS bundle.
-
-#### Client Components
-
-- Marked with `"use client"`.
-- Can use state, hooks, event handlers.
-- Cannot fetch data with `await` at the top level (must use client-side fetching like `useEffect`).
-#### Rendering
-
-| Mode                        | Trigger                                   | Example                 | Equivalent (Pages Router)           |
-| --------------------------- | ----------------------------------------- | ----------------------- | ----------------------------------- |
-| **Static Rendering (SSG)**  | `fetch(..., { cache: "force-cache" })`    | Pre-rendered at build   | `getStaticProps`                    |
-| **Dynamic Rendering (SSR)** | `fetch(..., { cache: "no-store" })`       | Fresh on every request  | `getServerSideProps`                |
-| **ISR (Revalidation)**      | `fetch(..., { next: { revalidate: N } })` | Updates every N seconds | ISR (`getStaticProps + revalidate`) |
-| **CSR**                     | `"use client"` + `useEffect` fetch        | Rendered on client only | CSR with hooks                      |
-
-# Rendering
-
-## Client-Side Rendering
-
-Client-Side Rendering (CSR) is a method where the browser (client) downloads a minimal HTML file along with JavaScript files. The JavaScript executes in the browser, fetching data from an API, and dynamically rendering content on the page.
-
-- When you visit a website using CSR, the browser first loads an empty page with almost no content.
-- Then, it downloads a JavaScript file that builds the page dynamically.
-  -The page loads slowly at first, but once everything is loaded, navigating between pages becomes very fast.
-
-### Steps
-
-1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
-2. **Server Responds with Minimal HTML:** The server responds with a lightweight HTML and Javscripts file.
-
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>CSR Example</title>
-     </head>
-     <body>
-       <div id="root"></div>
-       <!-- This is where React inserts the content -->
-       <script src="bundle.js"></script>
-       <!-- JavaScript file that builds the page -->
-     </body>
-   </html>
-   ```
-
-   At this point, the page is still empty! The content is missing because JavaScript hasn’t run yet.
-
-3. **Browser Downloads JavaScript File:**
-
-   - The browser loads bundle.js, which contains the React app.
-   - React runs and fetches the blog post from an API.
-
-4. **JavaScript Fetches Data and Updates the Page:**
-
-   ```tsx
-   import React, { useState, useEffect } from "react";
-
-   function BlogPost() {
-     const [data, setData] = useState(null);
-
-     useEffect(() => {
-       fetch("https://jsonplaceholder.typicode.com/posts/1") // API call
-         .then((response) => response.json())
-         .then((json) => setData(json)); // Set data
-     }, []);
-
-     return (
-       <div>
-         <h1>Client-Side Rendering Example</h1>
-         {data ? <h2>{data.title}</h2> : <p>Loading...</p>}
-       </div>
-     );
-   }
-
-   export default BlogPost;
-   ```
-
-5. **Content is Rendered in the Browser:** The fetched data is used to dynamically generate and update the page's content.
-6. **User Interacts with the Page:** Since the page is now fully loaded in the browser, interactions like clicking buttons or navigating between pages happen instantly without needing a full page reload.
-
-## Pre Rendering
-
-Server-Side Rendering (SSR) is a method where the server processes and renders the full HTML page before sending it to the browser. The browser only has to display the fully rendered content.
-
-- Instead of sending an empty page, the server builds the page first and then sends the full HTML to the browser.
-- The page loads quickly because the browser doesn’t have to wait for JavaScript to fetch the data.
-
-Pre rendering can be done with:
-
-1. Static Side Generation
-2. Server Side Rendering
-
-### Steps
-
-1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
-2. **Server Generates the HTML Page:** The server processes the request, executes any necessary database queries or API calls, and generates the full HTML page.
-   In Next.js, we use `getServerSideProps` to fetch data before the page is sent:
-
-   ```tsx
-   export async function getServerSideProps() {
-     const res = await fetch("https://jsonplaceholder.typicode.com/posts/1"); // API call
-     const data = await res.json();
-
-     return { props: { data } }; // Send data to the page
-   }
-
-   function BlogPost({ data }) {
-     return (
-       <div>
-         <h1>Server-Side Rendering Example</h1>
-         <h2>{data.title}</h2>
-       </div>
-     );
-   }
-
-   export default BlogPost;
-   ```
-
-3. **Server Sends a Fully Rendered Page**
-
-   - The server fetches the blog post first and puts it inside the HTML file.
-   - The fully rendered page (with all the necessary content) is sent to the browser.
-   - The browser receives a complete HTML page, which looks like this:
-
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>SSR Example</title>
-     </head>
-     <body>
-       <div id="root">
-         <h1>Server-Side Rendering Example</h1>
-         <h2>My Blog Post Title</h2>
-       </div>
-     </body>
-   </html>
-   ```
-
-4. **Browser Displays the Page Instantly:** Since the browser receives a ready-to-display HTML page, the content appears much faster.
-5. **JavaScript Enhancements Load in the Background:** If JavaScript frameworks like React or Vue.js are used, they hydrate (attach interactivity to) the already rendered HTML.
 
 # Client-Side Rendering
 
@@ -1002,6 +641,368 @@ export default UserPage;
 
 1. **Server Side Fetching:** Fetching data in Server Components (fast, no extra client-side requests).
 2. **Client Side Fetching:** When using React hooks
+
+# Router
+
+## `pages` Directory
+
+The `pages` directory plays a crucial role in defining the structure of the application. It follows a file-based routing system, where each file inside the pages directory automatically becomes a route in your application.
+
+### Routing
+
+- Each `.js`, `.jsx`, `.ts`, or `.tsx` file inside the `pages` directory represents a route.
+- The folder structure determines the URL path.
+- The `pages/api/` directory is special for API routes.
+
+**Example:**
+
+```
+/pages
+  ├── index.js           →  '/'
+  ├── about.js           →  '/about'
+  ├── contact.js         →  '/contact'
+  ├── blog
+  │   ├── index.js       →  '/blog'
+  │   ├── post.js        →  '/blog/post'
+  ├── api
+  │   ├── hello.js       →  '/api/hello'
+```
+
+### Special Files
+
+1. `_app.js`
+
+   - **Custom App Component:** Wraps all pages to maintain global styles, state, or layout.
+
+     ```tsx
+     import "../styles/globals.css";
+
+     export default function MyApp({ Component, pageProps }) {
+       return <Component {...pageProps} />;
+     }
+     ```
+
+2. `_document.js`
+
+   - **Custom HTML Structure:** Used for modifying the <html> and <body> structure.
+
+     ```tsx
+     import { Html, Head, Main, NextScript } from "next/document";
+
+     export default function Document() {
+       return (
+         <Html>
+           <Head>
+             <meta name="description" content="My Next.js App" />
+           </Head>
+           <body>
+             <Main />
+             <NextScript />
+           </body>
+         </Html>
+       );
+     }
+     ```
+### Data Fetching
+1. `getStaticProps` → Static Site Generation (SSG)
+- Runs at build time.
+- Pre-renders HTML + JSON.
+- Best for content that doesn’t change often.
+- Visiting `/static` will always show the same pre-rendered content until the site is rebuilt.
+2. `getServerSideProps` → Server-Side Rendering (SSR)
+- Runs on every request (Node.js server or Vercel Function).
+- Fetches fresh data each time.
+- Visiting `/server` always returns the latest time (fresh data per request).
+3. `getStaticPaths` (with `getStaticProps`) → Dynamic SSG
+
+- Used with dynamic routes (`[id].tsx`).
+- Pre-renders specific paths.
+4. `getInitialProps` (Legacy)
+
+- Runs on both server and client (not recommended anymore).
+- Still exists for compatibility, but usually replaced with `getStaticProps` or `getServerSideProps`.
+5. CSR via `useEffect`
+6. ISR via `revalidate`
+
+### Components
+In the Pages Router (unlike the App Router), everything is a client component by default.
+
+- All pages/components run in the browser after hydration.
+- Server-side work is done via:
+  - `getServerSideProps` (SSR)
+  - `getStaticProps` (SSG)
+  - API routes (`pages/api/*`).
+So, the "Server Component" concept doesn’t exist here (that’s App Router only).
+But, you can still execute server-side logic via the lifecycle methods.
+
+#### Rendering Modes in pages/
+
+Next.js `pages/` supports four rendering strategies:
+
+1. Static Generation (SSG) → `getStaticProps`
+2. Server-Side Rendering (SSR) → `getServerSideProps`
+3. Client-Side Rendering (CSR) → Fetching data inside `useEffect` in the browser
+4. Incremental Static Regeneration (ISR) → `getStaticProps` + `revalidate`
+## `app` Directory
+
+With Next.js 13+, a new App Router was introduced, replacing the traditional `pages` directory with a more flexible and powerful routing system using the `app` directory. This new system is built on React Server Components (RSC) and introduces features like layouts, loading states, server actions, and streaming.
+
+### Routing
+
+- The `app` directory follows a folder-based routing system (like `pages/`).
+- Each folder inside `app/` represents a route, and a `page.js` (or `page.tsx`) file inside it is rendered as the page.
+- Supports Server Components by default (unlike `pages/` which defaults to Client Components).
+- Introduces layouts, loading, and error handling.
+
+**Example:**
+
+```
+my-next-app/
+│── .next/                        # Auto-generated build output
+│── node_modules/                 # Dependencies
+│── public/                       # Static assets (served from /)
+│   ├── favicon.ico
+│   ├── images/
+│   └── robots.txt
+│
+│── src/                          # Source code (recommended structure)
+│   ├── app/                      # Next.js App Router (v13+)
+│   │   ├── layout.tsx            # Root layout (shared UI)
+│   │   ├── page.tsx              # Home page
+│   │   ├── about/                # Example route
+│   │   │   └── page.tsx
+│   │   ├── dashboard/            # Nested routes
+│   │   │   ├── layout.tsx        # Dashboard layout
+│   │   │   ├── page.tsx
+│   │   │   └── settings/
+│   │   │       └── page.tsx
+│   │   └── api/                  # API routes (server functions)
+│   │       └── hello/route.ts
+│   │
+│   ├── components/               # Reusable UI components
+│   │   ├── ui/                   # Generic UI elements (buttons, cards, etc.)
+│   │   │   └── Button.tsx
+│   │   ├── layout/               # Layout-specific components
+│   │   │   ├── Navbar.tsx
+│   │   │   └── Footer.tsx
+│   │   └── shared/               # Reusable feature components
+│   │       └── LoadingSpinner.tsx
+│   │
+│   ├── features/                 # Feature-based modules
+│   │   ├── auth/
+│   │   │   ├── hooks/            # Auth-specific hooks
+│   │   │   │   └── useAuth.ts
+│   │   │   ├── types.ts          # Auth-specific types
+│   │   │   └── AuthProvider.tsx
+│   │   ├── products/
+│   │   │   ├── ProductCard.tsx
+│   │   │   ├── utils.ts
+│   │   │   └── types.ts
+│   │   └── users/
+│   │       ├── UserCard.tsx
+│   │       └── types.ts
+│   │
+│   ├── lib/                      # Helpers & utility functions
+│   │   ├── fetcher.ts
+│   │   └── constants.ts
+│   │
+│   ├── hooks/                    # Global reusable hooks
+│   │   └── useMediaQuery.ts
+│   │
+│   ├── context/                  # Global React Contexts
+│   │   └── ThemeContext.tsx
+│   │
+│   ├── types/                    # Centralized global types/interfaces
+│   │   ├── api.ts                # API response/request types
+│   │   ├── user.ts               # Shared user types
+│   │   ├── product.ts            # Shared product types
+│   │   └── index.d.ts            # Global ambient types (extends Window, etc.)
+│   │
+│   ├── styles/                   # Styles
+│   │   ├── globals.css
+│   │   ├── variables.css
+│   │   └── tailwind.css
+│   │
+│   └── tests/                    # Unit & integration tests
+│       ├── components/
+│       └── features/
+│
+│── .eslintrc.json                # ESLint config
+│── .gitignore                    # Git ignore rules
+│── next.config.js                 # Next.js config
+│── package.json                   # Dependencies & scripts
+│── postcss.config.js              # PostCSS config (Tailwind, etc.)
+│── tailwind.config.js             # Tailwind config
+│── tsconfig.json                  # TypeScript config
+```
+
+### Features
+
+1. **File-Based Routing:** Each folder is a route, and `page.js` inside defines the actual page.
+2. **Layouts:** Layouts wrap multiple pages inside a route and persist across navigation.
+3. **Server Components:** Pages are server-rendered by default, but you can use `"use client"` to enable client-side behavior.
+4. **Streming & Suspense:** Next.js supports streaming and React Suspense for loading states and progressive rendering.
+5. **API Routes:** API routes now use `route.js` and support full HTTP methods.
+
+### Data Fetching
+- Uses the `app/` directory instead of `pages/`.
+- File-system routing still applies, but with React Server Components (RSC).
+- Components are Server by default.
+- Client-side interactivity requires `"use client"`.
+- Data fetching is async/await in Server Components (no more `getStaticProps`, `getServerSideProps`).
+- Rendering strategies (SSR, SSG, ISR, CSR) are handled automatically depending on how you fetch data.
+
+### Components
+#### Server Components (default)
+
+- Run only on the server (never shipped to client).
+- Can fetch data directly (use `fetch`, DB queries).
+- Great for performance — smaller JS bundle.
+
+#### Client Components
+
+- Marked with `"use client"`.
+- Can use state, hooks, event handlers.
+- Cannot fetch data with `await` at the top level (must use client-side fetching like `useEffect`).
+#### Rendering
+
+| Mode                        | Trigger                                   | Example                 | Equivalent (Pages Router)           |
+| --------------------------- | ----------------------------------------- | ----------------------- | ----------------------------------- |
+| **Static Rendering (SSG)**  | `fetch(..., { cache: "force-cache" })`    | Pre-rendered at build   | `getStaticProps`                    |
+| **Dynamic Rendering (SSR)** | `fetch(..., { cache: "no-store" })`       | Fresh on every request  | `getServerSideProps`                |
+| **ISR (Revalidation)**      | `fetch(..., { next: { revalidate: N } })` | Updates every N seconds | ISR (`getStaticProps + revalidate`) |
+| **CSR**                     | `"use client"` + `useEffect` fetch        | Rendered on client only | CSR with hooks                      |
+
+# Rendering
+
+## Client-Side Rendering
+
+Client-Side Rendering (CSR) is a method where the browser (client) downloads a minimal HTML file along with JavaScript files. The JavaScript executes in the browser, fetching data from an API, and dynamically rendering content on the page.
+
+- When you visit a website using CSR, the browser first loads an empty page with almost no content.
+- Then, it downloads a JavaScript file that builds the page dynamically.
+  -The page loads slowly at first, but once everything is loaded, navigating between pages becomes very fast.
+
+### Steps
+
+1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
+2. **Server Responds with Minimal HTML:** The server responds with a lightweight HTML and Javscripts file.
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>CSR Example</title>
+     </head>
+     <body>
+       <div id="root"></div>
+       <!-- This is where React inserts the content -->
+       <script src="bundle.js"></script>
+       <!-- JavaScript file that builds the page -->
+     </body>
+   </html>
+   ```
+
+   At this point, the page is still empty! The content is missing because JavaScript hasn’t run yet.
+
+3. **Browser Downloads JavaScript File:**
+
+   - The browser loads bundle.js, which contains the React app.
+   - React runs and fetches the blog post from an API.
+
+4. **JavaScript Fetches Data and Updates the Page:**
+
+   ```tsx
+   import React, { useState, useEffect } from "react";
+
+   function BlogPost() {
+     const [data, setData] = useState(null);
+
+     useEffect(() => {
+       fetch("https://jsonplaceholder.typicode.com/posts/1") // API call
+         .then((response) => response.json())
+         .then((json) => setData(json)); // Set data
+     }, []);
+
+     return (
+       <div>
+         <h1>Client-Side Rendering Example</h1>
+         {data ? <h2>{data.title}</h2> : <p>Loading...</p>}
+       </div>
+     );
+   }
+
+   export default BlogPost;
+   ```
+
+5. **Content is Rendered in the Browser:** The fetched data is used to dynamically generate and update the page's content.
+6. **User Interacts with the Page:** Since the page is now fully loaded in the browser, interactions like clicking buttons or navigating between pages happen instantly without needing a full page reload.
+
+## Pre Rendering
+
+Server-Side Rendering (SSR) is a method where the server processes and renders the full HTML page before sending it to the browser. The browser only has to display the fully rendered content.
+
+- Instead of sending an empty page, the server builds the page first and then sends the full HTML to the browser.
+- The page loads quickly because the browser doesn’t have to wait for JavaScript to fetch the data.
+
+Pre rendering can be done with:
+
+1. Static Side Generation
+2. Server Side Rendering
+
+### Steps
+
+1. **Browser Requests the Page:** The user enters a URL in the browser (e.g., `https://example.com`).
+2. **Server Generates the HTML Page:** The server processes the request, executes any necessary database queries or API calls, and generates the full HTML page.
+   In Next.js, we use `getServerSideProps` to fetch data before the page is sent:
+
+   ```tsx
+   export async function getServerSideProps() {
+     const res = await fetch("https://jsonplaceholder.typicode.com/posts/1"); // API call
+     const data = await res.json();
+
+     return { props: { data } }; // Send data to the page
+   }
+
+   function BlogPost({ data }) {
+     return (
+       <div>
+         <h1>Server-Side Rendering Example</h1>
+         <h2>{data.title}</h2>
+       </div>
+     );
+   }
+
+   export default BlogPost;
+   ```
+
+3. **Server Sends a Fully Rendered Page**
+
+   - The server fetches the blog post first and puts it inside the HTML file.
+   - The fully rendered page (with all the necessary content) is sent to the browser.
+   - The browser receives a complete HTML page, which looks like this:
+
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>SSR Example</title>
+     </head>
+     <body>
+       <div id="root">
+         <h1>Server-Side Rendering Example</h1>
+         <h2>My Blog Post Title</h2>
+       </div>
+     </body>
+   </html>
+   ```
+
+4. **Browser Displays the Page Instantly:** Since the browser receives a ready-to-display HTML page, the content appears much faster.
+5. **JavaScript Enhancements Load in the Background:** If JavaScript frameworks like React or Vue.js are used, they hydrate (attach interactivity to) the already rendered HTML.
 
 # API Routes
 
