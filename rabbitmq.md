@@ -1041,3 +1041,300 @@ To solve this, RabbitMQ uses Acknowledgements.
 | **ack**    | Processed successfully            | ❌ (message removed) | Normal processing             |
 | **nack**   | Failed (can be multiple messages) | ✅/❌                | Retry or discard batch        |
 | **reject** | Failed (single message)           | ✅/❌                | Invalid/unprocessable message |
+
+
+# Declaring Queues
+
+A queue is a buffer that stores messages until a consumer retrieves them.
+Key properties when declaring a queue:
+
+- **Name**: The identifier of the queue (e.g., "`task_queue`").
+- **Durable**: If `true`, the queue survives broker restarts (messages will persist if also marked as persistent).
+- **Exclusive**: If `true`, the queue is only accessible by the connection that declared it and will be deleted once the connection closes.
+- **Auto**-delete: If `true`, the queue will automatically be deleted when the last consumer unsubscribes.
+- **Arguments**: Optional extra settings like TTL (time-to-live) or max length.
+
+Declaring a queue ensures it exists before you publish or consume messages.
+
+## Durable Queues
+
+- A durable queue survives a broker restart.
+- To truly persist messages across restarts:
+    - The queue must be durable.
+    - Messages must be published as persistent (persistent: true in options).
+- If a queue is not durable:
+    - It will be deleted when RabbitMQ restarts.
+    - Any messages stored will also be lost.
+
+Durable queues are ideal for reliable background tasks (e.g., processing jobs in a worker system).
+
+```ts
+const amqp = require('amqplib');
+
+async function producer() {
+  const connection = await amqp.connect('amqp://localhost');
+  const channel = await connection.createChannel();
+
+  const queue = 'durable_queue';
+  const msg = 'Task needs to be processed';
+
+  // Declare a durable queue
+  await channel.assertQueue(queue, { durable: true });
+
+  // Publish persistent message
+  channel.sendToQueue(queue, Buffer.from(msg), {
+    persistent: true
+  });
+
+  console.log(" [x] Sent '%s'", msg);
+
+  await channel.close();
+  await connection.close();
+}
+
+producer();
+
+```
+## Auto-delete Queues
+
+- An auto-delete queue is deleted automatically when the last consumer unsubscribes.
+- Useful for temporary or short-lived consumers, like:
+    - Real-time chat rooms.
+    - Notifications where a queue exists only while someone is listening.
+- If you declare a queue as `autoDelete: true`, once no consumers are connected, RabbitMQ removes the queue automatically.
+- Note: Auto-delete is triggered only when consumers disconnect, not when the queue is empty.
+
+```ts
+const amqp = require('amqplib');
+
+async function consumer() {
+  const connection = await amqp.connect('amqp://localhost');
+  const channel = await connection.createChannel();
+
+  const queue = 'temp_notifications';
+
+  // Auto-delete queue (deleted when last consumer unsubscribes)
+  await channel.assertQueue(queue, {
+    durable: false,
+    autoDelete: true
+  });
+
+  console.log(" [*] Waiting for messages in %s", queue);
+
+  channel.consume(queue, (msg) => {
+    console.log(" [x] Received '%s'", msg.content.toString());
+  }, { noAck: true });
+}
+
+consumer();
+const amqp = require('amqplib');
+
+async function consumer() {
+  const connection = await amqp.connect('amqp://localhost');
+  const channel = await connection.createChannel();
+
+  const queue = 'temp_notifications';
+
+  // Auto-delete queue (deleted when last consumer unsubscribes)
+  await channel.assertQueue(queue, {
+    durable: false,
+    autoDelete: true
+  });
+
+  console.log(" [*] Waiting for messages in %s", queue);
+
+  channel.consume(queue, (msg) => {
+    console.log(" [x] Received '%s'", msg.content.toString());
+  }, { noAck: true });
+}
+
+consumer();
+```
+1. Producer side (durable_queue):
+    - Declares a queue with `{ durable: true }`.
+    - Sends a persistent message.
+    - Even if RabbitMQ restarts, the queue and message will still exist.
+2. Consumer side (temp_notifications):
+    - Declares a queue with `{ autoDelete: true }`.
+    - Queue will exist only while at least one consumer is connected.
+    - As soon as the consumer disconnects, RabbitMQ deletes the queue automatically
+    - 
+
+## Queue Property Matrix
+| Property       | Effect                                                                               | Use Case                                          |
+| -------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| **Durable**    | Queue survives broker restarts (persistent storage if messages are also persistent). | Background jobs, task queues, reliable systems    |
+| **AutoDelete** | Queue is deleted once the last consumer unsubscribes.                                | Temporary consumers, live sessions, pub/sub rooms |
+
+# Declaring Exchanges
+An exchange is responsible for routing messages to queues.
+When a producer publishes a message, it sends it to an exchange, not directly to a queue.
+
+Exchange properties:
+
+- **Name**: Identifier (e.g., "`logs_exchange`").
+- **Type**: Defines routing strategy:
+    - `direct`: Routes messages to queues based on exact routing key.
+    - `fanout`: Routes messages to all bound queues (broadcast).
+    - `topic`: Routes messages based on pattern matching (wildcards in routing keys).
+    - `headers`: Routes messages based on message headers.
+- **Durable**: Survives broker restart.
+- **Auto-delete**: Deleted once no queues are bound to it.
+
+Declaring an exchange ensures it exists before binding or publishing.
+
+# Binding Queues to Exchanges
+
+A binding links an exchange to a queue with a routing rule.
+
+- In a direct exchange, the binding includes a specific routing key.
+- In a fanout exchange, no routing key is needed (messages go everywhere).
+- In a topic exchange, the binding includes a pattern (like `*.error`).
+
+
+```ts
+const amqp = require('amqplib');
+
+async function setup() {
+  try {
+    // 1. Connect to RabbitMQ
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    // 2. Declare exchange
+    const exchangeName = 'direct_logs';
+    await channel.assertExchange(exchangeName, 'direct', {
+      durable: true
+    });
+
+    // 3. Declare queue
+    const queueName = 'error_logs';
+    await channel.assertQueue(queueName, {
+      durable: true,
+      exclusive: false,
+      autoDelete: false
+    });
+
+    // 4. Bind queue to exchange with routing key
+    const routingKey = 'error';
+    await channel.bindQueue(queueName, exchangeName, routingKey);
+
+    console.log(`Queue "${queueName}" bound to exchange "${exchangeName}" with key "${routingKey}"`);
+
+    // 5. Close connection after setup
+    setTimeout(() => {
+      connection.close();
+      process.exit(0);
+    }, 500);
+  } catch (err) {
+    console.error('Error setting up RabbitMQ:', err);
+  }
+}
+
+setup();
+```
+
+# Publishing Messages
+A producer sends a message to an exchange, which then routes it to one or more queues (depending on bindings).
+
+## Important options when publishing:
+
+- **exchange**: The exchange name (empty string `""` means the default exchange, which routes directly to a queue by its name).
+- **routingKey**: Used by `direct`/`topic` exchanges to decide which queue(s) should receive the message.
+- **content**: The actual message body (Buffer/string).
+- **options**:
+    - `persistent: true` → ensures the message is stored on disk (not lost if broker restarts, assuming queue is also durable).
+    - `expiration` → message TTL (time-to-live).
+    - `headers` → key/value pairs for `headers` exchange type.
+
+Producers don’t care which consumer eventually processes the message—they just publish.
+
+```ts
+const amqp = require('amqplib');
+
+async function producer() {
+  const connection = await amqp.connect('amqp://localhost');
+  const channel = await connection.createChannel();
+
+  const queue = 'task_queue';
+  const msg = 'Hello RabbitMQ!';
+
+  // Declare queue to make sure it exists
+  await channel.assertQueue(queue, { durable: true });
+
+  // Publish message to the queue
+  channel.sendToQueue(queue, Buffer.from(msg), {
+    persistent: true   // ensures message survives broker restart
+  });
+
+  console.log(` [x] Sent '${msg}'`);
+
+  await channel.close();
+  await connection.close();
+}
+
+producer();
+```
+
+# Consuming Messages
+A consumer connects to a queue and waits for messages.
+
+## Key concepts:
+- Queue name: The queue to consume from.
+- autoAck (automatic acknowledgement):
+    - ``true``: Message is removed immediately after delivery.
+    - `false`: Message stays in queue until consumer acknowledges it (via `channel.ack(msg)`).
+    - Using manual ack is safer in production, so unprocessed messages can be re-delivered if a consumer crashes.
+- prefetch: Limit how many unacknowledged messages a consumer can receive at once (helps load balance).
+
+```ts
+const amqp = require('amqplib');
+
+async function consumer() {
+  const connection = await amqp.connect('amqp://localhost');
+  const channel = await connection.createChannel();
+
+  const queue = 'task_queue';
+
+  // Ensure the queue exists
+  await channel.assertQueue(queue, { durable: true });
+
+  // Only fetch 1 unacknowledged message at a time
+  channel.prefetch(1);
+
+  console.log(" [*] Waiting for messages in %s", queue);
+
+  // Consume messages
+  channel.consume(queue, async (msg) => {
+    if (msg !== null) {
+      const content = msg.content.toString();
+      console.log(" [x] Received '%s'", content);
+
+      // Simulate some work
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      console.log(" [x] Done processing '%s'", content);
+
+      // Acknowledge after processing
+      channel.ack(msg);
+    }
+  }, {
+    noAck: false  // require manual acknowledgement
+  });
+}
+
+consumer();
+```
+1. **Producer:**
+    - Connects and declares a durable queue (`task_queue`).
+    - Publishes `"Hello RabbitMQ!"` into it.
+    - Message is persistent, meaning it will be stored on disk.
+2. **Consumer:**
+    - Connects and ensures the same queue exists.
+    - Calls `channel.consume` to start receiving messages.
+    - Uses `channel.prefetch(1)` → processes one message at a time (fair dispatch).
+    - Uses `channel.ack(msg)` → acknowledges processing is complete, so RabbitMQ removes it from the queue.
+  
+If the consumer crashes before `ack`, the message will be re-queued and delivered to another consumer.
+
+
