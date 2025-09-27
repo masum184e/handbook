@@ -900,7 +900,54 @@ console.log("Deleted user and their posts:", deletedUser);
 
 - Cascading deletes are controlled by the schema relation.
 - Without `Cascade`, deleting a parent may fail if child records exist.
+## Upsert
+**Upsert = Update + Insert**
 
+It’s a single database operation that:
+
+- Updates a record if it already exists.
+- Creates a new record if it doesn’t exist.
+
+This is super useful when you don’t know whether the record is already in the database, and you want to ensure that either way, you end up with a record in the right state — without having to run multiple queries (`find → update/create`).
+
+```prisma
+prisma.modelName.upsert({
+  where: { uniqueField: value },
+  update: { ...fieldsToUpdate },
+  create: { ...fieldsToCreate },
+})
+```
+- `where`: Defines the unique identifier to check if the record exists. It must be a unique field (like id or a field with a unique constraint).
+- `update`: What to update if the record already exists.
+- `create`: What to insert if the record doesn’t exist.
+
+## Pagination
+### Offset-based Pagination
+This is the most common (and simple) type of pagination.
+
+- `skip`: number of records to skip.
+- `take`: number of records to return (positive = forward, negative = backward).
+
+```ts
+const users = await prisma.user.findMany({
+  skip: 5,   // skip the first 5
+  take: 5,   // get the next 5
+})
+```
+### Cursor-based Pagination
+Instead of skipping records (which can get slow on large datasets), cursor pagination starts from a specific record.
+
+- `cursor`: defines the starting point (requires a unique field).
+- `skip`: often used with cursor to move past the cursor item.
+- `take`: how many to fetch from that point.
+
+```ts
+const users = await prisma.user.findMany({
+  cursor: { id: 10 }, // start at user with id=10
+  skip: 1,            // skip that cursor item itself
+  take: 5,            // fetch 5 after it
+})
+```
 ## Lazy Loading
 
 In traditional ORMs, lazy loading means related records are only fetched when you explicitly access them, often through a proxy object.
