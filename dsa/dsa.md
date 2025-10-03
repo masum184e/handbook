@@ -13,7 +13,30 @@
   - [Big O](#1-big-o-notation-o--upper-bound-worst-case)
   - [Omega](#2-omega-notation-ω--lower-bound-best-case)
   - [Theta](#3-theta-notation-θ--tight-bound-average-case)
-- [Dynamic Programming](#dynamic-programming) - [Dynamic Programming](#dynamic-programming) - [Key Characteristics](#key-characteristics-of-dp-problems) - [Optimal Substructure](#optimal-substructure) - [Overlapping Subproblems](#overlapping-subproblems) - [Two Main Approaches](#two-main-approaches-of-dp) - [Top-Down (Memoization)](#top-down-memoization) - [Bottom-Up (Tabulation)](#bottom-up-tabulation) - [Example Problem](#example-problem-of-dynamic-programming) - [Naive Recursive Solution (Exponential Time)](#naive-recursive-solution-exponential-time) - [Memoization (Top-Down)](#dp-with-memoization-top-down) - [Tabulation (Bottom-Up)](#dp-with-tabulation-bottom-up) - [General Template](#general-template) - [1D DP Template](#1d-dp-template) - [2D DP Template](#2d-dp-template)
+- [Backtracking](#backtracking)
+  - [When do we use Backtracking?](#when-do-we-use-backtracking)
+  - [Backtracking Process](#backtracking-process)
+  - [General Template](#general-template)
+    - [Iterative Template](#iterative-template-of-backtracking)
+    - [Recursive Approach](#recursive-template-of-backtracking)
+  - [Example Problem](#example-problem-of-backtracking)
+    - [Generate All Binary String](#generate-all-binary-strings-of-length-n)
+    - [N-Queens](#n-queens)
+- [Dynamic Programming](#dynamic-programming)
+  - [Key Characteristics](#key-characteristics-of-dp-problems)
+    - [Optimal Substructure](#optimal-substructure)
+    - [Overlapping Subproblems](#overlapping-subproblems)
+  - [Two Main Approaches](#two-main-approaches-of-dp)
+    - [Top-Down (Memoization)](#top-down-memoization)
+    - [Bottom-Up (Tabulation)](#bottom-up-tabulation)
+  - [Example Problem](#example-problem-of-dynamic-programming)
+    - [Naive Recursive Solution (Exponential Time)](#naive-recursive-solution-exponential-time)
+    - [Memoization (Top-Down)](#dp-with-memoization-top-down)
+    - [Tabulation (Bottom-Up)](#dp-with-tabulation-bottom-up)
+  - [General Template](#general-template)
+    - [1D DP Template](#1d-dp-template)
+    - [2D DP Template](#2d-dp-template)
+
 <!--
 
 
@@ -544,24 +567,73 @@ This is usually implemented with recursion.
 
 ## General Template
 
+### Iterative Template of Backtracking
+
 ```cpp
-void backtrack(State& state, Choices& choices, Result& result) {
-    // 1. Check if we reached a solution (base case)
-    if (isSolution(state)) {
-        result.push_back(state);   // record the solution
+// Recursive backtracking function
+void backtrack(vector<int>& current, vector<int>& nums, vector<vector<int>>& result) {
+    // Base case: if the current solution is complete
+    if (current.size() == nums.size()) {
+        result.push_back(current);  // Save the solution
         return;
     }
 
-    // 2. Explore choices
-    for (choice in choices) {
-        if (isValid(choice, state)) {   // pruning step
-            makeChoice(state, choice);  // choose
+    // Loop through all possible choices
+    for (int i = 0; i < nums.size(); i++) {
+        // Skip the choice if it's already used (check for duplicates, or already in the current solution)
+        if (/* condition to check if nums[i] is already in current */) continue;
 
-            backtrack(state, choices, result); // explore further
+        // Make the choice
+        current.push_back(nums[i]);
 
-            undoChoice(state, choice);  // un-choose (backtrack)
-        }
+        // Recur to the next level
+        backtrack(current, nums, result);
+
+        // Undo the choice (backtrack)
+        current.pop_back();
     }
+}
+
+// Driver function
+vector<vector<int>> solve(vector<int>& nums) {
+    vector<vector<int>> result;  // This will hold all the valid solutions
+    vector<int> current;         // This holds the current solution
+    backtrack(current, nums, result);
+    return result;
+}
+```
+
+### Recursive Template of Backtracking
+
+```cpp
+// Recursive backtracking function
+void backtrack(int index, vector<int>& current, vector<int>& nums, vector<vector<int>>& result) {
+    // Base case: if the current solution is complete (e.g., size equals to nums)
+    if (current.size() == nums.size()) {
+        result.push_back(current);  // Store the solution
+        return;
+    }
+
+    // Recursive case: explore the next possible choice
+    if (index >= nums.size()) {
+        return;  // Base case when index exceeds the array bounds
+    }
+
+    // Option 1: Include nums[index] in the current solution
+    current.push_back(nums[index]);
+    backtrack(index + 1, current, nums, result);  // Recursively move to the next step
+
+    // Option 2: Exclude nums[index] and try without it
+    current.pop_back();
+    backtrack(index + 1, current, nums, result);  // Recursively move to the next step
+}
+
+// Driver function
+vector<vector<int>> solve(vector<int>& nums) {
+    vector<vector<int>> result;  // This will hold all the valid solutions
+    vector<int> current;         // This holds the current solution
+    backtrack(0, current, nums, result);  // Start the recursion from the first index
+    return result;
 }
 ```
 
@@ -603,22 +675,6 @@ The task: Print all possible arrangements.
    - If not safe → try next column.
 3. If all rows are filled, print solution.
 4. If stuck, backtrack (remove queen) and try a different column.
-
-```cpp
-void solve(int row, int n, vector<string>& board, vector<vector<string>>& result) {
-    if (row == n) { // all rows filled
-        result.push_back(board);
-        return;
-    }
-    for (int col = 0; col < n; col++) {
-        if (isValid(board, row, col)) {
-            board[row][col] = 'Q';         // make choice
-            solve(row+1, n, board, result);
-            board[row][col] = '.';         // undo choice
-        }
-    }
-}
-```
 
 # Dynamic Programming
 
