@@ -13,21 +13,7 @@
   - [Big O](#1-big-o-notation-o--upper-bound-worst-case)
   - [Omega](#2-omega-notation-ω--lower-bound-best-case)
   - [Theta](#3-theta-notation-θ--tight-bound-average-case)
-- [Dynamic Programming](#dynamic-programming)
-    - [Dynamic Programming](#dynamic-programming)
-    - [Key Characteristics](#key-characteristics-of-dp-problems)
-        - [Optimal Substructure](#optimal-substructure)
-        - [Overlapping Subproblems](#overlapping-subproblems)
-    - [Two Main Approaches](#two-main-approaches-of-dp)
-        - [Top-Down (Memoization)](#top-down-memoization)
-        - [Bottom-Up (Tabulation)](#bottom-up-tabulation)
-    - [Example Problem](#example-problem-of-dynamic-programming)
-        - [Naive Recursive Solution (Exponential Time)](#naive-recursive-solution-exponential-time)
-        - [Memoization (Top-Down)](#dp-with-memoization-top-down)
-        - [Tabulation (Bottom-Up)](#dp-with-tabulation-bottom-up)
-    - [General Template](#general-template)
-        - [1D DP Template](#1d-dp-template)
-        - [2D DP Template](#2d-dp-template)
+- [Dynamic Programming](#dynamic-programming) - [Dynamic Programming](#dynamic-programming) - [Key Characteristics](#key-characteristics-of-dp-problems) - [Optimal Substructure](#optimal-substructure) - [Overlapping Subproblems](#overlapping-subproblems) - [Two Main Approaches](#two-main-approaches-of-dp) - [Top-Down (Memoization)](#top-down-memoization) - [Bottom-Up (Tabulation)](#bottom-up-tabulation) - [Example Problem](#example-problem-of-dynamic-programming) - [Naive Recursive Solution (Exponential Time)](#naive-recursive-solution-exponential-time) - [Memoization (Top-Down)](#dp-with-memoization-top-down) - [Tabulation (Bottom-Up)](#dp-with-tabulation-bottom-up) - [General Template](#general-template) - [1D DP Template](#1d-dp-template) - [2D DP Template](#2d-dp-template)
 <!--
 
 
@@ -556,6 +542,29 @@ Backtracking is commonly used in problems where:
 
 This is usually implemented with recursion.
 
+## General Template
+
+```cpp
+void backtrack(State& state, Choices& choices, Result& result) {
+    // 1. Check if we reached a solution (base case)
+    if (isSolution(state)) {
+        result.push_back(state);   // record the solution
+        return;
+    }
+
+    // 2. Explore choices
+    for (choice in choices) {
+        if (isValid(choice, state)) {   // pruning step
+            makeChoice(state, choice);  // choose
+
+            backtrack(state, choices, result); // explore further
+
+            undoChoice(state, choice);  // un-choose (backtrack)
+        }
+    }
+}
+```
+
 ## Example Problem of Backtracking
 
 ### Generate All Binary Strings of Length `n`
@@ -594,6 +603,22 @@ The task: Print all possible arrangements.
    - If not safe → try next column.
 3. If all rows are filled, print solution.
 4. If stuck, backtrack (remove queen) and try a different column.
+
+```cpp
+void solve(int row, int n, vector<string>& board, vector<vector<string>>& result) {
+    if (row == n) { // all rows filled
+        result.push_back(board);
+        return;
+    }
+    for (int col = 0; col < n; col++) {
+        if (isValid(board, row, col)) {
+            board[row][col] = 'Q';         // make choice
+            solve(row+1, n, board, result);
+            board[row][col] = '.';         // undo choice
+        }
+    }
+}
+```
 
 # Dynamic Programming
 
@@ -697,7 +722,7 @@ int solveDP(int n) {
     vector<int> dp(n + 1, 0); // DP array initialized to zero
 
     // Base case value, adjust as needed
-    dp[0] = 0; 
+    dp[0] = 0;
 
     // Loop through the problem
     for (int i = 1; i <= n; ++i) {
@@ -717,31 +742,31 @@ int solveDP(int n) {
 
 - To get the **path** you can **add**:
 
+  ```cpp
+  parent[i] = (dp[i - 2] < dp[i - 1]) ? i - 2 : i - 1;
+  ```
+
+  - Then add the following outside the loop
+
     ```cpp
-    parent[i] = (dp[i - 2] < dp[i - 1]) ? i - 2 : i - 1;
+    int lastStep = (dp[n - 2] < dp[n - 1]) ? n - 2 : n - 1;
+    int minCost = dp[lastStep];
+
+    // Reconstruct the path
+    vector<int> path;
+    int curr = lastStep;
+    while (curr != -1) {
+        path.push_back(curr);
+        curr = parent[curr];
+    }
+    reverse(path.begin(), path.end());
+
+    cout << "Minimum cost: " << minCost << "\nPath: ";
+    for (int step : path) {
+        cout << step << " ";
+    }
+    cout << endl;
     ```
-
-    - Then add the following outside the loop
-
-        ```cpp
-        int lastStep = (dp[n - 2] < dp[n - 1]) ? n - 2 : n - 1;
-        int minCost = dp[lastStep];
-
-        // Reconstruct the path
-        vector<int> path;
-        int curr = lastStep;
-        while (curr != -1) {
-            path.push_back(curr);
-            curr = parent[curr];
-        }
-        reverse(path.begin(), path.end());
-
-        cout << "Minimum cost: " << minCost << "\nPath: ";
-        for (int step : path) {
-            cout << step << " ";
-        }
-        cout << endl;
-        ```
 
 ### 2D DP Template
 
