@@ -1214,7 +1214,7 @@ Output:
 | C003        | 1            |
 
 - `GROUP BY customer_id` → All rows with the same `customer_id` are combined into one group.
-- `COUNT(*)` counts how many orders are in each grou
+- `COUNT(*)` counts how many orders are in each group
 
 ### Key Points to Remember for `GROUP BY`
 
