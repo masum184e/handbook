@@ -1,62 +1,22 @@
 # Contents
 
 ## 1. Introduction
-# Contents
-
-## 1. Introduction
 
 - [Introduction](#introduction)
   - [Core Characteristics of JavaScript](#core-characteristics-of-javascript)
   - [Programming Paradigms](#programming-paradigms)
   - [Runtime Behaviour](#runtime-behavior)
+  - [Fun Facts](#fun-facts)
 - [ECMAScript](#ecmascript)
   - [ECMAScript 2025](#features-introduced-in-ecmascript-2025)
+  - [ECMAScript Versions](#ecmascript-versions)
+  - [Deviates from ECMAScript](#deviates-from-ecmascript)
 - [DRY vs WET](#dry-vs-wet)
   - [Don’t Repeat Yourself](#dry-dont-repeat-yourself)
   - [We Enjoy Typing](#wet-write-everything-twice--we-enjoy-typing)
   - [Comparison of DRY and WET](#comparison-of-dry-and-wet)
 - [Browser vs NodeJS](#browser-vs-nodejs)
-
-## 2. Fundamentals
-
-- [Data Types](#data-types)
-  - [Primitive Data Types](#primitive-data-types)
-  - [Non-Primitive Data Types](#non-primitive-reference-data-types)
-  - [Value vs Reference](#key-difference-value-vs-reference)
-- [Variables](#variables)
-  - [Variable Environments](#variable-environments)
-  - [Variables](#variable-declaration)
-  - [Hoisting](#hoisting)
-  - [Temporal Dead Zone](#temporal-dead-zone)
-  - [Scope](#scope)
-    - [Lexical Scope](#lexical-scope)
-    - [Variable Shadowing](#variable-shadowing)
-    - [Scope Chain](#scope-chain)
-  - [Closure](#closure)
-    - [Why Closures Exist?](#why-closures-exist)
-    - [Basic Example of Clousure](#basic-example-of-clousure)
-    - [Closure with Private Variables](#closure-with-private-variables)
-    - [Closure in Loops](#closure-in-loops)
-- [Operators](#operators)
-  - [`typeof`](#typeof)
-  - [Truthy & Falsy](#truthy-and-falsy)
-
-## 3. Control Structures
-
-- [Loops](#loops)
-  - [Differences between `for...of` and `for...in`](#differences-between-forof-and-forin)
-- [Expression and Statement](#expression-and-statement)
-- [Introduction](#introduction)
-  - [Core Characteristics of JavaScript](#core-characteristics-of-javascript)
-  - [Programming Paradigms](#programming-paradigms)
-  - [Runtime Behaviour](#runtime-behavior)
-- [ECMAScript](#ecmascript)
-  - [ECMAScript 2025](#features-introduced-in-ecmascript-2025)
-- [DRY vs WET](#dry-vs-wet)
-  - [Don’t Repeat Yourself](#dry-dont-repeat-yourself)
-  - [We Enjoy Typing](#wet-write-everything-twice--we-enjoy-typing)
-  - [Comparison of DRY and WET](#comparison-of-dry-and-wet)
-- [Browser vs NodeJS](#browser-vs-nodejs)
+- [Browser Storage](#browserstorage)
 
 ## 2. Fundamentals
 
@@ -108,6 +68,8 @@
 ## 5. Objects & Prototypes
 
 - [Object Basics](#object)
+  - [Object Concatenation](#object-concatenation)
+  - [Immutability](#immutability)
   - [Bracket Notation](#bracket-notation)
 - [Prototype](#prototype)
   - [Key Concepts](#key-concepts-of-prototype)
@@ -195,11 +157,10 @@
 # Introduction
 
 ## Core Characteristics of JavaScript
-# Introduction
 
-## Core Characteristics of JavaScript
+### High Level Language
 
-**High-level:** JavaScript is considered a high-level language because it abstracts away most of the complex details of the computer, such as memory management and low-level operations, allowing developers to focus on logic and problem-solving.
+JavaScript is considered a high-level language because it abstracts away most of the complex details of the computer, such as memory management and low-level operations, allowing developers to focus on logic and problem-solving.
 
 ```js
 let num = 42; // No need to allocate memory manually
@@ -213,7 +174,7 @@ It would be more like Assembly language or machine code. That means:
 - You’d need to use CPU instructions directly (MOV, ADD, etc.).
 - Writing even simple programs would be harder, longer, and less readable.
 
-Example (same x + y):
+Example (x + y):
 
 ```asm
 MOV A, 5      ; Put 5 into register A
@@ -222,7 +183,7 @@ ADD A, B      ; Add A and B, result in A
 PRINT A       ; Print the result
 ```
 
-### Comparison with C
+**Comparison with C**
 
 | Feature            | C                              | JavaScript                    |
 | ------------------ | ------------------------------ | ----------------------------- |
@@ -231,40 +192,93 @@ PRINT A       ; Print the result
 | Closest to Machine | Yes, allows pointers           | No, abstracted                |
 | Ease of Writing    | Moderate                       | Very easy                     |
 
-**Dynamic Typing:** JavaScript is dynamically typed, meaning you don't need to declare variable types explicitly. The type is determined at runtime.
+### Dynamic Typing
+JavaScript is dynamically typed, meaning you don't need to declare variable types explicitly. The type is determined at runtime.
 
 ```js
 let x = 10; // number
 x = "hello"; // now string
 ```
 
-**Interpreted & Just-in-time Compiled:** Originally an interpreted language, JavaScript is now executed using Just-In-Time (JIT) compilation by modern engines (like V8 in Chrome). This means code is parsed and optimized into machine code at runtime, combining the flexibility of interpretation with the performance benefits of compilation.
+### Interpreted & Just-in-Time (JIT) Compiled Languages
+
+JavaScript started as an interpreted language but now runs through Just-In-Time (JIT) compilation in modern engines like V8 (Chrome), SpiderMonkey (Firefox), and JavaScriptCore (Safari).
+
+This means JavaScript code is parsed, optimized, and compiled into machine code at runtime, combining the flexibility of interpretation with the speed of compilation.
 
 ```js
-console.log("Executed in real-time by browser/engine");
+console.log("Executed in real-time by the browser/engine");
 ```
+#### Interpreted Languages
 
-- **Interpreted:** Imagine you are reading a comic book out loud to your friends. You don’t prepare in advance, you just read each line as you go. That’s how interpreted languages work — the computer reads and runs the code line by line.
+The code is read and executed line by line — no separate compilation step.
 
-- **Just-in-time (JIT) Compiled:** Now imagine instead of just reading, you quickly translate the comic into your friend’s language while reading, so they understand faster. That’s JIT — the computer changes the code into its own “machine language” right when it’s running, so it goes faster.
+Imagine you’re reading a comic book out loud to your friends — you don’t prepare ahead of time, you just read as you go.
 
-- **If it’s not Interpreted & not Just-in-time Compiled**
+- The interpreter reads each line and executes it immediately.
+- Great for flexibility and rapid testing.
+- Slower than compiled languages because code isn’t pre-optimized.
+- Examples: JavaScript, Python, Ruby
 
-  That means it’s a fully compiled language like C or Rust.
+Originally, JavaScript was a purely interpreted language — the engine would:
 
-  - You have to translate the entire book before reading it.
-  - The computer needs the whole program compiled into machine code before it can run at all.
-  - No quick changes in the browser — you’d have to “build” every time before testing.
+1. Read your source code line by line.
+2. Immediately execute it without converting it to machine code first.
 
-    Node.js is JavaScript outside the browser — for server-side apps. Even though JS is interpreted, there are reasons we “build” (Node.js can run js without even building but can't do it for typescript) Node.js apps:
+This made JS flexible and dynamic, perfect for browsers — but it was slow. Modern JavaScript engines introduced JIT (Just-In-Time) compilation to fix that.
 
-    - Node.js allows ES6+ syntax (like `import`, `async/await`) and TypeScript.
-    - Older Node.js versions may not support all features directly, so we transpile code before running.
-    - Building ensures compatibility.
+#### Compiled Languages
+
+The entire source code is translated into machine code before execution.
+
+It’s like translating the entire comic book into another language before reading it to your friends.
+
+- Produces a standalone executable.
+- Runs faster since the translation happens once, not every time.
+- Less flexible for quick changes.
+- Examples: C, C++, Rust, Go
+
+#### Just-In-Time (JIT) Compiled Languages
+
+A hybrid approach where code is compiled while it’s running, not entirely beforehand.
+
+You’re reading the comic book but translating each sentence quickly into your friend’s language as you go — faster than reading line by line, but still flexible.
+
+- The code starts running immediately (like an interpreter).
+- Frequently used code paths are optimized and compiled into machine code.
+- Provides both speed and adaptability.
+- Used In: Modern JavaScript engines, Java Virtual Machine (JVM), .NET CLR
+
+**If It’s Not Interpreted or JIT-Compiled**
+
+Then it’s a fully compiled language.
+- You must “translate the whole book” (compile the program) before it can run.
+- The computer won’t start execution until compilation is complete.
+- You need to build the project every time you make changes.
+- Examples: C, Rust, Swift
+
+**JavaScript and Node.js Context**
+
+Even though JavaScript is interpreted (with JIT optimization), Node.js lets you run JavaScript outside the browser — for server-side applications.
+
+You might still “build” Node.js apps (especially when using TypeScript or modern JS features) for these reasons:
+
+1. Syntax Compatibility: Not all Node.js versions support the latest ECMAScript features (like `import/export`, `async/await`).
+2. Transpilation: TypeScript and Babel convert modern code into backward-compatible JavaScript.
+3. Performance & Optimization: Building ensures consistent performance and compatibility across environments.
+
+Note: Node.js can execute plain `.js` files directly without building — but TypeScript (`.ts`) must be transpiled first.
+
+| Type             | Description                     | Example Languages  | Speed        | Flexibility |
+| ---------------- | ------------------------------- | ------------------ | ------------ | ----------- |
+| **Interpreted**  | Executes line-by-line           | JavaScript, Python | Medium     | High      |
+| **Compiled**     | Fully translated before running | C, Rust            |  Very High | Low       |
+| **JIT-Compiled** | Compiled during execution       | JS (V8), Java      |  High      | Medium    |
 
 ## Programming Paradigms
 
-**Multi-paradigm:** JavaScript supports multiple programming paradigms, including object-oriented, functional, and imperative programming.
+### Multi-paradigm
+JavaScript supports multiple programming paradigms, including object-oriented, functional, and imperative programming.
 
 ```js
 // Functional
@@ -281,7 +295,8 @@ class Dog {
 for (let i = 0; i < 3; i++) console.log(i);
 ```
 
-**Prototype-based Object Orientation:** Instead of classical inheritance (like Java or C++), JavaScript uses prototypes, where objects can directly inherit from other objects.
+### Prototype-based Object Orientation
+Instead of classical inheritance (like Java or C++), JavaScript uses prototypes, where objects can directly inherit from other objects.
 
 ```js
 function Animal(name) {
@@ -295,7 +310,8 @@ const dog = new Animal("Rex");
 dog.speak(); // Rex makes a sound
 ```
 
-**Functional:** With higher-order functions, closures, immutability practices, and functions as first-class citizens, JavaScript allows developers to follow a functional programming style.
+### Functional
+With higher-order functions, closures, immutability practices, and functions as first-class citizens, JavaScript allows developers to follow a functional programming style.
 
 ```js
 function greet(name) {
@@ -308,7 +324,8 @@ function executor(fn, value) {
 console.log(executor(greet, "Alice")); // Hi Alice
 ```
 
-**Imperative Programming Style:** JavaScript also supports imperative programming, where tasks are defined step by step using constructs like loops, conditionals, and assignments.
+### Imperative Programming Style
+JavaScript also supports imperative programming, where tasks are defined step by step using constructs like loops, conditionals, and assignments.
 
 If it’s not Imperative Programming Style, that means you wouldn’t give the computer step-by-step instructions. Instead you might use a Declarative style (like SQL or HTML), where you just say what you want, not how to do it.
 
@@ -333,7 +350,8 @@ and the computer figures out the steps.
 
 ## Runtime Behavior
 
-**First-class Functions:** Functions are treated like any other variable—they can be passed as arguments, returned from other functions, and stored in variables.
+### First-class Functions
+Functions are treated like any other variable—they can be passed as arguments, returned from other functions, and stored in variables.
 
 ```js
 const sayHi = () => console.log("Hi");
@@ -341,7 +359,8 @@ const run = (fn) => fn();
 run(sayHi); // Hi
 ```
 
-**Event-driven:** JavaScript is inherently event-driven, making it suitable for building interactive applications. Events (like user clicks, network responses, or timers) drive execution, supported by asynchronous features such as callbacks, promises, and async/await.
+### Event-driven
+JavaScript is inherently event-driven, making it suitable for building interactive applications. Events (like user clicks, network responses, or timers) drive execution, supported by asynchronous features such as callbacks, promises, and async/await.
 
 ```js
 // Browser example
@@ -372,179 +391,6 @@ It can executes after triggering an event(input is not an event) that's why it c
 - Atom, Brackets are build on top of Javascript
 - Visual Studio Code is build on Typescript
 
-# ECMAScript
-**High-level:** JavaScript is considered a high-level language because it abstracts away most of the complex details of the computer, such as memory management and low-level operations, allowing developers to focus on logic and problem-solving.
-
-```js
-let num = 42; // No need to allocate memory manually
-```
-
-**What if JavaScript were not high-level?**
-
-It would be more like Assembly language or machine code. That means:
-
-- You’d have to manage memory yourself (decide where variables live in RAM).
-- You’d need to use CPU instructions directly (MOV, ADD, etc.).
-- Writing even simple programs would be harder, longer, and less readable.
-
-Example (same x + y):
-
-```asm
-MOV A, 5      ; Put 5 into register A
-MOV B, 10     ; Put 10 into register B
-ADD A, B      ; Add A and B, result in A
-PRINT A       ; Print the result
-```
-
-### Comparison with C
-
-| Feature            | C                              | JavaScript                    |
-| ------------------ | ------------------------------ | ----------------------------- |
-| Level              | High-level (but lower than JS) | High-level                    |
-| Memory Management  | Manual                         | Automatic (garbage collected) |
-| Closest to Machine | Yes, allows pointers           | No, abstracted                |
-| Ease of Writing    | Moderate                       | Very easy                     |
-
-**Dynamic Typing:** JavaScript is dynamically typed, meaning you don't need to declare variable types explicitly. The type is determined at runtime.
-
-```js
-let x = 10; // number
-x = "hello"; // now string
-```
-
-**Interpreted & Just-in-time Compiled:** Originally an interpreted language, JavaScript is now executed using Just-In-Time (JIT) compilation by modern engines (like V8 in Chrome). This means code is parsed and optimized into machine code at runtime, combining the flexibility of interpretation with the performance benefits of compilation.
-
-```js
-console.log("Executed in real-time by browser/engine");
-```
-
-- **Interpreted:** Imagine you are reading a comic book out loud to your friends. You don’t prepare in advance, you just read each line as you go. That’s how interpreted languages work — the computer reads and runs the code line by line.
-
-- **Just-in-time (JIT) Compiled:** Now imagine instead of just reading, you quickly translate the comic into your friend’s language while reading, so they understand faster. That’s JIT — the computer changes the code into its own “machine language” right when it’s running, so it goes faster.
-
-- **If it’s not Interpreted & not Just-in-time Compiled**
-
-  That means it’s a fully compiled language like C or Rust.
-
-  - You have to translate the entire book before reading it.
-  - The computer needs the whole program compiled into machine code before it can run at all.
-  - No quick changes in the browser — you’d have to “build” every time before testing.
-
-    Node.js is JavaScript outside the browser — for server-side apps. Even though JS is interpreted, there are reasons we “build” (Node.js can run js without even building but can't do it for typescript) Node.js apps:
-
-    - Node.js allows ES6+ syntax (like `import`, `async/await`) and TypeScript.
-    - Older Node.js versions may not support all features directly, so we transpile code before running.
-    - Building ensures compatibility.
-
-## Programming Paradigms
-
-**Multi-paradigm:** JavaScript supports multiple programming paradigms, including object-oriented, functional, and imperative programming.
-
-```js
-// Functional
-[1, 2, 3].map((n) => n * 2);
-
-// OOP
-class Dog {
-  bark() {
-    console.log("Woof");
-  }
-}
-
-// Imperative
-for (let i = 0; i < 3; i++) console.log(i);
-```
-
-**Prototype-based Object Orientation:** Instead of classical inheritance (like Java or C++), JavaScript uses prototypes, where objects can directly inherit from other objects.
-
-```js
-function Animal(name) {
-  this.name = name;
-}
-Animal.prototype.speak = function () {
-  console.log(this.name + " makes a sound");
-};
-
-const dog = new Animal("Rex");
-dog.speak(); // Rex makes a sound
-```
-
-**Functional:** With higher-order functions, closures, immutability practices, and functions as first-class citizens, JavaScript allows developers to follow a functional programming style.
-
-```js
-function greet(name) {
-  return "Hi " + name;
-}
-function executor(fn, value) {
-  return fn(value);
-}
-
-console.log(executor(greet, "Alice")); // Hi Alice
-```
-
-**Imperative Programming Style:** JavaScript also supports imperative programming, where tasks are defined step by step using constructs like loops, conditionals, and assignments.
-
-If it’s not Imperative Programming Style, that means you wouldn’t give the computer step-by-step instructions. Instead you might use a Declarative style (like SQL or HTML), where you just say what you want, not how to do it.
-
-Instead of saying
-
-```js
-// Imperative Style
-let sum = 0;
-for (let i = 1; i <= 5; i++) {
-  sum += i;
-}
-console.log(sum); // 15
-```
-
-you’d just say:
-
-```sql
-SELECT SUM(numbers) FROM 1_to_5;
-```
-
-and the computer figures out the steps.
-
-## Runtime Behavior
-
-**First-class Functions:** Functions are treated like any other variable—they can be passed as arguments, returned from other functions, and stored in variables.
-
-```js
-const sayHi = () => console.log("Hi");
-const run = (fn) => fn();
-run(sayHi); // Hi
-```
-
-**Event-driven:** JavaScript is inherently event-driven, making it suitable for building interactive applications. Events (like user clicks, network responses, or timers) drive execution, supported by asynchronous features such as callbacks, promises, and async/await.
-
-```js
-// Browser example
-document.querySelector("button").addEventListener("click", () => {
-  console.log("Button clicked!");
-});
-
-// Async example
-setTimeout(() => console.log("Runs later"), 1000);
-```
-
-It can executes after triggering an event(input is not an event) that's why it called event-driven.
-
-**Event**
-
-- An event is something that happens in the system or browser.
-- It could be user actions (click, key press, typing), or system actions (page loaded, timer finished, data received).
-- Events are signals that something occurred.
-
-**Input**
-
-- Input usually means the data that comes from the user into the program.
-- It can be text typed in a box, numbers entered, choices made, etc.
-- Input is often collected because of an event, but it’s the actual value the user provides.
-
-## Fun Facts
-
-- Atom, Brackets are build on top of Javascript
-- Visual Studio Code is build on Typescript
 
 # ECMAScript
 
@@ -566,23 +412,23 @@ Javascript first introduced in 1995 as `LiveScript`, but during development it c
 
 ## Features Introduced in ECMAScript 2025
 
-### Enhanced Set Methods
+1. **Enhanced Set Methods**
 
-- Adds mathematical-style set operations: `.union()`, `.intersection()`, `.difference()`, `.symmetricDifference()`
-- Utility checks like `.isSubsetOf()`, `.isSupersetOf()`, and .`isDisjointFrom()`.
+    - Adds mathematical-style set operations: `.union()`, `.intersection()`, `.difference()`, `.symmetricDifference()`
+    - Utility checks like `.isSubsetOf()`, `.isSupersetOf()`, and .`isDisjointFrom()`.
 
-### JSON Modules and Import Attributes
+2. **JSON Modules and Import Attributes**
 
-- Support for JSON modules, allowing direct import of JSON files as modules.
-- Import attributes provide structured metadata alongside imports
+    - Support for JSON modules, allowing direct import of JSON files as modules.
+    - Import attributes provide structured metadata alongside imports
 
-### `Promise.try()` Utility
+3. **`Promise.try()` Utility**
 
-- A convenient method that simplifies Promise chains, making it easier to start them without explicitly constructing a new Promise
+    - A convenient method that simplifies Promise chains, making it easier to start them without explicitly constructing a new Promise
 
-### New Typed Array: `Float16Array`
+4. **New Typed Array: `Float16Array`**
 
-Adds support for 16-bit floating-point numbers, useful for certain graphics or performance-sensitive applications
+    - Adds support for 16-bit floating-point numbers, useful for certain graphics or performance-sensitive applications
 
 ## ECMAScript Versions
 
@@ -591,24 +437,21 @@ Adds support for 16-bit floating-point numbers, useful for certain graphics or p
 3. **ES3 (1999)** – Big step: added try/catch, do-while, switch, regular expressions, etc.
 4. **ES4 (abandoned, ~2000s)** – Planned huge upgrade (classes, modules, types) but dropped due to complexity.
 5. **ES5 (2009)** – Major update:
-
-- strict mode (`"use strict"`)
-- JSON support
-- Array.prototype methods (`map`, `filter`, `reduce`)
-- `Object.create()`
-
+    - strict mode (`"use strict"`)
+    - JSON support
+    - Array.prototype methods (`map`, `filter`, `reduce`)
+    - `Object.create()`
 6. **ES5.1 (2011)** – Minor alignment with ISO/IEC 16262:2011.
 7. **ES6 / ES2015 (2015)** – Huge milestone:
-
-- `let` / `const`
-- Arrow functions `() => {}`
-- Classes `class Foo {}`
-- Modules (`import` / `export`)
-- Template literals `` `Hello ${name}` ``
-- Promises
-- `Map`, `Set`, `WeakMap`, `WeakSet`
-- Spread/rest `...`
-- Default parameters
+    - `let` / `const`
+    - Arrow functions `() => {}`
+    - Classes `class Foo {}`
+    - Modules (`import` / `export`)
+    - Template literals `` `Hello ${name}` ``
+    - Promises
+    - `Map`, `Set`, `WeakMap`, `WeakSet`
+    - Spread/rest `...`
+    - Default parameters
 
 ### Annual Releases (Year-based)
 
@@ -652,7 +495,7 @@ Adds support for 16-bit floating-point numbers, useful for certain graphics or p
 - `document`, `window`, `alert()`, `prompt()`, `confirm()`
 - DOM APIs:
   - `querySelector()`, `appendChild()`, `getElementById()`
-- Network / async APIs:
+- Network / `async` APIs:
   - `fetch()`, `XMLHttpRequest`, `WebSocket`
 - Storage:
   - `localStorage`, `sessionStorage`, `indexedDB`
@@ -661,7 +504,7 @@ Adds support for 16-bit floating-point numbers, useful for certain graphics or p
 
 These are defined by **WHATWG (HTML spec)** or **W3C**, not ECMAScript.
 
-## 2. Host Objects / Environment Features
+### 2. Host Objects / Environment Features
 
 **Node.js adds:**
 
@@ -673,7 +516,7 @@ These are defined by **WHATWG (HTML spec)** or **W3C**, not ECMAScript.
 
 These are environment-specific, not part of ECMAScript.
 
-## 3. Non-Standard / Legacy JavaScript Features
+### 3. Non-Standard / Legacy JavaScript Features
 
 - `__proto__` property (originally non-ECMAScript, standardized later)
 - `escape()` / `unescape()` (deprecated)
@@ -681,17 +524,17 @@ These are environment-specific, not part of ECMAScript.
 - Automatic semicolon insertion quirks (e.g., `return` on new line)
 - Octal literals with leading zero (`0123`) – legacy, now use `0o123`
 
-## 4. Error Handling Differences
+### 4. Error Handling Differences
 
 - Browsers sometimes throw **different error messages** or handle edge cases differently than the spec.
 - Example: function parameter shadowing rules in older IE vs ECMAScript spec.
 
-## 5. Engine-Specific Extensions
+### 5. Engine-Specific Extensions
 
 - **V8 (Chrome / Node.js)**: sometimes implements experimental features behind flags before standardization.
 - **SpiderMonkey (Firefox)** and **JavaScriptCore (Safari)** may behave differently for in-progress proposals.
 
-## 6. Global Objects Beyond ECMAScript
+### 6. Global Objects Beyond ECMAScript
 
 - `console.log()` – widely used, but not in ECMAScript (part of WHATWG Console spec)
 - `performance.now()`, `crypto.getRandomValues()` – defined in Web APIs, not ECMAScript
@@ -810,6 +653,26 @@ It is often used for backend development, file systems, servers, and more.
 | **Use Case**    | Frontend (UI, user interactions) | Backend (servers, APIs, scripts)  |
 | **Security**    | Runs in sandbox                  | Access to OS/system resources     |
 
+# Browser Storage
+
+| Feature                  | **localStorage**       | **sessionStorage**     | **cookies**                 |
+| ------------------------ | ---------------------- | ---------------------- | --------------------------- |
+| **Storage Capacity**     | ~5–10 MB               | ~5 MB                  | ~4 KB                       |
+| **Expires**              | Never (until cleared)  | On tab close           | Optional (set by `expires`) |
+| **Accessible by**        | Browser (client only)  | Browser (client only)  | Browser + Server            |
+| **Data Type**            | String                 | String                 | String                      |
+| **Scope**                | All tabs (same origin) | Single tab/window      | Domain/path-based           |
+| **Auto-sent to server?** |  No                  |  No                  |  Yes                      |
+| **Best for**             | Long-term preferences  | Temporary session data | Authentication / Tracking   |
+
+## Security Notes
+
+| Concern                        | Explanation                                                                                               |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| **XSS (Cross-Site Scripting)** | If attacker injects JS, they can read your local/session storage. Always sanitize inputs.                 |
+| **Cookies**                    | Should use `HttpOnly` and `Secure` flags to prevent JavaScript access and ensure HTTPS-only transmission. |
+| **Sensitive Data**             | Never store passwords or tokens in plain text in localStorage or cookies.                                 |
+
 # Data Types
 
 ## Primitive Data Types
@@ -817,10 +680,10 @@ It is often used for backend development, file systems, servers, and more.
 Primitive types are the basic, immutable data types.
 
 - Immutable → The value itself cannot be changed (though variables can be reassigned).
-- Stored in stack memory (for fast access).
+- Stored in **stack memory** (for fast access).
 - Compared by value (two primitives are equal if their values are equal).
 
-### List of Primitive Types:
+### List of Primitive Types
 
 1. String → Text data
 2. Number → Integers, floats, `NaN`, `Infinity`
@@ -830,7 +693,7 @@ Primitive types are the basic, immutable data types.
 6. Null → Intentional absence of value
 7. Symbol → Unique identifiers
 
-### Example of Primitive Types
+**Example of Primitive Types**
 
 ```js
 // String
@@ -871,17 +734,17 @@ console.log(sym1 === sym2); // false (always unique)
 Non-primitive types are objects (including arrays, functions, dates, etc).
 
 - Mutable → Values can be changed.
-- Stored in heap memory, and variables hold a reference (address), not the actual value.
+- Stored in **heap memory**, and variables hold a reference (address), not the actual value.
 - Compared by reference, not by value (two objects are equal only if they reference the same memory).
 
-### Examples of Non-Primitive Types:
+### List of Non-Primitive Types
 
 1. Object → Key-value pairs
 2. Array → Ordered list of values
 3. Function → Callable objects
 4. Date, RegExp, Map, Set, WeakMap, WeakSet, etc.
 
-### Example of Non-Primitive Types
+**Example of Non-Primitive Types**
 
 ```js
 // Object
@@ -929,52 +792,59 @@ console.log(obj2.value); // 20
 | Feature         | Primitive                                                | Non-Primitive (Reference)                     |
 | --------------- | -------------------------------------------------------- | --------------------------------------------- |
 | **Examples**    | String, Number, Boolean, Null, Undefined, BigInt, Symbol | Object, Array, Function, Date, Map, Set, etc. |
-| **Mutable?**    | ❌ Immutable                                             | ✅ Mutable                                    |
+| **Mutable?**    |  Immutable                                             |  Mutable                                    |
 | **Stored in**   | Stack memory                                             | Heap memory                                   |
 | **Assigned by** | Value                                                    | Reference (address)                           |
 | **Comparison**  | By value (`===`)                                         | By reference (`===`)                          |
 | **Size**        | Fixed                                                    | Dynamic                                       |
 
 ## Wrapper Objects
+
 Even though primitives are not objects, JavaScript automatically wraps them in an object when you try to access properties or methods.
 
 - This wrapper object is temporary, only exists during property/method access.
 - The primitive itself remains unchanged.
 
 ```js
-let str = "hello"; 
+let str = "hello";
 console.log(str.toUpperCase()); // "HELLO"
 // JS internally does:
 // new String("hello").toUpperCase();
 ```
+
 ```js
 let bool = true;
 console.log(bool.valueOf()); // true
 // JS internally does:
 // new Boolean(true).valueOf();
 ```
+
 ### Why Wrapper Objects Are Considered Non-Primitive
 
 1. Primitives themselves do not have methods or properties.
 2. Wrapper objects like `String`, `Number`, `Boolean` are actual objects.
 3. When you call a method on a primitive, JavaScript creates a temporary wrapper object, which is non-primitive, executes the method, and then discards the object.
+
 ```js
 let str = "hello";
-console.log(typeof str);           // "string" (primitive)
+console.log(typeof str); // "string" (primitive)
 console.log(typeof new String(str)); // "object" (wrapper)
 ```
 
 So, wrapper objects are non-primitive, even though they represent primitive values.
 
 Using wrapper objects explicitly (e.g., `new String("hello")`) is generally discouraged, because it creates object instances which behave differently:
+
 ```js
 const s1 = "hello";
 const s2 = new String("hello");
 
-console.log(s1 == s2);  // true  (value comparison)
+console.log(s1 == s2); // true  (value comparison)
 console.log(s1 === s2); // false (different types)
 ```
+
 ### Built-in Wrapper Objects
+
 | Primitive Type | Wrapper Object | Example                           |
 | -------------- | -------------- | --------------------------------- |
 | string         | String         | `"hello".toUpperCase()`           |
@@ -1029,7 +899,7 @@ The Variable Environment is closely related to Lexical Environments. Both togeth
 
 ## Variable Declaration
 
-- `var` maintain function scope, `let`, `const` maintain block scope.
+- `var` maintain function scope (**not global scope**), `let`, `const` maintain block scope.
 - Updating/re-assigning `const` variable create `TypeError: Assignment to constant variable.` error.
 
 - `var` maintain function scope, `let`, `const` maintain block scope.
@@ -1124,7 +994,7 @@ console.log(i);
 - Scope is determine in creation phase, but undeclared variable executed at exection phase, that's how it became global variable
 - this will not in strict mode
 
-```javascript
+````javascript
 const show = () => {
   name = "Masum Billah";
 };
@@ -1150,9 +1020,128 @@ console.log(name);
   age = 25;
 }
 console.log(age);
+````
+
+# Modules
+
+Modules are a way to organize and structure code in a more modular and maintainable way. JavaScript modules allow you to split your code into multiple files and then import/export functionality between them.
+
+## ES6 Modules (ESM)
+
+The ES6 module system was introduced in ECMAScript 2015 (ES6) and is used for handling modules in modern JavaScript. It uses `import` and `export` keywords to facilitate the sharing of code between different files.
+
+### Key Features of ES6 Modules (ESM)
+
+- **Static Structure:** The import/export statements are resolved statically, meaning they are evaluated before code execution, which allows for better optimizations (e.g., tree-shaking).
+- **Default and Named Exports:** You can have both default and named exports in a module.
+
+## CommonJS Modules (CJS)
+
+CommonJS is the module system used by Node.js before ES6 was introduced. It is based on `require` and `module.exports` for importing and exporting code between different files.
+
+### Key Features of CommonJS
+
+- **Dynamic Structure:** `require()` is executed at runtime, so it supports conditional loading of modules and circular dependencies.
+- **Synchronous:** It loads modules synchronously, making it suitable for server-side code but less efficient for the browser.
+
+# Currying
+
+Currying is a technique of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument and returning another function (until all arguments have been provided).
+
+In simpler words: Currying breaks down a function of n arguments into n functions that each take one argument.
+
+**Example Without Currying:**
+
+```js
+function add(a, b, c) {
+  return a + b + c;
+}
+
+console.log(add(1, 2, 3)); // Output: 6
 ```
 
-# Hoisting
+**Curried Version:**
+
+```js
+function curriedAdd(a) {
+  return function (b) {
+    return function (c) {
+      return a + b + c;
+    };
+  };
+}
+
+console.log(curriedAdd(1)(2)(3)); // Output: 6
+```
+
+# Compoistion
+
+Function Composition is the process of combining multiple functions together so that the output of one function becomes the input of the next.
+
+In simple words: Function composition lets you build complex operations by chaining small, reusable functions together.
+
+**Example Without Composition:**
+
+```js
+function double(x) {
+  return x * 2;
+}
+
+function square(x) {
+  return x * x;
+}
+
+const number = 5;
+const result = square(double(number));
+console.log(result); // Output: 100
+```
+
+This works fine, but when you have many functions, nesting them gets hard to read.
+**Example With Composition:**
+
+```js
+function compose(f, g) {
+  return function (x) {
+    return f(g(x));
+  };
+}
+
+const doubleThenSquare = compose(square, double);
+
+console.log(doubleThenSquare(5)); // Output: 100
+```
+
+**Composing Multiple Functions:**
+
+```js
+function compose(...functions) {
+  return function (value) {
+    return functions.reduceRight((acc, fn) => fn(acc), value);
+  };
+}
+
+const add5 = (x) => x + 5;
+const double = (x) => x * 2;
+const square = (x) => x * x;
+
+const composed = compose(square, double, add5);
+
+console.log(composed(2)); // Output: 196
+```
+
+1. `add5(2)` → 7
+2. `double(7)` → 14
+3. `square(14)` → 196
+
+So `compose(square, double, add5)` runs right-to-left.
+
+## Composition vs Currying
+
+| Concept         | Description                                                            | Example               |
+| --------------- | ---------------------------------------------------------------------- | --------------------- |
+| **Currying**    | Breaks one multi-argument function into many single-argument functions | `f(a, b)` → `f(a)(b)` |
+| **Composition** | Combines multiple single-argument functions into one                   | `f(g(h(x)))`          |
+
 # Hoisting
 
 It's a mechanism where variables and function declarations are moved to the top of their containing scope during the compile phase, before the code is executed. This means that you can use functions and variables before they are declared in the code.
@@ -1160,13 +1149,12 @@ It's a mechanism where variables and function declarations are moved to the top 
 However, **only declarations are hoisted, not initializations**. The declaration is moved to the top, but the assignment or initialization stays in its place.
 
 ## Types of Hoisting
-## Types of Hoisting
 
 **1.Variable Hoisting**:
 
 - Variables declared with `var` are hoisted to the top of their scope but are initialized with `undefined` until they are assigned a value.
 - `let` and `const` declarations are hoisted but are not initialized. They are in a "temporal dead zone" (TDZ) from the start of the block until the declaration is encountered.
-**1.Variable Hoisting**:
+  **1.Variable Hoisting**:
 
 - Variables declared with `var` are hoisted to the top of their scope but are initialized with `undefined` until they are assigned a value.
 - `let` and `const` declarations are hoisted but are not initialized. They are in a "temporal dead zone" (TDZ) from the start of the block until the declaration is encountered.
@@ -1175,7 +1163,7 @@ However, **only declarations are hoisted, not initializations**. The declaration
 
 - Function declarations are fully hoisted. This means you can call the function even before it is declared in the code.
 - Function expressions assigned to variables (using `var`, `let`, or `const`) are not hoisted in the same way as function declarations
-**2.Function Hoisting**:
+  **2.Function Hoisting**:
 
 - Function declarations are fully hoisted. This means you can call the function even before it is declared in the code.
 - Function expressions assigned to variables (using `var`, `let`, or `const`) are not hoisted in the same way as function declarations
@@ -1203,9 +1191,11 @@ var sayHello = function () {
 ```
 
 ## How IIFE Interacts With Hoisting
+
 ## How IIFE Interacts With Hoisting
 
 ### Step 1: Function Expression vs Function Declaration
+
 ### Step 1: Function Expression vs Function Declaration
 
 - Function declaration (`function foo(){}`) is hoisted.
@@ -1234,16 +1224,17 @@ When an IIFE runs:
 - It creates a new execution context (like calling any function).
 - Inside it, hoisting rules apply again (vars hoisted to function scope, `let`/`const` in TDZ).
 - This protects outer/global scope from variable pollution.
-foo(); // Works
-function foo() {
+  foo(); // Works
+  function foo() {
   console.log("declaration");
-}
+  }
 
 bar(); // ❌ TypeError: bar is not a function
 var bar = function () {
-  console.log("expression");
+console.log("expression");
 };
-```
+
+````
 
 So in an IIFE, since it’s a function expression, only the variable (if assigned) is hoisted, not the function body.
 
@@ -1265,7 +1256,7 @@ var x = 1;
 })();
 
 console.log(x); // 1 (outer scope unaffected)
-```
+````
 
 Inside the IIFE, `var x` is hoisted to the top of the IIFE’s scope, shadowing the global x.
 
@@ -1328,7 +1319,6 @@ Here, `greet` is hoisted inside the IIFE only, not globally.
 - This is a compile-time error.
 - TDZ + block scoping ensures safer, predictable behavior.
 
-
 # Temporal Dead Zone
 
 Variables declared with `var` are hoisted at the top of their function scope. It means they are initialized with `undefined` even before the code execution reaches the declaration.
@@ -1348,7 +1338,7 @@ let y = 6;
 
 # Scope
 
-A variable declared with `var` can be access outside it's block scope but not outside of functions local scope.
+A variable declared with `var` can be access outside it's block scope (**not global scope**) but not outside of functions local scope.
 
 ## Lexical Scope
 
@@ -1450,7 +1440,8 @@ Closures happen because of lexical scoping.
 ## Basic Example of Clousure
 
 outer();
-```
+
+````
 
 # Closure
 
@@ -1486,7 +1477,7 @@ function outerFunction() {
 
 const closureExample = outerFunction();
 closureExample(); // Output: I am from outer function
-```
+````
 
 1. `outerFunction` defines a variable `outerVar` and an `innerFunction`.
 2. When `outerFunction` returns `innerFunction`, normally `outerVar` should be gone (because `outerFunction` finished execution).
@@ -1500,19 +1491,21 @@ closureExample(); // Output: I am from outer function
 - That's why all the required things packed up and return together and we can access it
 
 ## Closure passing argment to child
+
 function outerFunction() {
-  let outerVar = "I am from outer function";
+let outerVar = "I am from outer function";
 
-  function innerFunction() {
-    console.log(outerVar); // accessing outer function's variable
-  }
+function innerFunction() {
+console.log(outerVar); // accessing outer function's variable
+}
 
-  return innerFunction;
+return innerFunction;
 }
 
 const closureExample = outerFunction();
 closureExample(); // Output: I am from outer function
-```
+
+````
 
 1. `outerFunction` defines a variable `outerVar` and an `innerFunction`.
 2. When `outerFunction` returns `innerFunction`, normally `outerVar` should be gone (because `outerFunction` finished execution).
@@ -1534,7 +1527,7 @@ function parent(a) {
   }
 }
 parent(6)(4);
-```
+````
 
 ## Closure with Private Variables
 
@@ -1606,22 +1599,28 @@ for (let i = 1; i <= 3; i++) {
 - `a++` return first then increase.
 
 ## Nullish Coalescing Operator (??)
+
 The `??` operator provides a default value when the left-hand side expression is either `null` or `undefined`.
 
 🔑 Important: It does not consider other falsy values (`0`, `""`, `false`, `NaN`) as nullish.
 That makes it safer than using `||` (OR), which treats all falsy values as a reason to use the default.
+
 ```js
 let result = value ?? defaultValue;
 ```
+
 - If `value` is `null` or `undefined` → return `defaultValue`.
 - Otherwise, return `value`.
+
 ### Difference with `||`
+
 ```js
 let count = 0;
 
 console.log(count || 10); // 10   (because 0 is falsy)
 console.log(count ?? 10); // 0    (because 0 is not null or undefined)
 ```
+
 `??` is preferred when you want to keep values like `0`, `false`, or `""`, but still provide a fallback for `null`/`undefined`.
 
 ## Optional Chaining Operator (?.)
@@ -1631,11 +1630,13 @@ The `?.` operator allows you to safely access deeply nested object properties wi
 Instead of throwing an error, it returns `undefined` when the left-hand side is `null` or `undefined`.
 
 ```js
-object?.property
-object?.[expression]
-object?.method?.()
+object?.property;
+object?.[expression];
+object?.method?.();
 ```
+
 Example
+
 ```js
 let user = {
   profile: {
@@ -1648,7 +1649,9 @@ console.log(user.profile?.name);   // "Alice"
 console.log(user.profile?.greet?.());   // "Hello!"
 console.log(user.address?.city);   // undefined (no error!)
 ```
+
 Without optional chaining, `user.address.city` would throw an error because `address` is `undefined`
+
 ## `typeof`
 
 ```js
@@ -1683,12 +1686,13 @@ Arrays store data in indexed keys, But actually, `arr[0]` is just shorthand for 
 
 To check the type of array use `Array.isArray()`
 function parent(a) {
-  function child(b) {
-    console.log(`Sum: ${a + b}`);
-  }
+function child(b) {
+console.log(`Sum: ${a + b}`);
+}
 }
 parent(6)(4);
-```
+
+````
 
 ## Closure with Private Variables
 
@@ -1716,7 +1720,7 @@ counter.increment(); // 1
 counter.increment(); // 2
 counter.decrement(); // 1
 console.log(counter.getValue()); // 1
-```
+````
 
 - `count` is not directly accessible from outside.
 - But `increment`, `decrement`, and `getValue` functions (inner functions) can access and modify it because of closure.
@@ -1810,6 +1814,7 @@ A `truthy` value is any value that is considered `true` when encountered a boole
 console.log(`Me` && `You`); // You
 // last one well show, why?
 ```
+
 - `"true"` and `"false"` both are truthy
 
 ```js
@@ -1898,6 +1903,23 @@ function greet() {
 | Produces Value  | ✅ Yes                             | ❌ Usually no                               |
 | Can be Assigned | ✅ Yes                             | ❌ No                                       |
 | Example         | `5`, `x + 2`, `const f = () => {}` | `let x = 5;`, `if(x<4){}`, `function f(){}` |
+
+# Pure Function
+
+A pure function is a function that always:
+
+1. Produces the same output for the same input (deterministic behavior)
+2. Has no side effects
+
+## Rules of a Pure Function
+
+| Rule                                         | Description                                                          |
+| -------------------------------------------- | -------------------------------------------------------------------- |
+| **1. Same input → same output**              | Function must always return the same result for given arguments      |
+| **2. No side effects**                       | It should not modify any external variable, object, DOM, or database |
+| **3. No reliance on external mutable state** | Shouldn’t depend on changing global variables or random values       |
+
+- `Math.random()` impure function.
 
 # First Class Function
 
@@ -2126,20 +2148,20 @@ We can manually set `this` using:
 - `bind()` → returns a new function with fixed `this`
   marks: [85, 90, 95],
   showMarks() {
-    this.marks.forEach(function (mark) {
-      console.log(this.name + " scored " + mark);
-    });
+  this.marks.forEach(function (mark) {
+  console.log(this.name + " scored " + mark);
+  });
   },
-};
+  };
 
 student.showMarks();
 // ❌ Error: `this.name` is undefined inside normal function
 
 // ✅ Fix with arrow function
 student.showMarks = function () {
-  this.marks.forEach((mark) => {
-    console.log(this.name + " scored " + mark);
-  });
+this.marks.forEach((mark) => {
+console.log(this.name + " scored " + mark);
+});
 };
 
 student.showMarks();
@@ -2147,7 +2169,8 @@ student.showMarks();
 // Masum scored 85
 // Masum scored 90
 // Masum scored 95
-```
+
+````
 
 Here, the arrow function inherits `this` from `showMarks()` method, which points to `student`.
 
@@ -2171,7 +2194,7 @@ introduce.apply(user, ["Chittagong", "Bangladesh"]); // Masum from Chittagong, B
 
 const boundFunc = introduce.bind(user, "Jessore", "Bangladesh");
 boundFunc(); // Masum from Jessore, Bangladesh
-```
+````
 
 # `call()`, `bind()`, `apply()`
 
@@ -2302,7 +2325,7 @@ Primitive data store it's value to it own space. Non-primitive data doesn't stor
 
 ## Object Concatenation
 
-1. Using `Object.assign()`
+### Using `Object.assign()`
 
 ```js
 const obj1 = { a: 1 };
@@ -2314,7 +2337,7 @@ console.log(result); // {a:1, b:2}
 
 - First argument `{}` is target object → avoids modifying originals.
 
-2. Using Spread Operator (`...`)
+### Using Spread Operator (`...`)
 
 ```js
 const obj1 = { a: 1 };
@@ -2324,7 +2347,9 @@ const result = { ...obj1, ...obj2 };
 console.log(result); // {a:1, b:2}
 ```
 
-If keys overlap, later objects overwrite earlier ones 3. Using a function with reduce (multiple objects)
+If keys overlap, later objects overwrite earlier ones 
+
+### Using a function with reduce (multiple objects)
 
 ```js
 const objects = [{ a: 1 }, { b: 2 }, { c: 3 }];
@@ -2332,14 +2357,28 @@ const result = objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 console.log(result); // {a:1, b:2, c:3}
 ```
 
+## Immutability
+
+Shallow vs Deep Freeze
+
+```js
+const person = { name: "Alice", address: { city: "Wonderland" } };
+Object.freeze(person);
+
+person.address.city = "New York"; // This is allowed because `address` is not frozen
+console.log(person.address.city); // Output: 'New York'
+```
+
+In JavaScript, you can use libraries that provide immutable data structures, which prevent you from accidentally modifying the contents of arrays or objects. Some popular libraries for immutability are Immutable.js and Mori.
+
 ## Bracket Notation
 
-- Works like accessing an array index, but here you use the property name inside quotes.
-- Useful when:
-  - The property name is stored in a variable.
-  - The property name contains spaces or special characters.
-  - The property name starts with a number.
-  - You need to dynamically access properties.
+Works like accessing an array index, but here you use the property name inside quotes. It is useful when:
+
+- The property name is stored in a variable.
+- The property name contains spaces or special characters.
+- The property name starts with a number.
+- You need to dynamically access properties.
 
 ```js
 const key = "age";
@@ -2359,9 +2398,9 @@ console.log(student[key]); // 22
 | --------------------------- | -------------------------- | ------------------------------- |
 | Syntax                      | `obj.prop`                 | `obj["prop"]`                   |
 | Property Name Type          | Must be a valid identifier | Can be any string or expression |
-| Supports Variables          | ❌ No                      | ✅ Yes                          |
-| Special Characters / Spaces | ❌ No                      | ✅ Yes                          |
-| More Readable               | ✅ Yes                     | ❌ Sometimes                    |
+| Supports Variables          |  No                      |  Yes                          |
+| Special Characters / Spaces |  No                      |  Yes                          |
+| More Readable               |  Yes                     |  Sometimes                    |
 
 # Prototype
 
@@ -2377,28 +2416,30 @@ It is a mechanism by which objects inherit properties and methods from other obj
 
    ```js
    function Person(name) {
-      this.name = name;
-    }
+     this.name = name;
+   }
 
-    // Method added to prototype
-    Person.prototype.greet = function() {
-      console.log(`Hello, ${this.name}`);
-    };
+   // Method added to prototype
+   Person.prototype.greet = function () {
+     console.log(`Hello, ${this.name}`);
+   };
 
-    const p1 = new Person("Rahim");
-    const p2 = new Person("Masum");
+   const p1 = new Person("Rahim");
+   const p2 = new Person("Masum");
    ```
+
    **Memory & Lookup:**
 
-    - `p1` and `p2` do not have `greet` directly on them.
-    - When you call `p1.greet()`, JS looks:
-    ```
-    p1 → Does p1 have 'greet'? No
-    p1.__proto__ → Person.prototype → Yes, found!
-    Call the function with this = p1
-    ```
+   - `p1` and `p2` do not have `greet` directly on them.
+   - When you call `p1.greet()`, JS looks:
 
-  Same for `p2.greet()`. Both share the same function.
+   ```
+   p1 → Does p1 have 'greet'? No
+   p1.__proto__ → Person.prototype → Yes, found!
+   Call the function with this = p1
+   ```
+
+Same for `p2.greet()`. Both share the same function.
 
 ```
 p1
@@ -2413,6 +2454,7 @@ p1
           │
           └── null
 ```
+
 - `p1` → instance
 - `Person.prototype` → shared methods
 - `Object.prototype` → built-in methods
@@ -2422,8 +2464,9 @@ p1
 1. Instance properties first: JS always checks the object itself before prototype.
 2. Shared methods: Methods on prototype are shared among all instances.
 3. Dynamic: If you add a new method to the prototype later, all existing instances can access it:
+
 ```js
-Person.prototype.sayBye = function() {
+Person.prototype.sayBye = function () {
   console.log(`Bye, ${this.name}`);
 };
 
@@ -2432,12 +2475,14 @@ p2.sayBye(); // Bye, Masum
 ```
 
 4. Shadowing: If an instance has a property with the same name as a prototype method, the instance property takes precedence:
+
 ```js
-p1.greet = function() { console.log("Custom greet"); };
+p1.greet = function () {
+  console.log("Custom greet");
+};
 p1.greet(); // "Custom greet"
 p2.greet(); // "Hello, Masum"  (prototype method)
 ```
-
 
 2. **Prototype Property** (**`proto`** and **`.prototype`**):
 
@@ -2941,54 +2986,66 @@ Both can be used to check about properties of object
 ```
 
 **Skipping Elements**
+
 ```js
 // Skipping elements
 const [first, , third] = fruits;
 ```
+
 **Destructuring with Default Values**
+
 ```js
-const [first, second = 'orange'] = fruits;
+const [first, second = "orange"] = fruits;
 ```
+
 **Destructuring Nested Arrays**
+
 ```js
 const nestedArray = [1, [2, 3], 4];
 
 // Destructuring nested arrays
 const [first, [second, third], fourth] = nestedArray;
 
-console.log(first);   // Output: 1
-console.log(second);  // Output: 2
-console.log(third);   // Output: 3
-console.log(fourth);  // Output: 4
+console.log(first); // Output: 1
+console.log(second); // Output: 2
+console.log(third); // Output: 3
+console.log(fourth); // Output: 4
 ```
+
 **Destructuring Nested Objects**
+
 ```js
 const user = {
-  name: 'Alice',
+  name: "Alice",
   age: 25,
   address: {
-    city: 'New York',
-    zip: '10001'
-  }
+    city: "New York",
+    zip: "10001",
+  },
 };
 
 // Destructuring nested objects
-const { name, address: { city, zip } } = user;
+const {
+  name,
+  address: { city, zip },
+} = user;
 ```
+
 - `address` is not accessible, it shows `undefined` is because you are not directly destructuring the `address` property in the `user` object. Instead, you are only destructuring the `city` and `zip` properties from the `address` object.
 
 **Destructuring with Rest Operator**
 
 ```js
-const fruits = ['apple', 'banana', 'cherry', 'date'];
+const fruits = ["apple", "banana", "cherry", "date"];
 
 // Destructuring with rest operator
 const [first, second, ...rest] = fruits;
 
-console.log(first);   // Output: apple
-console.log(second);  // Output: banana
-console.log(rest);    // Output: ['cherry', 'date']
+console.log(first); // Output: apple
+console.log(second); // Output: banana
+console.log(rest); // Output: ['cherry', 'date']
 ```
+
 ## Array Concatenation
 
 1. Using `concat()`
@@ -3096,6 +3153,7 @@ example(1, 2, 3);
   String methods are only used with string, never use it with other data type
 
 ## repeat
+
 ## repeat
 
 It is used to repeat a string multiple time
@@ -3505,6 +3563,7 @@ The `Error` object is a buit-in object that provides a standarized way to handle
 - `stack` - details about the error.
 
 **Handle Error:**
+
 # Template Literal
 
 It enclosed by backticks(`) rather than a single quote or double quote.
@@ -4083,6 +4142,7 @@ console.log("4: End");
    - `"3: Promise resolved"` → executed.
 6. Then moves to macrotasks:
    - `"2: Timeout"` → executed.
+
 ### Step-by-step
 
 1. `console.log("1: Start")` → pushed to call stack → executed → removed.
@@ -4446,10 +4506,9 @@ Promises can be chained to run asynchronouse task sequenially which resolve call
 
 1.  **Convert Functions to Return Promises**
 
-
     For each function that uses a callback, refactor it to return a Promise instead.
 
-    ```js
+    ````js
     const takeOrder = (orderNumber) => {
       return new Promise((resolve) => {
         console.log(`Take Order ${orderNumber}`);
@@ -4482,23 +4541,27 @@ Promises can be chained to run asynchronouse task sequenially which resolve call
         resolve(orderNumber);
       });
     };
-    ```
+    ````
+
         setTimeout(() => {
           console.log(`Proceed Order ${orderNumber}`);
           resolve(orderNumber);
         }, 3000);
-      });
+
+    });
     };
     const completeOrder = (orderNumber) => {
-      return new Promise((resolve) => {
-        console.log(`Completed Order ${orderNumber}`);
-        resolve(orderNumber);
-      });
+    return new Promise((resolve) => {
+    console.log(`Completed Order ${orderNumber}`);
+    resolve(orderNumber);
+    });
     };
+
+    ```
+
     ```
 
 2.  **Chain the Promises**
-
 
     Once the functions return Promises, chain them using `.then()` and `.catch()` method.
 
@@ -4523,6 +4586,15 @@ Promises can be chained to run asynchronouse task sequenially which resolve call
       .then((orderNumber) => completeOrder(orderNumber))
       .catch(() => console.log("Error Occurred"));
     ```
+
+## Promise Methods
+
+| Method                     | Resolves when...                        | Rejects when...                       | Use Case                                                                            |
+| -------------------------- | --------------------------------------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
+| **`Promise.all()`**        | All promises resolve                    | Any promise rejects                   | When you need all promises to succeed                                               |
+| **`Promise.race()`**       | The first promise resolves or rejects   | The first promise resolves or rejects | When you care about the fastest promise (first to settle)                           |
+| **`Promise.any()`**        | The first promise resolves              | All promises reject (AggregateError)  | When you care about the first successful promise                                    |
+| **`Promise.allSettled()`** | All promises settle (resolve or reject) | Never rejects                         | When you want to know the outcome of all promises, regardless of success or failure |
 
 # async/await
 
@@ -4558,6 +4630,7 @@ AJAX stands for Asynchronous JavaScript and XML. It's a technique used in web de
 ## Methods
 
 ### GET
+
 # Ajax
 
 AJAX stands for Asynchronous JavaScript and XML. It's a technique used in web development to send and receive data from a server asynchronously (in the background) without reloading the entire web page.
@@ -4595,21 +4668,22 @@ function getData() {
 
 - `true` make it asynchronous
   **Modern Approach:**
-function getData() {
+  function getData() {
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1", true);
 
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      const data = response.body;
-      return data;
-    }
+  if (xhr.readyState === 4 && xhr.status === 200) {
+  const response = JSON.parse(xhr.responseText);
+  const data = response.body;
+  return data;
+  }
   };
 
   xhr.send();
-}
-```
+  }
+
+````
 
 - `true` make it asynchronous
   **Modern Approach:**
@@ -4623,7 +4697,7 @@ function getData() {
     })
     .catch((error) => console.error("Error:", error));
 }
-```
+````
 
 ### POST
 
@@ -4667,15 +4741,16 @@ fetch("api.php", {
   - 0 - request is not started yet
   - 1 - connection established
   - 2 - request sent
-function getData() {
-  fetch("https://jsonplaceholder.typicode.com/posts/1")
+    function getData() {
+    fetch("https://jsonplaceholder.typicode.com/posts/1")
     .then((response) => response.json())
     .then((data) => {
-      return data.body;
+    return data.body;
     })
     .catch((error) => console.error("Error:", error));
-}
-```
+    }
+
+````
 
 ### POST
 
@@ -4695,7 +4770,7 @@ function sendData() {
 
   xhr.send("name=" + encodeURIComponent(formData));
 }
-```
+````
 
 **Modern Approach:**
 
@@ -4911,6 +4986,81 @@ Two critical dependencies of Node.js are:
 5. **Execution of Callbacks**
 
    - Callbacks are moved to the call stack and executed.
+
+## Event Loop
+
+JavaScript is single-threaded, but it handles asynchronous operations (like timers, promises, or network calls) efficiently through the Event Loop.
+
+The Event Loop continuously checks:
+
+1. The Call Stack → runs synchronous code
+2. The Microtask Queue → runs microtasks (Promises, async/await, etc.)
+3. The Macrotask Queue (also called the Task Queue) → runs tasks like `setTimeout`, `fetch`, and events
+
+### Queue
+
+A queue is a general term for a list of tasks waiting to be executed in order (FIFO — First In, First Out).
+
+In JavaScript:
+
+- There are different queues for different types of asynchronous work:
+  - Microtask Queue
+  - Macrotask Queue (Task Queue)
+
+So when people say “the queue,” they usually mean one of these two queues managed by the Event Loop.
+
+### Microtasks
+
+Microtasks are small, high-priority asynchronous tasks that execute immediately after the current synchronous code — before the browser renders or any macrotasks run.
+
+- `Promise.then()`, `Promise.catch()`, `Promise.finally()`
+- `async/await` (code after `await`)
+- `queueMicrotask()`
+- `MutationObserver`
+
+**When They Run:**
+
+After the current synchronous task finishes and before any macrotask starts.
+
+### Macrotasks
+
+Macrotasks (also called tasks) are larger asynchronous tasks that are scheduled to run after all microtasks have finished.
+
+- `setTimeout()`
+- `setInterval()`
+- `setImmediate()` (Node.js)
+- `I/O callbacks`
+- `fetch().then()` (fetch callback itself is microtask)
+- DOM events like `click` or `scroll`
+
+**When They Run:**
+
+- After all synchronous code and all microtasks are completed.
+- Only one macrotask runs per event loop cycle.
+
+### Combined Example
+
+```js
+console.log("1");
+
+setTimeout(() => console.log("2 (Macrotask)"), 0);
+
+Promise.resolve().then(() => console.log("3 (Microtask)"));
+
+console.log("4");
+```
+
+| Step | Action                                        | Queue        |
+| ---- | --------------------------------------------- | ------------ |
+| 1    | `"1"` logged                                  | Synchronous  |
+| 2    | `setTimeout()` added to **Macrotask Queue**   | Macrotask    |
+| 3    | `Promise.then()` added to **Microtask Queue** | Microtask    |
+| 4    | `"4"` logged                                  | Synchronous  |
+| 5    | Stack empty → run **Microtask Queue**         | `"3"` logged |
+| 6    | Then run **Macrotask Queue**                  | `"2"` logged |
+
+The Microtask Queue and the Macrotask Queue in JavaScript are both regular FIFO (First-In, First-Out) queues in structure —
+but the Event Loop gives higher priority to the Microtask Queue when deciding what to execute next.
 
 # Execution Context
 
@@ -5815,6 +5965,7 @@ JavaScript evolves quickly. New versions (ES6/ES2015, ES7, ES8, etc.) bring feat
 - Modules (`import` / `export`)
 
 Problem: Not all browsers support these features.
+
 Solution: Use Babel to convert modern syntax into something universally supported.
 
 ## How Babel Works
@@ -6020,7 +6171,9 @@ Babel uses `@babel/generator` to walk through the AST and print the equivalent c
 - `@babel/generator` → Turns AST back into code
 - `@babel/core` → Orchestrates everything
 
-# webpack
+# Bundlers
+
+## webpack
 
 Webpack is a module bundler for JavaScript applications.
 
@@ -6276,6 +6429,7 @@ document.forms; // returns HTMLCollection
 | Common methods | `querySelectorAll`, `childNodes` | `getElementsByTagName`, `getElementsByClassName`, `forms` |
 
 ## `className` vs `classList`
+
 Both are properties of DOM elements used to manage CSS classes, but they work differently:
 
 | Feature          | `className`                                                      | `classList`                                                           |

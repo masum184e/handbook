@@ -60,16 +60,13 @@
 - []()
 - []()
 - [Modules & Namespaces]()
-  - [Named Export]()
-  - [Default Export]()
-  - [Export All]()
   - [Import Styles]()
   - [Namespaces vs. Modules]()
   - [Re-export]()
-- [Tooling & Ecosystem](#tooling--ecosystem)
-  - [Setting Up TypeScript with Node.js](#setting-up-typescript-with-nodejs)
-    - [Adding Development Tools]()
-    - [Running the Project]()
+- [Setting Up TypeScript with Node.js](#setting-up-typescript-with-nodejs)
+  - [Initialization]()
+  - [Adding Development Tools]()
+  - [Running the Project]()
 
 # Basics
 
@@ -2689,62 +2686,6 @@ const products: Collection<{ id: number; price: number }> = {
 
 # Modules & Namespaces
 
-## Named Export
-
-You can export multiple things by their names.
-
-```ts
-export const PI = 3.14;
-
-export function add(a: number, b: number): number {
-  return a + b;
-}
-
-export function subtract(a: number, b: number): number {
-  return a - b;
-```
-
-- Use `{}` to import specific named exports.
-- You can rename imports with `as`
-- Must import using the exact exported name (case-sensitive).
-- You can import specific members or all of them using destructuring syntax.
-```ts
-import { PI, add, subtract } from "./mathUtils";
-// import { add as sum } from "./mathUtils";
-```
-
-## Default Export
-
-A module can export **one default** thing.
-
-```ts
-export default function log(message: string): void {
-  console.log("Log:", message);
-}
-```
-
-- Each file can have only one default export.
-- Import without `{}`.
-- You can give it any name on import.
-
-```ts
-import log from "./logger";
-```
-
-## Export All
-
-You can re-export everything from another module.
-
-```ts
-export function greet(name: string) {
-  return `Hello, ${name}`;
-}
-```
-
-```ts
-export * from "./utils";
-```
-
 ## Import Styles
 
 1. Import Entire Module as an Object
@@ -3770,97 +3711,96 @@ Ensures that every file is parsed in ECMAScript strict mode (`"use strict";`).
 
 This matches modern JavaScript behavior and avoids subtle bugs.
 
-# Tooling & Ecosystem
 
-## Setting Up TypeScript with Node.js
-
+# Setting Up TypeScript with Node.js
+## Initialization
 1. Initialize a Node.js Project
 
-```bash
-mkdir ts-node-app
-cd ts-node-app
-npm init -y
-```
+    ```bash
+    mkdir ts-node-app
+    cd ts-node-app
+    npm init -y
+    ```
 
 2. Install TypeScript
 
-```bash
-npm install typescript --save-dev
-```
+    ```bash
+    npm install typescript --save-dev
+    ```
 
 3. Install Node.js type definitions
 
-TypeScript needs type definitions for Node.js APIs:
+    TypeScript needs type definitions for Node.js APIs:
 
-```bash
-npm install @types/node --save-dev
-```
+    ```bash
+    npm install @types/node --save-dev
+    ```
 
 4. Initialize TypeScript Configuration
 
-```bash
-npx tsc --init
-```
+    ```bash
+    npx tsc --init
+    ```
 
-Basic `tsconfig.json` for Node.js:
+    Basic `tsconfig.json` for Node.js:
 
-```json
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true
-  }
-}
-```
+    ```json
+    {
+      "compilerOptions": {
+        "target": "ES2020",
+        "module": "commonjs",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true
+      }
+    }
+    ```
 
-### Adding Development Tools
+## Adding Development Tools
 
 1. **ts-node:** Run TypeScript directly without compiling manually.
 
-```bash
-npm install ts-node --save-dev
-```
+    ```bash
+    npm install ts-node --save-dev
+    ```
 
 2. **nodemon:** Automatically restarts Node server on code changes.
 
-```bash
-npm install nodemon --save-dev
-```
+    ```bash
+    npm install nodemon --save-dev
+    ```
 
 3. Add a script in `package.json`:
 
-```json
-"scripts": {
-  "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
-}
-```
+    ```json
+    "scripts": {
+      "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    }
+    ```
 
-Now, `npm run dev` will run your TypeScript Node.js server and reload on changes.
+    Now, `npm run dev` will run your TypeScript Node.js server and reload on changes.
 
-### Running the Project
+## Running the Project
 
 1. Compile manually (optional):
 
-```bash
-npx tsc
-```
+    ```bash
+    npx tsc
+    ```
 
 - Compiles TypeScript from `src/` to `dist/`.
 - Run compiled JS:
 
-```bash
-node dist/index.js
-```
+    ```bash
+    node dist/index.js
+    ```
 
 2. Or run directly with ts-node:
 
-```bash
-npm run dev
-```
+    ```bash
+    npm run dev
+    ```
 
 # Question
 

@@ -2,6 +2,7 @@
 
 - [Introduction](#introduction)
   - [Features](#features)
+  - [Why Storing Data in RAM are Fast](#why-storing-data-in-ram-are-fast)
   - [Architecture](#architecture)
     - [Single Threaded Model](#single-threaded-model)
     - [Event Loop](#event-loop)
@@ -13,6 +14,7 @@
   - [Installing WSL](#installing-wsl)
   - [Basic Usage Examples of WSL](#basic-usage-examples-of-wsl)
   - [WSL for Development](#wsl-for-development)
+  - [Why we need to install Redis](#why-we-need-to-install-redis)
 - [Installation](#installation)
   - [Installing Redis in Local](#installing-redis-in-local)
   - [Installing Redis with Docker](#installing-redis-with-docker)
@@ -56,6 +58,40 @@ Redis is known for speed because it stores data in RAM instead of slower disk st
 | Atomic operations        | All operations in Redis are atomic, meaning no race conditions.                     |
 | Lua scripting            | Supports server-side scripting for complex operations.                              |
 | Replication & Clustering | Redis supports master-slave replication and automatic partitioning for scalability. |
+
+## Why Storing Data in RAM are Fast
+
+### Core Reason: Physical Design
+
+| Component          | Made Of                                             | How It Works                                                         | Speed                                        |
+| ------------------ | --------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------- |
+| **RAM (Memory)**   | Tiny electronic circuits (transistors & capacitors) | Stores bits as _electric charges_ directly accessible by the CPU     | ⚡ Nanoseconds (10⁻⁹ sec)                    |
+| **Disk (Storage)** | Moving parts (HDD) or flash cells (SSD)             | Data must be _located, read, and transferred_ through several layers | 🐢 Microseconds–milliseconds (10⁻⁶–10⁻³ sec) |
+
+**In simple terms:**
+
+- RAM is electronic: data is stored in active circuits the CPU can access instantly.
+- Disk is mechanical (in HDDs) or block-based (in SSDs), requiring extra steps to find and read data.
+
+### Different Access Path
+
+#### RAM
+
+```
+CPU → Memory Controller → RAM chip → Data returned
+```
+
+- Data is fetched directly from memory chips sitting right beside the CPU.
+- No moving parts, no searching, no delays.
+
+### Disk
+
+```
+CPU → OS → File System → Storage Controller → Disk → Locate file block → Read data → Return
+```
+
+- The CPU must ask the OS, which must find the file, then the disk driver must locate the block, and finally read it.
+- Even SSDs, while fast, involve these multiple layers.
 
 ## Architecture
 
@@ -256,6 +292,10 @@ sudo service nginx start
 3. Open browser in Windows → visit `http://localhost` → Nginx welcome page appears (because WSL shares the same network).
 
 This allows you to develop Linux-based applications directly from Windows.
+
+## Why we need to install Redis
+
+Redis was originally built for Linux/Unix systems, not Windows. While there used to be a Windows port years ago, it’s no longer officially maintained. That’s why, on Windows 10 or 11, the easiest and most reliable way to run Redis is through Linux — and that’s exactly what WSL provides.
 
 # Installation
 

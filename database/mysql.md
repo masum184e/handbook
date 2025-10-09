@@ -1214,7 +1214,7 @@ Output:
 | C003        | 1            |
 
 - `GROUP BY customer_id` → All rows with the same `customer_id` are combined into one group.
-- `COUNT(*)` counts how many orders are in each grou
+- `COUNT(*)` counts how many orders are in each group
 
 ### Key Points to Remember for `GROUP BY`
 
@@ -1566,42 +1566,42 @@ WHERE (
 
 ### Subqueries in Different Clauses
 
-1. In SELECT clause (Scalar Subquery)
+1. In `SELECT` clause (Scalar Subquery)
 
    ```sql
    SELECT student_name,
        (SELECT department_name
-        FROM Departments d
+        FROM departments d
         WHERE d.department_id = s.department_id) AS dept_name
-   FROM Students s;
+   FROM students s;
    ```
 
    Adds department name directly in the result without a join.
 
-2. In FROM clause (Derived Table / Inline View)
+2. In `FROM` clause (Derived Table / Inline View)
 
    ```sql
    SELECT dept_id, COUNT(*) AS total_students
    FROM (
        SELECT department_id AS dept_id
-       FROM Students
+       FROM students
    ) AS temp
    GROUP BY dept_id;
    ```
 
    Subquery acts like a temporary table (`temp`).
 
-3. In HAVING clause
+3. In `HAVING` clause
 
    ```sql
    SELECT course_id, COUNT(student_id) AS total_enrolled
-   FROM Enrollments
+   FROM enrollments
    GROUP BY course_id
    HAVING COUNT(student_id) > (
        SELECT AVG(total)
        FROM (
            SELECT COUNT(student_id) AS total
-           FROM Enrollments
+           FROM enrollments
            GROUP BY course_id
        ) AS sub
    );
@@ -1713,8 +1713,8 @@ But we can simulate it using `INNER JOIN` or `IN` clause.
 ```sql
 -- Using INNER JOIN
 SELECT s.name, s.email
-FROM Students s
-INNER JOIN Teachers t ON s.email = t.email;
+FROM students s
+INNER JOIN teachers t ON s.email = t.email;
 ```
 
 OR using subquery:
@@ -1740,19 +1740,19 @@ WHERE email IN (SELECT email FROM Teachers);
 
 Suppose we have two mailing lists:
 
-- `EventRegistrations` (people who registered for an event).
-- `NewsletterSubscribers` (people who subscribed to the newsletter).
+- `event_registrations` (people who registered for an event).
+- `newsletter_subscribers` (people who subscribed to the newsletter).
 
 1. People in either list (UNION):
    ```sql
-   SELECT email FROM EventRegistrations
+   SELECT email FROM event_registrations
    UNION
-   SELECT email FROM NewsletterSubscribers;
+   SELECT email FROM newsletter_subscribers;
    ```
 2. People in both lists (INTERSECT):
    ```sql
-   SELECT email FROM EventRegistrations
-   WHERE email IN (SELECT email FROM NewsletterSubscribers);
+   SELECT email FROM event_registrations
+   WHERE email IN (SELECT email FROM newsletter_subscribers);
    ```
 
 - `UNION` gives everyone we can contact.
@@ -1764,7 +1764,7 @@ An index in a database is like the index of a book — instead of reading the wh
 
 An Index is a database object that improves the speed of data retrieval (`SELECT` queries) but can slow down `INSERT`, `UPDATE`, and `DELETE` operations because indexes must also be updated.
 
-- Index columns that are frequently used in WHERE, JOIN, ORDER BY, and GROUP BY clauses.
+- Index columns that are frequently used in `WHERE`, `JOIN`, `ORDER BY`, and `GROUP BY` clauses.
 
 In SQL:
 
@@ -1776,8 +1776,8 @@ In SQL:
 
 Indexes improve performance for:
 
-- Searching (SELECT queries with WHERE)
-- Sorting (ORDER BY)
+- Searching (`SELECT` queries with `WHERE`)
+- Sorting (`ORDER BY`)
 - Joining multiple tables
 - Filtering data with conditions
 
@@ -1889,12 +1889,12 @@ MySQL can get `department`, `salary`, and `name` directly from the index → no 
 
 Without index:
 
-- DB scans all rows (O(n) complexity).
+- DB scans all rows (`O(n)` complexity).
 - Slower for large datasets.
 
 With index:
 
-- DB uses B-Tree navigation (O(log n) complexity).
+- DB uses B-Tree navigation (`O(log n)` complexity).
 - Much faster for lookups, filtering, sorting, joins.
 
 **Downsides of Indexes**
@@ -2923,7 +2923,7 @@ MySQL has a user management system to control who can access the database and wh
 
 ### Creating Users in MySQL
 
-MySQL users are stored in the mysql.user table. Each user is identified by:
+MySQL users are stored in the `mysql.user` table. Each user is identified by:
 
 - Username
 - Host (where they can connect from)
@@ -2959,7 +2959,7 @@ Syntax:
 GRANT privilege_list ON database.table TO 'username'@'host';
 ```
 
-- `privilege_list` → Type of access (e.g., SELECT, INSERT, UPDATE, DELETE, ALL PRIVILEGES).
+- `privilege_list` → Type of access (e.g., `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `ALL PRIVILEGES`).
 - `database.table` → Scope of privileges.
   - `*.*` → All databases and tables.
   - `mydb.*` → All tables in database mydb.
@@ -2974,12 +2974,12 @@ GRANT ALL PRIVILEGES ON company.* TO 'john'@'localhost';
 **Grant limited privileges**
 
 ```sql
-GRANT ALL PRIVILEGES ON company.* TO 'john'@'localhost';
+GRANT SELECT ON company.* TO 'john'@'localhost';
 ```
 
 ### Revoking Privileges
 
-If a user should no longer have some permissions, use the REVOKE statement.
+If a user should no longer have some permissions, use the `REVOKE` statement.
 
 Syntax:
 
@@ -2993,7 +2993,7 @@ Example:
 REVOKE INSERT ON company.employees FROM 'john'@'localhost';
 ```
 
-John can still read (SELECT) the employees table, but can no longer INSERT new rows.
+John can still read (`SELECT`) the employees table, but can no longer `INSERT` new rows.
 
 ### Viewing User Privileges
 
@@ -3060,6 +3060,19 @@ openssl x509 -req -in server-req.pem -days 3600 -CA ca-cert.pem -CAkey ca-key.pe
 openssl genrsa 2048 > client-key.pem
 openssl req -new -key client-key.pem -out client-req.pem
 openssl x509 -req -in client-req.pem -days 3600 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 -out client-cert.pem
+```
+
+For docker, just run:
+
+```bash
+docker run --name mysql-secure ^
+  -e MYSQL_ROOT_PASSWORD=my-secret-pw ^
+  -v "C:\Users\USER\mysql-certs:/etc/mysql/ssl" ^
+  -p 3306:3306 ^
+  -d mysql:latest ^
+  --ssl-ca=/etc/mysql/ssl/ca-cert.pem ^
+  --ssl-cert=/etc/mysql/ssl/server-cert.pem ^
+  --ssl-key=/etc/mysql/ssl/server-key.pem
 ```
 
 #### Step 2: Configure MySQL Server for SSL
@@ -3156,7 +3169,7 @@ ALTER USER 'john'@'localhost' PASSWORD EXPIRE INTERVAL 90 DAY;
 
 - Users should only get the minimum privileges required for their job.
 - Avoid granting `ALL PRIVILEGES` unless absolutely necessary.
-- Never give SUPER or GRANT OPTION to normal users.
+- Never give `SUPER` or `GRANT OPTION` to normal users.
 
 ```sql
 GRANT SELECT, INSERT ON company.employees TO 'hr_user'@'localhost';
@@ -3803,7 +3816,7 @@ Think of a view as a saved query that you can reuse.
 **Advantages of Views**
 
 - **Simplicity:** Complex queries can be saved as a view, so users can just query the view.
-  - Instead of repeating a big join, you just SELECT \* FROM employee_info.
+  - Instead of repeating a big join, you just `SELECT * FROM employee_info`.
 - **Security:** You can restrict access to sensitive columns.
   - Example: Create a view that excludes the salary column and give users access only to that view.
 - **Reusability:** One query definition can be reused many times.
@@ -4550,3 +4563,4 @@ Application continues to work with minimal downtime.
 6. Be very careful — CASCADE can remove more than you expect.
 7. `DECIMAL(10, 2)` - what the value inserted for 3.5278 is it 3.52 or 3.53?
 8. how B tree work during indexing
+9. An index is a data structure that stores pointers to rows in a table, organized to make lookups faster.
