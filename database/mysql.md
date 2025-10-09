@@ -2951,7 +2951,7 @@ This creates a user john who can connect only from localhost with password `secu
 ## Granting Privileges
 
 Once a user is created, they usually don’t have any privileges.
-We assign permissions using the GRANT statement.
+We assign permissions using the `GRANT` statement.
 
 Syntax:
 
@@ -3304,7 +3304,7 @@ Bad:
 SELECT * FROM employees WHERE YEAR(hire_date) = 2020;
 ```
 
-MySQL must evaluate YEAR() for every row → slow.
+MySQL must evaluate `YEAR()` for every row → slow.
 
 Good:
 
