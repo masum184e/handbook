@@ -100,6 +100,18 @@ int mx(Node* head){
     return max(head->data, mx(head->next));
 }
 
+
+    ListNode* middleNode(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while(slow && fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+
 int32_t main(){
 
     Node *head = new Node(1);

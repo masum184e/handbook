@@ -2344,7 +2344,7 @@ FROM employees;
 
 # Triggers
 
-A Trigger in MySQL is a database object that is automatically executed (“fired”) when a specific event (INSERT, UPDATE, DELETE) occurs on a table.
+A Trigger in MySQL is a database object that is automatically executed (“fired”) when a specific event (`INSERT`, `UPDATE`, `DELETE`) occurs on a table.
 
 They’re useful for:
 

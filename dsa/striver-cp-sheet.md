@@ -7,6 +7,16 @@
         1. A
         2. B
         3. C
+6. LinkedList
+    1. Introduction
+        1. Intro
+        2. Insertion
+        3. Delete
+        4. Length
+        5. Search
+    2. Doubly
+    3. Medium Problme
+        1. Middle of LL
 14. BST
     1. Concepts
         1. Intro: How to handle duplicate value?
