@@ -17,6 +17,12 @@
     2. Doubly
     3. Medium Problme
         1. Middle of LL
+        2. A
+        3. B
+        4. Detect Loop
+        5. C
+        6. D
+        7. E
 14. BST
     1. Concepts
         1. Intro: How to handle duplicate value?

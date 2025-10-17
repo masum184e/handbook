@@ -112,6 +112,19 @@ int mx(Node* head){
         return slow;
     }
 
+     bool hasCycle(ListNode *head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while(slow && fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(slow == fast)return true;
+        }
+return false;
+
+    }
+    
 int32_t main(){
 
     Node *head = new Node(1);
