@@ -154,27 +154,27 @@ Tables derived from entities:
 
 Student Table:
 
-- Student_ID (PK)
-- Name
-- Dept
+- student_id (PK)
+- name
+- dept
 
 Course Table:
 
-- Course_ID (PK)
-- Course_Name
-- Credit_Hours
+- course_id (PK)
+- course_name
+- credit_hours
 
 Faculty Table:
 
-- Faculty_ID (PK)
-- Name
+- faculty_id (PK)
+- name
 
-Enrollment Table (relationship between Student & Course):
+Enrollment Table (relationship between student & course):
 
-- Enrollment_ID (PK)
-- Student_ID (FK → Student)
-- Course_ID (FK → Course)
-- Grade
+- enrollment_id (PK)
+- student_id (FK → student)
+- course_id (FK → course)
+- grade
 
 Logical model answers: How will the data be structured logically?
 
@@ -246,7 +246,7 @@ An Entity–Relationship (ER) Diagram is a type of diagram used in database desi
 
 - An entity represents a real-world object (person, place, event, or thing) that has data stored about it.
 - In ER diagrams, entities are shown as rectangles.
-- Example: `Student`, `Course`, `Teacher`.
+- Example: `student`, `course`, `teacher`.
 
 Entities are of two types:
 
@@ -257,20 +257,20 @@ Entities are of two types:
 
 - Attributes describe the properties or characteristics of an entity.
 - Shown as ellipses (ovals) connected to entities.
-- Example: A `Student` entity may have attributes like `Student_ID`, `Name`, `Email`.
+- Example: A `student` entity may have attributes like `student_id`, `name`, `email`.
 
 Types of Attributes:
 
-- Simple Attribute → Cannot be divided further (e.g., Age).
-- Composite Attribute → Can be divided (e.g., FullName → FirstName + LastName).
+- Simple Attribute → Cannot be divided further (e.g., `age`).
+- Composite Attribute → Can be divided (e.g., `full_name` → `first_name` + `last_name`).
 - Derived Attribute → Calculated from other attributes (e.g., Age from DOB).
-- Key Attribute → A unique identifier for an entity (e.g., Student_ID).
+- Key Attribute → A unique identifier for an entity (e.g., `student_id`).
 
 ### Relationships
 
 - Relationships represent associations between entities.
 - Shown as diamonds in ER diagrams.
-- Example: A `Student` enrolls in a `Course`.
+- Example: A `student` enrolls in a `course`.
 
 Cardinality of Relationships (important in database design):
 
@@ -287,9 +287,9 @@ We need to design a database that stores information about Students, Courses, an
 
 Entities and Attributes:
 
-- Student (`Student_ID`, `Name`, `Email`)
-- Course (`Course_ID`, `Course_Name`, `Credits`)
-- Teacher (`Teacher_ID`, `Name`, `Department`)
+- student (`student_id`, `name`, `email`)
+- course (`course_id`, `course_name`, `credits`)
+- teacher (`teacher_id`, `name`, `department`)
 
 Relationships:
 
@@ -301,9 +301,9 @@ Relationships:
 ```scss
 [STUDENT] ----(enrolls in)----< [COURSE] >----(taught by)----[TEACHER]
 
-STUDENT: {Student_ID (PK), Name, Email}
-COURSE: {Course_ID (PK), Course_Name, Credits}
-TEACHER: {Teacher_ID (PK), Name, Department}
+STUDENT: {student_id (PK), name, email}
+COURSE: {course_id (PK), course_name, credits}
+TEACHER: {teacher_id (PK), name, department}
 ```
 
 ## ERD Symbols and Notations
@@ -324,21 +324,21 @@ An Entity–Relationship Diagram (ERD) uses specific symbols and notations to re
 - Double rectangles → Weak entities
 
 ```scss
-   Student (Student_ID, Name, DOB, Email)
+   student (Student_id, name, dob, email)
         |M:N
         |
-    Enrolls
+    enrolls
         |
         |M:N
-   Course (Course_ID, Title, Credits)
+   course (course_id, title, credits)
         |
         |1:N
-    Teaches
+    teaches
         |
- Instructor (Instructor_ID, Name, Salary)
+ instructor (instructor_id, name, salary)
         |
         |1:N
-   Department (Dept_ID, Dept_Name)
+   department (dept_id, dept_name)
 ```
 
 ### Chen’s Notation (1976)
@@ -361,8 +361,8 @@ Scenario → Students enroll in Courses
 ```scss
  [STUDENT] ------(enrolls)------ [COURSE]
       |                               |
-  (Student_ID)                    (Course_ID)
-  (Name)                          (Course_Name)
+  (student_id)                    (Course_id)
+  (name)                          (course_name)
 ```
 
 - Entities: Student, Course (rectangles)
