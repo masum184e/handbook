@@ -1966,7 +1966,7 @@ The basic syntax is:
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE procedure_name (parameters)
+CREATE PROCEDURE procedureName (parameters)
 BEGIN
    -- SQL statements go here
 END //
@@ -1995,7 +1995,7 @@ Let’s create a procedure that shows all employees from a table.
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE GetAllEmployees()
+CREATE PROCEDURE getAllEmployees()
 BEGIN
    SELECT * FROM employees;
 END //
@@ -2006,7 +2006,7 @@ DELIMITER ;
 To call this procedure:
 
 ```sql
-CALL GetAllEmployees();
+CALL getAllEmployees();
 ```
 
 ## Procedure with `IN` Parameter
@@ -2016,7 +2016,7 @@ Suppose you want to get employees of a particular department:
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE GetEmployeesByDept(IN dept_id INT)
+CREATE PROCEDURE getEmployeesByDept(IN dept_id INT)
 BEGIN
    SELECT * FROM employees
    WHERE department_id = dept_id;
@@ -2028,7 +2028,7 @@ DELIMITER ;
 To call this procedure:
 
 ```sql
-CALL GetEmployeesByDept(2);
+CALL getEmployeesByDept(2);
 ```
 
 ## Procedure with `OUT` Parameter
@@ -2038,7 +2038,7 @@ Now let’s create a procedure that returns the total number of employees.
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE GetEmployeeCount(OUT total INT)
+CREATE PROCEDURE getEmployeeCount(OUT total INT)
 BEGIN
    SELECT COUNT(*) INTO total FROM employees;
 END //
@@ -2049,7 +2049,7 @@ DELIMITER ;
 To call this procedure:
 
 ```sql
-CALL GetEmployeeCount(@empCount);
+CALL getEmployeeCount(@empCount);
 SELECT @empCount AS 'Total Employees';
 ```
 
@@ -2060,7 +2060,7 @@ Let’s say we want to increase a number by 10 and return it.
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE IncreaseNumber(INOUT num INT)
+CREATE PROCEDURE increaseNumber(INOUT num INT)
 BEGIN
    SET num = num + 10;
 END //
@@ -2072,7 +2072,7 @@ To call this procedure:
 
 ```sql
 SET @x = 5;
-CALL IncreaseNumber(@x);
+CALL increaseNumber(@x);
 SELECT @x AS 'New Value';
 ```
 
@@ -2105,21 +2105,22 @@ In MySQL, error handling inside stored procedures (and functions) is done using:
 
 ```sql
 DECLARE handler_type HANDLER FOR condition_value statement;
-
--- handler_type:
---   CONTINUE  → continue execution
---   EXIT      → exit procedure
-
--- condition_value:
---   SQLEXCEPTION, SQLWARNING, NOT FOUND, MySQL error code, or SQLSTATE code
 ```
+
+- `handler_type`:
+
+  - `CONTINUE` → continue execution
+  - `EXIT` → exit procedure
+
+- `condition_value`:
+  - `SQLEXCEPTION`, `SQLWARNING`, `NOT FOUND` or `SQLSTATE`
 
 ### EXIT HANDLER (stop procedure on error)
 
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE InsertEmployeeSafe(IN emp_id INT, IN emp_name VARCHAR(50))
+CREATE PROCEDURE insertEmployeeSafe(IN emp_id INT, IN emp_name VARCHAR(50))
 BEGIN
    DECLARE EXIT HANDLER FOR SQLEXCEPTION
    BEGIN
@@ -2127,7 +2128,7 @@ BEGIN
       SELECT 'An error occurred while inserting employee.' AS ErrorMessage;
    END;
 
-   INSERT INTO employees (employee_id, first_name)
+   INSERT INTO accounts (emp_id, emp_name)
    VALUES (emp_id, emp_name);
 
    SELECT 'Employee inserted successfully!' AS SuccessMessage;
@@ -2143,7 +2144,7 @@ DELIMITER ;
 **Call it:**
 
 ```sql
-CALL InsertEmployeeSafe(1, 'John');
+CALL insertEmployeeSafe(1, 'John');
 ```
 
 ### CONTINUE HANDLER (ignore error and keep going)
@@ -2151,7 +2152,7 @@ CALL InsertEmployeeSafe(1, 'John');
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE InsertWithIgnore(IN emp_id INT, IN emp_name VARCHAR(50))
+CREATE PROCEDURE insertWithIgnore(IN emp_id INT, IN emp_name VARCHAR(50))
 BEGIN
    DECLARE CONTINUE HANDLER FOR 1062 -- Duplicate entry error code
    BEGIN
@@ -2167,13 +2168,13 @@ END //
 DELIMITER ;
 ```
 
-- If a duplicate key error (1062) occurs, the CONTINUE HANDLER executes, but the procedure continues.
+- If a duplicate key error (`1062`) occurs, the `CONTINUE` HANDLER executes, but the procedure continues.
 - It won’t stop execution, just prints a warning.
 
 Call it:
 
 ```sql
-CALL InsertWithIgnore(1, 'Alice');
+CALL insertWithIgnore(1, 'Alice');
 ```
 
 ### NOT FOUND (cursor example)
@@ -2183,7 +2184,7 @@ When looping through rows with a cursor, you use `NOT FOUND` handler to stop whe
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE ListEmployeeNames()
+CREATE PROCEDURE listEmployeeNames()
 BEGIN
    DECLARE done INT DEFAULT 0;
    DECLARE emp_name VARCHAR(50);
@@ -2215,7 +2216,7 @@ DELIMITER ;
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE InsertWithErrorInfo(IN emp_id INT, IN emp_name VARCHAR(50))
+CREATE PROCEDURE insertWithErrorInfo(IN emp_id INT, IN emp_name VARCHAR(50))
 BEGIN
    DECLARE EXIT HANDLER FOR SQLEXCEPTION
    BEGIN
@@ -2237,6 +2238,7 @@ DELIMITER ;
 
 - If an error happens, MySQL fetches the error code and error message.
 - Example: If `emp_id` already exists, it might return:
+  
   ```sql
   Error 1062: Duplicate entry '1' for key 'PRIMARY'
   ```
@@ -2273,7 +2275,7 @@ It’s similar to a function in programming languages:
 ```sql
 DELIMITER //
 
-CREATE FUNCTION function_name(parameter_list)
+CREATE FUNCTION functionName(parameter_list)
 RETURNS datatype
 DETERMINISTIC
 BEGIN
@@ -2284,18 +2286,18 @@ END //
 DELIMITER ;
 ```
 
-- function_name → The name of the function.
-- parameter_list → Input parameters (only `IN` type, unlike procedures).
-- RETURNS datatype → Must specify the data type of the return value (e.g., `INT`, `VARCHAR(50)`).
-- DETERMINISTIC → Tells MySQL that the function will always return the same output for the same input (important for replication & optimization).
-- RETURN → Required to return a single value.
+- `function_name` → The name of the function.
+- `parameter_list` → Input parameters (only `IN` type, unlike procedures).
+- `RETURNS datatype` → Must specify the data type of the return value (e.g., `INT`, `VARCHAR(50)`).
+- `DETERMINISTIC` → Tells MySQL that the function will always return the same output for the same input (important for replication & optimization).
+- `RETURN` → Required to return a single value.
 
 ## Simple Function (Square of a Number)
 
 ```sql
 DELIMITER //
 
-CREATE FUNCTION SquareNumber(n INT)
+CREATE FUNCTION squareNumber(n INT)
 RETURNS INT
 DETERMINISTIC
 BEGIN
@@ -2308,7 +2310,7 @@ DELIMITER ;
 To use this function
 
 ```sql
-SELECT SquareNumber(5) AS Result;
+SELECT squareNumber(5) AS Result;
 ```
 
 Suppose we have an employees table with `first_name` and `last_name`.
@@ -2318,7 +2320,7 @@ We can create a function to return the full name:
 ```sql
 DELIMITER //
 
-CREATE FUNCTION GetFullName(fname VARCHAR(50), lname VARCHAR(50))
+CREATE FUNCTION getFullName(fname VARCHAR(50), lname VARCHAR(50))
 RETURNS VARCHAR(100)
 DETERMINISTIC
 BEGIN
@@ -2331,7 +2333,7 @@ DELIMITER ;
 To use this function:
 
 ```sql
-SELECT GetFullName(first_name, last_name) AS FullName
+SELECT getFullName(first_name, last_name) AS FullName
 FROM employees;
 
 ```
