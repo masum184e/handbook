@@ -2335,7 +2335,6 @@ To use this function:
 ```sql
 SELECT getFullName(first_name, last_name) AS FullName
 FROM employees;
-
 ```
 
 ## Managing Functions
@@ -2435,9 +2434,9 @@ DELIMITER ;
 
 ## Managing Triggers
 
-- Show triggers in a database: `SHOW TRIGGERS\G`
+- Show triggers in a database: `SHOW TRIGGERS`
 - Drop a trigger: `DROP TRIGGER after_employee_insert;`
-- Check trigger definition: `SHOW CREATE TRIGGER before_employee_update\G`
+- Check trigger definition: `SHOW CREATE TRIGGER before_employee_update`
 
 ## Common Use Cases for Triggers
 
@@ -2448,7 +2447,7 @@ DELIMITER ;
 5. **Enforcing Security Rules:** Restrict certain operations automatically.
 6. **Synchronizing Tables (Replication-like Behavior):** Automatically keep a summary table in sync.
 
-### Summary of Use Cases of TriggersS
+### Summary of Use Cases of Triggers
 
 | Use Case                 | Trigger Type               | Example                       |
 | ------------------------ | -------------------------- | ----------------------------- |
@@ -2467,8 +2466,8 @@ It allows you to automate recurring database tasks without relying on external s
 
 **Key Points about Events**
 
-- Events are managed by the MySQL Event Scheduler (must be enabled).
-- Syntax is similar to CREATE PROCEDURE, but with scheduling options.
+- Events are managed by the **MySQL Event Scheduler** (must be enabled).
+- Syntax is similar to `CREATE PROCEDURE`, but with scheduling options.
 - Can be one-time (run once at a specific date/time) or recurring (run periodically).
 - Common uses:
   - Automating backups
@@ -2501,12 +2500,12 @@ DO
    sql_statement;
 ```
 
-- event_name → Unique name for the event.
-- ON SCHEDULE → Defines when the event runs:
+- `event_name` → Unique name for the event.
+- `ON SCHEDULE` → Defines when the event runs:
   - `AT 'YYYY-MM-DD HH:MM:SS'` → Run once at specific time.
   - `EVERY interval` → Repeat (e.g., `EVERY 1 DAY`).
-- STARTS / ENDS → Define time range for recurring events.
-- DO → The SQL statement (or block) to execute.
+- `STARTS` / `ENDS` → Define time range for recurring events.
+- `DO` → The SQL statement (or block) to execute.
 
 ## One-Time Event
 
@@ -2562,7 +2561,7 @@ Every day, it clears and rebuilds a summary table of total salaries per departme
 ## Managing Events
 
 - View all events: `SHOW EVENTS;`
-- View event definition: `SHOW CREATE EVENT archive_orders\G`
+- View event definition: `SHOW CREATE EVENT archive_orders`
 - Drop event: `DROP EVENT archive_orders;`
 - Disable event (without deleting): `ALTER EVENT archive_orders DISABLE;`
 - Enable event again: `ALTER EVENT archive_orders ENABLE;`

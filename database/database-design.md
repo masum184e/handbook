@@ -25,16 +25,16 @@ A database does not provide tools to interact with data efficiently, DBMS does.
 **Example:**
 
 `students`
-| Student_ID | Name | Dept | Phone |
+| student_id | name | dept | phone |
 | ----------- | ----- | ---- | ----------- |
 | S101 | Amina | CSE | 01711111111 |
 
 `courses`
-| Course_ID | Course_Name | Credit |
+| course_id | course_name | credit |
 | ---------- | ------------- | ------ |
 | C201 | Database Sys. | 3 |
 
-- Relationship: Students enroll in Courses via a join table (Enrollment).
+- Relationship: `students` enroll in `courses` via a join table (Enrollment).
 
 ### NoSQL Database
 
@@ -101,7 +101,7 @@ Best for web/mobile apps that need global access.
 
 - A "Video" object contains:
 - Attributes: Title, Duration, Size.
-- Methods: Play(), Pause(), Stop().
+- Methods: play(), pause(), stop().
 
 Great for applications needing complex data types like images, audio, video
 
@@ -130,14 +130,14 @@ A data model is a blueprint for how data will be structured and managed. Databas
 
 Entities:
 
-- Student
-- Course
-- Faculty
+- student
+- course
+- faculty
 
 Relationships:
 
-- Student enrolls in Course
-- Faculty teaches Course
+- student enrolls in course
+- faculty teaches course
 
 Conceptual model answers: What data do we need?
 
@@ -187,30 +187,30 @@ Logical model answers: How will the data be structured logically?
 **Example:**
 
 ```sql
-CREATE TABLE Student (
-    Student_ID INT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
-    Dept VARCHAR(50)
+CREATE TABLE student (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    dept VARCHAR(50)
 );
 
-CREATE TABLE Course (
-    Course_ID INT PRIMARY KEY,
-    Course_Name VARCHAR(100),
-    Credit_Hours INT
+CREATE TABLE course (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(100),
+    credit_hours INT
 );
 
-CREATE TABLE Faculty (
-    Faculty_ID INT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL
+CREATE TABLE faculty (
+    faculty_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Enrollment (
-    Enrollment_ID INT PRIMARY KEY,
-    Student_ID INT,
-    Course_ID INT,
-    Grade CHAR(2),
-    FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID),
-    FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID)
+CREATE TABLE enrollment (
+    enrollment_id INT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    grade CHAR(2),
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id)
 );
 ```
 
@@ -3107,14 +3107,14 @@ The transaction fails entirely because referential integrity is violated. This p
 If you try:
 
 ```sql
-DELETE FROM Accounts WHERE account_id = 101;
+DELETE FROM accounts WHERE account_id = 101;
 ```
 
 - If Transactions table already has entries referencing account_id = 101, the deletion will be blocked.
 - To allow it, you must define actions:
 
 ```sql
-FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+FOREIGN KEY (account_id) REFERENCES accounts(account_id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 ```
@@ -3140,16 +3140,16 @@ This is done using:
 Other options exist too (like `SET NULL`, `SET DEFAULT`, `RESTRICT`, `NO ACTION`), but we’ll focus on CASCADE.
 
 ```sql
-CREATE TABLE Students (
+CREATE TABLE students (
     student_id INT PRIMARY KEY,
     name VARCHAR(100)
 );
 
-CREATE TABLE Enrollments (
+CREATE TABLE enrollments (
     enrollment_id INT PRIMARY KEY,
     student_id INT,
     course_code VARCHAR(10),
-    FOREIGN KEY (student_id) REFERENCES Students(student_id)
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -3162,22 +3162,22 @@ If a student is deleted, all their enrollment records should also be removed to 
 Example:
 
 ```sql
-INSERT INTO Students VALUES (101, 'Alice'), (102, 'Bob');
-INSERT INTO Enrollments VALUES (1, 101, 'CS101'), (2, 101, 'MATH201'), (3, 102, 'CS101');
+INSERT INTO students VALUES (101, 'Alice'), (102, 'Bob');
+INSERT INTO enrollments VALUES (1, 101, 'CS101'), (2, 101, 'MATH201'), (3, 102, 'CS101');
 ```
 
 Now delete Alice:
 
 ```sql
 BEGIN TRANSACTION;
-DELETE FROM Students WHERE student_id = 101;
+DELETE FROM students WHERE student_id = 101;
 COMMIT;
 ```
 
-Because of ON `DELETE CASCADE`:
+Because of `ON DELETE CASCADE`:
 
-- Alice (student_id = 101) is deleted from `Students`.
-- Her enrollments (1, 2) are automatically deleted from `Enrollments`.
+- Alice (`student_id = 101`) is deleted from `students`.
+- Her enrollments (1, 2) are automatically deleted from `enrollments`.
 - Bob’s enrollment (3) remains unaffected.
 
 This prevents dangling enrollments for a student who doesn’t exist.
@@ -3190,7 +3190,7 @@ Example:
 
 ```sql
 BEGIN TRANSACTION;
-UPDATE Students
+UPDATE students
 SET student_id = 201
 WHERE student_id = 102;
 COMMIT;
@@ -3198,8 +3198,8 @@ COMMIT;
 
 Because of `ON UPDATE CASCADE`:
 
-- Student ID `102` changes to `201` in `Students`.
-- In `Enrollments`, the row `(3, 102, 'CS101')` is automatically updated to `(3, 201, 'CS101')`.
+- Student id `102` changes to `201` in `students`.
+- In `enrollments`, the row `(3, 102, 'CS101')` is automatically updated to `(3, 201, 'CS101')`.
 
 Ensures child rows stay consistent with parent rows.
 
