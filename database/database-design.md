@@ -1,3 +1,5 @@
+ Contents
+- []
 # Fundamentals
 
 ## Database vs DBMS
@@ -52,12 +54,12 @@ A product entry in JSON format:
 
 ```json
 {
-  "ProductID": "P101",
-  "Name": "Laptop",
-  "Price": 700,
-  "Reviews": [
-    { "User": "Amina", "Rating": 5 },
-    { "User": "Rahim", "Rating": 4 }
+  "product_id": "P101",
+  "name": "Laptop",
+  "price": 700,
+  "reviews": [
+    { "user": "Amina", "rating": 5 },
+    { "user": "Rahim", "rating": 4 }
   ]
 }
 ```
@@ -361,12 +363,12 @@ Scenario → Students enroll in Courses
 ```scss
  [STUDENT] ------(enrolls)------ [COURSE]
       |                               |
-  (student_id)                    (Course_id)
+  (student_id)                    (course_id)
   (name)                          (course_name)
 ```
 
 - Entities: Student, Course (rectangles)
-- Attributes: `Student_ID`, `Name`, `Course_ID`, `Course_Name` (ovals)
+- Attributes: `student_id`, `name`, `course_id`, `course_name` (ovals)
 - Relationship: `enrolls` (diamond)
 
 Best for teaching and conceptual modeling, but diagrams can get large.
@@ -394,15 +396,15 @@ Scenario → Students enroll in Courses
 
 STUDENT
 ---------
-Student_ID (PK)
-Name
-Email
+student_id (PK)
+name
+email
 
 COURSE
 ---------
-Course_ID (PK)
-Course_Name
-Credits
+course_id (PK)
+course_name
+credits
 ```
 
 - `STUDENT` to `COURSE` → Many-to-Many (M:N) relationship
@@ -434,17 +436,17 @@ Scenario → Students enroll in Courses
  -------------------------
  |       STUDENT         |
  -------------------------
- | Student_ID (PK)       |
- | Name                  |
- | Email                 |
+ | student_id (PK)       |
+ | name                  |
+ | email                 |
  -------------------------
 
  -------------------------
  |       COURSE          |
  -------------------------
- | Course_ID (PK)        |
- | Course_Name           |
- | Credits               |
+ | course_id (PK)        |
+ | course_name           |
+ | credits               |
  -------------------------
 
 STUDENT  "0..*" --------- "1..*"  COURSE
@@ -487,7 +489,7 @@ Each entity is described by its attributes (like ID, name, age, etc.), and one o
 
 Requirement: “Students enroll in courses, and faculty members teach courses.”
 
-    - Entities: Student, Course, Faculty
+- Entities: Student, Course, Faculty
 
 ### Types of Entities
 
@@ -501,15 +503,15 @@ Requirement: “Students enroll in courses, and faculty members teach courses.�
 
 In a university database, the Student entity is a strong entity because:
 
-- Each student can be uniquely identified by Student_ID.
+- Each student can be uniquely identified by student_id.
 - It exists on its own without needing another entity.
 
 ```scss
 [STUDENT]
 -----------
-Student_ID (PK)
-Name
-Email
+student_id (PK)
+name
+email
 ```
 
 Even if no other entity exists, Student can still exist in the system.
@@ -535,14 +537,14 @@ In a banking system, consider `Bank Account` (strong entity) and `Dependent` (we
 
 ACCOUNT (Strong Entity)
 ----------------------
-Account_ID (PK)
-Account_Type
-Balance
+account_id (PK)
+account_type
+balance
 
 DEPENDENT (Weak Entity)
 ----------------------
-Dependent_Name (Partial Key)
-Relationship
+dependent_name (Partial Key)
+relationship
 ```
 
 - `ACCOUNT` is a strong entity (exists independently).
@@ -563,7 +565,7 @@ Relationship
 
 An Attribute is a property or characteristic that describes an entity (or sometimes a relationship) in an ER model.
 
-- Example: A `Student` entity may have attributes like Student_ID, Name, and Email.
+- Example: A `Student` entity may have attributes like student_id, Name, and Email.
 - In ER diagrams, attributes are usually represented as ellipses (ovals) connected to entities or relationships.
 
 **How to Identify?**
@@ -572,9 +574,9 @@ An Attribute is a property or characteristic that describes an entity (or someti
 
 **Example:**
 
-- Student → Student_ID (PK), Name, Phone, DOB
-- Course → Course_ID (PK), Course_Name, Credit_Hours
-- Faculty → Faculty_ID (PK), Name, Department
+- student → student_id (PK), name, phone, dob
+- course → course_id (PK), course_name, credit_hours
+- faculty → faculty_id (PK), name, department
 
 ### Types of Attributes
 
@@ -586,8 +588,8 @@ An Attribute is a property or characteristic that describes an entity (or someti
 
 ##### Example
 
-- `Age` of a student → atomic, cannot be further broken.
-- `Gender`, `Salary`, `Roll_No`.
+- `age` of a student → atomic, cannot be further broken.
+- `gender`, `salary`, `roll_no`.
 
 ```scss
 [STUDENT]
@@ -605,18 +607,18 @@ Here, `Age` is a simple attribute of `Student`.
 
 ##### Example
 
-- `Full_Name` can be divided into `First_Name` and `Last_Name`.
-- `Address` can be divided into `Street`, `City`, `State`, `Zip_Code`.
+- `full_name` can be divided into `first_name` and `last_name`.
+- `address` can be divided into `street`, `city`, `state`, `zip_code`.
 
 ```scss
-          (Full_Name)
+          (full_name)
           /        \
- (First_Name)   (Last_Name)
+ (first_name)   (last_name)
 
  [STUDENT]
 ```
 
-Here, `Full_Name` is a composite attribute.
+Here, `full_name` is a composite attribute.
 
 #### Multivalued Attribute
 
@@ -625,16 +627,16 @@ Here, `Full_Name` is a composite attribute.
 
 ##### Example
 
-- A `Student` may have multiple phone numbers.
-- An `Employee` may have multiple skills.
+- A `student` may have multiple phone numbers.
+- An `employee` may have multiple skills.
 
 ```scss
 [STUDENT]
    |
-((Phone_Number))
+((phone_number))
 ```
 
-Here, one student can have multiple phone numbers, so `Phone_Number` is a multivalued attribute.
+Here, one student can have multiple phone numbers, so `phone_number` is a multivalued attribute.
 
 #### Derived Attribute
 
@@ -643,16 +645,16 @@ Here, one student can have multiple phone numbers, so `Phone_Number` is a multiv
 
 ##### Example
 
-- `Age` can be derived from `Date_of_Birth`.
-- `Total_Price` can be derived as `Quantity × Unit_Price`.
+- `age` can be derived from `dob`.
+- `total_price` can be derived as `quantity × unit_price`.
 
 ```scss
 [STUDENT]
    |
- (Date_of_Birth) -----> (Age) [Dashed oval]
+ (dob) -----> (age) [Dashed oval]
 ```
 
-Here, `Age` is not stored directly; it is calculated from `Date_of_Birth`.
+Here, `age` is not stored directly; it is calculated from `dob`.
 
 ### Summary Table of Attribute Types
 
@@ -753,15 +755,15 @@ This is the most common type in databases.
 ```
 ENROLLMENT
 ------------------
-Student_ID (FK)
-Course_ID (FK)
-Enrollment_Date
+student_id (FK)
+course_id (FK)
+enrollment_date
 ```
 
 This breaks the M:N into two 1:N relationships:
 
-- Student → Enrollment
-- Course → Enrollment
+- student → enrollment
+- course → enrollment
 
 ### Comparison of Relationship Types
 
@@ -790,18 +792,18 @@ Keys ensure that there are no duplicate records and establish relationships betw
 
 In a `STUDENT` entity:
 
-- `Student_ID` can be the primary key because it uniquely identifies each student.
+- `student_id` can be the primary key because it uniquely identifies each student.
 
 ```scss
 STUDENT
 -------------------
-Student_ID (PK)
-Name
-Email
-Phone
+student_id (PK)
+name
+email
+phone
 ```
 
-Even if two students have the same name, their Student_ID will be unique.
+Even if two students have the same name, their student_id will be unique.
 
 #### Composite Key
 
@@ -818,12 +820,12 @@ Even if two students have the same name, their Student_ID will be unique.
 
 In the `STUDENT` entity:
 
-- `Student_ID` (unique)
-- `Email` (also unique)
+- `student_ID` (unique)
+- `email` (also unique)
 
-So: `{Student_ID, Email}` are candidate keys.
+So: `{student_id, email}` are candidate keys.
 
-- If we choose `Student_ID` as the primary key, `Email` remains an alternate key.
+- If we choose `student_id` as the primary key, `email` remains an alternate key.
 
 #### Foreign Key (FK)
 
@@ -838,18 +840,18 @@ Consider two entities:
 ```scss
 STUDENT
 ------------------
-Student_ID (PK)
-Name
-Email
+student_id (PK)
+name
+email
 
 ENROLLMENT
 ------------------
-Enrollment_ID (PK)
-Student_ID (FK)
-Course_ID (FK)
+enrollment_id (PK)
+student_id (FK)
+course_id (FK)
 ```
 
-- In `ENROLLMENT`, `Student_ID` is a foreign key referencing `STUDENT(Student_ID)`.
+- In `ENROLLMENT`, `student_id` is a foreign key referencing `STUDENT(student_id)`.
 - This links each enrollment record to a student.
 
 #### Super Key
@@ -862,13 +864,13 @@ Course_ID (FK)
 
 In `STUDENT`:
 
-- `{Student_ID}` → uniquely identifies a student.
-- `{Student_ID, Name}` → also uniquely identifies a student, but contains unnecessary attribute `Name`.
+- `{student_id}` → uniquely identifies a student.
+- `{student_id, Name}` → also uniquely identifies a student, but contains unnecessary attribute `Name`.
 
 So:
 
-- `{Student_ID}`, `{Email}`, `{Student_ID, Name}` are super keys.
-- Only the minimal one (Student_ID) is chosen as the primary key.
+- `{student_id}`, `{Email}`, `{student_id, Name}` are super keys.
+- Only the minimal one (student_id) is chosen as the primary key.
 
 #### Surrogate Key
 
@@ -877,24 +879,24 @@ So:
 - Helps avoid using long/natural keys (like National_ID or Email) as primary keys.
 
 **Example**
-| Enrollment_ID (PK, Auto) | Student_ID (FK) | Course_ID (FK) | Grade |
+| enrollment_id (PK, Auto) | student_id (FK) | course_id (FK) | Grade |
 | ------------------------- | ---------------- | --------------- | ----- |
 | 1 | S101 | C201 | A |
 | 2 | S101 | C202 | B |
 
-- Enrollment_ID is a surrogate key → generated automatically (1, 2, 3...).
-- Student_ID + Course_ID are still important, but surrogate key makes referencing easier.
+- enrollment_id is a surrogate key → generated automatically (1, 2, 3...).
+- student_id + course_id are still important, but surrogate key makes referencing easier.
 
 ### Comparison Table of Keys
 
 | Key Type          | Definition                                                                        | Example                                        |
 | ----------------- | --------------------------------------------------------------------------------- | ---------------------------------------------- |
-| **Primary Key**   | Chosen unique identifier for records; cannot be NULL                              | `Student_ID` in STUDENT                        |
-| **Composite Key** | Uniqueness based on combination of attributes.                                    | (Student_ID + Course_ID) in Enrollment         |
-| **Candidate Key** | All possible unique identifiers                                                   | `{Student_ID, Email}`                          |
-| **Foreign Key**   | Attribute linking two entities                                                    | `Student_ID` in ENROLLMENT referencing STUDENT |
-| **Super Key**     | Any set of attributes that uniquely identifies records (may include extra fields) | `{Student_ID}`, `{Student_ID, Name}`           |
-| **Surrogate Key** | Artificial key with no business meaning (auto-generated).                         | Enrollment_ID (1, 2, 3...)                     |
+| **Primary Key**   | Chosen unique identifier for records; cannot be NULL                              | `student_id` in STUDENT                        |
+| **Composite Key** | Uniqueness based on combination of attributes.                                    | (student_id + course_id) in Enrollment         |
+| **Candidate Key** | All possible unique identifiers                                                   | `{student_id, Email}`                          |
+| **Foreign Key**   | Attribute linking two entities                                                    | `student_id` in ENROLLMENT referencing STUDENT |
+| **Super Key**     | Any set of attributes that uniquely identifies records (may include extra fields) | `{student_id}`, `{student_id, Name}`           |
+| **Surrogate Key** | Artificial key with no business meaning (auto-generated).                         | enrollment_id (1, 2, 3...)                     |
 
 # Relational Model
 
@@ -990,11 +992,11 @@ Normally, attributes belong to entities. But in some cases:
 
 In a Student–Course enrollment system:
 
-- Entities: `Student`, `Course`.
-- Relationship: `Enrolls`.
-- Attribute: `Grade`.
+- Entities: `student`, `course`.
+- Relationship: `enrolls`.
+- Attribute: `grade`.
 
-The `Grade` cannot belong only to `Student` (different grades in different courses), nor only to `Course` (different grades for different students).
+The `grade` cannot belong only to `student` (different grades in different courses), nor only to `course` (different grades for different students).
 
 It makes sense only as part of the enrollment relationship.
 
@@ -1002,8 +1004,8 @@ It makes sense only as part of the enrollment relationship.
 
 **Entities & Attributes**
 
-- `Student` (`Student_ID`, `Name`)
-- `Course` (`Course_ID`, `Title`)
+- `Student` (`student_id`, `Name`)
+- `Course` (`course_id`, `Title`)
 
 **Relationship:**
 
@@ -1025,7 +1027,7 @@ It makes sense only as part of the enrollment relationship.
 1. They are used only when the attribute cannot be assigned to one entity alone.
 
 2. In relational databases, relationship attributes are usually stored in a separate table (junction/associative entity).
-   - Example: `Enrollment(Student_ID, Course_ID, Grade)`
+   - Example: `Enrollment(student_id, course_id, Grade)`
 
 ## When to Use Relationship Attributes
 
@@ -1161,8 +1163,8 @@ Date
 **Example: Teacher & Course**
 
 - A `Course` exists independently of a teacher.
-- Each course has its own `Course_ID` as a primary key.
-- But we add `Teacher_ID` as a foreign key to show who teaches it.
+- Each course has its own `course_id` as a primary key.
+- But we add `teacher_id` as a foreign key to show who teaches it.
 
 **ER Representation:**
 
@@ -1171,20 +1173,20 @@ Date
 
 TEACHER
 -------------------
-Teacher_ID (PK)
+teacher_id (PK)
 Name
 Department
 
 COURSE
 -------------------
-Course_ID (PK)
-Course_Name
+course_id (PK)
+course_name
 Credits
-Teacher_ID (FK)
+teacher_id (FK)
 ```
 
-- `Course` has its own independent key (`Course_ID`).
-- `Teacher_ID` is just a foreign key reference.
+- `Course` has its own independent key (`course_id`).
+- `teacher_id` is just a foreign key reference.
 - This makes the relationship non-identifying.
 
 ## Key Differences between Identifying and Non-Identifying Relationships
@@ -1217,7 +1219,7 @@ Key Points:
 
 ## Example:
 
-Consider an entity `Employee` with attributes: `Emp_ID`, `Name`, `Salary`.
+Consider an entity `Employee` with attributes: `Emp_ID`, `name`, `Salary`.
 
 Now, employees can be of two types:
 
@@ -1235,7 +1237,7 @@ Here, Specialization divides a broad entity (`Employee`) into specialized subtyp
 
 ```scss
           Employee
-      (Emp_ID, Name, Salary)
+      (Emp_ID, name, Salary)
           /         \
  FullTime_Employee   PartTime_Employee
       (Benefits)         (Hourly_Rate)
@@ -1312,7 +1314,7 @@ For example, a relationship (say “Works_On”) itself needs to connect with an
 ## Example
 
 - Entities:
-  - Employee (`Emp_ID, Name`)
+  - Employee (`Emp_ID, name`)
   - Project (`Proj_ID, Title`)
   - Department (`Dept_ID, Dept_Name`)
 - Relationship:
@@ -1405,7 +1407,7 @@ To create a database from this, we need to translate requirements into ERD compo
 **Example rule:**
 
 - “Each student has a student ID, name, and date of birth.”
-- Attributes of Student: Student_ID (PK), Name, DOB.
+- Attributes of Student: student_id (PK), Name, DOB.
 
 ### 5. Apply Constraints
 
@@ -1422,8 +1424,8 @@ To create a database from this, we need to translate requirements into ERD compo
 1. A university has students, courses, and instructors.
 2. Each student can enroll in many courses, and each course can have many students.
 3. Each course is taught by one instructor, but an instructor can teach many courses.
-4. Each student has a Student_ID, Name, and DOB.
-5. Each course has a Course_ID, Title, and Credits.
+4. Each student has a student_id, Name, and DOB.
+5. Each course has a course_id, Title, and Credits.
 6. Each instructor has an Instructor_ID, Name, and Salary.
 
 ### Mapping Process
@@ -1433,21 +1435,21 @@ To create a database from this, we need to translate requirements into ERD compo
   - Enrolls (Student–Course, M:N).
   - Teaches (Instructor–Course, 1:N).
 - Attributes:
-  - Student → Student_ID (PK), Name, DOB.
-  - Course → Course_ID (PK), Title, Credits.
+  - Student → student_id (PK), Name, DOB.
+  - Course → course_id (PK), Title, Credits.
   - Instructor → Instructor_ID (PK), Name, Salary.
 - Constraints:
   - Each course must be taught by one instructor (total participation of Course in Teaches).
   - A student may or may not enroll in a course (optional participation).
 
 ```scss
- Student (Student_ID, Name, DOB)
+ Student (student_id, Name, DOB)
         |M:N
         |
      Enrolls
         |
         |M:N
- Course (Course_ID, Title, Credits)
+ Course (course_id, Title, Credits)
         |
         |1:N
      Teaches
@@ -1495,7 +1497,7 @@ Relationship: Each student has one student_card.
 
 ```sql
 STUDENT(
-   Student_ID PRIMARY KEY,
+   student_id PRIMARY KEY,
    Name,
    DOB
 );
@@ -1503,8 +1505,8 @@ STUDENT(
 STUDENT_CARD(
    Card_ID PRIMARY KEY,
    Issue_Date,
-   Student_ID UNIQUE,   -- FK referencing STUDENT
-   FOREIGN KEY(Student_ID) REFERENCES STUDENT(Student_ID)
+   student_id UNIQUE,   -- FK referencing STUDENT
+   FOREIGN KEY(student_id) REFERENCES STUDENT(student_id)
 );
 ```
 
@@ -1524,7 +1526,7 @@ INSTRUCTOR(
 );
 
 COURSE(
-   Course_ID PRIMARY KEY,
+   course_id PRIMARY KEY,
    Title,
    Credits,
    Instructor_ID,   -- FK referencing INSTRUCTOR
@@ -1544,25 +1546,25 @@ Relationship: Students enroll in many courses, and each course has many students
 
 ```sql
 STUDENT(
-   Student_ID PRIMARY KEY,
+   student_id PRIMARY KEY,
    Name,
    DOB,
    Email
 );
 
 COURSE(
-   Course_ID PRIMARY KEY,
+   course_id PRIMARY KEY,
    Title,
    Credits
 );
 
 ENROLLMENT(
-   Student_ID,   -- FK referencing STUDENT
-   Course_ID,    -- FK referencing COURSE
+   student_id,   -- FK referencing STUDENT
+   course_id,    -- FK referencing COURSE
    Enroll_Date,
-   PRIMARY KEY (Student_ID, Course_ID),
-   FOREIGN KEY(Student_ID) REFERENCES STUDENT(Student_ID),
-   FOREIGN KEY(Course_ID) REFERENCES COURSE(Course_ID)
+   PRIMARY KEY (student_id, course_id),
+   FOREIGN KEY(student_id) REFERENCES STUDENT(student_id),
+   FOREIGN KEY(course_id) REFERENCES COURSE(course_id)
 );
 ```
 
@@ -1580,15 +1582,15 @@ Entity: Student has multiple Phone_Numbers.
 
 ```sql
 STUDENT(
-   Student_ID PRIMARY KEY,
+   student_id PRIMARY KEY,
    Name,
    DOB
 );
 
 STUDENT_PHONE(
-   Student_ID,   -- FK referencing STUDENT
+   student_id,   -- FK referencing STUDENT
    Phone_Number,
-   PRIMARY KEY (Student_ID, Phone_Number)
+   PRIMARY KEY (student_id, Phone_Number)
 );
 ```
 
@@ -1663,25 +1665,25 @@ EMPLOYEE(
 
 - Business Rule: Each student has one student_card.
 
-ERD: `Student (Student_ID, Name) —(Has)— Student_Card (Card_ID, Issue_Date)`
+ERD: `Student (student_id, Name) —(Has)— Student_Card (Card_ID, Issue_Date)`
 
 **Tables:**
 
 ```sql
 STUDENT(
-   Student_ID PRIMARY KEY,
+   student_id PRIMARY KEY,
    Name
 );
 
 STUDENT_CARD(
    Card_ID PRIMARY KEY,
    Issue_Date,
-   Student_ID UNIQUE,   -- ensures 1:1 mapping
-   FOREIGN KEY(Student_ID) REFERENCES STUDENT(Student_ID)
+   student_id UNIQUE,   -- ensures 1:1 mapping
+   FOREIGN KEY(student_id) REFERENCES STUDENT(student_id)
 );
 ```
 
-Here, `Student_ID` in `STUDENT_CARD` ensures each student has at most one card.
+Here, `student_id` in `STUDENT_CARD` ensures each student has at most one card.
 
 ### One-to-Many (1:N)
 
@@ -1693,7 +1695,7 @@ Here, `Student_ID` in `STUDENT_CARD` ensures each student has at most one card.
 
 - Business Rule: One instructor teaches many courses, but each course has only one instructor.
 
-ERD: `Instructor (Instructor_ID, Name) —(Teaches)— Course (Course_ID, Title)`
+ERD: `Instructor (Instructor_ID, Name) —(Teaches)— Course (course_id, Title)`
 
 **Tables:**
 
@@ -1704,7 +1706,7 @@ INSTRUCTOR(
 );
 
 COURSE(
-   Course_ID PRIMARY KEY,
+   course_id PRIMARY KEY,
    Title,
    Instructor_ID,   -- FK from INSTRUCTOR
    FOREIGN KEY(Instructor_ID) REFERENCES INSTRUCTOR(Instructor_ID)
@@ -1731,24 +1733,24 @@ ERD: `Student —(Enrolls)— Course` with attribute `Enroll_Date`
 
 ```sql
 STUDENT(
-   Student_ID PRIMARY KEY,
+   student_id PRIMARY KEY,
    Name,
    DOB
 );
 
 COURSE(
-   Course_ID PRIMARY KEY,
+   course_id PRIMARY KEY,
    Title,
    Credits
 );
 
 ENROLLMENT(
-   Student_ID,   -- FK from STUDENT
-   Course_ID,    -- FK from COURSE
+   student_id,   -- FK from STUDENT
+   course_id,    -- FK from COURSE
    Enroll_Date,
-   PRIMARY KEY(Student_ID, Course_ID),
-   FOREIGN KEY(Student_ID) REFERENCES STUDENT(Student_ID),
-   FOREIGN KEY(Course_ID) REFERENCES COURSE(Course_ID)
+   PRIMARY KEY(student_id, course_id),
+   FOREIGN KEY(student_id) REFERENCES STUDENT(student_id),
+   FOREIGN KEY(course_id) REFERENCES COURSE(course_id)
 );
 ```
 
@@ -1837,7 +1839,7 @@ When converting a weak entity to a relational table:
 **Example:**
 
 - `Order_Item` → Composite Key = (Order_ID, Item_No)
-- `Enrollment` (for Student–Course M:N relationship) → Composite Key = `(Student_ID, Course_ID)`
+- `Enrollment` (for Student–Course M:N relationship) → Composite Key = `(student_id, course_id)`
 
 ### Weak Entity Conversion
 
@@ -1889,7 +1891,7 @@ ORDER_ITEM(
 | **Definition**  | Cannot exist without owner entity     | A PK made of ≥ 2 attributes                   |
 | **Why Needed?** | Depends on strong entity for identity | No single attribute uniquely identifies a row |
 | **ERD Symbol**  | Double rectangle, double diamond      | Not a symbol, but implied in schema           |
-| **Example**     | Order_Item depends on Order           | Enrollment(Student_ID, Course_ID)             |
+| **Example**     | Order_Item depends on Order           | Enrollment(student_id, course_id)             |
 
 ## Resolving M:N relationships
 
@@ -1932,24 +1934,24 @@ Relational Tables:
 
 ```sql
 STUDENT(
-   Student_ID PRIMARY KEY,
+   student_id PRIMARY KEY,
    Name,
    DOB
 );
 
 COURSE(
-   Course_ID PRIMARY KEY,
+   course_id PRIMARY KEY,
    Title,
    Credits
 );
 
 ENROLLMENT(                     -- Bridge table
-   Student_ID,                  -- FK from STUDENT
-   Course_ID,                   -- FK from COURSE
+   student_id,                  -- FK from STUDENT
+   course_id,                   -- FK from COURSE
    Enroll_Date,                 -- Relationship attribute
-   PRIMARY KEY(Student_ID, Course_ID),
-   FOREIGN KEY(Student_ID) REFERENCES STUDENT(Student_ID),
-   FOREIGN KEY(Course_ID) REFERENCES COURSE(Course_ID)
+   PRIMARY KEY(student_id, course_id),
+   FOREIGN KEY(student_id) REFERENCES STUDENT(student_id),
+   FOREIGN KEY(course_id) REFERENCES COURSE(course_id)
 );
 ```
 
