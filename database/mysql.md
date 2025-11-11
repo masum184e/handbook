@@ -4232,34 +4232,49 @@ Replication is usually asynchronous (replicas might lag), but can also be semi-s
 - One or more slave servers handle reads (SELECT).
 - Slaves replicate data from the master continuously.
 
-
 ### Setting Up Master-Slave Replication
+
 #### Initial Setup
+
 **Create Docker Network**
+
 ```bash
 docker network create mysqlnet
 ```
+
 #### Step 1: On the Master
+
+Create a custom configuration file at `T:\project\master.cnf`
+
+```
+[mysqld]
+server-id=1
+log_bin=mysql-bin
+binlog_format=ROW
+```
+
 Run the Master Container
 
 ```bash
-docker run -d --name mysql-master --network mysqlnet -e MYSQL_ROOT_PASSWORD=rootpass -e MYSQL_DATABASE=companydb -v master_data:/var/lib/mysql -p 3308:3306 mysql:8
+docker run -d ^ --name mysql-master ^ --network mysqlnet ^ -e MYSQL_ROOT_PASSWORD=rootpass ^ -v T:\project\master.cnf:/etc/mysql/conf.d/master.cnf ^ -v master_data:/var/lib/mysql ^ -p 3308:3306 ^ mysql:latest
+
+docker exec -it mysql-master bash
+
+mysql -uroot -p
 ```
 
-Configure the Master
-
-```bash
-docker exec -it mysql-master mysql -uroot -prootpass
-```
-
-Enable binary logging in my.cnf, run:
+Verify Installation
 
 ```mysql
-SET GLOBAL server_id = 1;
-SET GLOBAL log_bin = 'mysql-bin';
+SHOW VARIABLES LIKE 'log_bin';
+SHOW VARIABLES LIKE 'server_id';
 ```
 
-Restart MySQL.
+Restart MySQL:
+
+```bash
+docker restart mysql-master
+```
 
 Create a replication user:
 
