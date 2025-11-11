@@ -3858,14 +3858,6 @@ DROP VIEW it_employees;
 
 A temporary table in MySQL is a table that exists only for the duration of a session (or until explicitly dropped).
 
-```sql
-CREATE TEMPORARY TABLE temp_table_name (
-    column1 datatype,
-    column2 datatype,
-    ...
-);
-```
-
 - Automatically dropped when:
   - The session (connection) ends.
   - Or you explicitly DROP it.
@@ -3887,7 +3879,7 @@ CREATE TEMPORARY TABLE temp_table_name (
 - Performance overhead → large temporary tables may use disk instead of memory.
 - Limited features:
   - No `FOREIGN KEY` constraints allowed.
-  - Temporary tables cannot be indexed with FULLTEXT or SPATIAL indexes.
+  - Temporary tables cannot be indexed with `FULLTEXT` or `SPATIAL` indexes.
     If you create a temporary table with the same name as an existing permanent table in your session, the temporary table takes priority. (Permanent table becomes hidden for that session until temp table is dropped.)
 
 ## Creating and Using a Temporary Table
@@ -3934,7 +3926,7 @@ You can modify, drop, join temporary table like regular table.
 
 # Common Table Expressions
 
-A Common Table Expression (CTE) is a temporary result set defined within the execution of a single SQL statement, using the WITH clause.
+A Common Table Expression (CTE) is a temporary result set defined within the execution of a single SQL statement, using the `WITH` clause.
 
 - It is not stored in the database (unlike a table or view).
 - It exists only for the duration of the query.
@@ -4279,7 +4271,7 @@ docker restart mysql-master
 Create a replication user:
 
 ```sql
-CREATE USER 'replica'@'%' IDENTIFIED BY 'replicapass';
+CREATE USER 'replica'@'%' IDENTIFIED WITH mysql_native_password BY 'replicapass';
 GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%';
 FLUSH PRIVILEGES;
 ```
@@ -4287,14 +4279,18 @@ FLUSH PRIVILEGES;
 Check master status:
 
 ```sql
-SHOW MASTER STATUS;
+SHOW BINARY LOG STATUS;
 ```
 
 Output example:
 
 ```
-File: mysql-bin.000001
-Position: 154
++---------------+----------+--------------+------------------+-------------------+
+| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |
++---------------+----------+--------------+------------------+-------------------+
+| binlog.000004 |      863 |              |                  |                   |
++---------------+----------+--------------+------------------+-------------------+
+1 row in set (0.006 sec)
 ```
 
 Note these values; they’ll be used on the slave.
@@ -4304,44 +4300,42 @@ Note these values; they’ll be used on the slave.
 Run the Slave Container
 
 ```bash
-docker run -d --name mysql-slave --network mysqlnet -e MYSQL_ROOT_PASSWORD=rootpass -v slave_data:/var/lib/mysql -p 3309:3306 mysql:8
+docker run -d --name mysql-slave --network mysqlnet -e MYSQL_ROOT_PASSWORD=rootpass -v slave_data:/var/lib/mysql -p 3309:3306 mysql:latest --server-id=2 --relay-log=relay-bin --log-bin=mysql-bin --read-only=1
+
+docker exec -it mysql-slave bash
+
+mysql -uroot -p
 ```
 
-Configure the Slave
-
-```bash
-docker exec -it mysql-slave mysql -uroot -prootpass
-```
-
-Configure in my.cnf, run:
+Verify Installation
 
 ```mysql
-SET GLOBAL server_id = 2;
-SET GLOBAL log_bin = 'relay-bin';
+SHOW VARIABLES LIKE 'log_bin';
+SHOW VARIABLES LIKE 'server_id';
 ```
-
-Restart MySQL.
 
 Connect slave to master:
 
 ```sql
+RESET REPLICA ALL;
 CHANGE REPLICATION SOURCE TO
   SOURCE_HOST='mysql-master',
   SOURCE_USER='replica',
   SOURCE_PASSWORD='replicapass',
-  SOURCE_LOG_FILE='mysql-bin.000001',
-  SOURCE_LOG_POS=156;
+  SOURCE_LOG_FILE='binlog.000005',
+  SOURCE_LOG_POS=548,
+  GET_SOURCE_PUBLIC_KEY=1;
 
-START SLAVE;
+START REPLICA;
 ```
 
 Check status:
 
 ```sql
-SHOW SLAVE STATUS\G
+SHOW REPLICA STATUS\G
 ```
 
-If Slave_IO_Running = Yes and Slave_SQL_Running = Yes → replication is working.
+If both `Replica_IO_Running` and `Replica_SQL_Running` are Yes, replication is successful.
 
 #### Step 3: Test
 
