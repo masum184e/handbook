@@ -2750,6 +2750,8 @@ MySQL supports 4 standard isolation levels (SQL standard).
 | **REPEATABLE READ** (default in MySQL InnoDB) | ✅ Prevented | ✅ Prevented        | ❌ Allowed (but handled by Next-Key Locks in InnoDB) | ⚖️ Balanced             |
 | **SERIALIZABLE**                              | ✅ Prevented | ✅ Prevented        | ✅ Prevented                                         | 🐌 Slowest (most safe)  |
 
+> Run each transaction in seperate terminal
+
 ### READ UNCOMMITTED
 
 Transactions can see uncommitted changes made by others → dirty reads.
@@ -4230,16 +4232,31 @@ Replication is usually asynchronous (replicas might lag), but can also be semi-s
 - One or more slave servers handle reads (SELECT).
 - Slaves replicate data from the master continuously.
 
+
 ### Setting Up Master-Slave Replication
-
+#### Initial Setup
+**Create Docker Network**
+```bash
+docker network create mysqlnet
+```
 #### Step 1: On the Master
+Run the Master Container
 
-Enable binary logging in my.cnf:
+```bash
+docker run -d --name mysql-master --network mysqlnet -e MYSQL_ROOT_PASSWORD=rootpass -e MYSQL_DATABASE=companydb -v master_data:/var/lib/mysql -p 3308:3306 mysql:8
+```
 
-```ini
-[mysqld]
-server-id=1
-log_bin=mysql-bin
+Configure the Master
+
+```bash
+docker exec -it mysql-master mysql -uroot -prootpass
+```
+
+Enable binary logging in my.cnf, run:
+
+```mysql
+SET GLOBAL server_id = 1;
+SET GLOBAL log_bin = 'mysql-bin';
 ```
 
 Restart MySQL.
@@ -4247,7 +4264,7 @@ Restart MySQL.
 Create a replication user:
 
 ```sql
-CREATE USER 'replica'@'%' IDENTIFIED BY 'password';
+CREATE USER 'replica'@'%' IDENTIFIED BY 'replicapass';
 GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%';
 FLUSH PRIVILEGES;
 ```
@@ -4269,12 +4286,23 @@ Note these values; they’ll be used on the slave.
 
 #### Step 2: On the Slave
 
-Configure in my.cnf:
+Run the Slave Container
 
+```bash
+docker run -d --name mysql-slave --network mysqlnet -e MYSQL_ROOT_PASSWORD=rootpass -v slave_data:/var/lib/mysql -p 3309:3306 mysql:8
 ```
-[mysqld]
-server-id=2
-relay-log=relay-bin
+
+Configure the Slave
+
+```bash
+docker exec -it mysql-slave mysql -uroot -prootpass
+```
+
+Configure in my.cnf, run:
+
+```mysql
+SET GLOBAL server_id = 2;
+SET GLOBAL log_bin = 'relay-bin';
 ```
 
 Restart MySQL.
@@ -4282,12 +4310,12 @@ Restart MySQL.
 Connect slave to master:
 
 ```sql
-CHANGE MASTER TO
-  MASTER_HOST='master_ip',
-  MASTER_USER='replica',
-  MASTER_PASSWORD='password',
-  MASTER_LOG_FILE='mysql-bin.000001',
-  MASTER_LOG_POS=154;
+CHANGE REPLICATION SOURCE TO
+  SOURCE_HOST='mysql-master',
+  SOURCE_USER='replica',
+  SOURCE_PASSWORD='replicapass',
+  SOURCE_LOG_FILE='mysql-bin.000001',
+  SOURCE_LOG_POS=156;
 
 START SLAVE;
 ```
