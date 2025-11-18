@@ -1,3 +1,30 @@
+# Contents
+
+- [Number System](#number-system)
+  - [Binary Number System](#binary-number-system-base-2)
+  - [Octal Number System](#octal-number-system-base-8)
+  - [Decimal Number System](#decimal-number-system-base-10)
+  - [Hexadecimal Number System](#hexadecimal-number-system-base-16)
+  - [Conversation](#conversation)
+- [Signed Number Representation](#signed-number-representation)
+  - [Types of Signed Number Representation](#types-of-signed-number-representation)
+  - [The Sign Bit](#important-concept-the-sign-bit)
+  - [1’s Complement Representation](#1s-complement-representation)
+  - [2’s Complement Representation](#2s-complement-representation)
+  - [1’s Complement vs 2’s Complement](#key-differences-1s-complement-vs-2s-complement)
+  - [Add +5 and –3 using 2’s complement](#add-5-and-3-using-2s-complement-4-bit)
+  - [Subtract 5 from 9 using 2’s complement (8-bit)](#subtract-5-from-9-using-2s-complement-8-bit)
+- [Combinational Circuits in ALU](#combinational-circuits-in-alu)
+  - [Adder](#adder)
+    - [Half Adder](#half-adder)
+    - [Full Adder](#full-adder)
+    - [Ripple Carry Adder](#ripple-carry-adder-rca)
+    - [Carry Look-Ahead Adder](#carry-look-ahead-adder-cla)
+  - [Subtractor](#subtractor)
+    - [Half Subtractor](#half-subtractor)
+    - [Full Subtractor](#full-subtractor)
+  - [Multiplier](#multiplier)
+
 # Number System
 
 A number system is a way to represent and express numbers using a set of symbols (called digits) and a base (or radix).
@@ -67,7 +94,7 @@ Each digit represents a power of 8.
 Convert **(253)₈** to decimal:
 
 $$
-(253)\_8 = (2 \times 8^2) + (5 \times 8^1) + (3 \times 8^0)
+(253)_8 = (2 \times 8^2) + (5 \times 8^1) + (3 \times 8^0)
 $$
 
 $$
@@ -75,16 +102,6 @@ $$
 $$
 
 **So, (253)₈ = (171)₁₀**
-
-# Conversation
-
-| From → To                  | Method                              |
-| :------------------------- | :---------------------------------- |
-| Binary → Octal             | Group bits in 3s                    |
-| Binary → Hex               | Group bits in 4s                    |
-| Octal/Hex → Binary         | Replace each digit with 3 or 4 bits |
-| Binary/Octal/Hex → Decimal | Multiply each digit by baseⁿ        |
-| Decimal → Other bases      | Repeated division by base           |
 
 ## Decimal Number System (Base-10)
 
@@ -100,10 +117,10 @@ $$
 Each digit represents a power of 10.
 
 | Decimal | Place Value | Power of 10 | Value |
-|:--------:|:-------------:|:-------------:|:------:|
-| 4 | 10² | 100 | 400 |
-| 5 | 10¹ | 10 | 50 |
-| 6 | 10⁰ | 1 | 6 |
+| :-----: | :---------: | :---------: | :---: |
+|    4    |     10²     |     100     |  400  |
+|    5    |     10¹     |     10      |  50   |
+|    6    |     10⁰     |      1      |   6   |
 
 ---
 
@@ -126,16 +143,16 @@ Decimal numbers are familiar to us and serve as a reference when converting to/f
 ## Hexadecimal Number System (Base-16)
 
 **Base:** 16  
-**Digits:** 0–9 and A–F  
+**Digits:** 0–9 and A–F
 
 | Symbol | Decimal Equivalent |
-|:-------:|:------------------:|
-| A | 10 |
-| B | 11 |
-| C | 12 |
-| D | 13 |
-| E | 14 |
-| F | 15 |
+| :----: | :----------------: |
+|   A    |         10         |
+|   B    |         11         |
+|   C    |         12         |
+|   D    |         13         |
+|   E    |         14         |
+|   F    |         15         |
 
 **Used for:** Compact representation of binary (each hex digit = 4 binary bits)  
 **Common in:** Memory addresses, color codes, instruction sets, etc.
@@ -146,11 +163,11 @@ Decimal numbers are familiar to us and serve as a reference when converting to/f
 
 Each digit represents a power of 16.
 
-| Hex | Place Value | Power of 16 | Value |
-|:----:|:--------------:|:--------------:|:------:|
-| 2 | 16² | 256 | 512 |
-| F (15) | 16¹ | 16 | 240 |
-| 3 | 16⁰ | 1 | 3 |
+|  Hex   | Place Value | Power of 16 | Value |
+| :----: | :---------: | :---------: | :---: |
+|   2    |     16²     |     256     |  512  |
+| F (15) |     16¹     |     16      |  240  |
+|   3    |     16⁰     |      1      |   3   |
 
 ---
 
@@ -171,6 +188,16 @@ $$
 $$
 
 **So, (2F3)₁₆ = (755)₁₀**
+
+## Conversation
+
+| From → To                  | Method                              |
+| :------------------------- | :---------------------------------- |
+| Binary → Octal             | Group bits in 3s                    |
+| Binary → Hex               | Group bits in 4s                    |
+| Octal/Hex → Binary         | Replace each digit with 3 or 4 bits |
+| Binary/Octal/Hex → Decimal | Multiply each digit by baseⁿ        |
+| Decimal → Other bases      | Repeated division by base           |
 
 # Signed Number Representation
 
@@ -198,8 +225,8 @@ But to represent negative numbers, we need signed representation systems.
 In all signed binary systems:
 
 - MSB (Most Significant Bit) = sign bit
-    - 0 → Positive
-    - 1 → Negative
+  - 0 → Positive
+  - 1 → Negative
 
 Example (8-bit system):
 
@@ -207,7 +234,6 @@ Example (8-bit system):
 | :---------- | :------------------------------------- |
 | `0 0100101` | +37                                    |
 | `1 0100101` | -37 (depends on representation method) |
-
 
 ## 1’s Complement Representation
 
@@ -223,18 +249,388 @@ Rule
 Let’s represent +5 and –5.
 
 1. +5 in binary (8-bit):
-    ```
-    0000 0101
-    ```
+
+   ```
+   0000 0101
+   ```
 
 2. To get (–5):
-Invert all bits (1’s complement)
-    ```
-    1111 1010
-    ```
-So
+   Invert all bits (1’s complement)
+   `   1111 1010`
+   So
 
 | Number | 1’s Complement Representation |
 | :----- | :---------------------------- |
 | +5     | 0000 0101                     |
 | –5     | 1111 1010                     |
+
+## 2’s Complement Representation
+
+In 2’s complement, negative numbers are represented by:
+
+1. Taking the binary of the positive value
+2. Computing its 1’s complement (invert all bits)
+3. Adding 1 to the result
+
+This is the most widely used signed-number representation in computers because it has a unique zero and supports efficient arithmetic.
+
+Rules
+
+- Positive numbers → normal binary form.
+- Negative numbers →
+  - Write the positive binary
+  - Invert all bits (1’s complement)
+  - Add 1
+
+### Example (8-bit representation)
+
+Let’s represent +5 and –5.
+
+1.  +5 in binary (8-bit)
+
+    ```
+    0000 0101
+    ```
+
+2.  To get (–5)
+
+        Step 1: 1’s complement (invert bits)
+
+        ```
+        0000 0101 → 1111 1010
+        ```
+
+        Step 2: Add 1
+        ```
+        1111 1010
+        +       1
+        -----------
+        1111 1011   ← 2’s complement representation of –5
+        ```
+
+    **Final Table**
+
+| Number | 2’s Complement Representation |
+| ------ | ----------------------------- |
+| +5     | 0000 0101                     |
+| –5     | 1111 1011                     |
+
+2’s Complement Addition Rules
+
+## Key Differences: 1’s Complement vs 2’s Complement
+
+| Feature                  | 1’s Complement | 2’s Complement |
+| ------------------------ | -------------- | -------------- |
+| How to negate            | Flip bits      | Flip bits + 1  |
+| Zero representations     | +0 and –0      | Only one zero  |
+| Used in modern computers | ❌ No          | ✅ Yes         |
+| Adds end-around carry?   | Yes            | No             |
+| Range (4 bits)           | –7 to +7       | –8 to +7       |
+
+## Add +5 and –3 using 2’s complement (4-bit)
+
+1. Represent numbers
+   - +5 = 0101
+   - –3
+     - +3 = 0011
+     - 1's complement = 1100
+     - +1 → 1101
+2. Add
+   ```
+     0101
+   + 1101
+   ---------
+    10010
+   ```
+
+Since we are using 4 bits, discard the leftmost carry:
+
+```
+0010 = +2
+```
+
+Result: 5 + (–3) = 2
+
+## Subtract 5 from 9 using 2’s complement (8-bit)
+
+Compute: 9 – 5
+Use 8-bit for clarity.
+
+1. Represent +9 and +5
+
+   - +9 = 00001001
+   - +5 = 00000101
+
+   To subtract, do: 9 – 5 = 9 + (–5)
+
+2. Find 2’s complement of +5
+
+   - 1’s complement of 00000101 = 11111010
+   - Add 1:
+   - 11111011 → this is –5
+
+3. Add
+   ```
+     00001001
+   + 11111011
+   ----------------
+    100001100
+   ```
+
+Ignore carry beyond 8 bits:
+
+Result = 00000100 = 4
+
+# Combinational Circuits in ALU
+
+Combinational circuits are digital circuits whose output depends only on the current inputs (no memory).
+In an ALU, arithmetic operations such as addition, subtraction, multiplication, etc., are performed using combinational logic blocks.
+
+The main arithmetic combinational circuits are:
+
+1. Adder
+2. Subtractor
+3. Multiplier
+
+## Adder
+
+An adder is a combinational circuit that performs binary addition.
+
+There are two basic types:
+
+- Half Adder
+- Full Adder
+
+Later these are used to build:
+
+- Ripple Carry Adder
+- Carry Look-Ahead Adder
+
+### Half Adder
+
+A Half Adder (HA) adds two single bits: A and B
+Outputs:
+
+- Sum (S)
+- Carry (C)
+
+Truth Table
+
+| A   | B   | Sum S | Carry C |
+| --- | --- | ----- | ------- |
+| 0   | 0   | 0     | 0       |
+| 0   | 1   | 1     | 0       |
+| 1   | 0   | 1     | 0       |
+| 1   | 1   | 0     | 1       |
+
+**Logic equations**
+
+- Sum = A ⊕ B
+- Carry = A · B
+
+**Example**
+
+Add: 1 + 1
+
+- Sum = 1 XOR 1 = 0
+- Carry = 1 AND 1 = 1
+- Result = 10₂ (2 in decimal)
+
+### Full Adder
+
+A Full Adder (FA) adds 3 bits:
+
+- Input bits: A, B
+- Carry-in: Cin
+- Outputs:
+- Sum (S)
+- Carry-out (Cout)
+
+Truth Table
+
+| A   | B   | Cin | Sum | Cout |
+| --- | --- | --- | --- | ---- |
+| 0   | 0   | 0   | 0   | 0    |
+| 0   | 0   | 1   | 1   | 0    |
+| 0   | 1   | 0   | 1   | 0    |
+| 0   | 1   | 1   | 0   | 1    |
+| 1   | 0   | 0   | 1   | 0    |
+| 1   | 0   | 1   | 0   | 1    |
+| 1   | 1   | 0   | 0   | 1    |
+| 1   | 1   | 1   | 1   | 1    |
+
+**Equations**
+
+- Sum = A ⊕ B ⊕ Cin
+- Cout = AB + BCin + ACin
+
+**Example**
+
+- Compute 1011₂ + 0101₂
+- Add bit-by-bit using Full Adder:
+
+### Ripple Carry Adder (RCA)
+
+- Connect several full adders in series.
+- Carry-out of one FA → Carry-in of next FA.
+- Simple but slower.
+
+Example: 4-bit Ripple Carry Adder can add two 4-bit numbers.
+
+### Carry Look-Ahead Adder (CLA)
+
+- Faster than RCA
+- Uses Generate (G) and Propagate (P) signals to compute carries directly.
+
+Used in high-speed ALUs.
+
+## Subtractor
+
+Subtractor performs binary subtraction:
+
+$$
+A−B
+$$
+
+Two types:
+
+- Half Subtractor
+- Full Subtractor
+
+Alternatively, subtraction is done using 2’s complement with an adder.
+
+### Half Subtractor
+
+Subtracts two single-bit numbers.
+
+- Inputs: A, B
+- Outputs
+  - Difference (D)
+  - Borrow (Bo)
+
+**Logic Equations**
+
+$$
+D=A⊕B
+$$
+
+$$
+Bo=A⋅B
+$$
+
+**Example: Subtract 0 – 1**
+
+A = 0, B = 1
+
+D = 0 XOR 1 = 1
+
+Borrow = A'·B = 1·1 = 1
+
+Output: Borrow = 1, Difference = 1
+
+Means: 0 - 1 = 1 with borrow 1
+
+### Full Subtractor
+
+Subtracts:
+
+$$
+A−B−Bin
+$$
+
+- Inputs: A, B, Borrow-in (Bin)
+- Outputs: Difference (D), Borrow-out (Bout)
+
+**Logic Equations**
+
+$$
+D=A⊕B⊕Bin
+$$
+
+$$
+Bout=B⋅Bin+\bar{A}(B+Bin)
+$$
+
+**Example: 1 − 1 − 1**
+
+A = 1, B = 1, Bin = 1
+
+Difference = 1 XOR 1 XOR 1 = 1
+
+Bout = 1·1 + 0 = 1
+
+Output: Difference 1, Borrow 1
+
+## Multiplier
+
+Binary multiplication is a repeated shift-and-add process.
+
+There are several hardware multipliers:
+
+1. Array Multiplier
+2. Booth Multiplier
+3. Shift-and-Add Multiplier
+
+We explain the basic principle using Array Multiplier.
+
+### Binary Multiplication Rules
+
+Same as decimal:
+
+- 0 × 0 = 0
+- 0 × 1 = 0
+- 1 × 0 = 0
+- 1 × 1 = 1
+
+### Multiply 101 (5) × 011 (3)
+
+Let: A = 101, B = 011
+
+Write B bits as multipliers:
+
+1. Multiply A by each bit of B
+
+   ```
+       101   (A)
+   ×   011   (B)
+   -----------
+       101     ← A × 1 (LSB)
+      101      ← A × 1 (shifted by 1)
+     000       ← A × 0 (shifted by 2)
+   ```
+
+2. Add all partial products
+
+   ```
+         101
+   +    1010
+   +   00000
+   -----------
+       1111
+   ```
+
+Final Result
+
+$$
+101×011=1111₂
+$$
+
+Check in decimal: 5 × 3 = 15 → 1111₂ Correct
+
+### Array Multiplier
+
+- Built using AND gates + Full Adders
+- Each bit of the multiplier multiplies all bits of the multiplicand using AND gates
+- Results are summed with adders
+
+This is the most common hardware implementation.
+
+## Summary Table
+
+| Circuit             | Inputs         | Outputs            | Purpose                  |
+| ------------------- | -------------- | ------------------ | ------------------------ |
+| **Half Adder**      | A, B           | Sum, Carry         | Adds 1-bit numbers       |
+| **Full Adder**      | A, B, Cin      | Sum, Cout          | Adds 3 bits (with carry) |
+| **Half Subtractor** | A, B           | Difference, Borrow | Subtracts 1-bit numbers  |
+| **Full Subtractor** | A, B, Bin      | Difference, Bout   | Subtracts with borrow    |
+| **Multiplier**      | Multi-bit A, B | Product            | Binary multiplication    |
