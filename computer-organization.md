@@ -249,8 +249,84 @@ Let’s represent +5 and –5.
 | :----- | :---------------------------- |
 | +5     | 0000 0101                     |
 | –5     | 1111 1010                     |
-### Add +5 and –3 using 1’s complement (4-bit)
-### Subtract 5 from 9 using 2’s complement (8-bit)
+
+### Subtraction Rule
+
+To compute A − B:
+
+$$
+A − B = A + (1’s complement of B)
+$$
+
+**Case 1: End-around carry occurs**
+
+- Add carry to result → final result is positive
+
+**Case 2: No carry**
+
+- Take 1’s complement of result → answer is negative
+
+#### Add +5 and –3 using 1’s complement (4-bit)
+
+1. 1’s complement of B
+
+   ```
+   B     = 0011
+   1’s c = 1100
+   ```
+
+2. Add A + 1’s complement of B
+
+   ```
+      0101
+    + 1100
+    --------
+     1 0001
+   ```
+
+    There is a carry → add it back
+
+3. End-around carry
+
+   ```
+   0001 + 1 = 0010
+   ```
+
+    Final result: 0010 (2)
+    
+    Which is correct: 5 + (−3) = 2
+
+#### Subtract 9 from 5 using 1’s complement (8-bit)
+
+1. 1’s complement of B
+
+   ```
+   B     = 00001001
+   1’s c = 11110110
+   ```
+
+2. Add A + 1’s complement of B
+
+   ```
+      00000101
+    + 11110110 
+    ------------
+      11111011   
+   ```
+
+3. Interpret the result
+
+    Since result starts with 1, it is negative (in 1’s complement form).
+
+    Take 1’s complement to get magnitude:
+
+    ```
+    1’s complement of 11111011 = 00000100
+    ```
+
+    Magnitude: 00000100 (+4)
+
+    Which is correct: 5 + (−9) = -4
 
 ## 2’s Complement Representation
 
@@ -289,6 +365,7 @@ Let’s represent +5 and –5.
     ```
 
     Step 2: Add 1
+
     ```
     1111 1010
     +       1
@@ -624,6 +701,7 @@ This is the most common hardware implementation.
 | **Multiplier**      | Multi-bit A, B | Product            | Binary multiplication    |
 
 # Memory Hierarchy
+
 Memory hierarchy is an arrangement of storage systems based on:
 
 - Speed
@@ -645,6 +723,7 @@ The goal of this hierarchy is to give the processor fast access to the most impo
               Secondary Storage
         (SSD/HDD - slowest, largest)
 ```
+
 As we move down the hierarchy:
 
 - Speed decreases
@@ -805,17 +884,20 @@ Consider running a program like Google Chrome.
 2. Loaded into Main Memory: When executed, the OS loads the program into RAM.
 3. Cached into Cache Memory: Frequently accessed instructions (loops, functions) move into cache.
 4. CPU uses Registers
-  - During execution
-    - Operands go into registers
-    - ALU performs operations directly with register values
 
-  - Thus, execution goes:
-    ```
-    Registers → Cache → RAM → SSD/HDD
-             (Fastest)           (Slowest)
-    ```
+- During execution
+
+  - Operands go into registers
+  - ALU performs operations directly with register values
+
+- Thus, execution goes:
+  ```
+  Registers → Cache → RAM → SSD/HDD
+           (Fastest)           (Slowest)
+  ```
 
 ## Summary of Memory Hierarchy
+
 | Level | Memory Type       | Speed     | Size      | Cost per Bit | Volatile     | Example          |
 | ----- | ----------------- | --------- | --------- | ------------ | ------------ | ---------------- |
 | 1     | Registers         | Fastest   | Few bytes | Highest      | Volatile     | ACC, PC          |
