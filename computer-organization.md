@@ -75,8 +75,6 @@ $$
 **Digits:** 0, 1, 2, 3, 4, 5, 6, 7  
 **Used for:** Short representation of binary numbers (each octal digit = 3 binary bits)
 
----
-
 ### Positional Values
 
 Each digit represents a power of 8.
@@ -86,8 +84,6 @@ Each digit represents a power of 8.
 |   2   |     8²      |     64     |  128  |
 |   5   |     8¹      |     8      |  40   |
 |   3   |     8⁰      |     1      |   3   |
-
----
 
 ### Example
 
@@ -110,8 +106,6 @@ $$
 **Used by:** Humans in daily life  
 **Used in computers:** For display and input/output operations (converted internally to binary)
 
----
-
 ### Positional Values
 
 Each digit represents a power of 10.
@@ -121,8 +115,6 @@ Each digit represents a power of 10.
 |    4    |     10²     |     100     |  400  |
 |    5    |     10¹     |     10      |  50   |
 |    6    |     10⁰     |      1      |   6   |
-
----
 
 ### Example
 
@@ -137,8 +129,6 @@ $$
 $$
 
 Decimal numbers are familiar to us and serve as a reference when converting to/from other systems
-
----
 
 ## Hexadecimal Number System (Base-16)
 
@@ -157,8 +147,6 @@ Decimal numbers are familiar to us and serve as a reference when converting to/f
 **Used for:** Compact representation of binary (each hex digit = 4 binary bits)  
 **Common in:** Memory addresses, color codes, instruction sets, etc.
 
----
-
 ### Positional Values
 
 Each digit represents a power of 16.
@@ -168,8 +156,6 @@ Each digit represents a power of 16.
 |   2    |     16²     |     256     |  512  |
 | F (15) |     16¹     |     16      |  240  |
 |   3    |     16⁰     |      1      |   3   |
-
----
 
 ### Example
 
@@ -256,13 +242,15 @@ Let’s represent +5 and –5.
 
 2. To get (–5):
    Invert all bits (1’s complement)
-   `   1111 1010`
+   `1111 1010`
    So
 
 | Number | 1’s Complement Representation |
 | :----- | :---------------------------- |
 | +5     | 0000 0101                     |
 | –5     | 1111 1010                     |
+### Add +5 and –3 using 1’s complement (4-bit)
+### Subtract 5 from 9 using 2’s complement (8-bit)
 
 ## 2’s Complement Representation
 
@@ -294,21 +282,21 @@ Let’s represent +5 and –5.
 
 2.  To get (–5)
 
-        Step 1: 1’s complement (invert bits)
+    Step 1: 1’s complement (invert bits)
 
-        ```
-        0000 0101 → 1111 1010
-        ```
+    ```
+    0000 0101 → 1111 1010
+    ```
 
-        Step 2: Add 1
-        ```
-        1111 1010
-        +       1
-        -----------
-        1111 1011   ← 2’s complement representation of –5
-        ```
+    Step 2: Add 1
+    ```
+    1111 1010
+    +       1
+    -----------
+    1111 1011   ← 2’s complement representation of –5
+    ```
 
-    **Final Table**
+**Final Table**
 
 | Number | 2’s Complement Representation |
 | ------ | ----------------------------- |
@@ -317,17 +305,7 @@ Let’s represent +5 and –5.
 
 2’s Complement Addition Rules
 
-## Key Differences: 1’s Complement vs 2’s Complement
-
-| Feature                  | 1’s Complement | 2’s Complement |
-| ------------------------ | -------------- | -------------- |
-| How to negate            | Flip bits      | Flip bits + 1  |
-| Zero representations     | +0 and –0      | Only one zero  |
-| Used in modern computers | ❌ No          | ✅ Yes         |
-| Adds end-around carry?   | Yes            | No             |
-| Range (4 bits)           | –7 to +7       | –8 to +7       |
-
-## Add +5 and –3 using 2’s complement (4-bit)
+### Add +5 and –3 using 2’s complement (4-bit)
 
 1. Represent numbers
    - +5 = 0101
@@ -351,7 +329,7 @@ Since we are using 4 bits, discard the leftmost carry:
 
 Result: 5 + (–3) = 2
 
-## Subtract 5 from 9 using 2’s complement (8-bit)
+### Subtract 5 from 9 using 2’s complement (8-bit)
 
 Compute: 9 – 5
 Use 8-bit for clarity.
@@ -380,6 +358,16 @@ Use 8-bit for clarity.
 Ignore carry beyond 8 bits:
 
 Result = 00000100 = 4
+
+## Key Differences: 1’s Complement vs 2’s Complement
+
+| Feature                  | 1’s Complement | 2’s Complement |
+| ------------------------ | -------------- | -------------- |
+| How to negate            | Flip bits      | Flip bits + 1  |
+| Zero representations     | +0 and –0      | Only one zero  |
+| Used in modern computers | ❌ No          | ✅ Yes         |
+| Adds end-around carry?   | Yes            | No             |
+| Range (4 bits)           | –7 to +7       | –8 to +7       |
 
 # Combinational Circuits in ALU
 
@@ -634,3 +622,203 @@ This is the most common hardware implementation.
 | **Half Subtractor** | A, B           | Difference, Borrow | Subtracts 1-bit numbers  |
 | **Full Subtractor** | A, B, Bin      | Difference, Bout   | Subtracts with borrow    |
 | **Multiplier**      | Multi-bit A, B | Product            | Binary multiplication    |
+
+# Memory Hierarchy
+Memory hierarchy is an arrangement of storage systems based on:
+
+- Speed
+- Cost
+- Capacity
+- Distance from CPU
+
+The goal of this hierarchy is to give the processor fast access to the most important data, while still providing large storage at low cost.
+
+**Pyramid of Memory Hierarchy**
+
+```
+             Registers (fastest, smallest)
+                    ↓
+                Cache Memory
+                    ↓
+                Main Memory (RAM)
+                    ↓
+              Secondary Storage
+        (SSD/HDD - slowest, largest)
+```
+As we move down the hierarchy:
+
+- Speed decreases
+- Cost per bit decreases
+- Capacity increases
+- Access time increases
+
+## Registers (Fastest, Smallest)
+
+Registers are small storage locations inside the CPU (ALU, Control Unit).
+
+**Characteristics**
+
+- Fastest memory in the computer
+- Very small size (typically 32–256 registers)
+- Directly controlled by CPU
+- No access delay (1 CPU cycle)
+
+**Types of Registers**
+
+- ACC (Accumulator)
+- PC (Program Counter)
+- MAR (Memory Address Register)
+- MDR (Memory Data Register)
+- IR (Instruction Register)
+- General Purpose Registers (R0, R1, R2…)
+
+**Example**
+
+Suppose the CPU wants to add:
+
+$$
+5+7
+$$
+
+Steps:
+
+- Load 5 into register R1
+- Load 7 into register R2
+- ALU performs R1 + R2
+- Result stored in R3
+
+Registers allow instant access, enabling fast execution.
+
+## Cache Memory (Very Fast, Small)
+
+Cache memory is a small, high-speed memory located between CPU and RAM.
+
+**Purpose**
+
+To store frequently used instructions and data so the CPU can access them faster than going to RAM.
+
+**Levels of Cache**
+
+- L1 Cache: inside CPU, fastest, smallest
+- L2 Cache: slightly larger, slower
+- L3 Cache: shared between cores, larger but slower
+
+**Why Cache Works? (Principles)**
+
+1. Temporal Locality: Data used recently is likely used again soon.
+2. Spatial Locality: Nearby data is also likely needed.
+
+**Example**
+
+Program repeatedly accesses array A[0], A[1], A[2].
+Cache stores these values:
+
+- First access: from RAM → stored in cache
+- Next accesses: taken from cache (much faster)
+
+Result: Program runs much faster.
+
+## Main Memory (RAM)
+
+Main memory is volatile, large storage used to hold active:
+
+- Programs
+- Data
+- Operating system components
+
+**Characteristics**
+
+- Slower than cache, but faster than secondary storage
+- Larger capacity than cache
+- Data lost when power is off (volatile)
+
+**Types of RAM**
+
+- DRAM (Dynamic RAM)
+- SRAM (Static RAM) – used in cache
+
+**Example**
+
+When you open a program (e.g., MS Word):
+
+- The program is loaded from disk (secondary storage) into RAM
+- CPU fetches instructions from RAM
+- Frequently used instructions move into cache
+
+## Secondary Storage (Slowest, Largest)
+
+Non-volatile, large-capacity storage used to store:
+
+- OS files
+- Applications
+- Documents
+- Media (videos, images)
+
+**Examples:**
+
+- SSD (Solid State Drive)
+- HDD (Hard Disk Drive)
+- USB drives
+- SD cards
+
+**Characteristics**
+
+- Slowest access time
+- Very large capacity (GBs to TBs)
+- Non-volatile
+- Cheapest per bit
+
+**Example**
+
+When the computer boots:
+
+- OS loads from HDD/SSD (slow)
+- Into RAM (faster)
+- Then into cache/registers (fastest) during execution
+
+## Why Memory Hierarchy is Needed
+
+Because of the speed gap between CPU and memory.
+
+- CPU speed: nanoseconds
+- RAM speed: tens of nanoseconds
+- Disk speed: milliseconds (millions of nanoseconds!)
+
+If the CPU accessed only RAM or disk, it would be too slow.
+
+Thus, memory hierarchy:
+
+- Uses small, fast memory close to CPU (registers, cache)
+- Uses larger, slower memory farther away (RAM, disk)
+
+This balances:
+
+- Speed
+- Cost
+- Capacity
+
+## Example of Executing a Program
+
+Consider running a program like Google Chrome.
+
+1. Stored on Secondary Storage: chrome.exe is stored in SSD/HDD.
+2. Loaded into Main Memory: When executed, the OS loads the program into RAM.
+3. Cached into Cache Memory: Frequently accessed instructions (loops, functions) move into cache.
+4. CPU uses Registers
+  - During execution
+    - Operands go into registers
+    - ALU performs operations directly with register values
+
+  - Thus, execution goes:
+    ```
+    Registers → Cache → RAM → SSD/HDD
+             (Fastest)           (Slowest)
+    ```
+
+## Summary of Memory Hierarchy
+| Level | Memory Type       | Speed     | Size      | Cost per Bit | Volatile     | Example          |
+| ----- | ----------------- | --------- | --------- | ------------ | ------------ | ---------------- |
+| 1     | Registers         | Fastest   | Few bytes | Highest      | Volatile     | ACC, PC          |
+| 2     | Cache             | Very Fast | KB–MB     | High         | Volatile     | L1, L2, L3 cache |
+| 3     | Main Memory       | Medium    | GBs       | Medium       | Volatile     | DRAM             |
+| 4     | Secondary Storage | Slowest   | TBs       | Lowest       | Non-volatile | SSD, HDD         |
