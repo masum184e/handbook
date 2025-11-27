@@ -35,6 +35,34 @@
     - [`EXPIRE`](#expire)
     - [`TTL`](#ttl)
     - [`PERSIST`](#persist)
+  - [Pattern matching](#pattern-matching)
+    - [KEYS](#keys)
+    - [SCAN](#scan)
+  - [Key naming conventions](#key-naming-conventions)
+  - [Deleting data](#deleting-data)
+    - [DEL](#del)
+    - [UNLINK](#unlink)
+- [Persistence & Durability](#persistence--durability)
+  - [Redis Database Backup](#redis-database-backup)
+    - [How RDB Works](#how-rdb-works)
+    - [Configuring RDB in `redis.conf`](#configuring-rdb-in-redisconf)
+    - [Performance Considerations](#performance-considerations)
+  - [Append Only File](#append-only-file)
+    - [Configuring AOF](#configuring-aof-in-redisconf)
+    - [Recovery with AOF](#recovery-with-aof)
+    - [Commands for Managing AOF](#commands-for-managing-aof)
+  - [Hybrid Persistence](#hybrid-persistence)
+    - [How It Works](#how-hybrid-persistence-works)
+    - [Configuring Hybrid Persistence](#configuring-hybrid-persistence)
+    - [Check AOF File](#check-aof-file)
+  - [Backup & Restore Strategies](#backup--restore-strategies)
+    - [Restore from RDB](#restore-from-rdb)
+    - [Restore from AOF](#restore-from-aof)
+    - [Restore from Hybrid Persistence](#restore-from-hybrid-persistence)
+- [Pub/Sub](#pubsub)
+  - [Subscriber](#terminal-1-subscriber)
+  - [Publisher](#terminal-2-publisher)
+  - [Pattern Subscription](#pattern-subscription)
 
 # Introduction
 
@@ -151,10 +179,10 @@ That’s why Redis can easily achieve >100,000 operations per second on normal h
 2. Client Request 2 (immediately after): `GET session:101`. Returns "Masum" instantly.
 3. Event Loop Handling:
 
-- Event loop receives both requests.
-- Adds them to the queue.
-- Processes `SET` first, then `GET`.
-- Since it’s sequential, there’s no risk that `GET` runs before `SET`.
+   - Event loop receives both requests.
+   - Adds them to the queue.
+   - Processes `SET` first, then `GET`.
+   - Since it’s sequential, there’s no risk that `GET` runs before `SET`.
 
 This guarantees consistency and simplicity, even with thousands of concurrent clients.
 
@@ -374,19 +402,19 @@ You can connect with options:
 - Specify host & port
 
 ```bash
-redis-cli -h 127.0.0.1 -p 6379
+docker exec -it redis-server redis-cli -h 127.0.0.1 -p 6379
 ```
 
 - With authentication (if Redis has a password)
 
 ```bash
-redis-cli -a mypassword
+docker exec -it redis-server redis-cli -a mypassword
 ```
 
 - Run a single command without entering interactive mode
 
 ```bash
-redis-cli PING
+docker exec -it redis-server redis-cli PING
 ```
 
 ## Redis `redis.conf` File
@@ -395,144 +423,118 @@ The `redis.conf` file is the main configuration file for Redis.
 
 - When Redis starts, it reads this file to load settings.
 - By default, it’s located in `/etc/redis/redis.conf` (Linux) or inside the Redis source folder.
-- You can also start Redis with a custom config:
 
-```bash
-redis-server /path/to/redis.conf
-```
+Docker container does not include a `redis.conf` file by default.
+
+1. Create a folder on your host(project): `mkdir redis-config`
+2. Download a `redis.conf` template: `curl -o redis-config/redis.conf https://raw.githubusercontent.com/redis/redis/7.0/redis.conf`
+3. Use `redis.conf` in Docker container
+
+   ```shell
+   docker stop redis-server
+   docker rm redis-server
+
+   docker run -d ^
+     --name redis-server ^
+     -p 6379:6379 ^
+     -v "%cd%\redis-config\redis.conf":/usr/local/etc/redis/redis.conf ^
+     redis redis-server /usr/local/etc/redis/redis.conf
+   ```
 
 If no config is given, Redis starts with default settings
 
 ### Main Sections of `redis.conf`
 
-Here are the most important settings you’ll encounter in `redis.conf` (Introduction & Basics level):
+Here are the most important settings you’ll encounter in `redis.conf`:
 
-1. . General Settings
+1. General Settings
 
-- Daemonize (background mode):
+   - Daemonize (background mode): `daemonize yes`
 
-```bash
-daemonize yes
-```
+     - yes → Redis runs in the background.
+     - no → Redis runs in the foreground (useful for debugging).
 
-    - yes → Redis runs in the background.
-    - no → Redis runs in the foreground (useful for debugging).
-
-- PID file (process ID storage):
-
-```bash
-pidfile /var/run/redis/redis-server.pid
-```
+   - PID file (process ID storage): `pidfile /var/run/redis/redis-server.pid`
 
 2. Networking
 
-- Port Redis listens on:
-
-```bash
-port 6379
-```
-
-Default is 6379. You can change it if needed.
-
-- Bind address:
-
-```bash
-bind 127.0.0.1
-```
-
-Redis will only accept connections from localhost.
-
-- If you want to allow external access:
-
-```bash
-bind 0.0.0.0
-```
-
-But for security, you must add a password (see below).
+   - Port Redis listens on `port 6379`, Default is 6379. You can change it if needed.
+   - Bind address: `bind 127.0.0.1`, Redis will only accept connections from localhost.
+   - If you want to allow external access: `bind 0.0.0.0`. But for security, you must add a password (see below).
 
 3. Security
 
-Require password for clients:
-
-```bash
-requirepass myStrongPassword
-```
-
-After setting this, every client must authenticate:
-
-```bash
-redis-cli -a myStrongPassword
-```
+   - Require password for clients: `requirepass myStrongPassword`
+   - After setting this, every client must authenticate: `redis-cli -a myStrongPassword`
 
 4. Persistence (Saving Data)
 
-Redis stores data in memory, but persistence ensures data is saved to disk.
+   Redis stores data in memory, but persistence ensures data is saved to disk.
 
-- RDB snapshots (point-in-time saves):
+   - RDB snapshots (point-in-time saves):
 
-```bash
-save 900 1   # Save if at least 1 key changed in 900 seconds (15 min)
-save 300 10  # Save if at least 10 keys changed in 300 seconds (5 min)
-save 60 10000 # Save if 10000 keys changed in 60 seconds
-```
+     ```bash
+     save 900 1   # Save if at least 1 key changed in 900 seconds (15 min)
+     save 300 10  # Save if at least 10 keys changed in 300 seconds (5 min)
+     save 60 10000 # Save if 10000 keys changed in 60 seconds
+     ```
 
-- AOF (Append-Only File) logging:
+   - AOF (Append-Only File) logging:
 
-```bash
-appendonly yes
-appendfsync everysec
-```
+     ```bash
+     appendonly yes
+     appendfsync everysec
+     ```
 
-- Keeps a log of all write operations.
-- everysec → syncs data every second (good balance between performance and safety).
+     - Keeps a log of all write operations.
+     - `everysec` → syncs data every second (good balance between performance and safety).
 
 5. Memory Management
 
-Maximum memory limit:
+   - Maximum memory limit:
 
-```bash
-maxmemory 256mb
-```
+     ```bash
+     maxmemory 256mb
+     ```
 
-Redis will not use more than 256 MB RAM.
+   - Redis will not use more than 256 MB RAM.
+   - Eviction policy (when memory is full):
 
-- Eviction policy (when memory is full):
+     ```bash
+     maxmemory-policy allkeys-lru
+     ```
 
-```bash
-maxmemory-policy allkeys-lru
-```
+     Options:
 
-Options:
-
-- `noeviction` → return error when memory full.
-- `allkeys-lru` → remove least recently used keys.
-- `volatile-lru` → remove LRU keys with TTL set.
+     - `noeviction` → return error when memory full.
+     - `allkeys-lru` → remove least recently used keys.
+     - `volatile-lru` → remove LRU keys with TTL set.
 
 6. Logging
 
-- Log level:
+   - Log level:
 
-```bash
-loglevel notice
-```
+     ```bash
+     loglevel notice
+     ```
 
-Options: debug, verbose, notice, warning.
+     Options: debug, verbose, notice, warning.
 
-- Log file path:
+   - Log file path:
 
-```bash
-logfile /var/log/redis/redis-server.log
-```
+     ```bash
+     logfile /var/log/redis/redis-server.log
+     ```
 
 7. Replication (Master/Replica setup)
 
-Make this Redis a replica of another:
+   Make this Redis a replica of another:
 
-```bash
-replicaof 192.168.1.100 6379
-```
+   ```bash
+   replicaof 192.168.1.100 6379
+   ```
 
-This makes Redis sync data from the given master.
+   This makes Redis sync data from the given master.
 
 # Most Common Commands
 
@@ -659,7 +661,7 @@ The main commands are:
 
 ### `PERSIST`
 
-- Removes the TTL from a key, making it permanent.
+Removes the TTL from a key, making it permanent.
 
 ```bash
 SET temp:key "value"
@@ -697,20 +699,20 @@ Pattern supports wildcards:
 - `[abc]` → matches one character in the set
 - `[a-z]` → matches one character in range
 
-```bash
-SET user:1 "Masum"
-SET user:2 "Billah"
-SET session:101 "active"
+  ```bash
+  SET user:1 "Masum"
+  SET user:2 "Billah"
+  SET session:101 "active"
 
-KEYS user:*
-# Output:
-# 1) "user:1"
-# 2) "user:2"
+  KEYS user:*
+  # Output:
+  # 1) "user:1"
+  # 2) "user:2"
 
-KEYS session:?
-# Output:
-# 1) "session:1"
-```
+  KEYS session:?
+  # Output:
+  # 1) "session:1"
+  ```
 
 - `KEYS` scans the entire keyspace.
 - Not recommended in production if you have millions of keys → can block Redis.
@@ -745,12 +747,12 @@ For production environments, always use SCAN instead of KEYS to avoid performanc
 - Use : to create logical namespaces.
 - Format: `namespace:entity:id`
 
-```bash
-user:101:name → "Masum"
-user:101:email → "masum@example.com"
-session:2021-09-01 → "active"
-cache:homepage → "<html>...</html>"
-```
+  ```bash
+  user:101:name → "Masum"
+  user:101:email → "masum@example.com"
+  session:2021-09-01 → "active"
+  cache:homepage → "<html>...</html>"
+  ```
 
 - Groups related keys together
 - Simplifies pattern matching:
@@ -760,13 +762,13 @@ cache:homepage → "<html>...</html>"
 - Include meaningful information in the key.
 - Avoid cryptic abbreviations unless widely understood.
 
-```bash
-# Good
-cart:user:101:item:202 → quantity of item 202 in user 101's cart
+  ```bash
+  # Good
+  cart:user:101:item:202 → quantity of item 202 in user 101's cart
 
-# Bad
-c:u101:i202 → hard to read
-```
+  # Bad
+  c:u101:i202 → hard to read
+  ```
 
 ### 3. Avoid Using Spaces
 
@@ -783,13 +785,13 @@ Recommended: < 64 bytes if possible.
 - Use lowercase consistently to avoid confusion.
 - Mixed-case keys can lead to mistakes:
 
-```bash
-# Consistent
-user:101:profile
+  ```bash
+  # Consistent
+  user:101:profile
 
-# Inconsistent (bad)
-User:101:Profile
-```
+  # Inconsistent (bad)
+  user:101:Profile
+  ```
 
 ### 6. Use Suffixes for Type Clarity
 
@@ -844,8 +846,8 @@ counter:signups:2025-09-04 → 15
 
 - Redis allows you to delete one or more keys when they are no longer needed.
 - Two main commands:
-  1. DEL → Synchronous delete (blocking)
-  2. UNLINK → Asynchronous delete (non-blocking)
+  1. `DEL` → Synchronous delete (blocking)
+  2. `UNLINK` → Asynchronous delete (non-blocking)
 - Choosing the right command is important for performance, especially in production with large datasets.
 
 ### `DEL`
@@ -853,9 +855,9 @@ counter:signups:2025-09-04 → 15
 - Deletes one or more keys immediately.
 - Returns the number of keys actually deleted.
 
-```bash
-DEL key [key ...]
-```
+  ```bash
+  DEL key [key ...]
+  ```
 
 - Synchronous: Redis frees memory immediately.
 - Blocking: For large keys (like big hashes or lists), deletion can block other clients temporarily.
@@ -903,46 +905,46 @@ Think of it like taking a photo of your data at specific intervals.
 - This process writes the entire dataset from memory into an RDB file (`dump.rdb`).
 - Redis keeps serving clients during this snapshot (thanks to forking).
 
-### Configuring RDB in redis.conf
+### Configuring RDB in `redis.conf`
 
 1. Automatic Snapshots
 
-Defined using save rules:
+   Defined using save rules:
 
-```bash
-save 900 1      # Snapshot if 1 key changed in 900 seconds (15 min)
-save 300 10     # Snapshot if 10 keys changed in 300 seconds (5 min)
-save 60 10000   # Snapshot if 10000 keys changed in 60 seconds
-```
+   ```bash
+   save 900 1      # Snapshot if 1 key changed in 900 seconds (15 min)
+   save 300 10     # Snapshot if 10 keys changed in 300 seconds (5 min)
+   save 60 10000   # Snapshot if 10000 keys changed in 60 seconds
+   ```
 
-- Format: `save <seconds> <changes>`
-- You can define multiple rules.
-- To disable RDB snapshots:
+   - Format: `save <seconds> <changes>`
+   - You can define multiple rules.
+   - To disable RDB snapshots:
 
-```bash
-save ""
-```
+   ```bash
+   save ""
+   ```
 
 2. RDB File Settings
 
-```bash
-dbfilename dump.rdb        # Default snapshot file name
-dir /var/lib/redis/        # Directory to save RDB files
-```
+   ```bash
+   dbfilename dump.rdb        # Default snapshot file name
+   dir /var/lib/redis/        # Directory to save RDB files
+   ```
 
 3. Manual Snapshots
 
-You can force snapshots with commands:
+   You can force snapshots with commands:
 
-- `SAVE` → Creates snapshot in main thread (blocks clients).
-- `BGSAVE` → Forks a background process (non-blocking, preferred).
+   - `SAVE` → Creates snapshot in main thread (blocks clients).
+   - `BGSAVE` → Forks a background process (non-blocking, preferred).
 
-```bash
-127.0.0.1:6379> BGSAVE
-Background saving started
-```
+   ```bash
+   127.0.0.1:6379> BGSAVE
+   Background saving started
+   ```
 
-The file `dump.rdb` will be created in your Redis data directory.
+   The file `dump.rdb` will be created in your Redis data directory.
 
 ### Performance Considerations
 
@@ -970,36 +972,32 @@ Think of it as a black box recorder — every change is stored so nothing is los
 
 1. Enable AOF
 
-```conf
-appendonly yes
-appendfilename "appendonly.aof"
-```
+   ```conf
+   appendonly yes
+   appendfilename "appendonly.aof"
+   ```
 
-2. Sync Policy (appendfsync)
+2. Sync Policy (`appendfsync`)
 
-This controls how often Redis writes AOF changes to disk:
+   This controls how often Redis writes AOF changes to disk:
 
-```conf
-appendfsync always      # Write every command to disk immediately (safest, slowest)
-appendfsync everysec    # Default: write once per second (good balance)
-appendfsync no          # Let OS decide when to flush (fastest, risky)
-```
+   ```conf
+   appendfsync always      # Write every command to disk immediately (safest, slowest)
+   appendfsync everysec    # Default: write once per second (good balance)
+   appendfsync no          # Let OS decide when to flush (fastest, risky)
+   ```
 
-Most production systems use `everysec`. 3. Start Redis
+   Most production systems use `everysec`.
 
-```bash
-redis-server /etc/redis/redis.conf
-```
+3. Rewrite Policy
 
-4. Rewrite Policy
+   Since AOF keeps growing, Redis rewrites the log periodically to compact it.
+   Settings:
 
-Since AOF keeps growing, Redis rewrites the log periodically to compact it.
-Settings:
-
-```conf
-auto-aof-rewrite-percentage 100   # Rewrite when AOF file is 100% larger than last rewrite
-auto-aof-rewrite-min-size 64mb    # Minimum file size before rewriting
-```
+   ```conf
+   auto-aof-rewrite-percentage 100   # Rewrite when AOF file is 100% larger than last rewrite
+   auto-aof-rewrite-min-size 64mb    # Minimum file size before rewriting
+   ```
 
 ### Recovery with AOF
 
@@ -1035,13 +1033,13 @@ The combined persistence file is written to AOF.
 1. Redis periodically creates RDB snapshots.
 2. Instead of writing only commands to AOF, Redis writes:
 
-- The latest RDB snapshot (as binary dump).
-- Plus incremental AOF commands since that snapshot.
+   - The latest RDB snapshot (as binary dump).
+   - Plus incremental AOF commands since that snapshot.
 
 3. On restart, Redis:
 
-- Loads the RDB part (fast load).
-- Replays the AOF portion (ensures recent durability).
+   - Loads the RDB part (fast load).
+   - Replays the AOF portion (ensures recent durability).
 
 ### Configuring Hybrid Persistence
 
@@ -1201,12 +1199,18 @@ Output
 ```s
 Reading messages... (blocking)
 
-1) "message"
+1) "subscribe"
 2) "chatroom"
 3) "Hello, world!"
 ```
 
 Terminal 1 is now listening for all messages on the `chatroom` channel.
+
+| Index | What it represents                          | Meaning                                     |
+| ----- | ------------------------------------------- | ------------------------------------------- |
+| `1)`  | Event type                                  | `"subscribe"` = you subscribed to a channel |
+| `2)`  | Channel name                                | `"chatroom"`                                |
+| `3)`  | Number of channels you’re subscribed to now | `1`                                         |
 
 ### Terminal 2: Publisher
 
@@ -1235,7 +1239,7 @@ Redis provides two kinds of subscriptions:
 1. Direct subscriptions → using `SUBSCRIBE channel` (exact channel name).
 2. Pattern-based subscriptions → using `PSUBSCRIBE pattern` (wildcard matching).
 
-With PSUBSCRIBE, a client can subscribe to multiple channels at once using glob-style patterns `(*`, `?`, `[]`).
+With `PSUBSCRIBE`, a client can subscribe to multiple channels at once using glob-style patterns `(*`, `?`, `[]`).
 
 ### How It Works
 
@@ -1256,54 +1260,54 @@ With PSUBSCRIBE, a client can subscribe to multiple channels at once using glob-
 
 1. Subscribe with a Pattern
 
-In one terminal:
+   In one terminal:
 
-```bash
-redis-cli
-127.0.0.1:6379> PSUBSCRIBE news.*
-```
+   ```bash
+   redis-cli
+   127.0.0.1:6379> PSUBSCRIBE news.*
+   ```
 
-Output:
+   Output:
 
-```bash
-Reading messages... (press Ctrl-C to quit)
-1) "psubscribe"
-2) "news.*"
-3) (integer) 1
-```
+   ```bash
+   Reading messages... (press Ctrl-C to quit)
+   1) "psubscribe"
+   2) "news.*"
+   3) (integer) 1
+   ```
 
 2. Publish to Matching Channels
 
-In another terminal:
+   In another terminal:
 
-```bash
-127.0.0.1:6379> PUBLISH news.sports "Sports update: Redis is awesome!"
-(integer) 1
+   ```bash
+   127.0.0.1:6379> PUBLISH news.sports "Sports update: Redis is awesome!"
+   (integer) 1
 
-127.0.0.1:6379> PUBLISH news.weather "Weather update: Sunny day!"
-(integer) 1
-```
+   127.0.0.1:6379> PUBLISH news.weather "Weather update: Sunny day!"
+   (integer) 1
+   ```
 
 3. Subscriber Receives Messages
 
-Back in the subscriber terminal:
+   Back in the subscriber terminal:
 
-```bash
-1) "pmessage"
-2) "news.*"
-3) "news.sports"
-4) "Sports update: Redis is awesome!"
+   ```bash
+   1) "pmessage"
+   2) "news.*"
+   3) "news.sports"
+   4) "Sports update: Redis is awesome!"
 
-1) "pmessage"
-2) "news.*"
-3) "news.weather"
-4) "Weather update: Sunny day!"
-```
+   1) "pmessage"
+   2) "news.*"
+   3) "news.weather"
+   4) "Weather update: Sunny day!"
+   ```
 
-- `pmessage` → type of message (pattern-based).
-- `news.*` → the pattern that matched.
-- `news.sports` → actual channel.
-- `"Sports update: Redis is awesome!"` → message content.
+   - `pmessage` → type of message (pattern-based).
+   - `news.*` → the pattern that matched.
+   - `news.sports` → actual channel.
+   - `"Sports update: Redis is awesome!"` → message content.
 
 # Transactions & Atomicity
 

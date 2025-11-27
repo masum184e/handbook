@@ -284,7 +284,7 @@ $$
      1 0001
    ```
 
-    There is a carry → add it back
+   There is a carry → add it back
 
 3. End-around carry
 
@@ -292,9 +292,9 @@ $$
    0001 + 1 = 0010
    ```
 
-    Final result: 0010 (2)
-    
-    Which is correct: 5 + (−3) = 2
+   Final result: 0010 (2)
+
+   Which is correct: 5 + (−3) = 2
 
 #### Subtract 9 from 5 using 1’s complement (8-bit)
 
@@ -309,24 +309,24 @@ $$
 
    ```
       00000101
-    + 11110110 
+    + 11110110
     ------------
-      11111011   
+      11111011
    ```
 
 3. Interpret the result
 
-    Since result starts with 1, it is negative (in 1’s complement form).
+   Since result starts with 1, it is negative (in 1’s complement form).
 
-    Take 1’s complement to get magnitude:
+   Take 1’s complement to get magnitude:
 
-    ```
-    1’s complement of 11111011 = 00000100
-    ```
+   ```
+   1’s complement of 11111011 = 00000100
+   ```
 
-    Magnitude: 00000100 (+4)
+   Magnitude: 00000100 (+4)
 
-    Which is correct: 5 + (−9) = -4
+   Which is correct: 5 + (−9) = -4
 
 ## 2’s Complement Representation
 
@@ -501,6 +501,8 @@ Add: 1 + 1
 - Carry = 1 AND 1 = 1
 - Result = 10₂ (2 in decimal)
 
+If ANY carry occurs during addition You MUST use a FULL ADDER
+
 ### Full Adder
 
 A Full Adder (FA) adds 3 bits:
@@ -532,7 +534,7 @@ Truth Table
 **Example**
 
 - Compute 1011₂ + 0101₂
-- Add bit-by-bit using Full Adder:
+- Add bit-by-bit using Full Adder
 
 ### Ripple Carry Adder (RCA)
 
@@ -580,7 +582,7 @@ D=A⊕B
 $$
 
 $$
-Bo=A⋅B
+Bo=\bar{A}⋅B
 $$
 
 **Example: Subtract 0 – 1**
@@ -613,7 +615,7 @@ D=A⊕B⊕Bin
 $$
 
 $$
-Bout=B⋅Bin+\bar{A}(B+Bin)
+Bout=\bar{A}B+\bar{(A⊕B)}Bin
 $$
 
 **Example: 1 − 1 − 1**
