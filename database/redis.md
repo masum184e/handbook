@@ -63,6 +63,20 @@
   - [Subscriber](#terminal-1-subscriber)
   - [Publisher](#terminal-2-publisher)
   - [Pattern Subscription](#pattern-subscription)
+- [Transactions](#transactions--atomicity)
+  - [MULTI, EXEC, DISCARD, WATCH](#multi-exec-discard-watch)
+  - [Optimistic Locking](#optimistic-locking)
+  - [Atomicity](#ensuring-atomic-operations)
+- [Replication](#replication)
+  - [Master-Slave replication](#master-slave-replication)
+  - [Read Replicas](#read-replicas-in-redis)
+  - [Redis Sentinel for Failover](#redis-sentinel-for-failover)
+  - [Redis Cluster](#redis-cluster)
+- [Security](#security)
+  - [Redis AUTH](#redis-auth)
+  - [Redis ACLs](#redis-acls-access-control-lists)
+  - [Network-level security](#network-level-security)
+  - [Private Network](#private-network)
 
 # Introduction
 
@@ -1396,7 +1410,7 @@ Then Client A’s `EXEC` will fail:
   - If watched keys were modified → transaction aborts.
 - `DISCARD` → cancel transaction manually if needed.
 
-## Optimistic locking
+## Optimistic Locking
 
 - Optimistic locking is a technique to handle concurrent updates safely without using traditional locks.
 - In Redis, it is implemented via the `WATCH` command.
@@ -1459,56 +1473,57 @@ SET balance:alice 50
 ### How Redis Ensures Atomicity
 
 1. Single-threaded execution:
-   Redis runs commands one at a time on a single main thread.
-   This ensures no two commands from different clients can interleave.
+
+   - Redis runs commands one at a time on a single main thread.
+     This ensures no two commands from different clients can interleave.
 
 2. MULTI/EXEC transactions:
 
-- For multi-command operations, you can use `MULTI` → `EXEC`.
-- Redis executes all queued commands atomically after `EXEC`.
+   - For multi-command operations, you can use `MULTI` → `EXEC`.
+   - Redis executes all queued commands atomically after `EXEC`.
 
 3. Optimistic locking (`WATCH`):
 
-- Ensures atomicity when you need to check a key’s value before modifying it.
+   - Ensures atomicity when you need to check a key’s value before modifying it.
 
 ### Examples of Atomic Operations
 
 1. Atomic INCR
 
-```bash
-SET counter 0
-INCR counter
-```
+   ```bash
+   SET counter 0
+   INCR counter
+   ```
 
-Even if multiple clients run `INCR counter` simultaneously, Redis ensures each increment is applied exactly once.
+   Even if multiple clients run `INCR counter` simultaneously, Redis ensures each increment is applied exactly once.
 
 2. Atomic Check-and-Set (SETNX)
 
-```bash
-SETNX lock "1"
-```
+   ```bash
+   SETNX lock "1"
+   ```
 
-- `SETNX` = "SET if Not eXists"
-- If the key doesn’t exist → sets it and returns `1`
-- If the key exists → does nothing and returns `0`
-- Useful for implementing distributed locks safely.
+   - `SETNX` = "SET if Not eXists"
+   - If the key doesn’t exist → sets it and returns `1`
+   - If the key exists → does nothing and returns `0`
+   - Useful for implementing distributed locks safely.
 
 3. Atomic Multi-Key Operation with Transaction
 
-Suppose you want to transfer money from Alice to Bob:
+   Suppose you want to transfer money from Alice to Bob:
 
-```bash
-WATCH balance:alice balance:bob   # Watch keys for changes
-alice_balance = GET balance:alice
+   ```bash
+   WATCH balance:alice balance:bob   # Watch keys for changes
+   alice_balance = GET balance:alice
 
-if alice_balance >= 10:
-    MULTI
-    DECRBY balance:alice 10
-    INCRBY balance:bob 10
-    EXEC
-else:
-    DISCARD
-```
+   if alice_balance >= 10:
+       MULTI
+       DECRBY balance:alice 10
+       INCRBY balance:bob 10
+       EXEC
+   else:
+       DISCARD
+   ```
 
 - `MULTI` → queue multiple commands
 - `EXEC` → executes all commands atomically
@@ -1516,11 +1531,11 @@ else:
 
 4. Atomic List Operation
 
-```bash
-LPUSH queue "task1"
-```
+   ```bash
+   LPUSH queue "task1"
+   ```
 
-Even if multiple clients push to the same list simultaneously, Redis ensures each push is atomic.
+   Even if multiple clients push to the same list simultaneously, Redis ensures each push is atomic.
 
 ### Tips to Ensure Atomicity in Redis
 
@@ -1531,7 +1546,7 @@ Even if multiple clients push to the same list simultaneously, Redis ensures eac
 
 # Replication
 
-## Master-slave replication
+## Master-Slave replication
 
 Redis provides asynchronous replication that allows you to set up one master node and one or more slave (replica) nodes.
 
@@ -1558,20 +1573,20 @@ This model is often used for high availability (HA), load balancing, and data re
 
 1. **Initial Sync**
 
-- When a slave connects to the master, it requests a full synchronization.
-- The master performs a BGSAVE (background save) to create an RDB snapshot.
-- It sends this snapshot to the slave, which loads it into memory.
-- While the snapshot is being sent, the master buffers write commands.
-- After the snapshot is loaded, the master sends the buffered commands to the slave.
+   - When a slave connects to the master, it requests a full synchronization.
+   - The master performs a `BGSAVE` (background save) to create an RDB snapshot.
+   - It sends this snapshot to the slave, which loads it into memory.
+   - While the snapshot is being sent, the master buffers write commands.
+   - After the snapshot is loaded, the master sends the buffered commands to the slave.
 
 2. **Ongoing Replication**
 
-- After the initial sync, the master continuously sends write commands to the slave so it stays up-to-date.
-- This is asynchronous, meaning there could be a slight lag.
+   - After the initial sync, the master continuously sends write commands to the slave so it stays up-to-date.
+   - This is asynchronous, meaning there could be a slight lag.
 
 3. **Automatic Reconnection**
 
-- If the slave disconnects, it automatically tries to reconnect and resync with the master.
+   - If the slave disconnects, it automatically tries to reconnect and resync with the master.
 
 ### Configuration
 
@@ -1601,43 +1616,43 @@ Let’s say we want 1 master and 2 slaves.
 
 1. **Start Master**
 
-```sj
-redis-server --port 6379
-```
+   ```sj
+   redis-server --port 6379
+   ```
 
 2. **Start Slaves**
 
-```sh
-redis-server --port 6380
-redis-server --port 6381
-```
+   ```sh
+   redis-server --port 6380
+   redis-server --port 6381
+   ```
 
 3. **Configure Slaves**
 
-In the Redis CLI:
+   In the Redis CLI:
 
-```sh
-127.0.0.1:6380> REPLICAOF 127.0.0.1 6379
-127.0.0.1:6381> REPLICAOF 127.0.0.1 6379
-```
+   ```sh
+   127.0.0.1:6380> REPLICAOF 127.0.0.1 6379
+   127.0.0.1:6381> REPLICAOF 127.0.0.1 6379
+   ```
 
 4. **Test Replication**
 
-On master:
+   On master:
 
-```sh
-127.0.0.1:6379> SET user:1 "Alice"
-OK
-```
+   ```sh
+   127.0.0.1:6379> SET user:1 "Alice"
+   OK
+   ```
 
-On slave (port 6380 or 6381):
+   On slave (port 6380 or 6381):
 
-```sh
-127.0.0.1:6380> GET user:1
-"Alice"
-```
+   ```sh
+   127.0.0.1:6380> GET user:1
+   "Alice"
+   ```
 
-The data written to the master is automatically replicated to the slaves.
+   The data written to the master is automatically replicated to the slaves.
 
 ## Read Replicas in Redis
 
@@ -1652,21 +1667,21 @@ This improves performance and scalability, since you can distribute read queries
 
 1. **Read-only by default**
 
-- By default, replicas are read-only (replica-read-only yes in config).
-- This prevents accidental writes.
-- You can override with CONFIG SET replica-read-only no, but it breaks consistency.
+    - By default, replicas are read-only (replica-read-only yes in config).
+    - This prevents accidental writes.
+    - You can override with CONFIG SET replica-read-only no, but it breaks consistency.
 
 2. **Asynchronous Replication**
 
-- Replicas might be slightly behind the master (called replication lag).
+    - Replicas might be slightly behind the master (called replication lag).
 
 3. **Scaling Reads**
 
-- Applications can direct read-heavy traffic (like analytics or reporting queries) to replicas.
+    - Applications can direct read-heavy traffic (like analytics or reporting queries) to replicas.
 
 4. **High Availability**
 
-- If the master goes down, replicas can be promoted to master (manually, or automatically via Sentinel).
+    - If the master goes down, replicas can be promoted to master (manually, or automatically via Sentinel).
 
 ### Limitations of Read Replicas
 
@@ -1680,19 +1695,19 @@ Redis Sentinel is a distributed system that provides:
 
 1. **Monitoring**
 
-- Keeps track of whether the master and replicas are working properly.
+    - Keeps track of whether the master and replicas are working properly.
 
 2. **Notification**
 
-- Alerts administrators or external systems when something goes wrong.
+    - Alerts administrators or external systems when something goes wrong.
 
 3. **Automatic Failover**
 
-- If the master is not reachable, Sentinel promotes one of the replicas to master and reconfigures the other replicas to follow it.
+    - If the master is not reachable, Sentinel promotes one of the replicas to master and reconfigures the other replicas to follow it.
 
 4. **Configuration Provider**
 
-- Applications can query Sentinel to know the current master’s address (no need to hardcode the master IP).
+    - Applications can query Sentinel to know the current master’s address (no need to hardcode the master IP).
 
 ### Why Sentinel?
 
@@ -1704,19 +1719,19 @@ Redis Sentinel is a distributed system that provides:
 
 1. **Monitoring**
 
-- Each Sentinel constantly checks the health of the master and replicas via PINGs.
+    - Each Sentinel constantly checks the health of the master and replicas via PINGs.
 
 2. **Failure Detection**
 
-- If a master doesn’t respond within a configured time (down-after-milliseconds), the Sentinel marks it as subjectively down.
-- Other Sentinels must agree to mark it objectively down (majority vote).
+    - If a master doesn’t respond within a configured time (down-after-milliseconds), the Sentinel marks it as subjectively down.
+    - Other Sentinels must agree to mark it objectively down (majority vote).
 
 3. **Failover**
 
-- Sentinels elect a leader.
-- The leader promotes one replica to master.
-- Other replicas are reconfigured to follow the new master.
-- Applications connected through Sentinel will automatically discover the new master.
+    - Sentinels elect a leader.
+    - The leader promotes one replica to master.
+    - Other replicas are reconfigured to follow the new master.
+    - Applications connected through Sentinel will automatically discover the new master.
 
 ### Sentinel Configuration Example
 
@@ -1728,122 +1743,122 @@ Suppose we have:
 
 1. **Configure Redis Master**
 
-```sh
-# redis-master.conf
-port 6379
-```
+    ```sh
+    # redis-master.conf
+    port 6379
+    ```
 
 2. **Configure Replicas**
 
-```sh
-# redis-slave.conf (for each replica)
-port 6380
-replicaof 127.0.0.1 6379
-```
+    ```sh
+    # redis-slave.conf (for each replica)
+    port 6380
+    replicaof 127.0.0.1 6379
+    ```
 
 3. **Configure Sentinel**
 
-Create a `sentinel.conf`:
+    Create a `sentinel.conf`:
 
-```sh
-port 26379
-sentinel monitor mymaster 127.0.0.1 6379 2
-sentinel down-after-milliseconds mymaster 5000
-sentinel failover-timeout mymaster 10000
-sentinel parallel-syncs mymaster 1
-```
+    ```sh
+    port 26379
+    sentinel monitor mymaster 127.0.0.1 6379 2
+    sentinel down-after-milliseconds mymaster 5000
+    sentinel failover-timeout mymaster 10000
+    sentinel parallel-syncs mymaster 1
+    ```
 
-Explanation:
+    Explanation:
 
-- `mymaster` → Name of monitored master.
-- `127.0.0.1 6379` → Master’s address and port.
-- `2` → Number of Sentinels that must agree master is down.
-- `down-after-milliseconds` → Time after which a master is considered down (5s).
-- `failover-timeout` → Max time for failover (10s).
-- `parallel-syncs` → Number of replicas syncing with new master at once.
+    - `mymaster` → Name of monitored master.
+    - `127.0.0.1 6379` → Master’s address and port.
+    - `2` → Number of Sentinels that must agree master is down.
+    - `down-after-milliseconds` → Time after which a master is considered down (5s).
+    - `failover-timeout` → Max time for failover (10s).
+    - `parallel-syncs` → Number of replicas syncing with new master at once.
 
 4. **Start Components**
 
-```sh
-redis-server redis-master.conf
-redis-server redis-slave.conf --port 6380
-redis-server redis-slave.conf --port 6381
-redis-sentinel sentinel.conf --port 26379
-redis-sentinel sentinel.conf --port 26380
-redis-sentinel sentinel.conf --port 26381
-```
+    ```sh
+    redis-server redis-master.conf
+    redis-server redis-slave.conf --port 6380
+    redis-server redis-slave.conf --port 6381
+    redis-sentinel sentinel.conf --port 26379
+    redis-sentinel sentinel.conf --port 26380
+    redis-sentinel sentinel.conf --port 26381
+    ```
 
 ### Example Walkthrough of Sentinel
 
 1. Normal Operation
 
-- Master: `6379`
-- Replicas: `6380`, `6381`
-- Sentinels monitor the master.
+    - Master: `6379`
+    - Replicas: `6380`, `6381`
+    - Sentinels monitor the master.
 
 2. Insert Data
 
-```sh
-127.0.0.1:6379> SET user:1 "Alice"
-OK
-```
+    ```sh
+    127.0.0.1:6379> SET user:1 "Alice"
+    OK
+    ```
 
-Check replica:
+    Check replica:
 
-```
-127.0.0.1:6380> GET user:1
-"Alice"
-```
+    ```
+    127.0.0.1:6380> GET user:1
+    "Alice"
+    ```
 
 3. Simulate Failure
-   Stop the master:
+  
+    Stop the master:
 
-```sh
-pkill -f "redis-server.*6379"
-```
+    ```sh
+    pkill -f "redis-server.*6379"
+    ```
 
 4. Failover Happens
 
-- Sentinels detect master is down after 5 seconds.
-- They vote and promote one replica (say 6380) as new master.
-- Other replica (6381) is reconfigured to follow 6380.
+    - Sentinels detect master is down after 5 seconds.
+    - They vote and promote one replica (say 6380) as new master.
+    - Other replica (6381) is reconfigured to follow 6380.
 
-Check with Sentinel:
+    Check with Sentinel:
 
-```sh
-redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
-1) "127.0.0.1"
-2) "6380"
-```
+    ```sh
+    redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
+    1) "127.0.0.1"
+    2) "6380"
+    ```
 
-The master has changed automatically!
+    The master has changed automatically!
 
 5. Client Auto-Discovery
-   Applications can connect to Sentinel to always find the current master:
 
-```sh
-redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
-```
+    Applications can connect to Sentinel to always find the current master:
 
-This avoids hardcoding the master’s address in the app.
+    ```sh
+    redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
+    ```
+
+    This avoids hardcoding the master’s address in the app.
 
 ## Redis Cluster
 
 Redis Cluster is Redis’s built-in distributed solution that provides:
 
 1. Automatic Sharding (Data Partitioning)
-
-- Splits the dataset across multiple nodes.
-- Each node holds only part of the data.
+    - Splits the dataset across multiple nodes.
+    - Each node holds only part of the data.
 
 2. High Availability with Replication
-
-- Each shard (master) can have replicas.
-- If a master fails, a replica is promoted automatically.
+    - Each shard (master) can have replicas.
+    - If a master fails, a replica is promoted automatically.
 
 3. No Single Point of Failure
 
-- Cluster survives as long as the majority of masters are available.
+    - Cluster survives as long as the majority of masters are available.
 
 ### Sharding in Redis Cluster
 
@@ -1903,15 +1918,15 @@ redis-server --port 7005 --cluster-enabled yes --cluster-config-file nodes-7005.
 
 2. **Create the Cluster**
 
-```sh
-redis-cli --cluster create 127.0.0.1:7000 \
-                          127.0.0.1:7001 \
-                          127.0.0.1:7002 \
-                          127.0.0.1:7003 \
-                          127.0.0.1:7004 \
-                          127.0.0.1:7005 \
-                          --cluster-replicas 1
-```
+    ```sh
+    redis-cli --cluster create 127.0.0.1:7000 \
+                              127.0.0.1:7001 \
+                              127.0.0.1:7002 \
+                              127.0.0.1:7003 \
+                              127.0.0.1:7004 \
+                              127.0.0.1:7005 \
+                              --cluster-replicas 1
+    ```
 
 - `--cluster-replicas 1` → Each master will have one replica.
 - Redis will automatically assign slots across the 3 masters.
@@ -1920,45 +1935,45 @@ redis-cli --cluster create 127.0.0.1:7000 \
 
 1. Check Cluster Info
 
-```sh
-redis-cli -c -p 7000 cluster info
-```
+    ```sh
+    redis-cli -c -p 7000 cluster info
+    ```
 
 2. Check Slot Assignment
 
-```sh
-redis-cli -c -p 7000 cluster slots
-```
+    ```sh
+    redis-cli -c -p 7000 cluster slots
+    ```
 
-Example output:
+    Example output:
 
-```sh
-0-5460       -> 7000 (master), 7003 (replica)
-5461-10922   -> 7001 (master), 7004 (replica)
-10923-16383  -> 7002 (master), 7005 (replica)
-```
+    ```sh
+    0-5460       -> 7000 (master), 7003 (replica)
+    5461-10922   -> 7001 (master), 7004 (replica)
+    10923-16383  -> 7002 (master), 7005 (replica)
+    ```
 
 3. Insert a Key
 
-```
-redis-cli -c -p 7000 SET user:1 "Alice"
-```
+      ```
+      redis-cli -c -p 7000 SET user:1 "Alice"
+      ```
 
-The client will:
+      The client will:
 
-- Compute slot for `user:1` (e.g., `5798`).
-- Redirect request to the correct master (`7001`).
+      - Compute slot for `user:1` (e.g., `5798`).
+      - Redirect request to the correct master (`7001`).
 
-With `-c` (cluster mode), `redis-cli` automatically follows redirects.
+      With `-c` (cluster mode), `redis-cli` automatically follows redirects.
 
 4. Read a Key
 
-```
-redis-cli -c -p 7002 GET user:1
-"Alice"
-```
+    ```
+    redis-cli -c -p 7002 GET user:1
+    "Alice"
+    ```
 
-Even though you connected to `7002`, the client redirects you to the correct node.
+    Even though you connected to `7002`, the client redirects you to the correct node.
 
 ### Benefits of Redis Cluster
 
@@ -2053,7 +2068,7 @@ ACL DELUSER alice
 ACL SETUSER alice off
 ```
 
-## Network-level security
+## Network-level Security
 
 Network-level security protects Redis from unauthorized access over the network. Even if your Redis server is running with proper authentication and ACLs, if the network is exposed, attackers can still try to connect.
 
@@ -2063,88 +2078,88 @@ Network-level security involves controlling access to Redis via networking confi
 
 1. Bind Address
 
-- Redis binds to a specific network interface. By default:
+    - Redis binds to a specific network interface. By default:
+    
+      ```bash
+      bind 127.0.0.1
+      ```
+    
+    - `127.0.0.1` → only accessible locally.
+    - To allow external access:
+    
+      ```bash
+      bind 0.0.0.0
+      ```
 
-```bash
-bind 127.0.0.1
-```
-
-- `127.0.0.1` → only accessible locally.
-- To allow external access:
-
-```bash
-bind 0.0.0.0
-```
-
-Warning: Exposing Redis to the public without security is very dangerous.
+      Warning: Exposing Redis to the public without security is very dangerous.
 
 2. Protected Mode
 
-Enabled by default in Redis >= 3.2:
+    Enabled by default in Redis >= 3.2:
 
-```bash
-protected-mode yes
-```
+    ```bash
+    protected-mode yes
+    ```
 
-- Redis refuses connections from external hosts if no password is set.
-- Provides an extra layer for safeguarding default installations.
+    - Redis refuses connections from external hosts if no password is set.
+    - Provides an extra layer for safeguarding default installations.
 
 3. Firewall Rules
 
-Use firewalls to allow only trusted IPs to connect.
+    Use firewalls to allow only trusted IPs to connect.
 
-Example: UFW on Linux
+    Example: UFW on Linux
 
-```bash
-# Allow Redis port 6379 only from 192.168.1.10
-sudo ufw allow from 192.168.1.10 to any port 6379
-```
+    ```bash
+    # Allow Redis port 6379 only from 192.168.1.10
+    sudo ufw allow from 192.168.1.10 to any port 6379
+    ```
 
-Example: iptables
+    Example: iptables
 
-```bash
-sudo iptables -A INPUT -p tcp -s 192.168.1.0/24 --dport 6379 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 6379 -j DROP
-```
+    ```bash
+    sudo iptables -A INPUT -p tcp -s 192.168.1.0/24 --dport 6379 -j ACCEPT
+    sudo iptables -A INPUT -p tcp --dport 6379 -j DROP
+    ```
 
 4. TLS/SSL Encryption
 
-- Redis >= 6 supports TLS for encrypted network traffic.
-- Protects data in transit and prevents man-in-the-middle attacks.
+    - Redis >= 6 supports TLS for encrypted network traffic.
+    - Protects data in transit and prevents man-in-the-middle attacks.
 
-Example: Enabling TLS
+    Example: Enabling TLS
 
-In `redis.conf`:
+    In `redis.conf`:
 
-```bash
-tls-port 6379
-port 0
-tls-cert-file /etc/ssl/redis.crt
-tls-key-file /etc/ssl/redis.key
-tls-ca-cert-file /etc/ssl/ca.crt
-```
+    ```bash
+    tls-port 6379
+    port 0
+    tls-cert-file /etc/ssl/redis.crt
+    tls-key-file /etc/ssl/redis.key
+    tls-ca-cert-file /etc/ssl/ca.crt
+    ```
 
-- `port 0` disables non-TLS connections.
-- Clients must connect using TLS:
+    - `port 0` disables non-TLS connections.
+    - Clients must connect using TLS:
 
-```bash
-redis-cli -h redis.example.com -p 6379 --tls
-```
+    ```bash
+    redis-cli -h redis.example.com -p 6379 --tls
+    ```
 
 5. Network Segmentation
 
-- Place Redis in a private network or VPC.
-- Only application servers that need Redis can access it.
-- Avoid exposing Redis directly to the internet.
+    - Place Redis in a private network or VPC.
+    - Only application servers that need Redis can access it.
+    - Avoid exposing Redis directly to the internet.
 
 6. Disable Dangerous Commands
 
-While not strictly “network-level,” disabling commands like `FLUSHALL` or `CONFIG` can prevent attackers from damaging your system if they somehow gain network access.
-
-```
-rename-command FLUSHALL ""
-rename-command CONFIG ""
-```
+    While not strictly “network-level,” disabling commands like `FLUSHALL` or `CONFIG` can prevent attackers from damaging your system if they somehow gain network access.
+    
+    ```
+    rename-command FLUSHALL ""
+    rename-command CONFIG ""
+    ```
 
 ### Summary of Measures
 
@@ -2193,7 +2208,7 @@ Example: AWS Security Group
 - Inbound rule: TCP 6379 → Source: 10.0.1.0/24 (private subnet)
 - Outbound rule: allow Redis responses back to the app servers
 
-3. Bind Redis to Private IP
+**Bind Redis to Private IP**
 
 In `redis.conf`, set:
 
@@ -2204,7 +2219,7 @@ protected-mode yes       # Extra safeguard
 
 Do not use `0.0.0.0` unless combined with strict firewall rules.
 
-4. Optional: Combine with TLS
+**Optional: Combine with TLS**
 
 If you must allow access across a less-trusted network, enable TLS:
 
