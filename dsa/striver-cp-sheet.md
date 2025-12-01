@@ -29,14 +29,30 @@
        4. N to N
        5. Sum of first N
        6. Fact of N
-       7.
-       8.
+       7. Reverse Array
+       8. Check Palindrome
        9. Fibonacci Number
     6. Hashing
        1. Hashing Theory
        2. Counting Frequencies
        3.
-2.  Array
+2.  Sorting
+    1. Sorting I
+       1. Selection Sort
+          - left Portion is sorted, right portion is unsorted
+          - find minimum element of unsorted array
+          - replace the minimum element with the first item which become the last item of sorted array
+          - prevent swap if they are both
+       2. Bubble Sort
+          - left portion is unsorted, right portion is sorted
+          - bubbles up mean the large item should be placed at the end of unsorted portion, which is done by pushing/swapping the large item one step ahead
+       3. Insertion Sort
+          - it's like arranging card
+          - we have some arranged card and we got new one
+          - how we can include it, find the right place for it and place it
+          - do proper indexing of variable and check condition properly
+    2. Sorting II
+3.  Array
     1. Easy
        1. Largest Element
        2. Second Largest
@@ -46,7 +62,7 @@
        6. Left Rotate By D Place
        7. Moves Zeros to end
        8. Linear Search
-       9.
+       9. Find Union
        10. Find Missing numbers
        - xor of [0, n] vs xor of array
        - sum of [0, n] vs sum of array
@@ -59,9 +75,12 @@
           - `unordered_map`: easy to access
           - `map`: sorted useage
           - To apply two pointer approach, array need to be sorted, if not sorted use hash map.
-       2.
-       3.
-       4.
+       2. Sort Color
+          - mid is move with left and mid
+          - right is reduced to mid
+          - that's why mid can be targetting for tracking iteration
+       3. Majority Element
+       4. Kadane's Algorithm
        5.
        6.
        7. Rearrange Array Elements by Sign
@@ -74,7 +93,7 @@
        14.
     3. Hard
        1. a
-       2.
+       2. Majority Elements
        3. [Three Sum]()
           - Inner Loop Replaced by Two Pointer and array must be sorted
        4.
@@ -86,7 +105,7 @@
        10.
        11.
        12.
-3.  Binary Search
+4.  Binary Search
     1. 1D Array
        1. Find X
        2. a
@@ -105,7 +124,7 @@
        3. a
        4. a
        5. a
-4.  LinkedList
+5.  LinkedList
     1. Introduction
        1. Intro
        2. Insertion
@@ -113,6 +132,10 @@
        4. Length
        5. Search
     2. Doubly
+       1. Intro
+       2. Insert
+       3. Delete
+       4. Reverse`
     3. Medium Problme
        1. Middle of LL
        2. A
@@ -121,12 +144,23 @@
        5. C
        6. D
        7. E
-5.  BST
+      
+8. Bit Manipulation
+    1. Learning
+       1. 
+       2. 
+       3. Odd Even
+       4. 
+       5. 
+       6. 
+       7. 
+       8. 
+6.  BST
     1. Concepts
        1. Intro: How to handle duplicate value?
        2. BST
        3. Find Min/Max in BST
-6.  Graph
+7.  Graph
 
     1. Learing
        1. Graph and Types
@@ -137,7 +171,7 @@
        2. B
        3. C
 
-7.  Binary Tree
+8.  Binary Tree
 
     1. Traversals
 
@@ -171,11 +205,9 @@
 
 Task
 
-1. Reverse - Iterative
-2. Reverse - Recursion
-3. Pallindrome
-4. Starting of Loop
-5. Length of Loop
-6. Odd Even
-7. String Pallindrome
-8. Highest/Lowest Freq
+1. Starting of Loop
+2. Length of Loop
+3. Odd Even
+4. String Pallindrome
+5. Highest/Lowest Freq
+6. Pascal Triangle(factorial will not work, do it with iterative way)
