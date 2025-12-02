@@ -35,7 +35,7 @@
     6. Hashing
        1. Hashing Theory
        2. Counting Frequencies
-       3.
+       3. a
 2.  Sorting
     1. Sorting I
        1. Selection Sort
@@ -52,11 +52,25 @@
           - how we can include it, find the right place for it and place it
           - do proper indexing of variable and check condition properly
     2. Sorting II
+       1. Merge Sort
+          - recursive call, then merge
+          - for merge
+            - extract size
+            - extract item
+            - merge
+            - reassign item
+       2. a
+       3. a
+       4. Quick Sort
+          - kind of reverse approach of merge
+            - get pivot
+            - reverse call
+          - place the pivot at right place
 3.  Array
     1. Easy
        1. Largest Element
        2. Second Largest
-       3.
+       3. a
        4. Remove Duplicates
        5. Left Rotate By One Place
        6. Left Rotate By D Place
@@ -64,12 +78,12 @@
        8. Linear Search
        9. Find Union
        10. Find Missing numbers
-       - xor of [0, n] vs xor of array
-       - sum of [0, n] vs sum of array
+           - xor of [0, n] vs xor of array
+           - sum of [0, n] vs sum of array
        11. Maximum Consecutive Ones
        12. Find the number that appear once
        13. Longest subarray with given sum K
-       14.
+       14. a
     2. Medium
        1. Two Sum
           - `unordered_map`: easy to access
@@ -144,23 +158,22 @@
        5. C
        6. D
        7. E
-      
-8. Bit Manipulation
+6.  Bit Manipulation
     1. Learning
-       1. 
-       2. 
+       1. a
+       2. a
        3. Odd Even
-       4. 
-       5. 
-       6. 
-       7. 
-       8. 
-6.  BST
+       4. a
+       5. a
+       6. a
+       7. a
+       8. a
+7.  BST
     1. Concepts
        1. Intro: How to handle duplicate value?
        2. BST
        3. Find Min/Max in BST
-7.  Graph
+8.  Graph
 
     1. Learing
        1. Graph and Types
@@ -171,7 +184,7 @@
        2. B
        3. C
 
-8.  Binary Tree
+9.  Binary Tree
 
     1. Traversals
 
