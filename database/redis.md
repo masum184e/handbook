@@ -1667,21 +1667,21 @@ This improves performance and scalability, since you can distribute read queries
 
 1. **Read-only by default**
 
-    - By default, replicas are read-only (replica-read-only yes in config).
-    - This prevents accidental writes.
-    - You can override with CONFIG SET replica-read-only no, but it breaks consistency.
+   - By default, replicas are read-only (replica-read-only yes in config).
+   - This prevents accidental writes.
+   - You can override with CONFIG SET replica-read-only no, but it breaks consistency.
 
 2. **Asynchronous Replication**
 
-    - Replicas might be slightly behind the master (called replication lag).
+   - Replicas might be slightly behind the master (called replication lag).
 
 3. **Scaling Reads**
 
-    - Applications can direct read-heavy traffic (like analytics or reporting queries) to replicas.
+   - Applications can direct read-heavy traffic (like analytics or reporting queries) to replicas.
 
 4. **High Availability**
 
-    - If the master goes down, replicas can be promoted to master (manually, or automatically via Sentinel).
+   - If the master goes down, replicas can be promoted to master (manually, or automatically via Sentinel).
 
 ### Limitations of Read Replicas
 
@@ -1695,19 +1695,19 @@ Redis Sentinel is a distributed system that provides:
 
 1. **Monitoring**
 
-    - Keeps track of whether the master and replicas are working properly.
+   - Keeps track of whether the master and replicas are working properly.
 
 2. **Notification**
 
-    - Alerts administrators or external systems when something goes wrong.
+   - Alerts administrators or external systems when something goes wrong.
 
 3. **Automatic Failover**
 
-    - If the master is not reachable, Sentinel promotes one of the replicas to master and reconfigures the other replicas to follow it.
+   - If the master is not reachable, Sentinel promotes one of the replicas to master and reconfigures the other replicas to follow it.
 
 4. **Configuration Provider**
 
-    - Applications can query Sentinel to know the current master’s address (no need to hardcode the master IP).
+   - Applications can query Sentinel to know the current master’s address (no need to hardcode the master IP).
 
 ### Why Sentinel?
 
@@ -1719,19 +1719,19 @@ Redis Sentinel is a distributed system that provides:
 
 1. **Monitoring**
 
-    - Each Sentinel constantly checks the health of the master and replicas via PINGs.
+   - Each Sentinel constantly checks the health of the master and replicas via PINGs.
 
 2. **Failure Detection**
 
-    - If a master doesn’t respond within a configured time (down-after-milliseconds), the Sentinel marks it as subjectively down.
-    - Other Sentinels must agree to mark it objectively down (majority vote).
+   - If a master doesn’t respond within a configured time (down-after-milliseconds), the Sentinel marks it as subjectively down.
+   - Other Sentinels must agree to mark it objectively down (majority vote).
 
 3. **Failover**
 
-    - Sentinels elect a leader.
-    - The leader promotes one replica to master.
-    - Other replicas are reconfigured to follow the new master.
-    - Applications connected through Sentinel will automatically discover the new master.
+   - Sentinels elect a leader.
+   - The leader promotes one replica to master.
+   - Other replicas are reconfigured to follow the new master.
+   - Applications connected through Sentinel will automatically discover the new master.
 
 ### Sentinel Configuration Example
 
@@ -1743,122 +1743,124 @@ Suppose we have:
 
 1. **Configure Redis Master**
 
-    ```sh
-    # redis-master.conf
-    port 6379
-    ```
+   ```sh
+   # redis-master.conf
+   port 6379
+   ```
 
 2. **Configure Replicas**
 
-    ```sh
-    # redis-slave.conf (for each replica)
-    port 6380
-    replicaof 127.0.0.1 6379
-    ```
+   ```sh
+   # redis-slave.conf (for each replica)
+   port 6380
+   replicaof 127.0.0.1 6379
+   ```
 
 3. **Configure Sentinel**
 
-    Create a `sentinel.conf`:
+   Create a `sentinel.conf`:
 
-    ```sh
-    port 26379
-    sentinel monitor mymaster 127.0.0.1 6379 2
-    sentinel down-after-milliseconds mymaster 5000
-    sentinel failover-timeout mymaster 10000
-    sentinel parallel-syncs mymaster 1
-    ```
+   ```sh
+   port 26379
+   sentinel monitor mymaster 127.0.0.1 6379 2
+   sentinel down-after-milliseconds mymaster 5000
+   sentinel failover-timeout mymaster 10000
+   sentinel parallel-syncs mymaster 1
+   ```
 
-    Explanation:
+   Explanation:
 
-    - `mymaster` → Name of monitored master.
-    - `127.0.0.1 6379` → Master’s address and port.
-    - `2` → Number of Sentinels that must agree master is down.
-    - `down-after-milliseconds` → Time after which a master is considered down (5s).
-    - `failover-timeout` → Max time for failover (10s).
-    - `parallel-syncs` → Number of replicas syncing with new master at once.
+   - `mymaster` → Name of monitored master.
+   - `127.0.0.1 6379` → Master’s address and port.
+   - `2` → Number of Sentinels that must agree master is down.
+   - `down-after-milliseconds` → Time after which a master is considered down (5s).
+   - `failover-timeout` → Max time for failover (10s).
+   - `parallel-syncs` → Number of replicas syncing with new master at once.
 
 4. **Start Components**
 
-    ```sh
-    redis-server redis-master.conf
-    redis-server redis-slave.conf --port 6380
-    redis-server redis-slave.conf --port 6381
-    redis-sentinel sentinel.conf --port 26379
-    redis-sentinel sentinel.conf --port 26380
-    redis-sentinel sentinel.conf --port 26381
-    ```
+   ```sh
+   redis-server redis-master.conf
+   redis-server redis-slave.conf --port 6380
+   redis-server redis-slave.conf --port 6381
+   redis-sentinel sentinel.conf --port 26379
+   redis-sentinel sentinel.conf --port 26380
+   redis-sentinel sentinel.conf --port 26381
+   ```
 
 ### Example Walkthrough of Sentinel
 
 1. Normal Operation
 
-    - Master: `6379`
-    - Replicas: `6380`, `6381`
-    - Sentinels monitor the master.
+   - Master: `6379`
+   - Replicas: `6380`, `6381`
+   - Sentinels monitor the master.
 
 2. Insert Data
 
-    ```sh
-    127.0.0.1:6379> SET user:1 "Alice"
-    OK
-    ```
+   ```sh
+   127.0.0.1:6379> SET user:1 "Alice"
+   OK
+   ```
 
-    Check replica:
+   Check replica:
 
-    ```
-    127.0.0.1:6380> GET user:1
-    "Alice"
-    ```
+   ```
+   127.0.0.1:6380> GET user:1
+   "Alice"
+   ```
 
 3. Simulate Failure
-  
-    Stop the master:
 
-    ```sh
-    pkill -f "redis-server.*6379"
-    ```
+   Stop the master:
+
+   ```sh
+   pkill -f "redis-server.*6379"
+   ```
 
 4. Failover Happens
 
-    - Sentinels detect master is down after 5 seconds.
-    - They vote and promote one replica (say 6380) as new master.
-    - Other replica (6381) is reconfigured to follow 6380.
+   - Sentinels detect master is down after 5 seconds.
+   - They vote and promote one replica (say 6380) as new master.
+   - Other replica (6381) is reconfigured to follow 6380.
 
-    Check with Sentinel:
+   Check with Sentinel:
 
-    ```sh
-    redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
-    1) "127.0.0.1"
-    2) "6380"
-    ```
+   ```sh
+   redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
+   1) "127.0.0.1"
+   2) "6380"
+   ```
 
-    The master has changed automatically!
+   The master has changed automatically!
 
 5. Client Auto-Discovery
 
-    Applications can connect to Sentinel to always find the current master:
+   Applications can connect to Sentinel to always find the current master:
 
-    ```sh
-    redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
-    ```
+   ```sh
+   redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster
+   ```
 
-    This avoids hardcoding the master’s address in the app.
+   This avoids hardcoding the master’s address in the app.
 
 ## Redis Cluster
 
 Redis Cluster is Redis’s built-in distributed solution that provides:
 
 1. Automatic Sharding (Data Partitioning)
-    - Splits the dataset across multiple nodes.
-    - Each node holds only part of the data.
+
+   - Splits the dataset across multiple nodes.
+   - Each node holds only part of the data.
 
 2. High Availability with Replication
-    - Each shard (master) can have replicas.
-    - If a master fails, a replica is promoted automatically.
+
+   - Each shard (master) can have replicas.
+   - If a master fails, a replica is promoted automatically.
 
 3. No Single Point of Failure
 
-    - Cluster survives as long as the majority of masters are available.
+   - Cluster survives as long as the majority of masters are available.
 
 ### Sharding in Redis Cluster
 
@@ -1918,15 +1920,15 @@ redis-server --port 7005 --cluster-enabled yes --cluster-config-file nodes-7005.
 
 2. **Create the Cluster**
 
-    ```sh
-    redis-cli --cluster create 127.0.0.1:7000 \
-                              127.0.0.1:7001 \
-                              127.0.0.1:7002 \
-                              127.0.0.1:7003 \
-                              127.0.0.1:7004 \
-                              127.0.0.1:7005 \
-                              --cluster-replicas 1
-    ```
+   ```sh
+   redis-cli --cluster create 127.0.0.1:7000 \
+                             127.0.0.1:7001 \
+                             127.0.0.1:7002 \
+                             127.0.0.1:7003 \
+                             127.0.0.1:7004 \
+                             127.0.0.1:7005 \
+                             --cluster-replicas 1
+   ```
 
 - `--cluster-replicas 1` → Each master will have one replica.
 - Redis will automatically assign slots across the 3 masters.
@@ -1935,45 +1937,45 @@ redis-server --port 7005 --cluster-enabled yes --cluster-config-file nodes-7005.
 
 1. Check Cluster Info
 
-    ```sh
-    redis-cli -c -p 7000 cluster info
-    ```
+   ```sh
+   redis-cli -c -p 7000 cluster info
+   ```
 
 2. Check Slot Assignment
 
-    ```sh
-    redis-cli -c -p 7000 cluster slots
-    ```
+   ```sh
+   redis-cli -c -p 7000 cluster slots
+   ```
 
-    Example output:
+   Example output:
 
-    ```sh
-    0-5460       -> 7000 (master), 7003 (replica)
-    5461-10922   -> 7001 (master), 7004 (replica)
-    10923-16383  -> 7002 (master), 7005 (replica)
-    ```
+   ```sh
+   0-5460       -> 7000 (master), 7003 (replica)
+   5461-10922   -> 7001 (master), 7004 (replica)
+   10923-16383  -> 7002 (master), 7005 (replica)
+   ```
 
 3. Insert a Key
 
-      ```
-      redis-cli -c -p 7000 SET user:1 "Alice"
-      ```
+   ```
+   redis-cli -c -p 7000 SET user:1 "Alice"
+   ```
 
-      The client will:
+   The client will:
 
-      - Compute slot for `user:1` (e.g., `5798`).
-      - Redirect request to the correct master (`7001`).
+   - Compute slot for `user:1` (e.g., `5798`).
+   - Redirect request to the correct master (`7001`).
 
-      With `-c` (cluster mode), `redis-cli` automatically follows redirects.
+   With `-c` (cluster mode), `redis-cli` automatically follows redirects.
 
 4. Read a Key
 
-    ```
-    redis-cli -c -p 7002 GET user:1
-    "Alice"
-    ```
+   ```
+   redis-cli -c -p 7002 GET user:1
+   "Alice"
+   ```
 
-    Even though you connected to `7002`, the client redirects you to the correct node.
+   Even though you connected to `7002`, the client redirects you to the correct node.
 
 ### Benefits of Redis Cluster
 
@@ -2078,88 +2080,88 @@ Network-level security involves controlling access to Redis via networking confi
 
 1. Bind Address
 
-    - Redis binds to a specific network interface. By default:
-    
-      ```bash
-      bind 127.0.0.1
-      ```
-    
-    - `127.0.0.1` → only accessible locally.
-    - To allow external access:
-    
-      ```bash
-      bind 0.0.0.0
-      ```
+   - Redis binds to a specific network interface. By default:
 
-      Warning: Exposing Redis to the public without security is very dangerous.
+     ```bash
+     bind 127.0.0.1
+     ```
+
+   - `127.0.0.1` → only accessible locally.
+   - To allow external access:
+
+     ```bash
+     bind 0.0.0.0
+     ```
+
+     Warning: Exposing Redis to the public without security is very dangerous.
 
 2. Protected Mode
 
-    Enabled by default in Redis >= 3.2:
+   Enabled by default in Redis >= 3.2:
 
-    ```bash
-    protected-mode yes
-    ```
+   ```bash
+   protected-mode yes
+   ```
 
-    - Redis refuses connections from external hosts if no password is set.
-    - Provides an extra layer for safeguarding default installations.
+   - Redis refuses connections from external hosts if no password is set.
+   - Provides an extra layer for safeguarding default installations.
 
 3. Firewall Rules
 
-    Use firewalls to allow only trusted IPs to connect.
+   Use firewalls to allow only trusted IPs to connect.
 
-    Example: UFW on Linux
+   Example: UFW on Linux
 
-    ```bash
-    # Allow Redis port 6379 only from 192.168.1.10
-    sudo ufw allow from 192.168.1.10 to any port 6379
-    ```
+   ```bash
+   # Allow Redis port 6379 only from 192.168.1.10
+   sudo ufw allow from 192.168.1.10 to any port 6379
+   ```
 
-    Example: iptables
+   Example: iptables
 
-    ```bash
-    sudo iptables -A INPUT -p tcp -s 192.168.1.0/24 --dport 6379 -j ACCEPT
-    sudo iptables -A INPUT -p tcp --dport 6379 -j DROP
-    ```
+   ```bash
+   sudo iptables -A INPUT -p tcp -s 192.168.1.0/24 --dport 6379 -j ACCEPT
+   sudo iptables -A INPUT -p tcp --dport 6379 -j DROP
+   ```
 
 4. TLS/SSL Encryption
 
-    - Redis >= 6 supports TLS for encrypted network traffic.
-    - Protects data in transit and prevents man-in-the-middle attacks.
+   - Redis >= 6 supports TLS for encrypted network traffic.
+   - Protects data in transit and prevents man-in-the-middle attacks.
 
-    Example: Enabling TLS
+   Example: Enabling TLS
 
-    In `redis.conf`:
+   In `redis.conf`:
 
-    ```bash
-    tls-port 6379
-    port 0
-    tls-cert-file /etc/ssl/redis.crt
-    tls-key-file /etc/ssl/redis.key
-    tls-ca-cert-file /etc/ssl/ca.crt
-    ```
+   ```bash
+   tls-port 6379
+   port 0
+   tls-cert-file /etc/ssl/redis.crt
+   tls-key-file /etc/ssl/redis.key
+   tls-ca-cert-file /etc/ssl/ca.crt
+   ```
 
-    - `port 0` disables non-TLS connections.
-    - Clients must connect using TLS:
+   - `port 0` disables non-TLS connections.
+   - Clients must connect using TLS:
 
-    ```bash
-    redis-cli -h redis.example.com -p 6379 --tls
-    ```
+   ```bash
+   redis-cli -h redis.example.com -p 6379 --tls
+   ```
 
 5. Network Segmentation
 
-    - Place Redis in a private network or VPC.
-    - Only application servers that need Redis can access it.
-    - Avoid exposing Redis directly to the internet.
+   - Place Redis in a private network or VPC.
+   - Only application servers that need Redis can access it.
+   - Avoid exposing Redis directly to the internet.
 
 6. Disable Dangerous Commands
 
-    While not strictly “network-level,” disabling commands like `FLUSHALL` or `CONFIG` can prevent attackers from damaging your system if they somehow gain network access.
-    
-    ```
-    rename-command FLUSHALL ""
-    rename-command CONFIG ""
-    ```
+   While not strictly “network-level,” disabling commands like `FLUSHALL` or `CONFIG` can prevent attackers from damaging your system if they somehow gain network access.
+
+   ```
+   rename-command FLUSHALL ""
+   rename-command CONFIG ""
+   ```
 
 ### Summary of Measures
 
@@ -2232,3 +2234,1145 @@ tls-ca-cert-file /etc/ssl/ca.crt
 ```
 
 Encrypts traffic between client and Redis even on private networks.
+
+# Redis Modules
+
+Redis Modules extend Redis beyond its core capabilities, allowing you to add new data types, commands, indexing engines, machine-learning components, and more—without modifying Redis itself.
+
+Modules were introduced in Redis 4.0 to make Redis adaptable for specialized workloads such as search, graph processing, timeseries, and probabilistic data structures.
+
+**Why Redis Modules?**
+
+By default, Redis is fast and powerful but intentionally minimalistic:
+
+- Only a limited set of data structures (strings, hashes, lists, sets…)
+- No full-text search
+- No built-in graph traversal
+- No native time-series engine
+- Limited analytics and query features
+
+Redis Modules solve this by allowing plug-in extensions.
+
+| Module              | Purpose                                      |
+| ------------------- | -------------------------------------------- |
+| **RediSearch**      | Full-text search & secondary indexing        |
+| **RedisJSON**       | Store & query JSON documents                 |
+| **RedisGraph**      | Graph database using Cypher                  |
+| **RedisBloom**      | Bloom, Cuckoo, Count-Min filters             |
+| **RedisTimeSeries** | Time-series ingestion, queries, downsampling |
+| **RedisAI**         | Serving machine-learning models              |
+
+## Advanced Redis Features
+
+### 1. New Data Types
+
+Modules can introduce entirely new structures:
+
+- Bloom filters (RedisBloom)
+- Time-series buckets (RedisTimeSeries)
+- JSON documents (RedisJSON)
+- Graph nodes/edges (RedisGraph)
+
+### 2. New Commands
+
+Modules add command namespaces:
+
+- `FT.*` for RediSearch
+- `JSON.*` for RedisJSON
+- `TS.*` for RedisTimeSeries
+- `GRAPH.*` for RedisGraph
+
+### 3. Optimized Workloads
+
+Modules can execute heavy computations inside Redis:
+
+- Searching
+- Aggregations
+- ML inference (RedisAI)
+
+### 4. Plug-and-Play
+
+Modules can be loaded dynamically without altering Redis core.
+
+## RedisJSON – Storing and Querying JSON
+
+RedisJSON lets you store structured JSON documents with a JSON-native API.
+
+```json
+JSON.SET user:1 $ '{"name":"Alice","age":25,"skills":["redis","python"]}'
+```
+
+- `JSON.SET` → command from RedisJSON module
+- `user:1` → key
+- `$` → root path of JSON document
+- JSON content stored in Redis in a tree structure
+
+**Example: Retrieving a JSON field**
+
+```
+JSON.GET user:1 $.name
+```
+
+Output:
+
+```
+["Alice"]
+```
+
+- `$` refers to the root path
+- `$.name` extracts only the “name” field
+
+## RediSearch – Full-Text Search & Secondary Indexing
+
+RediSearch enables fast indexing, search, filtering, and aggregations.
+
+Create an Index:
+
+```sh
+FT.CREATE idx:users ON HASH PREFIX 1 user: SCHEMA name TEXT age NUMERIC
+```
+
+- Creates an index named `idx:users`
+- Works on keys beginning with `user:`
+- Indexes two fields:
+  - `name (text)`
+  - `age (numeric)`
+
+**Example: Inserting User Data**
+
+```sh
+HSET user:1 name "Alice" age 25
+HSET user:2 name "Bob" age 30
+```
+
+**Example: Search query**
+
+```sh
+FT.SEARCH idx:users "Alice"
+```
+
+Output:
+
+```
+1) 1) "user:1"
+   2) "name"
+   3) "Alice"
+   4) "age"
+   5) "25"
+```
+
+**Example: Filter query (Age between 20 and 28)**
+
+```sh
+FT.SEARCH idx:users "@age:[20 28]"
+```
+
+## RedisBloom – Probabilistic Filters
+
+RedisBloom adds advanced filters for large-scale analytics.
+
+**Example: Create a Bloom filter**
+
+```sh
+BF.RESERVE myFilter 0.01 1000
+```
+
+- false positive rate: 1%
+- expected entries: 1,000
+
+**Add an item**
+
+```sh
+BF.ADD myFilter "alice"
+```
+
+**Check existence**
+
+```sh
+BF.EXISTS myFilter "alice"
+```
+
+Output:
+
+```sh
+1 (means: probably present)
+```
+
+## RedisTimeSeries – Time Series Data Engine
+
+**Example: Create a time-series key**
+
+```sh
+TS.CREATE temperature:room1 RETENTION 600000
+```
+
+- Time-series for "room1"
+- Retains data for 600,000 ms (10 minutes)
+
+**Add data points**
+
+```sh
+TS.ADD temperature:room1 1670000000 22.5
+TS.ADD temperature:room1 1670000060 23.0
+```
+
+**Query with range**
+
+```sh
+TS.RANGE temperature:room1 1670000000 1670001000
+```
+
+Returns the list of data points in that time range.
+
+## RedisGraph – Graph Database
+
+RedisGraph enables graph modeling and Cypher queries.
+
+**Example: Create nodes**
+
+```sh
+GRAPH.QUERY social "CREATE (:Person {name:'Alice'}), (:Person {name:'Bob'})"
+```
+
+**Example: Create relationship**
+
+```sh
+GRAPH.QUERY social "
+MATCH (a:Person {name:'Alice'}), (b:Person {name:'Bob'})
+CREATE (a)-[:FRIEND]->(b)
+"
+```
+
+**Query relationships**
+
+```sh
+GRAPH.QUERY social "
+MATCH (a)-[:FRIEND]->(b)
+RETURN a.name, b.name
+"
+```
+
+# Redis Geospatial Indexes
+
+Redis provides built-in geospatial capabilities that allow you to:
+
+- Store geographic locations (longitude, latitude)
+- Query nearby points within a radius
+- Calculate distances between two locations
+- Sort by distance
+- Use bounding boxes and circular radius queries
+
+Redis geospatial features are built on top of the sorted set (ZSET) data structure using a technique called Geohash encoding.
+
+## How Redis Geospatial Works Internally
+
+1. Every geospatial point is stored as a Geohash, which is a 52-bit integer.
+2. Redis stores that integer inside a sorted set.
+3. Geospatial commands (`GEOADD`, `GEORADIUS`, etc.) handle encoding and querying.
+
+Redis does not store altitude or 3D coordinates—just latitude & longitude.
+
+## Redis Geospatial Commands
+
+| Command                                | Description                                       |
+| -------------------------------------- | ------------------------------------------------- |
+| `GEOADD`                               | Add a location with longitude, latitude, and name |
+| `GEOPOS`                               | Get coordinates of a member                       |
+| `GEODIST`                              | Get distance between two points                   |
+| `GEORADIUS`                            | Find members within a radius (circle)             |
+| `GEORADIUSBYMEMBER`                    | Radius query based on another member              |
+| `GEORADIUS_RO`, `GEORADIUSBYMEMBER_RO` | Read-only versions                                |
+| `GEOHASH`                              | Get geohash strings                               |
+
+1. Adding Geospatial Data
+
+   ```sh
+   GEOADD cities -74.00597 40.71427 "NewYork"
+   ```
+
+   - cities = key name holding geospatial index
+   - Each entry requires: longitude, latitude, member name
+   - Redis converts data → geohash → stores in sorted set
+
+2. Retrieve Coordinates of a City
+
+   ```
+   GEOPOS cities "NewYork"
+   ```
+
+   Output:
+
+   ```
+   1) 1) "-74.00596940505599976"
+      2) "40.71426910448555265"
+   ```
+
+   Redis returns the actual stored coordinates (with high precision).
+
+3. Get Distance Between Cities
+
+   ```
+   GEODIST cities "NewYork" "Chicago" km
+   ```
+
+   Output
+
+   ```
+   1146.3023
+   ```
+
+   Redis uses spherical Earth approximation (Haversine formula).
+
+4. Find Nearby Locations (Radius Query)
+
+   Example: Find cities within 1500 km of New York
+
+   ```
+   GEORADIUS cities -74.00597 40.71427 1500 km
+   ```
+
+   Output:
+
+   ```
+   1) "Chicago"
+   1) "NewYork"
+   ```
+
+   - Center → given manually (longitude/latitude)
+   - Radius → 1500 km
+   - Returns matching cities sorted by distance from center (closest first)
+
+5. Radius Query Based on Another
+
+   Example: Cities within 1800 km of Chicago
+
+   ```
+   GEORADIUSBYMEMBER cities "Chicago" 1800 km
+   ```
+
+   Output:
+
+   ```
+   1) "NewYork"
+   1) "Chicago"
+   ```
+
+   - Uses Chicago’s coordinates as the center automatically
+   - Very useful for “find nearby users”, “find nearby restaurants”, etc.
+
+6. Radius Query with Extra Details
+
+   Example: Include coordinates + distance + geohash
+
+   ```sh
+   GEORADIUS cities -74 40 1500 km WITHCOORD WITHDIST WITHHASH
+   ```
+
+   Output:
+
+   ```
+   1) 1) "NewYork"
+      2) "14.1"                 ← distance
+      3) "3478007285230310"     ← geohash
+      4) 1) "-74.0059"          ← longitude
+         2) "40.7142"           ← latitude
+   ```
+
+   Additional flags:
+
+   - `WITHDIST` → distance from center
+   - `WITHCOORD` → return lat/lon
+   - `WITHHASH` → internal hash used in Redis
+
+7. Get Geohash Values
+
+   ```
+   GEOHASH cities "NewYork"
+   ```
+
+   Output:
+
+   ```
+   1) "dr5regw3pg0"
+   ```
+
+   Geohashes provide:
+
+   - Location encoding
+   - Prefix similarity → spatial proximity (Locations close on map share geohash prefixes)
+
+# Memory Optimization
+
+Redis is an in-memory database, meaning performance and cost depend heavily on how efficiently memory is used.
+Optimizing memory helps you:
+
+- Reduce RAM usage
+- Improve throughput
+- Lower latency
+- Store more data on the same hardware
+- Prevent eviction due to memory limits
+
+Redis provides several built-in mechanisms and settings to control memory use.
+
+## Compression Using Listpacks / Ziplist Encoding
+
+Redis automatically stores small data structures in compact forms:
+
+- Listpack (newer)
+- Ziplist (older)
+
+Used in:
+
+- Hashes
+- Lists
+- Sorted sets
+
+Example: Small Sorted Set
+
+```sh
+ZADD leaders 100 "Alice" 200 "Bob"
+```
+
+Stored as a small optimized list, not a full skiplist + dictionary.
+This drastically reduces memory.
+
+## Bitmaps, Bitfields, and HyperLogLogs
+
+Redis provides specialized structures for massive memory savings.
+
+### Using Bitmaps Instead of Sets
+
+#### Storing user login status (1 million users)
+
+**Using a Set**
+
+```sh
+SADD loggedIn 1 5 10 200000
+```
+
+- A set entry ≈ 50–80 bytes → potentially tens of MB.
+
+**Using a Bitmap**
+
+```sh
+SETBIT loginBitmap 200000 1
+```
+
+- Bitmap uses 1 bit per user
+- 1,000,000 bits → 125 KB only
+- Huge savings compared to large sets
+
+#### Using HyperLogLog for Approximated Counting
+
+Counting unique visitors:
+
+**Using a Set**
+
+```sh
+SADD visitors user123
+```
+
+- Memory grows unbounded.
+
+**Using HyperLogLog (fixed ≈ 12 KB)**
+
+```sh
+PFADD uv user123
+PFCOUNT uv
+```
+
+Perfect for:
+
+- Daily unique visitors
+- Counting unique IPs
+- Measuring cardinality at scale
+
+## Memory Policies & Eviction Strategy
+
+Redis can use different eviction policies when memory limit is reached (`maxmemory-policy`).
+
+**Common Policies:**
+
+- `allkeys-lru` → evict least-recently used keys
+- `volatile-lru` → LRU but only keys with TTL
+- `allkeys-random`
+- `noeviction` (default)
+
+```sh
+maxmemory 512mb
+maxmemory-policy allkeys-lru
+```
+
+Redis automatically frees memory by removing the least-used keys when it reaches 512 MB.
+
+# Lua scripting
+
+Redis includes a built-in Lua interpreter that allows you to run server-side scripts using the command:
+
+```sh
+EVAL <script> <numkeys> key1 key2 arg1 arg2 ...
+```
+
+## Why Lua Scripting Matters for Performance
+
+When you execute multiple Redis commands from your application:
+
+### Without optimization
+
+Your app → Redis → app → Redis (many round trips)
+
+This creates:
+
+- high latency
+- many network packets
+- slow client-side logic
+
+### With Lua scripting
+
+Your app → Redis (one script) → Redis runs everything internally
+
+Huge performance improvements because:
+
+- 0 network round trips inside script
+- Atomicity guaranteed
+
+## Atomic Increment with Logic
+
+Suppose you want: Increment a counter only if a limit is not exceeded.
+
+Without Lua (multiple round trips):
+
+1. `GET counter`
+2. compute in app
+3. `SET counter newValue`
+
+This can cause race conditions in concurrent environments.
+
+```sh
+EVAL "
+local current = redis.call('GET', KEYS[1])
+if not current then
+  redis.call('SET', KEYS[1], 1)
+  return 1
+elseif tonumber(current) < tonumber(ARGV[1]) then
+  redis.call('INCR', KEYS[1])
+  return redis.call('GET', KEYS[1])
+else
+  return current
+end
+" 1 counter 10
+```
+
+- `KEYS[1]` = `"counter"`
+- `ARGV[1]` = `10` (limit)
+- Logic:
+  - If counter doesn't exist → set to 1
+  - If under limit → increment
+  - If over limit → return current value
+- All done atomically and in one server-side script
+
+## Why Lua is Faster Than Multi-Command Client Logic
+
+Because Redis runs Lua scripts without releasing the CPU until finished.
+
+This makes it:
+
+- Safer (no race conditions)
+- Faster (no network calls)
+- More powerful (conditional logic on server)
+
+## Lua Scripting vs MULTI/EXEC
+
+| Feature                 | Lua Scripting                     | MULTI/EXEC                                           |
+| ----------------------- | --------------------------------- | ---------------------------------------------------- |
+| **Atomic?**             | ✔ Entire script atomic            | ✔ Entire transaction atomic                          |
+| **Conditional logic?**  | ✔ Fully flexible                  | ❌ No logic inside transaction (client must compute) |
+| **Network round trips** | ✔ 1 round trip                    | ❌ Multiple (commands are queued)                    |
+| **Performance**         | ⭐ Fastest for multi-ops          | ⚡ Fast                                              |
+| **Error behavior**      | Script runs fully or errors early | Errors only on EXEC                                  |
+| **Server-side loops?**  | ✔ Yes                             | ❌ No                                                |
+| **Ideal for**           | complex logic, repeated patterns  | simple atomic sequences                              |
+
+## Lua Scripting vs Pipelining
+
+Pipelining sends multiple commands in one batch but:
+
+| Feature                   | Lua Scripting  | Pipelining                   |
+| ------------------------- | -------------- | ---------------------------- |
+| **Atomic**                | ✔ Yes          | ❌ No                        |
+| **Conditional logic**     | ✔ Yes          | ❌ No                        |
+| **Network round trips**   | ✔ 1            | ✔ 1                          |
+| **Executes server-side?** | ✔ Yes          | ❌ No (just client batching) |
+| **Order guarantee**       | ✔ Yes          | ✔ Yes                        |
+| **Ideal for**             | stateful logic | high-volume simple commands  |
+
+## Compare Lua, MULTI/EXEC, and Pipelining
+
+Requirement: Increment three keys and return their sum
+
+### Approach 1: Without Optimization (3 round trips)
+
+```
+INCR k1
+INCR k2
+INCR k3
+```
+
+- 3 network round trips
+- 3 server executions
+- client computes sum
+
+### Approach 2: Pipelining (1 round trip)
+
+```
+INCR k1
+INCR k2
+INCR k3
+```
+
+Sent as a pipeline → 1 round trip
+
+BUT:
+
+- Still 3 server operations
+- No atomicity
+- Client computes last step
+
+### Approach 3: MULTI/EXEC (Atomic but more round trips)
+
+```
+MULTI
+INCR k1
+INCR k2
+INCR k3
+EXEC
+```
+
+- ✔ atomic
+- ❌ 2 network round trips (MULTI + EXEC)
+- ❌ cannot compute sum server-side
+
+### Approach 4: Lua Scripting (Best)
+
+```
+EVAL "
+local a = redis.call('INCR', KEYS[1])
+local b = redis.call('INCR', KEYS[2])
+local c = redis.call('INCR', KEYS[3])
+return a + b + c
+" 3 k1 k2 k3
+```
+
+- 1 round trip
+- All increments occur inside Redis
+- Sum computed server-side
+- Atomic
+- Fastest option
+
+## Between Lua, MULTI/EXEC, and Pipelining
+
+| If you need…                                  | Use                   |
+| --------------------------------------------- | --------------------- |
+| Complex logic                                 | **Lua**               |
+| Atomicity + logic                             | **Lua**               |
+| Many simple commands with no logic            | **Pipelining**        |
+| Strict atomic multi-command bundle            | **MULTI/EXEC**        |
+| Server-side computation (loops, conditionals) | **Lua**               |
+| Minimizing network latency                    | **Lua or Pipelining** |
+
+# Connection pooling
+
+Connection pooling is a technique where a client application maintains a set of pre-established Redis connections and reuses them instead of creating a new connection for every request.
+
+**Without pooling:**
+
+- Application opens a new TCP connection → sends a request → closes it
+- High overhead
+- Slow
+- Causes connection churn on Redis server
+- Leads to TIME_WAIT and socket exhaustion
+
+**With pooling:**
+
+- A pool of persistent Redis connections is created once
+- Each request picks an idle connection
+- Returns it to the pool after use
+
+**This significantly improves:**
+
+- Latency
+- Throughput
+- Server stability
+- Concurrent request handling
+
+## Why Connection Pooling Improves Performance
+
+Opening/closing a TCP connection is expensive:
+
+**TCP overhead includes:**
+
+- Handshake (SYN → SYN-ACK → ACK)
+- TLS handshake (if SSL enabled)
+- Kernel allocation for sockets
+- Redis authentication (AUTH)
+- Redis handshake (HELLO/RESP negotiation)
+
+All of these add milliseconds per operation.
+
+If an app performs 1,000 operations/sec, but each requires creating a connection, the overhead becomes huge.
+
+Connection pooling eliminates all this by keeping connections alive.
+
+## Redis Server Connection Limits
+
+Redis is fast with commands, but slow to handle thousands of new connections per second.
+
+Default connection limit:
+
+```
+maxclients 10000
+```
+
+If your application does not pool connections, it may exhaust `maxclients` under load.
+
+Pooling minimizes client count.
+
+## How Connection Pooling Works (Architecture)
+
+```
+Application
+ ├── Worker Thread A ---┐
+ ├── Worker Thread B ---|--> Connection Pool (10–100 connections)
+ ├── Worker Thread C ---┘
+ └── Worker Thread D → Redis Server
+```
+
+Workers borrow connections from the pool → execute → return connections.
+
+# Monitoring
+
+## Redis MONITOR — Real-Time Command Inspection
+
+`MONITOR` streams every command that Redis processes in real time.
+
+**What it shows:**
+
+- Every Redis command executed
+- The exact arguments
+- The client issuing it
+- Millisecond timestamps
+
+**When to use:**
+
+- Debugging application behavior
+- Detecting unexpected commands
+- Real-time auditing
+- Checking if clients are overloading Redis with unnecessary calls
+
+**Caution:**
+
+- `MONITOR` is slow and CPU-heavy because it logs every operation.
+- Use on development or temporary debugging, not production long-term.
+
+**Output Example:**
+
+```
+1617043000.123456 [0 127.0.0.1:51726] "SET" "user:1" "Alice"
+1617043000.123789 [0 127.0.0.1:51726] "INCR" "visits"
+1617043000.124001 [0 127.0.0.1:51726] "LPUSH" "tasks" "task1"
+```
+
+- Timestamp: `1617043000.123456`
+- DB index: `[0`
+- Client IP: `127.0.0.1`
+- Command: `"SET"`, `"INCR"`, `"LPUSH"`
+
+## Redis INFO — Health, Stats, and System Overview
+
+INFO gives a complete snapshot of Redis server status.
+
+It has many sections, including:
+| Section | Shows |
+| ------------- | ---------------------------------- |
+| `server` | Redis version, uptime |
+| `clients` | Connected clients, blocked clients |
+| `memory` | RAM usage, fragmentation |
+| `persistence` | RDB/AOF status |
+| `stats` | Command statistics |
+| `replication` | Master/slave info |
+| `cpu` | CPU usage |
+| `cluster` | Cluster status |
+| `keyspace` | Key counts, expirations |
+
+**Output Example:**
+
+```
+# Server
+redis_version:7.0.0
+uptime_in_seconds:3600
+
+# Clients
+connected_clients:42
+blocked_clients:1
+
+# Memory
+used_memory:25600000
+used_memory_peak:30000000
+mem_fragmentation_ratio:1.12
+
+# Stats
+total_commands_processed:105000
+instantaneous_ops_per_sec:1200
+
+# Keyspace
+db0:keys=5000,expires=2000,avg_ttl=60000
+```
+
+- Server section
+  - Redis has been running for 1 hour
+  - Version: 7.0.0
+- Clients
+  - 42 active connections
+  - 1 blocked client (likely due to BRPOP or Lua script)
+- Memory
+  - used_memory: ~25 MB
+  - mem_fragmentation_ratio: 1.12 (healthy)
+- Stats
+  - 105,000 commands processed overall
+  - Throughput: 1200 ops/sec
+- Keyspace
+  - Database db0 has 5,000 keys
+  - 2,000 of them have TTLs
+
+**Useful options**
+
+- Get only memory info: `INFO memory`
+- Get only clients info: `INFO clients`
+
+## Redis SLOWLOG — Detect Slow Commands
+
+SLOWLOG records Redis commands that exceed a configured execution time threshold.
+
+Redis is fast, so anything > 1 millisecond is often suspicious.
+
+### How to configure Slow Log
+
+- Set threshold to 1000 microseconds (1ms): `CONFIG SET slowlog-log-slower-than 1000`
+- Set number of entries stored: `CONFIG SET slowlog-max-len 128`
+
+### Adding a Slow Command
+
+If your application runs:
+
+```
+LRANGE huge_list 0 -1
+```
+
+…on a list with millions of items, it may take >1ms.
+
+Redis will record it in the slow log.
+
+### Viewing the Slow Log
+
+```
+SLOWLOG GET 5
+```
+
+Example output:
+
+```
+1) 1) (integer) 15
+   2) (integer) 1617043400
+   3) (integer) 1200
+   4) 1) "LRANGE"
+      2) "biglist"
+      3) "0"
+      4) "-1"
+   5) "127.0.0.1:51726"
+```
+
+| Field                         | Meaning                                |
+| ----------------------------- | -------------------------------------- |
+| `(integer) 15`                | Slowlog entry ID                       |
+| `1617043400`                  | Unix timestamp                         |
+| `1200`                        | Execution time in microseconds (1.2ms) |
+| `"LRANGE" "biglist" "0" "-1"` | Command that was slow                  |
+| `"127.0.0.1:51726"`           | Client that executed it                |
+
+Redis caught a slow command.
+
+- Get slowlog length: `SLOWLOG LEN`
+- Reset slowlog: `SLOWLOG RESET`
+
+## Memory Usage Inspection
+
+| Command             | Purpose                   |
+| ------------------- | ------------------------- |
+| INFO memory         | High-level memory stats   |
+| MEMORY USAGE key    | Inspect single key memory |
+| MEMORY STATS        | Deep memory metrics       |
+| MEMORY DOCTOR       | Automated advice          |
+| MEMORY MALLOC-STATS | Allocator-level stats     |
+| MEMORY PURGE        | Defrag attempt            |
+
+# Log Analysis
+
+## Where Redis Logs Are Stored
+
+The Redis configuration file `redis.conf` determines where logs are written.
+
+```sh
+logfile /var/log/redis/redis-server.log
+```
+
+If `logfile ""` is set, Redis logs to stdout (useful for Docker environments).
+
+## Redis Log Levels
+
+Redis supports multiple log levels:
+
+| Level     | Description                          |
+| --------- | ------------------------------------ |
+| `debug`   | Very verbose, for deep debugging     |
+| `verbose` | Detailed info, useful for tracing    |
+| `notice`  | Default; normal but important events |
+| `warning` | Only warnings and errors             |
+
+Configure via `redis.conf`: `loglevel notice` Or dynamically: `CONFIG SET loglevel verbose`
+
+# Debugging Blocking
+
+Redis is single-threaded (for command execution), so any blocking operation stops the server from processing other commands.
+This leads to:
+
+- High latency
+- Timeouts in applications
+- Replication lag
+- Slow clients
+- Stuck transactions
+- Load imbalance
+
+Understanding and debugging blocking operations is crucial for Redis performance and stability.
+
+## Common Blocking Commands
+
+A blocking operation is any Redis command that waits for something instead of responding immediately.
+
+| Command                            | Blocking Reason                                           |
+| ---------------------------------- | --------------------------------------------------------- |
+| `BLPOP`, `BRPOP`, `BRPOPLPUSH`     | Waits for elements in a list                              |
+| `XREAD BLOCK`                      | Waits for new messages in a stream                        |
+| `XREADGROUP BLOCK`                 | Waits for pending stream entries                          |
+| `WAIT`                             | Waits for replication                                     |
+| `DEBUG SLEEP`                      | Explicitly blocks Redis execution                         |
+| Long Lua scripts                   | Redis cannot process other commands until script finishes |
+| Slow commands scheduled by clients | Eg. `KEYS *`, `LRANGE biglist 0 -1`, `HGETALL huge_hash`  |
+
+## To debug blocking
+
+| Tool             | Purpose                      |
+| ---------------- | ---------------------------- |
+| `CLIENT LIST`    | Find blocked clients         |
+| `SLOWLOG`        | Find slow/expensive commands |
+| `MONITOR`        | Live command stream          |
+| `INFO clients`   | Count blocked clients        |
+| `LATENCY DOCTOR` | Analyze latency spikes       |
+
+# Real-world Integrations
+## Redis as a Cache Layer
+Apps often connect to slow data sources (SQL databases, APIs). Redis is used as a caching layer to store frequently accessed data.
+
+```
+Client → Application → Redis Cache → (fallback) Database
+```
+Node.js Implementation
+```ts
+import express from "express";
+import Redis from "ioredis";
+import fetch from "node-fetch";
+
+const app = express();
+const redis = new Redis();
+
+// GET /user/123
+app.get("/user/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  // 1. Check cache
+  const cached = await redis.get(`user:${userId}`);
+  if (cached) {
+    return res.json({ source: "redis-cache", data: JSON.parse(cached) });
+  }
+
+  // 2. Fetch from external DB/API
+  const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+  const userData = await response.json();
+
+  // 3. Save to Redis for 60 sec
+  await redis.setex(`user:${userId}`, 60, JSON.stringify(userData));
+
+  res.json({ source: "api", data: userData });
+});
+
+app.listen(3000, () => console.log("Server running"));
+```
+## Redis for Session Storage
+```ts
+import session from "express-session";
+import connectRedis from "connect-redis";
+import Redis from "ioredis";
+
+const RedisStore = connectRedis(session);
+const redis = new Redis();
+
+app.use(
+  session({
+    store: new RedisStore({ client: redis }),
+    secret: "mySecret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 }
+  })
+);
+```
+- Sessions are stored inside Redis.
+- Any server instance can access the same session.
+- Helps with load-balanced architectures.
+
+
+## Redis for Message Queues (Using Pub/Sub or Streams)
+
+Redis can integrate with microservices as a message broker.
+
+Publisher
+```ts
+import Redis from "ioredis";
+const pub = new Redis();
+
+pub.publish("orders", "Order #5001 created");
+```
+Subscriber
+```ts
+import Redis from "ioredis";
+const sub = new Redis();
+
+sub.subscribe("orders");
+sub.on("message", (channel, message) => {
+  console.log(`Received from ${channel}: ${message}`);
+});
+```
+Explanation
+
+- The publisher sends messages to a channel.
+- All subscribers listening to the channel receive the message.
+
+Used in:
+
+- Notification systems
+- Realtime logging
+- Realtime analytics dashboards
+
+## Redis Streams for Event Processing (Advanced Integration)
+
+Redis Streams are used for:
+
+- Event pipelines
+- Background workers
+- Ordered message processing
+
+Producer
+```ts
+await redis.xadd("payments-stream", "*", "user", "42", "amount", "99.00");
+```
+Consumer
+```ts
+const messages = await redis.xread(
+  { block: 5000 },
+  "STREAMS",
+  "payments-stream",
+  "0"
+);
+
+console.log(messages);
+```
+- Stream stores messages with IDs.
+- Consumers process them in order.
+- Supports consumer groups for load balancing.
+
+
+## Redis for Distributed Locks (Redlock Pattern)
+
+Used to prevent:
+- Duplicate payments
+- Race condition updates
+- Concurrency issues
+
+```ts
+import Redis from "ioredis";
+const redis = new Redis();
+
+async function runCriticalSection() {
+  const lockKey = "lock:payment:501";
+  const lock = await redis.set(lockKey, "locked", "NX", "EX", 10);
+
+  if (!lock) {
+    console.log("Another process is already handling this!");
+    return;
+  }
+
+  console.log("Running critical work...");
+  
+  // critical logic here...
+
+  await redis.del(lockKey);
+}
+```
+
+- `NX` ensures key is set only if it doesn’t exist.
+- `EX 10` auto-expires lock in case of crash.
+- Only one worker can hold the lock at a time.
+
+
+## Redis with Real-time Analytics / Leaderboards
+
+Redis sorted sets (ZSET) are perfect for:
+
+- Game leaderboards
+- Ranking systems
+- Trending items
+
+Leaderboard
+```ts
+await redis.zadd("game:leaderboard", 1500, "player1");
+await redis.zadd("game:leaderboard", 2200, "player2");
+
+const topPlayers = await redis.zrevrange("game:leaderboard", 0, 2, "WITHSCORES");
+console.log(topPlayers);
+```
+- Sorted sets keep elements ordered automatically.
+- You can get top `N` users instantly.
+
+## Redis as a Rate Limiter
+
+Used for:
+
+- API rate limits
+- Login attempt limits
+- Preventing abuse
+
+10 Requests Per Minute Limit
+```ts
+async function isRateLimited(userId) {
+  const key = `rate:${userId}`;
+  const count = await redis.incr(key);
+
+  if (count === 1) {
+    await redis.expire(key, 60);
+  }
+
+  return count > 10;
+}
+```
+- `incr()` automatically increments request count.
+- Key expires after 60 seconds.
+- If count exceeds limit → block user.
