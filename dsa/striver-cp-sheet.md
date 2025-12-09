@@ -70,7 +70,9 @@
     1. Easy
        1. Largest Element
        2. Second Largest
-       3. a
+       3. Check Rotated Sorted
+          - Count how many times nums[i] > nums[i+1] happens.
+          - If this break happens more than once, it cannot be a valid sorted-rotated array. 
        4. Remove Duplicates
        5. Left Rotate By One Place
        6. Left Rotate By D Place
@@ -101,7 +103,8 @@
        8.
        9.
        10.
-       11.
+       11. Set Zeros
+           - Constant space, O(n<sup>2</sup>) time 
        12.
        13.
        14.
@@ -216,7 +219,7 @@
        1. Height of Binary Tree
     3. Hard
 
-Task
+Task - Study details with gpt, approach, why couldn't able to build the logic etc
 
 1. Starting of Loop
 2. Length of Loop
@@ -224,3 +227,5 @@ Task
 4. String Pallindrome
 5. Highest/Lowest Freq
 6. Pascal Triangle(factorial will not work, do it with iterative way)
+7. Check Rotated Sorted Array
+8. Set Zeros
