@@ -33,7 +33,6 @@ void backwardRecursiveDisplay(Node *head){
     cout<<head->data<<" ";
 }
 
-
 Node *insertAtEnd(Node *head, int data){
     Node *newNode = new Node(data);
     if(head == NULL) return newNode; // NOTE IT DOWN
@@ -65,6 +64,9 @@ Node *insertAtPos(Node *head, int p, int data) {// 0 - based index
     newNode->prev = current;
     newNode->next = current->next;
 
+     if(current->next){ // NOTE IT DOWN - FOR INSERTING NODE WE HAVE TO CONSIDER TOTAL FOUR POSITION
+            current->next->prev = newNode;
+    }
     current->next = newNode;
     
     return head;

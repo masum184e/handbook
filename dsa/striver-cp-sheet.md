@@ -151,8 +151,11 @@
     2. Doubly
        1. Intro
        2. Insert
+         - consider four position for inserting new node
+         - handle the indexing properly
+         - for 1/0 based indexing use pos > 1/0 as condition and pos-- as statement
        3. Delete
-       4. Reverse`
+       4. Reverse
     3. Medium Problme
        1. Middle of LL
        2. A
