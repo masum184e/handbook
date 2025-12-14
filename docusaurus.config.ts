@@ -111,6 +111,11 @@ const config: Config = {
         { to: 'https://mdmasumbillah.vercel.app/projects', label: 'Projects', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/academy', label: 'Academy', position: 'left' },
         {
+          href: 'https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link',
+          label: 'Resume',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/masum184e',
           label: 'GitHub',
           position: 'right',
@@ -120,6 +125,7 @@ const config: Config = {
           label: 'Portfolio',
           position: 'right',
         },
+
         {
           type: 'search',
           position: 'right',
