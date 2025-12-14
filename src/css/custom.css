@@ -15,6 +15,7 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docsearch-primary-color: var(--ifm-color-primary);
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -27,4 +28,36 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --docsearch-primary-color: var(--ifm-color-primary);
+
+}
+
+/* Search result highlight */
+.DocSearch-Hit-title mark,
+.DocSearch-Hit-path mark {
+  color: var(--ifm-color-primary);
+}
+
+
+
+/* Search button border & icon */
+.navbar__search-input {
+  border-color: var(--ifm-color-primary);
+}
+
+/* Search input focus */
+.navbar__search-input:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px rgba(0, 24, 88, 0.25);
+}
+
+/* Search icon color */
+.navbar__search-input::placeholder {
+  color: var(--ifm-color-primary);
+}
+
+/* Search icon (magnifier) */
+.navbar__search-input {
+  background-image: url("data:image/svg+xml,%3Csvg fill='%23001858' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z'/%3E%3C/svg%3E");
 }

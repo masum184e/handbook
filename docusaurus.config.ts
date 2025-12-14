@@ -15,10 +15,10 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://masum184e.github.io/handbook/',
+  url: 'https://masum184e.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/handbook/',
+  baseUrl: '/handbook',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -61,21 +61,21 @@ const config: Config = {
       'classic',
       {
         docs: false,
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        // blog: {
+        //   showReadingTime: true,
+        //   feedOptions: {
+        //     type: ['rss', 'atom'],
+        //     xslt: true,
+        //   },
+        //   // Please change this to your repo.
+        //   // Remove this to remove the "edit this page" links.
+        //   editUrl:
+        //     'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        //   // Useful options to enforce blogging best practices
+        //   onInlineTags: 'warn',
+        //   onInlineAuthors: 'warn',
+        //   onUntruncatedBlogPosts: 'warn',
+        // },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -89,6 +89,7 @@ const config: Config = {
     colorMode: {
       respectPrefersColorScheme: true,
     },
+
     navbar: {
       title: 'Handbook',
       logo: {
@@ -102,62 +103,106 @@ const config: Config = {
         //   position: 'left',
         //   label: 'Tutorial',
         // },
+        { to: '/', label: 'Handbook', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/blogs', label: 'Thoughts', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/projects', label: 'Projects', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/academy', label: 'Academy', position: 'left' },
-        { to: '/handbook', label: 'Handbook', position: 'left' },
         {
           href: 'https://github.com/masum184e',
           label: 'GitHub',
           position: 'right',
         },
+        {
+          href: 'https://mdmasumbillah.vercel.app/',
+          label: 'Portfolio',
+          position: 'right',
+        },
+        {
+          type: 'search',
+          position: 'right',
+        },
       ],
+    },
+    algolia: {
+      appId: "Z4KTJJ1USA",
+      apiKey: "58481185c2ad0281907a866d21045ccd",
+      indexName: "handbook",
     },
     footer: {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Quick Links',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Data Structure & Algorithms',
+              href: '/docs/dsa',
+            },
+            {
+              label: 'Amazon Web Services',
+              href: '/docs/dsa',
             },
           ],
         },
         {
-          title: 'Community',
+          title: 'Online Judges',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Codeforces',
+              href: 'http://codeforces.com/profile/masum1834e',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'LeetCode',
+              href: 'https://leetcode.com/u/masum1834e/',
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'CodeChef',
+              href: 'https://www.codechef.com/users/masum184e',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Join My Network',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
+              label: 'Linkedin',
+              href: 'https://www.linkedin.com/in/masum1834e/',
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://www.github.com/masum184e',
+            },
+            {
+              label: 'Facebook',
+              href: 'https://www.facebook.com/masum184e',
+            }
+          ],
+        },
+        {
+          title: 'Engage Me',
+          items: [
+            {
+              label: 'Whatsapp',
+              href: 'https://wa.me/+8801400095352',
+            },
+            {
+              label: 'Telegram',
+              href: 'https://t.me/masum184e',
+            },
+            {
+              label: 'Email',
+              href: 'mailto:masum184e@gmail.com',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
-    },
+      copyright: `
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © ${new Date().getFullYear()}
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+`,
+    }
+    ,
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,

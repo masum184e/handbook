@@ -7,6 +7,7 @@ import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
+import LearningModules from "../components/LearningModules";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -18,11 +19,8 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro"
-          >
-            Docusaurus Tutorial - 5min ⏱️
+          <Link className="button button--secondary button--lg" to="/">
+            Start Learning 🚀
           </Link>
         </div>
       </div>
@@ -40,6 +38,7 @@ export default function Home(): ReactNode {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <LearningModules />
       </main>
     </Layout>
   );

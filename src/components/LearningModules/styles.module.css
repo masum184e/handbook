@@ -1,0 +1,38 @@
+.section {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 3rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.featureSvg {
+  height: 100px;
+  width: 100px;
+}
