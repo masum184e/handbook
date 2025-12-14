@@ -1,13 +1,13 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  title: 'Md Masum Billah - Handbook',
+  tagline: 'Fueled by curiosity, briyani, and the occasional Aha! moment.',
+  favicon: 'img/mb-logo.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -22,8 +22,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'masum184e', // Usually your GitHub org/user name.
+  projectName: 'handbook', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -35,17 +35,32 @@ const config: Config = {
     locales: ['en'],
   },
 
+  plugins: [
+    // [
+    //   '@docusaurus/plugin-content-docs',
+    //   {
+    //     id: 'iot',
+    //     path: 'docs/iot',
+    //     routeBasePath: 'docs/iot',
+    //     sidebarPath: './sidebars.ts',
+    //   },
+    // ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'dsa',
+        path: 'docs/dsa',
+        routeBasePath: 'docs/dsa',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
+  ],
+
   presets: [
     [
       'classic',
       {
-        docs: {
-          sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
+        docs: false,
         blog: {
           showReadingTime: true,
           feedOptions: {
@@ -78,7 +93,6 @@ const config: Config = {
       title: 'Handbook',
       logo: {
         alt: 'Md Masum Billah',
-        // src: 'img/logo.svg',
         src: 'img/mb-logo.png',
       },
       items: [
@@ -88,9 +102,10 @@ const config: Config = {
         //   position: 'left',
         //   label: 'Tutorial',
         // },
-        {to: 'https://mdmasumbillah.vercel.app/blogs', label: 'Thoughts', position: 'left'},
-        {to: 'https://mdmasumbillah.vercel.app/projects', label: 'Projects', position: 'left'},
-        {to: 'https://mdmasumbillah.vercel.app/academy', label: 'Academy', position: 'left'},
+        { to: 'https://mdmasumbillah.vercel.app/blogs', label: 'Thoughts', position: 'left' },
+        { to: 'https://mdmasumbillah.vercel.app/projects', label: 'Projects', position: 'left' },
+        { to: 'https://mdmasumbillah.vercel.app/academy', label: 'Academy', position: 'left' },
+        { to: '/handbook', label: 'Handbook', position: 'left' },
         {
           href: 'https://github.com/masum184e',
           label: 'GitHub',
