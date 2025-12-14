@@ -19,7 +19,7 @@
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-color-primary: #25c2a0;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
@@ -29,35 +29,8 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
   --docsearch-primary-color: var(--ifm-color-primary);
-
 }
 
-/* Search result highlight */
-.DocSearch-Hit-title mark,
-.DocSearch-Hit-path mark {
-  color: var(--ifm-color-primary);
-}
-
-
-
-/* Search button border & icon */
-.navbar__search-input {
-  border-color: var(--ifm-color-primary);
-}
-
-/* Search input focus */
-.navbar__search-input:focus {
-  outline: none;
-  border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 2px rgba(0, 24, 88, 0.25);
-}
-
-/* Search icon color */
-.navbar__search-input::placeholder {
-  color: var(--ifm-color-primary);
-}
-
-/* Search icon (magnifier) */
-.navbar__search-input {
-  background-image: url("data:image/svg+xml,%3Csvg fill='%23001858' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z'/%3E%3C/svg%3E");
+.DocSearch-Button-Key, .DocSearch-Commands-Key {
+  background-color: #2e8555!important;
 }

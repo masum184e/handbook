@@ -23,16 +23,25 @@
 .card {
   text-decoration: none;
   transition: all 0.25s ease;
-  border: 1px solid var(--ifm-color-emphasis-200);
+  /* border: 1px solid var(--ifm-color-emphasis-200); */
+  border: 1px solid white;
 }
 
 .card:hover {
   transform: translateY(-6px);
-  border-color: var(--ifm-color-primary);
+  border-color: white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.title,
+.description {
+  color: white;
+  text-align: left;
 }
 
 .featureSvg {
   height: 100px;
   width: 100px;
+  color: var(--ifm-color-content-secondary);
 }
+

@@ -38,8 +38,8 @@ export default function LearningModules() {
               <div className="card__body">
                 <Svg className={styles.featureSvg} role="img" />
 
-                <Heading as="h3">{title}</Heading>
-                <p>{description}</p>
+                <Heading as="h3" className={styles.title} >{title}</Heading>
+                <p className={styles.description}>{description}</p>
               </div>
             </Link>
           ))}

@@ -91,10 +91,13 @@ const config: Config = {
     },
 
     navbar: {
-      title: 'Handbook',
+      title: 'Md Masum Billah',
       logo: {
         alt: 'Md Masum Billah',
         src: 'img/mb-logo.png',
+        href: '/',
+        height: "10px",
+        width: "30px"
       },
       items: [
         // {
