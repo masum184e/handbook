@@ -1,4 +1,3 @@
-
 Scope is the region of the program where a variable, constant, function, or type is accessible.
 
 In Go, scope also impacts whether a value is stored on the stack (short-lived, inside function scope) or on the heap (long-lived, escaped variables).
@@ -21,7 +20,6 @@ func main() {
     // fmt.Println(x) // ❌ ERROR: x not in scope here
 }
 ```
-
 
 **RAM Impact:**
 
@@ -49,7 +47,6 @@ func main() {
 }
 ```
 
-
 **RAM Impact:**
 
 - `a`, `b`, and `result` are stack variables.
@@ -75,7 +72,6 @@ func main() {
     fmt.Println(globalMessage) // ✅ Works
 }
 ```
-
 
 - `globalMessage` is declared outside all functions, so any function in the same file (or package) can use it.
 
@@ -104,8 +100,6 @@ func whisper() {
 ```
 
 `main.go`
-
-
 
 ```go
 package main
@@ -144,7 +138,6 @@ func main() {
 }
 ```
 
-
 **RAM Impact:**
 
 - Same as package scope — stored globally in heap, persists for program runtime.
@@ -169,9 +162,6 @@ func main() {
     fmt.Println(mylib.GlobalVar) // ✅ accessible globally
 }
 ```
-
-
-
 
 **RAM Impact:**
 
@@ -201,8 +191,6 @@ func main() {
 }
 ```
 
-
-
 **RAM Impact:**
 
 - `x` escapes to the heap because the inner function (`closure`) needs it after `outer()` ends.
@@ -218,8 +206,6 @@ func main() {
 | File Scope     | Entire program runtime    | Heap                       | Package-private variables                |
 | Global Scope   | Entire program runtime    | Heap                       | Exported vars/constants                  |
 | Lexical Scope  | As long as closure exists | Heap                       | Closures holding variables               |
-
-
 
 ## Variable Shadowing
 
@@ -243,8 +229,6 @@ func main() {
     fmt.Println(msg) // "Local message" (block scope ended)
 }
 ```
-
-
 
 ## Execution with Memory & Scope
 
@@ -299,7 +283,6 @@ func init(){
 }
 ```
 
-
 ### 1. Program Load (before main() runs)
 
 Go’s runtime loads your package. It sets up package-scope variables and functions in global memory:
@@ -316,8 +299,6 @@ In RAM now (Global Context):
   - `main`
 
 These live for the entire program lifetime. These don’t live on the stack, they live in the global memory region.
-
-
 
 ### 2. Run `init()` Function Automatically
 
@@ -348,9 +329,6 @@ A new stack frame for `main()` is created.
 - Then `x := 10` → new variable shadows outer `x`.
 
 So now stack has:
-
-
-
 
 ```go
 Outer x = 5 (main)
@@ -384,7 +362,6 @@ Prints:
 ```
 Value of a is (In - Another): 5
 ```
-
 
 - Then returns → stack frame destroyed.
 
@@ -425,7 +402,6 @@ Value of first is (Pre - Main): 20   // because display() changed it
 Value of second is (Pre - Main): 10
 Value of x is (Last - Main): 5
 ```
-
 
 ### Execution Summary
 
