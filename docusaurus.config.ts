@@ -115,8 +115,8 @@ const config: Config = {
         alt: 'Md Masum Billah',
         src: 'img/mb-logo.png',
         href: '/',
-        height: "10px",
-        width: "30px"
+        height: 10,
+        width: 30,
       },
       items: [
         // {
