@@ -73,6 +73,51 @@ const config: Config = {
         sidebarPath: './sidebars.ts',
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'aws',
+        path: 'docs/aws',
+        routeBasePath: 'docs/aws',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'docker',
+        path: 'docs/docker',
+        routeBasePath: 'docs/docker',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'iot',
+        path: 'docs/iot',
+        routeBasePath: 'docs/iot',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'mysql',
+        path: 'docs/mysql',
+        routeBasePath: 'docs/mysql',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'redis',
+        path: 'docs/redis',
+        routeBasePath: 'docs/redis',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
   ],
 
   presets: [
@@ -125,7 +170,7 @@ const config: Config = {
         //   position: 'left',
         //   label: 'Tutorial',
         // },
-        { to: '/handbook/', label: 'Handbook', position: 'left' },
+        { to: '/', label: 'Handbook', position: 'left', exact: true },
         { to: '/docs/roadmap', label: 'Roadmap', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/blogs', label: 'Thoughts', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/projects', label: 'Projects', position: 'left' },

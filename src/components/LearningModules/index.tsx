@@ -15,9 +15,23 @@ const modules: ModuleItem[] = [
   {
     title: "Data Structures & Algorithms",
     description:
-      "Hands-on IoT projects, sensors, microcontrollers, and real-time system design.",
+      "Problem-solving techniques, core data structures, algorithms, and interview-focused practice.",
     link: "/docs/dsa",
     Svg: require("@site/static/icons/dsa.svg").default,
+  },
+  {
+    title: "Amazon Web Services (AWS)",
+    description:
+      "Cloud fundamentals, IAM, EC2, S3, VPC, deployment strategies, and scalable infrastructure design.",
+    link: "/docs/aws",
+    Svg: require("@site/static/icons/aws.svg").default,
+  },
+  {
+    title: "Docker",
+    description:
+      "Containerization basics, Dockerfiles, images, containers, networking, and production-ready workflows.",
+    link: "/docs/docker",
+    Svg: require("@site/static/icons/docker.svg").default,
   },
   {
     title: "Golang",
@@ -32,14 +46,26 @@ const modules: ModuleItem[] = [
       "Type-safe JavaScript, advanced typing, interfaces, generics, and scalable application architecture.",
     link: "/docs/typescript",
     Svg: require("@site/static/icons/typescript.svg").default,
-  },
-
-  {
-    title: "React",
+  },{
+    title: "Redis",
     description:
-      "Modern React, hooks, component design, and best practices for scalable UIs.",
-    link: "/docs/react",
-    Svg: require("@site/static/icons/react.svg").default,
+      "In-memory data structures, caching strategies, pub/sub, persistence, and performance optimization.",
+    link: "/docs/redis",
+    Svg: require("@site/static/icons/redis.svg").default,
+  },
+  {
+    title: "Internet of Things (IoT)",
+    description:
+      "Hands-on IoT projects, sensors, microcontrollers, communication protocols, and real-time systems.",
+    link: "/docs/iot",
+    Svg: require("@site/static/icons/iot.svg").default,
+  },
+  {
+    title: "MySQL",
+    description:
+      "Relational database design, SQL queries, indexing, transactions, and performance tuning.",
+    link: "/docs/mysql",
+    Svg: require("@site/static/icons/mysql.svg").default,
   },
 ];
 
