@@ -27,6 +27,14 @@ const modules: ModuleItem[] = [
     Svg: require("@site/static/icons/go.svg").default,
   },
   {
+    title: "TypeScript",
+    description:
+      "Type-safe JavaScript, advanced typing, interfaces, generics, and scalable application architecture.",
+    link: "/docs/typescript",
+    Svg: require("@site/static/icons/typescript.svg").default,
+  },
+
+  {
     title: "React",
     description:
       "Modern React, hooks, component design, and best practices for scalable UIs.",

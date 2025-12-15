@@ -160,7 +160,7 @@ const config: Config = {
             },
             {
               label: 'Amazon Web Services',
-              href: '/docs/dsa',
+              href: '/docs/aws',
             },
           ],
         },
