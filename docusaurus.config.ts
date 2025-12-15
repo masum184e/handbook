@@ -171,6 +171,10 @@ const config: Config = {
               label: 'Amazon Web Services',
               href: '/docs/aws',
             },
+            {
+              label: 'Interview Questions (BD)',
+              href: 'https://tamimehsan.github.io/interview-questions-bangladesh/',
+            },
           ],
         },
         {
