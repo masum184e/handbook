@@ -23,7 +23,7 @@ const modules: ModuleItem[] = [
     title: "Golang",
     description:
       "Go fundamentals, concurrency with goroutines, channels, and building high-performance backend services.",
-    link: "/docs/go",
+    link: "/docs/golang",
     Svg: require("@site/static/icons/go.svg").default,
   },
   {
