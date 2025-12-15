@@ -37,15 +37,15 @@ const config: Config = {
   },
 
   plugins: [
-    // [
-    //   '@docusaurus/plugin-content-docs',
-    //   {
-    //     id: 'iot',
-    //     path: 'docs/iot',
-    //     routeBasePath: 'docs/iot',
-    //     sidebarPath: './sidebars.ts',
-    //   },
-    // ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'golang',
+        path: 'docs/golang',
+        routeBasePath: 'docs/golang',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
     [
       '@docusaurus/plugin-content-docs',
       {
