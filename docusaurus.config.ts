@@ -125,7 +125,7 @@ const config: Config = {
         //   position: 'left',
         //   label: 'Tutorial',
         // },
-        { to: 'https://masum184e.github.io/handbook/', label: 'Handbook', position: 'left' },
+        { to: '/handbook/', label: 'Handbook', position: 'left' },
         { to: '/docs/roadmap', label: 'Roadmap', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/blogs', label: 'Thoughts', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/projects', label: 'Projects', position: 'left' },
