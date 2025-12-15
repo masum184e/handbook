@@ -20,10 +20,17 @@ const modules: ModuleItem[] = [
     Svg: require("@site/static/icons/dsa.svg").default,
   },
   {
+    title: "Golang",
+    description:
+      "Go fundamentals, concurrency with goroutines, channels, and building high-performance backend services.",
+    link: "/docs/go",
+    Svg: require("@site/static/icons/go.svg").default,
+  },
+  {
     title: "React",
     description:
       "Modern React, hooks, component design, and best practices for scalable UIs.",
-    link: "/docs/dsa",
+    link: "/docs/react",
     Svg: require("@site/static/icons/react.svg").default,
   },
 ];
@@ -38,7 +45,9 @@ export default function LearningModules() {
               <div className="card__body">
                 <Svg className={styles.featureSvg} role="img" />
 
-                <Heading as="h3" className={styles.title} >{title}</Heading>
+                <Heading as="h3" className={styles.title}>
+                  {title}
+                </Heading>
                 <p className={styles.description}>{description}</p>
               </div>
             </Link>
