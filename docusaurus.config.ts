@@ -91,15 +91,15 @@ const config: Config = {
     //     sidebarPath: './sidebars.ts',
     //   },
     // ],
-    // [
-    //   '@docusaurus/plugin-content-docs',
-    //   {
-    //     id: 'iot',
-    //     path: 'docs/iot',
-    //     routeBasePath: 'docs/iot',
-    //     sidebarPath: './sidebars.ts',
-    //   },
-    // ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'iot',
+        path: 'docs/iot',
+        routeBasePath: 'docs/iot',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
     // [
     //   '@docusaurus/plugin-content-docs',
     //   {
