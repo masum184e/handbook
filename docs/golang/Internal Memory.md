@@ -1,4 +1,88 @@
 
+When we talk about "internal memory" in Go (or any language), we’re referring to how data is stored and managed in the computer’s RAM while the program runs.
+
+Go divides internal memory into several important areas:
+
+1. Stack – Small, fast memory used for function calls and local variables.
+2. Heap – Larger memory area used for dynamically allocated variables.
+3. Data Segment – For global and static variables.
+4. Code Segment – Where compiled machine instructions are stored.
+
+## Memory Layout
+
+When a Go program runs, memory is roughly divided like this:
+
+```
++---------------------+   <- High memory addresses
+|   Command Line Args |
++---------------------+
+|   Environment Vars  |
++---------------------+
+|       Stack         |  <- Each goroutine has its own stack
++---------------------+
+|       Heap          |  <- Shared between all goroutines
++---------------------+
+|  Global Variables   |
++---------------------+
+|   Program Code      |
++---------------------+   <- Low memory addresses
+```
+
+## Stack
+
+- Stores function call frames:
+  - Local variables
+  - Function parameters
+  - Return addresses
+- Automatically cleaned up after a function returns.
+- Very fast because it works like a LIFO (Last In, First Out) structure.
+- Limited in size (default goroutine stack starts small, grows automatically).
+
+```go
+func add(a, b int) int {
+    result := a + b // 'result' stored on stack
+    return result
+}
+
+func main() {
+    sum := add(5, 3) // 'sum' stored on stack
+    fmt.Println(sum)
+}
+```
+
+- `a`, `b`, and `result` live in the stack frame of `add()`.
+- `sum` lives in the stack frame of `main()`.
+
+
+## Heap
+
+- Stores dynamically allocated memory.
+- Managed by Go’s garbage collector.
+- Slower than stack, but size is much bigger.
+- Memory stays allocated until garbage collector removes it.
+
+```go
+func createSlice() *[]int {
+    nums := []int{1, 2, 3} // allocated on heap
+    return &nums
+}
+
+func main() {
+    slicePtr := createSlice()
+    fmt.Println(*slicePtr)
+}
+```
+
+- `nums` escapes to the heap because we return a pointer to it.
+- Even after `createSlice()` ends, `nums` stays in memory (heap) until GC clears it.
+
+
+## Data Segment
+
+- Stores global variables and constants.
+- Exists for the entire lifetime of the program
+
+```go
 var globalCount int = 100 // stored in data segment
 
 func main() {
@@ -23,6 +107,7 @@ func main() {
 | **Lifetime**   | Until function ends          | Until GC cleans it      |
 | **Management** | Automatic (LIFO)             | Garbage Collector       |
 | **Best for**   | Local, short-lived variables | Long-lived, shared data |
+
 
 ## Memory Escape
 

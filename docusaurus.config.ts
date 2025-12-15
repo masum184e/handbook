@@ -49,6 +49,15 @@ const config: Config = {
     [
       '@docusaurus/plugin-content-docs',
       {
+        id: 'typescript',
+        path: 'docs/typescript',
+        routeBasePath: 'docs/typescript',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
         id: 'dsa',
         path: 'docs/dsa',
         routeBasePath: 'docs/dsa',
