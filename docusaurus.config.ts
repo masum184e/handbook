@@ -117,6 +117,7 @@ const config: Config = {
         //   label: 'Tutorial',
         // },
         { to: '/', label: 'Handbook', position: 'left' },
+        { to: '/roadmap', label: 'Roadmap', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/blogs', label: 'Thoughts', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/projects', label: 'Projects', position: 'left' },
         { to: 'https://mdmasumbillah.vercel.app/academy', label: 'Academy', position: 'left' },
