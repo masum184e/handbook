@@ -1,4 +1,3 @@
-# Next.js Topics for Full-Stack Development
 
 ## 1. Introduction to Next.js
 

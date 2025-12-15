@@ -1,4 +1,3 @@
-# Express.js Topics for MERN Stack
 
 ## 1. Express.js Basics
 - Introduction to Express.js
