@@ -100,6 +100,15 @@ const config: Config = {
         sidebarPath: './sidebars.ts',
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'database-design',
+        path: 'docs/database-design',
+        routeBasePath: 'docs/database-design',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
     // [
     //   '@docusaurus/plugin-content-docs',
     //   {
