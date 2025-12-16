@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-database-design docs-version-current docs-doc-page docs-doc-id-ER Diagram" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">ER Diagram | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/database-design/ER Diagram"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-database-design-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-database-design-current"><meta data-rh="true" property="og:title" content="ER Diagram | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="An Entity–Relationship (ER) Diagram is a type of diagram used in database design to visually represent the structure of a database. It shows how entities (tables) in a system are related to each other, along with their attributes and the type of relationships they share."><meta data-rh="true" property="og:description" content="An Entity–Relationship (ER) Diagram is a type of diagram used in database design to visually represent the structure of a database. It shows how entities (tables) in a system are related to each other, along with their attributes and the type of relationships they share."><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/database-design/ER Diagram"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/database-design/ER Diagram" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/database-design/ER Diagram" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ER Diagram","item":"https://masum184e.github.io/handbook/docs/database-design/ER Diagram"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.8ac44d04.css">
+<script src="/handbook/assets/js/runtime~main.c1bb2dee.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.c32399be.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/"><span title="Introduction" class="linkLabel_WmDU">Introduction</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Fundamentals"><span title="Fundamentals" class="linkLabel_WmDU">Fundamentals</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Data Model"><span title="Data Model" class="linkLabel_WmDU">Data Model</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/handbook/docs/database-design/ER Diagram"><span title="ER Diagram" class="linkLabel_WmDU">ER Diagram</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Normalization"><span title="Normalization" class="linkLabel_WmDU">Normalization</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Denormalization"><span title="Denormalization" class="linkLabel_WmDU">Denormalization</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Relational Model"><span title="Relational Model" class="linkLabel_WmDU">Relational Model</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Relationship Attributes"><span title="Relationship Attributes" class="linkLabel_WmDU">Relationship Attributes</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Recursive Relationships"><span title="Recursive Relationships" class="linkLabel_WmDU">Recursive Relationships</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Identifying vs Non-Identifying"><span title="Identifying vs Non-Identifying" class="linkLabel_WmDU">Identifying vs Non-Identifying</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Specialization"><span title="Specialization" class="linkLabel_WmDU">Specialization</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Generalization"><span title="Generalization" class="linkLabel_WmDU">Generalization</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Aggregation"><span title="Aggregation" class="linkLabel_WmDU">Aggregation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Mapping Business Rules"><span title="Mapping Business Rules" class="linkLabel_WmDU">Mapping Business Rules</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Partitioning"><span title="Partitioning" class="linkLabel_WmDU">Partitioning</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Sharding"><span title="Sharding" class="linkLabel_WmDU">Sharding</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Storage Consideration"><span title="Storage Consideration" class="linkLabel_WmDU">Storage Consideration</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/ACID Properties"><span title="ACID Properties" class="linkLabel_WmDU">ACID Properties</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Integrity"><span title="Integrity" class="linkLabel_WmDU">Integrity</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Referential Integrity"><span title="Referential Integrity" class="linkLabel_WmDU">Referential Integrity</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Cascading"><span title="Cascading" class="linkLabel_WmDU">Cascading</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Transaction Management"><span title="Transaction Management" class="linkLabel_WmDU">Transaction Management</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/handbook/docs/database-design/Database Security"><span title="Database Security" class="linkLabel_WmDU">Database Security</span></a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/handbook/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">ER Diagram</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>ER Diagram</h1></header><p>An Entity–Relationship (ER) Diagram is a type of diagram used in database design to visually represent the structure of a database. It shows how entities (tables) in a system are related to each other, along with their attributes and the type of relationships they share.</p>
+<ul>
+<li class="">It is part of conceptual data modeling.</li>
+<li class="">Helps database designers, developers, and business users understand how data is structured.</li>
+</ul>
+<p><strong>Why ER Diagrams are Important?</strong></p>
+<ol>
+<li class="">Helps in visualizing database design before implementation.</li>
+<li class="">Ensures clear communication between developers, analysts, and stakeholders.</li>
+<li class="">Identifies entities, attributes, and relationships to reduce redundancy.</li>
+<li class="">Provides a blueprint to convert into Relational Schema (tables in SQL).</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-components-of-an-er-diagram">Key Components of an ER Diagram<a href="#key-components-of-an-er-diagram" class="hash-link" aria-label="Direct link to Key Components of an ER Diagram" title="Direct link to Key Components of an ER Diagram" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="entity">Entity<a href="#entity" class="hash-link" aria-label="Direct link to Entity" title="Direct link to Entity" translate="no">​</a></h3>
+<ul>
+<li class="">An entity represents a real-world object (person, place, event, or thing) that has data stored about it.</li>
+<li class="">In ER diagrams, entities are shown as rectangles.</li>
+<li class="">Example: <code>student</code>, <code>course</code>, <code>teacher</code>.</li>
+</ul>
+<p>Entities are of two types:</p>
+<ul>
+<li class="">Strong Entity → Can exist independently.</li>
+<li class="">Weak Entity → Depends on another entity for its existence.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="attributes">Attributes<a href="#attributes" class="hash-link" aria-label="Direct link to Attributes" title="Direct link to Attributes" translate="no">​</a></h3>
+<ul>
+<li class="">Attributes describe the properties or characteristics of an entity.</li>
+<li class="">Shown as ellipses (ovals) connected to entities.</li>
+<li class="">Example: A <code>student</code> entity may have attributes like <code>student_id</code>, <code>name</code>, <code>email</code>.</li>
+</ul>
+<p>Types of Attributes:</p>
+<ul>
+<li class="">Simple Attribute → Cannot be divided further (e.g., <code>age</code>).</li>
+<li class="">Composite Attribute → Can be divided (e.g., <code>full_name</code> → <code>first_name</code> + <code>last_name</code>).</li>
+<li class="">Derived Attribute → Calculated from other attributes (e.g., Age from DOB).</li>
+<li class="">Key Attribute → A unique identifier for an entity (e.g., <code>student_id</code>).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="relationships">Relationships<a href="#relationships" class="hash-link" aria-label="Direct link to Relationships" title="Direct link to Relationships" translate="no">​</a></h3>
+<ul>
+<li class="">Relationships represent associations between entities.</li>
+<li class="">Shown as diamonds in ER diagrams.</li>
+<li class="">Example: A <code>student</code> enrolls in a <code>course</code>.</li>
+</ul>
+<p>Cardinality of Relationships (important in database design):</p>
+<ul>
+<li class=""><strong>One-to-One (1:1)</strong> → One entity relates to exactly one other.
+(Example: Each Student has one ID Card).</li>
+<li class=""><strong>One-to-Many (1<!-- -->:N<!-- -->)</strong> → One entity relates to many others.
+(Example: One Teacher teaches many Courses).</li>
+<li class=""><strong>Many-to-Many (M<!-- -->:N<!-- -->)</strong> → Many entities relate to many others.
+(Example: Students enroll in many Courses, and each Course has many Students).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-of-an-er-diagram">Example of an ER Diagram<a href="#example-of-an-er-diagram" class="hash-link" aria-label="Direct link to Example of an ER Diagram" title="Direct link to Example of an ER Diagram" translate="no">​</a></h2>
+<p>We need to design a database that stores information about Students, Courses, and Teachers.</p>
+<p>Entities and Attributes:</p>
+<ul>
+<li class="">student (<code>student_id</code>, <code>name</code>, <code>email</code>)</li>
+<li class="">course (<code>course_id</code>, <code>course_name</code>, <code>credits</code>)</li>
+<li class="">teacher (<code>teacher_id</code>, <code>name</code>, <code>department</code>)</li>
+</ul>
+<p>Relationships:</p>
+<ul>
+<li class="">A Student can enroll in many Courses, and a Course can have many Students → Many-to-Many.</li>
+<li class="">A Teacher can teach many Courses, but each Course is taught by only one Teacher → One-to-Many.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="diagram-representation">Diagram Representation<a href="#diagram-representation" class="hash-link" aria-label="Direct link to Diagram Representation" title="Direct link to Diagram Representation" translate="no">​</a></h3>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT] ----(enrolls in)----&lt; [COURSE] &gt;----(taught by)----[TEACHER]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">STUDENT: {student_id (PK), name, email}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">COURSE: {course_id (PK), course_name, credits}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">TEACHER: {teacher_id (PK), name, department}</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="erd-symbols-and-notations">ERD Symbols and Notations<a href="#erd-symbols-and-notations" class="hash-link" aria-label="Direct link to ERD Symbols and Notations" title="Direct link to ERD Symbols and Notations" translate="no">​</a></h2>
+<p>An Entity–Relationship Diagram (ERD) uses specific symbols and notations to represent entities, attributes, and relationships. Over time, different styles of notations have evolved. The three most commonly used are:</p>
+<ol>
+<li class="">Chen Notation (original, most descriptive)</li>
+<li class="">Crow’s Foot Notation (most widely used in industry)</li>
+<li class="">UML Notation (Unified Modeling Language, used in software engineering)</li>
+</ol>
+<p><strong>Use ER diagram symbols:</strong></p>
+<ul>
+<li class="">Rectangles → Entities</li>
+<li class="">Ellipses → Attributes</li>
+<li class="">Diamonds → Relationships</li>
+<li class="">Lines → Connections</li>
+<li class="">Double lines → Total participation</li>
+<li class="">Double rectangles → Weak entities</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">   student (Student_id, name, dob, email)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |M:N</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    enrolls</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |M:N</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   course (course_id, title, credits)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |1:N</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    teaches</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> instructor (instructor_id, name, salary)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        |1:N</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   department (dept_id, dept_name)</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="chens-notation-1976">Chen’s Notation (1976)<a href="#chens-notation-1976" class="hash-link" aria-label="Direct link to Chen’s Notation (1976)" title="Direct link to Chen’s Notation (1976)" translate="no">​</a></h3>
+<p>This is the original notation introduced by Peter Chen. It is very visual and descriptive, but sometimes less compact.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="symbols-in-chens-notation">Symbols in Chen’s Notation<a href="#symbols-in-chens-notation" class="hash-link" aria-label="Direct link to Symbols in Chen’s Notation" title="Direct link to Symbols in Chen’s Notation" translate="no">​</a></h4>
+<ul>
+<li class="">Entity → Rectangle</li>
+<li class="">Attribute → Ellipse (Oval)<!-- -->
+<ul>
+<li class="">Key Attribute: underlined</li>
+<li class="">Derived Attribute: dashed oval</li>
+</ul>
+</li>
+<li class="">Relationship → Diamond</li>
+<li class="">Connecting Lines → link entities, attributes, and relationships</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="example">Example<a href="#example" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example" translate="no">​</a></h4>
+<p>Scenario → Students enroll in Courses</p>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"> [STUDENT] ------(enrolls)------ [COURSE]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      |                               |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  (student_id)                    (course_id)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  (name)                          (course_name)</span><br></span></code></pre></div></div>
+<ul>
+<li class="">Entities: Student, Course (rectangles)</li>
+<li class="">Attributes: <code>student_id</code>, <code>name</code>, <code>course_id</code>, <code>course_name</code> (ovals)</li>
+<li class="">Relationship: <code>enrolls</code> (diamond)</li>
+</ul>
+<p>Best for teaching and conceptual modeling, but diagrams can get large.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="crows-foot-notation">Crow’s Foot Notation<a href="#crows-foot-notation" class="hash-link" aria-label="Direct link to Crow’s Foot Notation" title="Direct link to Crow’s Foot Notation" translate="no">​</a></h3>
+<p>This is the most popular in database design (especially in business and IT). It focuses on entities, attributes, and cardinalities (1:1, 1<!-- -->:N<!-- -->, M<!-- -->:N<!-- -->).</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="symbols-in-crows-foot-notation">Symbols in Crow’s Foot Notation<a href="#symbols-in-crows-foot-notation" class="hash-link" aria-label="Direct link to Symbols in Crow’s Foot Notation" title="Direct link to Symbols in Crow’s Foot Notation" translate="no">​</a></h4>
+<ul>
+<li class="">Entity → Rectangle (with attributes inside)</li>
+<li class="">Primary Key → Underlined / at top</li>
+<li class="">Relationships → Lines with symbols:<!-- -->
+<ul>
+<li class="">One (|)</li>
+<li class="">Many (crow’s foot symbol with three lines)</li>
+<li class="">Optional (circle)</li>
+</ul>
+</li>
+<li class="">Attributes: Usually shown inside entities (not separate ovals).</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-1">Example<a href="#example-1" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example" translate="no">​</a></h4>
+<p>Scenario → Students enroll in Courses</p>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT] ────&lt; enrolls &gt;──── [COURSE]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">STUDENT</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">---------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">student_id (PK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">email</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">COURSE</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">---------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">course_id (PK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">course_name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">credits</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>STUDENT</code> to <code>COURSE</code> → Many-to-Many (M<!-- -->:N<!-- -->) relationship</li>
+<li class="">Represented by a crow’s foot near both ends</li>
+<li class="">Often requires a junction table (e.g., ENROLLMENT).</li>
+</ul>
+<p>Best for practical database design, easy to map directly to relational schema.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="uml-notation-unified-modeling-language">UML Notation (Unified Modeling Language)<a href="#uml-notation-unified-modeling-language" class="hash-link" aria-label="Direct link to UML Notation (Unified Modeling Language)" title="Direct link to UML Notation (Unified Modeling Language)" translate="no">​</a></h3>
+<p>UML is a general modeling language for software design, not just databases. However, it can be used to design ERDs too.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="symbols-in-uml-notation">Symbols in UML Notation<a href="#symbols-in-uml-notation" class="hash-link" aria-label="Direct link to Symbols in UML Notation" title="Direct link to Symbols in UML Notation" translate="no">​</a></h4>
+<ul>
+<li class="">Entity (Class) → Rectangle divided into 3 sections<!-- -->
+<ol>
+<li class="">Entity Name</li>
+<li class="">Attributes</li>
+<li class="">Methods (optional in ERD, often left blank in DB design)</li>
+</ol>
+</li>
+<li class="">Relationships → Lines with multiplicity notations:<!-- -->
+<ul>
+<li class=""><code>1</code> → One</li>
+<li class=""><code>0..1</code> → Zero or One</li>
+<li class=""><code>*</code> → Many</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-2">Example:<a href="#example-2" class="hash-link" aria-label="Direct link to Example:" title="Direct link to Example:" translate="no">​</a></h4>
+<p>Scenario → Students enroll in Courses</p>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"> -------------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> |       STUDENT         |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> -------------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> | student_id (PK)       |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> | name                  |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> | email                 |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> -------------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> -------------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> |       COURSE          |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> -------------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> | course_id (PK)        |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> | course_name           |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> | credits               |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> -------------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">STUDENT  &quot;0..*&quot; --------- &quot;1..*&quot;  COURSE</span><br></span></code></pre></div></div>
+<ul>
+<li class="">Multiplicity (<code>0..*</code>, <code>1..*</code>) describes cardinality.</li>
+<li class="">UML looks like class diagrams in software engineering.</li>
+</ul>
+<p>Best when integrating database design with object-oriented systems.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="comparison-of-notations">Comparison of Notations<a href="#comparison-of-notations" class="hash-link" aria-label="Direct link to Comparison of Notations" title="Direct link to Comparison of Notations" translate="no">​</a></h3>
+<table><thead><tr><th>Feature</th><th>Chen Notation</th><th>Crow’s Foot Notation</th><th>UML Notation</th></tr></thead><tbody><tr><td><strong>Focus</strong></td><td>Conceptual modeling</td><td>Practical database design</td><td>Software + database design</td></tr><tr><td><strong>Entities</strong></td><td>Rectangles</td><td>Rectangles with attributes</td><td>Classes (rectangles)</td></tr><tr><td><strong>Attributes</strong></td><td>Ovals</td><td>Inside entity box</td><td>Inside class box</td></tr><tr><td><strong>Relationships</strong></td><td>Diamonds</td><td>Lines with crow’s foot</td><td>Lines with multiplicity</td></tr><tr><td><strong>Cardinality shown</strong></td><td>Verbally near diamond</td><td>Graphically (crow’s foot)</td><td>Numbers (<em>, 0..1, 1..</em>)</td></tr><tr><td><strong>Usage</strong></td><td>Academia, theory</td><td>Industry, real databases</td><td>Software engineering</td></tr></tbody></table>
+<ul>
+<li class=""><strong>Chen Notation</strong> → Best for teaching and high-level conceptual diagrams.</li>
+<li class=""><strong>Crow’s Foot Notation</strong> → Best for real-world database design (most popular).</li>
+<li class=""><strong>UML Notation</strong> → Best for integrating database design with software development.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="entities">Entities<a href="#entities" class="hash-link" aria-label="Direct link to Entities" title="Direct link to Entities" translate="no">​</a></h2>
+<p>In ER modeling, an Entity represents a real-world object or concept that has data stored about it in the database.</p>
+<ul>
+<li class="">Examples: <code>Student</code>, <code>Teacher</code>, <code>Car</code>, <code>Bank Account</code>.</li>
+<li class="">Entities are shown as rectangles in ER diagrams.</li>
+</ul>
+<p>Each entity is described by its attributes (like ID, name, age, etc.), and one or more of these attributes act as a primary key to uniquely identify instances of that entity.</p>
+<p><strong>How to Identify?</strong></p>
+<ul>
+<li class="">Look for nouns in the requirement description.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Requirement: “Students enroll in courses, and faculty members teach courses.”</p>
+<ul>
+<li class="">Entities: Student, Course, Faculty</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-entities">Types of Entities<a href="#types-of-entities" class="hash-link" aria-label="Direct link to Types of Entities" title="Direct link to Types of Entities" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="strong-entity">Strong Entity<a href="#strong-entity" class="hash-link" aria-label="Direct link to Strong Entity" title="Direct link to Strong Entity" translate="no">​</a></h4>
+<ul>
+<li class="">Exists independently of other entities.</li>
+<li class="">Has a primary key (unique identifier).</li>
+<li class="">Represented by a single rectangle in ERD.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>In a university database, the Student entity is a strong entity because:</p>
+<ul>
+<li class="">Each student can be uniquely identified by student_id.</li>
+<li class="">It exists on its own without needing another entity.</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">-----------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">student_id (PK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">email</span><br></span></code></pre></div></div>
+<p>Even if no other entity exists, Student can still exist in the system.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="weak-entity">Weak Entity<a href="#weak-entity" class="hash-link" aria-label="Direct link to Weak Entity" title="Direct link to Weak Entity" translate="no">​</a></h4>
+<ul>
+<li class="">Cannot exist independently.</li>
+<li class="">Depends on a Strong Entity for its existence.</li>
+<li class="">Does not have a complete primary key of its own; instead, it has a partial key (called a discriminator) that combines with the strong entity’s key to create a unique identifier.</li>
+<li class="">Represented by a double rectangle in ERD.</li>
+<li class="">The relationship connecting it to the strong entity is called an Identifying Relationship, drawn with a double diamond.</li>
+</ul>
+<p><strong>Example</strong></p>
+<p>In a banking system, consider <code>Bank Account</code> (strong entity) and <code>Dependent</code> (weak entity).</p>
+<ul>
+<li class="">Each Dependent (like spouse or child of account holder) cannot exist without being linked to an <code>account</code>.</li>
+<li class=""><code>dependent</code> might have an attribute like <code>dependent_name</code> (partial key).</li>
+<li class="">Full identification requires combining <code>account_id</code> (from strong entity) + <code>dependent_name</code>.</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[ACCOUNT] ──&lt;&lt;Identifies&gt;&gt;── [DEPENDENT]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ACCOUNT (Strong Entity)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">----------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">account_id (PK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">account_type</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">balance</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">DEPENDENT (weak entity)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">----------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">dependent_name (Partial Key)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">relationship</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>account</code> is a strong entity (exists independently).</li>
+<li class=""><code>dependent</code> is a weak entity (cannot exist unless tied to an <code>account</code>).</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-differences-between-strong-and-weak-entities">Key Differences Between Strong and Weak Entities<a href="#key-differences-between-strong-and-weak-entities" class="hash-link" aria-label="Direct link to Key Differences Between Strong and Weak Entities" title="Direct link to Key Differences Between Strong and Weak Entities" translate="no">​</a></h4>
+<table><thead><tr><th>Feature</th><th>Strong Entity</th><th>Weak Entity</th></tr></thead><tbody><tr><td><strong>Existence</strong></td><td>Independent</td><td>Dependent on a strong entity</td></tr><tr><td><strong>Primary Key</strong></td><td>Has its own primary key</td><td>Does not have a full primary key</td></tr><tr><td><strong>Identification</strong></td><td>Self-identified</td><td>Identified using strong entity’s key + partial key</td></tr><tr><td><strong>ERD Symbol</strong></td><td>Single rectangle</td><td>Double rectangle</td></tr><tr><td><strong>Relationship</strong></td><td>Normal relationship (single diamond)</td><td>Identifying relationship (double diamond)</td></tr><tr><td><strong>Example</strong></td><td>Student, Course, Teacher</td><td>Dependent, Order Item, Invoice Line</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="attributes-1">Attributes<a href="#attributes-1" class="hash-link" aria-label="Direct link to Attributes" title="Direct link to Attributes" translate="no">​</a></h2>
+<p>An Attribute is a property or characteristic that describes an entity (or sometimes a relationship) in an ER model.</p>
+<ul>
+<li class="">Example: A <code>student</code> entity may have attributes like <code>student_id</code>, <code>name</code>, and <code>email</code>.</li>
+<li class="">In ER diagrams, attributes are usually represented as ellipses (ovals) connected to entities or relationships.</li>
+</ul>
+<p><strong>How to Identify?</strong></p>
+<ul>
+<li class="">Look for descriptive information related to an entity.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<ul>
+<li class=""><code>student</code> → <code>student_id</code> (PK), <code>name</code>, <code>phone</code>, <code>dob</code></li>
+<li class=""><code>course</code> → <code>course_id</code> (PK), <code>course_name</code>, <code>credit_hours</code></li>
+<li class=""><code>faculty</code> → <code>faculty_id</code> (PK), <code>name</code>, <code>department</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-attributes">Types of Attributes<a href="#types-of-attributes" class="hash-link" aria-label="Direct link to Types of Attributes" title="Direct link to Types of Attributes" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="simple-attribute">Simple Attribute<a href="#simple-attribute" class="hash-link" aria-label="Direct link to Simple Attribute" title="Direct link to Simple Attribute" translate="no">​</a></h4>
+<ul>
+<li class="">Cannot be divided further into smaller parts.</li>
+<li class="">They are atomic (indivisible).</li>
+<li class="">Represented as a single oval.</li>
+</ul>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-3">Example<a href="#example-3" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example" translate="no">​</a></h5>
+<ul>
+<li class=""><code>age</code> of a student → atomic, cannot be further broken.</li>
+<li class=""><code>gender</code>, <code>salary</code>, <code>roll_no</code>.</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> (Age)</span><br></span></code></pre></div></div>
+<p>Here, <code>age</code> is a simple attribute of <code>student</code>.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="composite-attribute">Composite Attribute<a href="#composite-attribute" class="hash-link" aria-label="Direct link to Composite Attribute" title="Direct link to Composite Attribute" translate="no">​</a></h4>
+<ul>
+<li class="">Can be divided into smaller sub-parts, each representing a more detailed attribute.</li>
+<li class="">Useful for representing structured data.</li>
+<li class="">Represented as an oval connected to smaller ovals.</li>
+</ul>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-4">Example<a href="#example-4" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example" translate="no">​</a></h5>
+<ul>
+<li class=""><code>full_name</code> can be divided into <code>first_name</code> and <code>last_name</code>.</li>
+<li class=""><code>address</code> can be divided into <code>street</code>, <code>city</code>, <code>state</code>, <code>zip_code</code>.</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">          (full_name)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">          /        \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> (first_name)   (last_name)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> [STUDENT]</span><br></span></code></pre></div></div>
+<p>Here, <code>full_name</code> is a composite attribute.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="multivalued-attribute">Multivalued Attribute<a href="#multivalued-attribute" class="hash-link" aria-label="Direct link to Multivalued Attribute" title="Direct link to Multivalued Attribute" translate="no">​</a></h4>
+<ul>
+<li class="">Can hold multiple values for a single entity instance.</li>
+<li class="">Represented by a double oval.</li>
+</ul>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-5">Example<a href="#example-5" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example" translate="no">​</a></h5>
+<ul>
+<li class="">A <code>student</code> may have multiple phone numbers.</li>
+<li class="">An <code>employee</code> may have multiple skills.</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">((phone_number))</span><br></span></code></pre></div></div>
+<p>Here, one student can have multiple phone numbers, so <code>phone_number</code> is a multivalued attribute.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="derived-attribute">Derived Attribute<a href="#derived-attribute" class="hash-link" aria-label="Direct link to Derived Attribute" title="Direct link to Derived Attribute" translate="no">​</a></h4>
+<ul>
+<li class="">Value is derived (calculated) from other attributes.</li>
+<li class="">Represented by a dashed oval.</li>
+</ul>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-6">Example<a href="#example-6" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example" translate="no">​</a></h5>
+<ul>
+<li class=""><code>age</code> can be derived from <code>dob</code>.</li>
+<li class=""><code>total_price</code> can be derived as <code>quantity × unit_price</code>.</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   |</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> (dob) -----&gt; (age) [Dashed oval]</span><br></span></code></pre></div></div>
+<p>Here, <code>age</code> is not stored directly; it is calculated from <code>dob</code>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary-table-of-attribute-types">Summary Table of Attribute Types<a href="#summary-table-of-attribute-types" class="hash-link" aria-label="Direct link to Summary Table of Attribute Types" title="Direct link to Summary Table of Attribute Types" translate="no">​</a></h3>
+<table><thead><tr><th><strong>Attribute Type</strong></th><th><strong>Definition</strong></th><th><strong>Symbol in ERD</strong></th><th><strong>Example</strong></th></tr></thead><tbody><tr><td><strong>Simple</strong></td><td>Cannot be subdivided</td><td>Oval</td><td>Age, Gender, Salary</td></tr><tr><td><strong>Composite</strong></td><td>Can be subdivided into sub-parts</td><td>Oval → sub-ovals</td><td>Full_Name (First, Last)</td></tr><tr><td><strong>Multivalued</strong></td><td>Can store multiple values</td><td>Double oval</td><td>Phone_Number, Skills</td></tr><tr><td><strong>Derived</strong></td><td>Computed from other attributes</td><td>Dashed oval</td><td>Age (from DOB), Total_Price</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="relationships-1">Relationships<a href="#relationships-1" class="hash-link" aria-label="Direct link to Relationships" title="Direct link to Relationships" translate="no">​</a></h2>
+<p>A relationship in an ER model describes the association between two or more entities.</p>
+<ul>
+<li class="">Shown as a diamond shape (Chen notation) or simply a line (Crow’s Foot notation).</li>
+<li class="">Each relationship has a cardinality (the number of entity instances that can be associated).</li>
+</ul>
+<p><strong>How to Identify?</strong></p>
+<ul>
+<li class="">Look for verbs in the requirement description.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Requirement: “Students enroll in courses, and faculty members teach courses.”</p>
+<ul>
+<li class="">Relationships:<!-- -->
+<ul>
+<li class="">Student enrolls in Course (M<!-- -->:N<!-- -->)</li>
+<li class="">Faculty teaches Course (1<!-- -->:N<!-- -->)</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-relationships-by-cardinality">Types of Relationships (by Cardinality)<a href="#types-of-relationships-by-cardinality" class="hash-link" aria-label="Direct link to Types of Relationships (by Cardinality)" title="Direct link to Types of Relationships (by Cardinality)" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="one-to-one-11-relationship">One-to-One (1:1) Relationship<a href="#one-to-one-11-relationship" class="hash-link" aria-label="Direct link to One-to-One (1:1) Relationship" title="Direct link to One-to-One (1:1) Relationship" translate="no">​</a></h4>
+<ul>
+<li class="">One entity is associated with exactly one instance of another entity.</li>
+<li class="">Each side has only one matching record.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<ul>
+<li class="">In a university, each Student has one <code>student_id_card</code>, and each <code>student_id_card</code> belongs to exactly one student.</li>
+</ul>
+<p><strong>ER Representation (text-based):</strong></p>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT] 1 ──── 1 [STUDENT_ID_CARD]</span><br></span></code></pre></div></div>
+<ul>
+<li class="">A student can have only one ID card.</li>
+<li class="">An ID card belongs to only one student.</li>
+</ul>
+<p>Rare in practice, but used when data must be stored separately for efficiency or security reasons.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="one-to-many-1-relationship">One-to-Many (1<!-- -->:N<!-- -->) Relationship<a href="#one-to-many-1-relationship" class="hash-link" aria-label="Direct link to one-to-many-1-relationship" title="Direct link to one-to-many-1-relationship" translate="no">​</a></h4>
+<ul>
+<li class="">One entity is associated with many instances of another entity.</li>
+<li class="">But the reverse is not true (those many belong to only one).</li>
+</ul>
+<p><strong>Example:</strong></p>
+<ul>
+<li class="">A Teacher teaches many Courses.</li>
+<li class="">But each Course is taught by only one Teacher.</li>
+</ul>
+<p><strong>ER Representation (text-based):</strong></p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[TEACHER] 1 ────&lt; [COURSE]</span><br></span></code></pre></div></div>
+<ul>
+<li class="">One teacher → many courses.</li>
+<li class="">Each course → exactly one teacher.</li>
+</ul>
+<p>This is the most common type in databases.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="many-to-many-m-relationship">Many-to-Many (M<!-- -->:N<!-- -->) Relationship<a href="#many-to-many-m-relationship" class="hash-link" aria-label="Direct link to many-to-many-m-relationship" title="Direct link to many-to-many-m-relationship" translate="no">​</a></h4>
+<ul>
+<li class="">One entity can be associated with many instances of another, and vice versa.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<ul>
+<li class="">A Student can enroll in many Courses.</li>
+<li class="">Each Course can have many Students.</li>
+</ul>
+<p><strong>ER Representation (text-based):</strong></p>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">[STUDENT] &gt;───&lt; [COURSE]</span><br></span></code></pre></div></div>
+<ul>
+<li class="">A student can enroll in multiple courses.</li>
+<li class="">A course can have multiple students.</li>
+</ul>
+<p><strong>In relational databases:</strong></p>
+<ul>
+<li class="">M<!-- -->:N<!-- --> relationships cannot be implemented directly.</li>
+<li class="">They are resolved by creating a junction (bridge) table.</li>
+</ul>
+<p><strong>Example Junction Table: <code>ENROLLMENT</code></strong></p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">ENROLLMENT</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">student_id (FK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">course_id (FK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">enrollment_date</span><br></span></code></pre></div></div>
+<p>This breaks the M<!-- -->:N<!-- --> into two 1<!-- -->:N<!-- --> relationships:</p>
+<ul>
+<li class="">student → enrollment</li>
+<li class="">course → enrollment</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="comparison-of-relationship-types">Comparison of Relationship Types<a href="#comparison-of-relationship-types" class="hash-link" aria-label="Direct link to Comparison of Relationship Types" title="Direct link to Comparison of Relationship Types" translate="no">​</a></h3>
+<table><thead><tr><th>Relationship Type</th><th>Meaning</th><th>Example</th><th>ERD Representation</th></tr></thead><tbody><tr><td><strong>1:1</strong> (One-to-One)</td><td>One entity ↔ One entity</td><td>Student ↔ Student_ID_Card</td><td><code>[STUDENT] 1───1 [STUDENT_ID_CARD]</code></td></tr><tr><td><strong>1:N</strong> (One-to-Many)</td><td>One entity ↔ Many entities</td><td>Teacher ↔ Courses</td><td><code>[TEACHER] 1───&lt; [COURSE]</code></td></tr><tr><td><strong>M:N</strong> (Many-to-Many)</td><td>Many entities ↔ Many entities</td><td>Students ↔ Courses</td><td><code>[STUDENT] &gt;───&lt; [COURSE]</code></td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="keys">Keys<a href="#keys" class="hash-link" aria-label="Direct link to Keys" title="Direct link to Keys" translate="no">​</a></h2>
+<p>A Key is an attribute (or set of attributes) that helps in uniquely identifying an entity in a database.</p>
+<p>Keys ensure that there are no duplicate records and establish relationships between tables.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-keys">Types of Keys<a href="#types-of-keys" class="hash-link" aria-label="Direct link to Types of Keys" title="Direct link to Types of Keys" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="primary-key-pk">Primary Key (PK)<a href="#primary-key-pk" class="hash-link" aria-label="Direct link to Primary Key (PK)" title="Direct link to Primary Key (PK)" translate="no">​</a></h4>
+<ul>
+<li class="">A unique identifier for each entity (record).</li>
+<li class="">No two rows can have the same primary key value.</li>
+<li class="">Cannot be NULL.</li>
+<li class="">In ER diagrams, it is often underlined.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>In a <code>STUDENT</code> entity:</p>
+<ul>
+<li class=""><code>student_id</code> can be the primary key because it uniquely identifies each student.</li>
+</ul>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">STUDENT</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">-------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">student_id (PK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">email</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">phone</span><br></span></code></pre></div></div>
+<p>Even if two students have the same name, their <code>student_id</code> will be unique.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="composite-key">Composite Key<a href="#composite-key" class="hash-link" aria-label="Direct link to Composite Key" title="Direct link to Composite Key" translate="no">​</a></h4>
+<ul>
+<li class="">A primary key made up of two or more attributes.</li>
+<li class="">Used when a single attribute is not enough to uniquely identify a record.</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="candidate-key">Candidate Key<a href="#candidate-key" class="hash-link" aria-label="Direct link to Candidate Key" title="Direct link to Candidate Key" translate="no">​</a></h4>
+<ul>
+<li class="">All possible attributes (or combinations) that can uniquely identify an entity.</li>
+<li class="">From the candidate keys, one is chosen as the primary key.</li>
+<li class="">Others remain as alternative unique identifiers.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>In the <code>STUDENT</code> entity:</p>
+<ul>
+<li class=""><code>student_ID</code> (unique)</li>
+<li class=""><code>email</code> (also unique)</li>
+</ul>
+<p>So: <code>{student_id, email}</code> are candidate keys.</p>
+<ul>
+<li class="">If we choose <code>student_id</code> as the primary key, <code>email</code> remains an alternate key.</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="foreign-key-fk">Foreign Key (FK)<a href="#foreign-key-fk" class="hash-link" aria-label="Direct link to Foreign Key (FK)" title="Direct link to Foreign Key (FK)" translate="no">​</a></h4>
+<ul>
+<li class="">An attribute that creates a relationship between two entities.</li>
+<li class="">It is a primary key in one table and appears as an attribute in another table.</li>
+<li class="">Used to enforce referential integrity (you cannot insert a value in FK unless it exists in the referenced PK).</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Consider two entities:</p>
+<div class="language-scss codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-scss codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">STUDENT</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">student_id (PK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">email</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ENROLLMENT</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">------------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">enrollment_id (PK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">student_id (FK)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">course_id (FK)</span><br></span></code></pre></div></div>
+<ul>
+<li class="">In <code>ENROLLMENT</code>, <code>student_id</code> is a foreign key referencing <code>STUDENT(student_id)</code>.</li>
+<li class="">This links each enrollment record to a student.</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="super-key">Super Key<a href="#super-key" class="hash-link" aria-label="Direct link to Super Key" title="Direct link to Super Key" translate="no">​</a></h4>
+<ul>
+<li class="">A set of one or more attributes that can uniquely identify a record.</li>
+<li class="">Primary key is always a super key, but not all super keys are primary keys.</li>
+<li class="">Super key may contain extra attributes that are not necessary for uniqueness.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>In <code>STUDENT</code>:</p>
+<ul>
+<li class=""><code>{student_id}</code> → uniquely identifies a student.</li>
+<li class=""><code>{student_id, Name}</code> → also uniquely identifies a student, but contains unnecessary attribute <code>Name</code>.</li>
+</ul>
+<p>So:</p>
+<ul>
+<li class=""><code>{student_id}</code>, <code>{Email}</code>, <code>{student_id, Name}</code> are super keys.</li>
+<li class="">Only the minimal one (<code>student_id</code>) is chosen as the primary key.</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="surrogate-key">Surrogate Key<a href="#surrogate-key" class="hash-link" aria-label="Direct link to Surrogate Key" title="Direct link to Surrogate Key" translate="no">​</a></h4>
+<ul>
+<li class="">An artificially created key (usually auto-incremented number or UUID).</li>
+<li class="">Has no business meaning, used only for uniqueness.</li>
+<li class="">Helps avoid using long/natural keys (like National_ID or Email) as primary keys.</li>
+</ul>
+<p><strong>Example</strong></p>
+<table><thead><tr><th>enrollment_id (PK, Auto)</th><th>student_id (FK)</th><th>course_id (FK)</th><th>Grade</th></tr></thead><tbody><tr><td>1</td><td>S101</td><td>C201</td><td>A</td></tr><tr><td>2</td><td>S101</td><td>C202</td><td>B</td></tr></tbody></table>
+<ul>
+<li class=""><code>enrollment_id</code> is a surrogate key → generated automatically (1, 2, 3...).</li>
+<li class=""><code>student_id</code> + <code>course_id</code> are still important, but surrogate key makes referencing easier.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="comparison-table-of-keys">Comparison Table of Keys<a href="#comparison-table-of-keys" class="hash-link" aria-label="Direct link to Comparison Table of Keys" title="Direct link to Comparison Table of Keys" translate="no">​</a></h3>
+<table><thead><tr><th>Key Type</th><th>Definition</th><th>Example</th></tr></thead><tbody><tr><td><strong>Primary Key</strong></td><td>Chosen unique identifier for records; cannot be NULL</td><td><code>student_id</code> in STUDENT</td></tr><tr><td><strong>Composite Key</strong></td><td>Uniqueness based on combination of attributes.</td><td>(student_id + course_id) in Enrollment</td></tr><tr><td><strong>Candidate Key</strong></td><td>All possible unique identifiers</td><td><code>{student_id, Email}</code></td></tr><tr><td><strong>Foreign Key</strong></td><td>Attribute linking two entities</td><td><code>student_id</code> in ENROLLMENT referencing STUDENT</td></tr><tr><td><strong>Super Key</strong></td><td>Any set of attributes that uniquely identifies records (may include extra fields)</td><td><code>{student_id}</code>, <code>{student_id, Name}</code></td></tr><tr><td><strong>Surrogate Key</strong></td><td>Artificial key with no business meaning (auto-generated).</td><td>enrollment_id (1, 2, 3...)</td></tr></tbody></table></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/handbook/docs/database-design/Data Model"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Data Model</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/handbook/docs/database-design/Normalization"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Normalization</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#key-components-of-an-er-diagram" class="table-of-contents__link toc-highlight">Key Components of an ER Diagram</a><ul><li><a href="#entity" class="table-of-contents__link toc-highlight">Entity</a></li><li><a href="#attributes" class="table-of-contents__link toc-highlight">Attributes</a></li><li><a href="#relationships" class="table-of-contents__link toc-highlight">Relationships</a></li></ul></li><li><a href="#example-of-an-er-diagram" class="table-of-contents__link toc-highlight">Example of an ER Diagram</a><ul><li><a href="#diagram-representation" class="table-of-contents__link toc-highlight">Diagram Representation</a></li></ul></li><li><a href="#erd-symbols-and-notations" class="table-of-contents__link toc-highlight">ERD Symbols and Notations</a><ul><li><a href="#chens-notation-1976" class="table-of-contents__link toc-highlight">Chen’s Notation (1976)</a></li><li><a href="#crows-foot-notation" class="table-of-contents__link toc-highlight">Crow’s Foot Notation</a></li><li><a href="#uml-notation-unified-modeling-language" class="table-of-contents__link toc-highlight">UML Notation (Unified Modeling Language)</a></li><li><a href="#comparison-of-notations" class="table-of-contents__link toc-highlight">Comparison of Notations</a></li></ul></li><li><a href="#entities" class="table-of-contents__link toc-highlight">Entities</a><ul><li><a href="#types-of-entities" class="table-of-contents__link toc-highlight">Types of Entities</a></li></ul></li><li><a href="#attributes-1" class="table-of-contents__link toc-highlight">Attributes</a><ul><li><a href="#types-of-attributes" class="table-of-contents__link toc-highlight">Types of Attributes</a></li><li><a href="#summary-table-of-attribute-types" class="table-of-contents__link toc-highlight">Summary Table of Attribute Types</a></li></ul></li><li><a href="#relationships-1" class="table-of-contents__link toc-highlight">Relationships</a><ul><li><a href="#types-of-relationships-by-cardinality" class="table-of-contents__link toc-highlight">Types of Relationships (by Cardinality)</a></li><li><a href="#comparison-of-relationship-types" class="table-of-contents__link toc-highlight">Comparison of Relationship Types</a></li></ul></li><li><a href="#keys" class="table-of-contents__link toc-highlight">Keys</a><ul><li><a href="#types-of-keys" class="table-of-contents__link toc-highlight">Types of Keys</a></li><li><a href="#comparison-table-of-keys" class="table-of-contents__link toc-highlight">Comparison Table of Keys</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2025
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>
