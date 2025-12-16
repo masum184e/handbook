@@ -73,24 +73,24 @@ const config: Config = {
         sidebarPath: './sidebars.ts',
       },
     ],
-    // [
-    //   '@docusaurus/plugin-content-docs',
-    //   {
-    //     id: 'aws',
-    //     path: 'docs/aws',
-    //     routeBasePath: 'docs/aws',
-    //     sidebarPath: './sidebars.ts',
-    //   },
-    // ],
-    // [
-    //   '@docusaurus/plugin-content-docs',
-    //   {
-    //     id: 'docker',
-    //     path: 'docs/docker',
-    //     routeBasePath: 'docs/docker',
-    //     sidebarPath: './sidebars.ts',
-    //   },
-    // ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'aws',
+        path: 'docs/aws',
+        routeBasePath: 'docs/aws',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'docker',
+        path: 'docs/docker',
+        routeBasePath: 'docs/docker',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
     [
       '@docusaurus/plugin-content-docs',
       {
