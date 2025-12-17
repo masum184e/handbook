@@ -33,7 +33,17 @@
   --docsearch-primary-color: var(--ifm-color-primary);
 }
 
-.DocSearch-Button-Key, .DocSearch-Commands-Key {
-  background-color: #2e8555!important;
-  color: white!important;
+.DocSearch-Button-Key,
+.DocSearch-Commands-Key {
+  background-color: #2e8555 !important;
+  color: white !important;
 }
+
+.theme-doc-sidebar-menu > li:first-of-type > div:first-of-type {
+  color: green;
+  background-color: red !important;
+  border: 1px solid black;
+  padding-left: 0px !important;
+  display: none;
+}
+

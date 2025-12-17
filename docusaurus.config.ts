@@ -36,113 +36,15 @@ const config: Config = {
     locales: ['en'],
   },
 
-  plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'golang',
-        path: 'docs/golang',
-        routeBasePath: 'docs/golang',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'typescript',
-        path: 'docs/typescript',
-        routeBasePath: 'docs/typescript',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'dsa',
-        path: 'docs/dsa',
-        routeBasePath: 'docs/dsa',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'roadmap',
-        path: 'docs/roadmap',
-        routeBasePath: 'docs/roadmap',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'aws',
-        path: 'docs/aws',
-        routeBasePath: 'docs/aws',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'docker',
-        path: 'docs/docker',
-        routeBasePath: 'docs/docker',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'iot',
-        path: 'docs/iot',
-        routeBasePath: 'docs/iot',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'database-design',
-        path: 'docs/database-design',
-        routeBasePath: 'docs/database-design',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'higher-studies',
-        path: 'docs/higher-studies',
-        routeBasePath: 'docs/higher-studies',
-        sidebarPath: './sidebars.ts',
-      },
-    ],
-    // [
-    //   '@docusaurus/plugin-content-docs',
-    //   {
-    //     id: 'mysql',
-    //     path: 'docs/mysql',
-    //     routeBasePath: 'docs/mysql',
-    //     sidebarPath: './sidebars.ts',
-    //   },
-    // ],
-    // [
-    //   '@docusaurus/plugin-content-docs',
-    //   {
-    //     id: 'redis',
-    //     path: 'docs/redis',
-    //     routeBasePath: 'docs/redis',
-    //     sidebarPath: './sidebars.ts',
-    //   },
-    // ],
-  ],
-
   presets: [
     [
       'classic',
       {
-        docs: false,
+        docs: {
+          path: 'docs',
+          routeBasePath: 'docs',
+          sidebarPath: './sidebars.ts',
+        },
         // blog: {
         //   showReadingTime: true,
         //   feedOptions: {
