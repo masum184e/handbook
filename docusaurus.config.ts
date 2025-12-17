@@ -109,6 +109,15 @@ const config: Config = {
         sidebarPath: './sidebars.ts',
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'higher-studies',
+        path: 'docs/higher-studies',
+        routeBasePath: 'docs/higher-studies',
+        sidebarPath: './sidebars.ts',
+      },
+    ],
     // [
     //   '@docusaurus/plugin-content-docs',
     //   {
