@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[4282],{5156:o=>{o.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"golang"}')}}]);
