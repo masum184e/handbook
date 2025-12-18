@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[3608],{5883:o=>{o.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"OOP","slug":"/category/oop","permalink":"/handbook/docs/category/oop","sidebar":"oopSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/oop/"}}}}')}}]);
