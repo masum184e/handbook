@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[5029],{3791(a){a.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Javascript","slug":"/category/javascript","permalink":"/handbook/docs/category/javascript","sidebar":"javascriptSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/javascript/"}}}}')}}]);

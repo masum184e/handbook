@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[1379],{1192:e=>{e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"TypeScript","slug":"/category/typescript","permalink":"/handbook/docs/category/typescript","sidebar":"typescriptSidebar","navigation":{"next":{"title":"Basics","permalink":"/handbook/docs/typescript/Basics"}}}}')}}]);
