@@ -1,0 +1,3 @@
+- Focus on the current optimal solution
+- Final solution may not optional
+- Minimization or Maximization
