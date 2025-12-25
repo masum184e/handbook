@@ -1,0 +1,4 @@
+## Implmentation
+
+- For stack implementation `top` begin with `-1`.
+- For queue implementation `front` begin with `0` and `rear` begin with `-1`.
