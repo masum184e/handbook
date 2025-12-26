@@ -9,3 +9,6 @@
 ## Answer
 
 ## 2D Array -->
+
+## Answer
+- New pattern identified: left = accumulated sum, right = max element

@@ -7,6 +7,10 @@ Welcome to the DSA handbook.
 
 ## Task
 
+### Now
+1. 3 Sum, 4 Sum Duplicacy removal
+2.
+
 ### Dec 30, 2025
 
 Primary focus on **all 13 problem of 1D Array**
@@ -36,3 +40,7 @@ Primary focus on **all 9 problem of LL, DLL and Medium of DLL**
 
 - Note Down current & current->next
 - Iterative & Recursive Reverse
+
+
+### Feb 1, 2025
+Primary focus on **all 14 problem of array easy**
