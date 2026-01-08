@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">1D Array (2) | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/striver a2z/binary search/1d array"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="1D Array (2) | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="Submission"><meta data-rh="true" property="og:description" content="Submission"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/striver a2z/binary search/1d array"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/binary search/1d array" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/binary search/1d array" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DSA","item":"https://masum184e.github.io/handbook/docs/category/dsa"},{"@type":"ListItem","position":2,"name":"Striver A2Z DSA Sheet","item":"https://masum184e.github.io/handbook/docs/dsa/Striver A2Z/"},{"@type":"ListItem","position":3,"name":"1D Array (2)","item":"https://masum184e.github.io/handbook/docs/striver a2z/binary search/1d array"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.f95f8452.css">
-<script src="/handbook/assets/js/runtime~main.658d5284.js" defer="defer"></script>
+<script src="/handbook/assets/js/runtime~main.ff7e92fb.js" defer="defer"></script>
 <script src="/handbook/assets/js/main.4580ebaa.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -37,88 +37,30 @@
 </li>
 <li class="">
 <p><a href="https://www.geeksforgeeks.org/problems/implement-lower-bound/1" target="_blank" rel="noopener noreferrer" class="">Lower Bound</a></p>
-<ul>
-<li class="">The first index where an element is ≥ target (<code>arr[i] &gt;= target</code>).</li>
-</ul>
 </li>
 <li class="">
 <p><a href="https://www.geeksforgeeks.org/problems/implement-upper-bound/1" target="_blank" rel="noopener noreferrer" class="">Upper Bound</a></p>
-<ul>
-<li class="">The first index where an element is &gt; target (<code>arr[i] &gt; target</code>).</li>
-<li class="">Implmentation is as same as Lower Bound, Both return <code>left</code>, just modify the condition.</li>
-</ul>
 </li>
 <li class="">
 <p><a href="https://leetcode.com/problems/search-insert-position/" target="_blank" rel="noopener noreferrer" class="">Search Insert Position</a></p>
-<ul>
-<li class="">Sept 19, 2025</li>
-<li class="">Feb 12, 2025</li>
-<li class="">Dec 21, 2025</li>
-<li class="">Solve Again without watching the solutions.</li>
-</ul>
 </li>
 <li class="">
 <p><a href="https://www.geeksforgeeks.org/problems/floor-in-a-sorted-array-1587115620/1" target="_blank" rel="noopener noreferrer" class="">Floor</a>/<a href="https://www.geeksforgeeks.org/problems/ceil-in-a-sorted-array/1" target="_blank" rel="noopener noreferrer" class="">Ceil</a></p>
 </li>
 <li class="">
 <p><a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener noreferrer" class="">First and Last Occurences</a></p>
-<ul>
-<li class="">
-<p><strong>If <code>target</code> exists in the array:</strong></p>
-<ul>
-<li class="">First Occrrence = Lower Bound</li>
-<li class="">Last Occurrence = Upper Bound - 1</li>
-<li class="">Ceil = Floor = <code>arr[lower_bound]</code></li>
-</ul>
-<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">0  1 2 3  4 5</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">-------------</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">1 [2 2 2] 3 4 - target = 2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ^       ^</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  lb      ub</span><br></span></code></pre></div></div>
-<ul>
-<li class="">First Occurrence = <code>lower_bound</code> = 1</li>
-<li class="">Last Occurrence = <code>upper_bound</code> - 1 = 3</li>
-<li class="">Ceil = Floor = <code>arr[lower_bound]</code> = 2</li>
-</ul>
-</li>
-<li class="">
-<p><strong>If <code>target</code> doesn&#x27;t exists in the array:</strong></p>
-<ul>
-<li class=""><code>lower_bound</code> = <code>upper_bound</code></li>
-<li class="">First Occurrence = <code>-1</code></li>
-<li class="">Last Occurrence = <code>-1</code></li>
-<li class="">Ceil = <code>arr[lower_bound]</code></li>
-<li class="">Floor = <code>arr[lower_bound - 1]</code></li>
-</ul>
-<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">1 2 |4 4 5 - target = 3</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      ^</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   lb = ub = 2</span><br></span></code></pre></div></div>
-<ul>
-<li class="">First Occurrence = <code>-1</code></li>
-<li class="">Last Occurrence = <code>-1</code></li>
-<li class="">Ceil = <code>arr[lower_bound]</code> = <code>4</code></li>
-<li class="">Floor = <code>arr[lower_bound - 1]</code> = <code>arr[1]</code> = <code>2</code></li>
-</ul>
-</li>
-</ul>
 </li>
 <li class="">
 <p><a href="https://www.geeksforgeeks.org/problems/number-of-occurrence2259/1" target="_blank" rel="noopener noreferrer" class="">Count Occurences</a></p>
 </li>
 <li class="">
 <p><a href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noopener noreferrer" class="">Search in Rotated Sorted</a></p>
-<ul>
-<li class="">Solve Again without watching the solutions.</li>
-<li class="">Search in Portion</li>
-<li class="">Search when left half is sorted</li>
-<li class="">Search when right half is sorted</li>
-<li class="">First check which portion is sorted, not where target is placed.</li>
-</ul>
 </li>
 <li class="">
 <p><a href="https://leetcode.com/problems/search-in-rotated-sorted-array-ii/" target="_blank" rel="noopener noreferrer" class="">Search in Roated Sorted II</a></p>
-<p>Previous approach breaks for duplicate values</p>
-<div class="language-cpp codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-cpp codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">nums </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> target </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">l </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> m </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> r </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">l</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">m</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><br></span></code></pre></div></div>
 </li>
 <li class="">
 <p><a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank" rel="noopener noreferrer" class="">Minimum in Rotated Sorted Array</a></p>
-<ul>
-<li class="">When you return <code>nums[left]</code>,<code>while(left &lt;= right)</code> may cause out of bound error, use <code>&lt;</code> instead and may one of the pointer update with equal to <code>mid</code> not incremented or decremented.</li>
-</ul>
 </li>
 <li class="">
 <p><a href="https://www.geeksforgeeks.org/problems/rotation4723/1" target="_blank" rel="noopener noreferrer" class="">Count rotation</a></p>
