@@ -1,0 +1,276 @@
+Input validation is the process of verifying that incoming request data:
+
+- Exists when required
+- Has the correct data type
+- Falls within allowed ranges or formats
+- Follows business rules
+- Is safe to process (prevents injection and misuse)
+
+In REST APIs, validation occurs before business logic executes, and invalid input should result in client error responses (4xx).
+
+## Why Input Validation Is Critical
+
+- **Security:** Prevents SQL injection, XSS, header injection, and malformed requests
+- **Data Integrity:** Ensures only valid data enters your system
+- **Predictable API Behavior:** Clients get consistent, meaningful errors
+- **Easier Debugging:** Clear feedback helps consumers fix requests quickly
+- **Performance:** Rejects bad requests early without costly processing
+
+## Types of Input Validation in REST APIs
+
+REST APIs typically validate three major request parts:
+
+1. Request Body – JSON/XML payload
+2. Query Parameters – URL parameters
+3. Headers – Metadata and authorization info
+
+## Request Body Validation
+
+What Is Validated?
+
+- Required fields
+- Data types
+- Length constraints
+- Formats (email, UUID, date)
+- Nested object structure
+- Business rules
+
+### Example API
+
+**Create User**
+
+```sh
+POST /users
+Content-Type: application/json
+```
+
+**Request Body**
+
+```json
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "age": 25
+}
+```
+
+**Validation Rules**
+| Field | Rule |
+| -------- | ----------------------------- |
+| username | Required, string, min 3 chars |
+| email | Required, valid email format |
+| age | Optional, integer ≥ 18 |
+
+**Invalid Request Example**
+
+```json
+{
+  "username": "jo",
+  "email": "invalid-email",
+  "age": 15
+}
+```
+
+**Error Response**
+
+```sh
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+```
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    { "field": "username", "message": "Must be at least 3 characters long" },
+    { "field": "email", "message": "Invalid email format" },
+    { "field": "age", "message": "Must be 18 or older" }
+  ]
+}
+```
+
+**Explanation**
+
+- 400 Bad Request → client sent invalid data
+- Error message is descriptive but safe
+- Each field error is returned separately
+- Helps client correct the request easily
+
+## Query Parameter Validation
+
+What Is Validated?
+
+- Presence of required query params
+- Allowed values
+- Data types
+- Range limits
+- Default values
+
+**Example API**
+
+Get Users with Pagination
+
+```sh
+GET /users?page=1&limit=20
+```
+
+**Validation Rules**
+
+| Parameter | Rule                                   |
+| --------- | -------------------------------------- |
+| page      | Optional, integer ≥ 1 (default = 1)    |
+| limit     | Optional, integer 1–100 (default = 10) |
+
+**Invalid Request Example**
+
+```sh
+GET /users?page=-2&limit=500
+```
+
+**Error Response**
+
+```sh
+HTTP/1.1 400 Bad Request
+```
+
+```json
+{
+  "error": "Invalid query parameters",
+  "details": [
+    { "parameter": "page", "message": "Must be a positive integer" },
+    { "parameter": "limit", "message": "Must be between 1 and 100" }
+  ]
+}
+```
+
+**Explanation**
+
+- Query params are validated before fetching data
+- Prevents expensive or abusive requests
+- Default values help keep API flexible
+
+## Header Validation
+
+What Is Validated?
+
+- Presence of required headers
+- Header format
+- Allowed values
+- Authorization tokens
+- Content-Type and Accept headers
+
+Common Headers to Validate
+
+- `Authorization`
+- `Content-Type`
+- `Accept`
+- Custom `headers` (e.g., `X-Request-Id`)
+
+### Example API
+
+```sh
+POST /orders
+```
+
+**Required Headers**
+
+| Header        | Rule                       |
+| ------------- | -------------------------- |
+| Authorization | Required, Bearer token     |
+| Content-Type  | Must be `application/json` |
+
+**Invalid Request Example**
+
+```sh
+POST /orders
+Content-Type: text/plain
+```
+
+**Error Response**
+
+```sh
+HTTP/1.1 415 Unsupported Media Type
+```
+
+```json
+{
+  "error": "Unsupported Content-Type",
+  "message": "Expected application/json"
+}
+```
+
+**Authorization Header Example**
+
+```sh
+Authorization: Bearer abc123
+```
+
+**If missing:**
+
+```sh
+HTTP/1.1 401 Unauthorized
+```
+
+```json
+{
+  "error": "Unauthorized",
+  "message": "Missing or invalid Authorization header"
+}
+```
+
+**Explanation**
+
+- 415 → wrong content format
+- 401 → authentication problem
+- Headers are validated before parsing body
+
+## Validation Order (Best Practice)
+
+1. Validate headers
+2. Validate query parameters
+3. Validate request body
+4. Apply business rules
+5. Execute core logic
+
+This avoids unnecessary processing and improves performance.
+
+## Best Practices for Input Validation
+
+1. Fail Fast: Reject invalid requests immediately.
+2. Use Standard HTTP Status Codes
+   | Scenario | Status |
+   | ------------------------------------- | ------ |
+   | Invalid input | 400 |
+   | Missing auth | 401 |
+   | Forbidden | 403 |
+   | Unsupported media type | 415 |
+   | Unprocessable entity (semantic error) | 422 |
+
+3. Return Consistent Error Format
+
+   ```json
+   {
+     "error": "Validation failed",
+     "details": [...]
+   }
+   ```
+
+4. Don’t Leak Internal Details
+   - ❌ Avoid: "SQL syntax error near column age"
+   - ✅ Use: "Invalid age value"
+
+## Use Schema-Based Validation
+
+- JSON Schema
+- OpenAPI (Swagger)
+- Framework validators (Spring Validation, Joi, Yup, etc.)
+
+## Summary
+
+| Area    | What to Validate            | Why                    |
+| ------- | --------------------------- | ---------------------- |
+| Body    | Structure, types, formats   | Data integrity         |
+| Query   | Range, type, allowed values | Prevent abuse          |
+| Headers | Auth, content type          | Security & correctness |
+
+Input validation is the first line of defense in REST API design and is tightly coupled with clear, consistent error handling.

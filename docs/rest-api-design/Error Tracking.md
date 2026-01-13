@@ -1,0 +1,170 @@
+Error tracking is the process of detecting, recording, and analyzing errors that occur in a REST API, in real time or retrospectively, to help developers identify, diagnose, and fix issues quickly.
+
+**Goals:**
+
+- Detect exceptions and failures
+- Capture contextual information (request, user, environment)
+- Reduce mean time to resolution (MTTR)
+- Enable root-cause analysis
+- Integrate with monitoring, logging, and alerting systems
+
+## Popular Error Tracking Tools
+
+| Tool            | Description                                                                                                    |
+| --------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Sentry**      | Real-time error tracking, exception reporting, and performance monitoring. Supports many languages/frameworks. |
+| **ELK Stack**   | Elasticsearch, Logstash, Kibana — collects, indexes, visualizes logs; can track errors from logs and metrics.  |
+| **Other Tools** | Rollbar, Bugsnag, Datadog APM                                                                                  |
+
+## How Sentry Works
+
+**Key Features**
+
+- Captures unhandled exceptions
+- Collects context: user, request, headers, stack trace
+- Groups similar errors
+- Sends alerts via Slack, email, etc.
+- Provides issue tracking and workflow integration
+
+**Workflow**
+
+```
+API Error → Sentry SDK → Error captured → Dashboard & Alerts
+```
+
+### Sentry Integration Example
+
+**Install Sentry SDK**
+
+```sh
+npm install @sentry/node
+```
+
+**Initialize Sentry**
+
+```ts
+// app.js
+const express = require("express");
+const Sentry = require("@sentry/node");
+
+Sentry.init({
+  dsn: "https://<PUBLIC_KEY>@sentry.io/<PROJECT_ID>",
+  tracesSampleRate: 1.0, // For performance monitoring
+});
+
+const app = express();
+
+// Request handler must come first
+app.use(Sentry.Handlers.requestHandler());
+app.use(express.json());
+```
+
+**Add Routes and Error Handling**
+
+```ts
+app.post("/api/users", (req, res) => {
+  if (!req.body.name) {
+    throw new Error("Name is required"); // This error will be captured
+  }
+  res.status(201).json(req.body);
+});
+
+// Sentry error handler (must be last middleware)
+app.use(Sentry.Handlers.errorHandler());
+
+app.listen(3000, () => console.log("API running"));
+```
+
+1. Request comes in → Sentry request handler attaches context
+2. Error occurs → Sentry captures stack trace, HTTP request info, and user data
+3. Error appears in Dashboard → Developers can view detailed context and fix it
+
+## ELK Stack for Error Tracking
+
+ELK Stack (Elasticsearch, Logstash, Kibana) is mainly a log-based error tracking system.
+
+**How It Works**
+
+- Application Logs Errors → File, stdout, or remote
+- Logstash → Parses and transforms logs
+- Elasticsearch → Stores logs and indexes them for search
+- Kibana → Visualizes errors and creates dashboards
+- Alerts → Can be configured via Kibana or integrated tools
+
+### ELK Integration Example
+
+```ts
+// logger.js
+const { createLogger, transports, format } = require("winston");
+require("winston-elasticsearch");
+
+const logger = createLogger({
+  level: "error",
+  format: format.combine(format.timestamp(), format.json()),
+  transports: [
+    new transports.Console(),
+    new transports.Elasticsearch({
+      level: "error",
+      clientOpts: { node: "http://localhost:9200" },
+      indexPrefix: "api-errors",
+    }),
+  ],
+});
+
+module.exports = logger;
+```
+
+Using Logger in Routes
+
+```ts
+const express = require("express");
+const logger = require("./logger");
+
+const app = express();
+app.use(express.json());
+
+app.post("/api/users", (req, res) => {
+  try {
+    if (!req.body.name) throw new Error("Name required");
+    res.status(201).json(req.body);
+  } catch (err) {
+    logger.error({
+      message: err.message,
+      route: "/api/users",
+      body: req.body,
+      stack: err.stack,
+    });
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.listen(3000);
+```
+
+1. Error occurs → Logged in structured JSON format
+2. Logstash/Elasticsearch ingests logs
+3. Kibana dashboard visualizes errors:
+   - Frequency over time
+   - Endpoint-specific errors
+   - Stack traces
+4. Alerts can be set for thresholds, e.g., >10 errors in 5 minutes
+
+## Sentry vs ELK Stack
+
+| Feature                | Sentry                                 | ELK Stack                                       |
+| ---------------------- | -------------------------------------- | ----------------------------------------------- |
+| Type                   | Exception tracking + performance       | Log aggregation & visualization                 |
+| Setup                  | Quick, SDK-based                       | Requires ELK infrastructure                     |
+| Real-time Alerts       | ✅ Yes                                 | ✅ Yes (via Kibana/Watcher)                     |
+| Error Context          | Detailed (stack, user, environment)    | Depends on logged info                          |
+| Performance Monitoring | ✅ Yes                                 | Limited (requires custom metrics)               |
+| Best Use Case          | Quick bug detection & developer alerts | Enterprise logging, analytics, long-term trends |
+
+## Best Practices for Error Tracking
+
+1. Track both handled and unhandled errors
+2. Include context — user ID, endpoint, request payload
+3. Do not log sensitive information
+4. Set alerts for critical issues
+5. Integrate with CI/CD — e.g., fail build if errors spike
+6. Combine tools — e.g., Sentry for exceptions, ELK for analytics

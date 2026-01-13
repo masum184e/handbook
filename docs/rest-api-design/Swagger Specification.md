@@ -1,0 +1,266 @@
+**OpenAPI Specification (OAS)**
+
+The OpenAPI Specification is a machine-readable standard for describing REST APIs.
+It defines how an API works, not how it is implemented.
+
+- Formerly known as Swagger Specification
+- Maintained by the OpenAPI Initiative (OAI)
+- Current widely used versions: OpenAPI 3.0.x and 3.1
+
+**Swagger**
+
+Swagger refers to a tooling ecosystem built around OpenAPI:
+
+- Swagger UI – Interactive API documentation
+- Swagger Editor – Write & validate OpenAPI specs
+- Swagger Codegen / OpenAPI Generator – Generate client/server code
+
+OpenAPI = specification (standard)
+
+Swagger = tools that use the specification
+
+## Documentation
+
+OpenAPI acts as a single source of truth for API documentation:
+
+- Endpoints
+- HTTP methods
+- Request parameters
+- Request/response schemas
+- Authentication mechanisms
+- Error responses
+
+This documentation:
+
+- Is always in sync with the API
+- Can be automatically generated
+- Is interactive (try requests directly)
+
+## Discoverability
+
+Discoverability answers the question:
+
+> “How do developers find out what this API can do?”
+
+OpenAPI improves discoverability by:
+
+- Listing all available endpoints
+- Clearly defining input/output formats
+- Providing examples
+- Supporting self-service onboarding
+
+Developers can explore the API without reading external docs or source code.
+
+## Key Components of an OpenAPI Specification
+
+An OpenAPI document is usually written in YAML or JSON.
+
+High-level structure
+
+```yaml
+openapi: 3.0.3
+info:
+paths:
+components:
+security:
+```
+
+## Complete OpenAPI Example
+
+```yaml
+openapi: 3.0.3
+
+info:
+  title: User Management API
+  description: API for managing users in the system
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      description: Returns a list of all registered users
+      tags:
+        - Users
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+    post:
+      summary: Create a new user
+      description: Creates a new user in the system
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreate"
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid input
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      description: Returns a single user by their unique ID
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+      required:
+        - id
+        - name
+        - email
+
+    UserCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          format: email
+          example: jane.doe@example.com
+      required:
+        - name
+        - email
+```
+
+- `openapi`: Specifies the OpenAPI version being used.
+- `info`: Provides human-readable metadata, Critical for documentation portals.
+- `servers`: Defines where the API is hosted. Helps tools know where to send requests.
+- `paths`: Each path represents a resource.
+  Each HTTP method includes:
+  - `summary` → Short description
+  - `description` → Detailed explanation
+  - `tags` → Logical grouping
+  - `responses` → Output definitions
+
+### Request Body (POST)
+
+```yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "#/components/schemas/UserCreate"
+```
+
+- Defines what clients must send
+- Schema ensures validation
+- Improves discoverability of required fields
+
+### Parameters
+
+```yaml
+parameters:
+  - name: id
+    in: path
+    required: true
+```
+
+Explains:
+
+- Parameter location (`path`, `query`, `header`)
+- Data type
+- Whether it’s required
+
+### Responses
+
+```yaml
+responses:
+  "200":
+    description: User found
+```
+
+Each response includes:
+
+- HTTP status code
+- Meaning
+- Content type
+- Schema
+
+This removes ambiguity for API consumers.
+
+### Components & Schemas
+
+```yaml
+components:
+  schemas:
+```
+
+Reusable models:
+
+- Prevent duplication
+- Ensure consistency
+- Enable code generation
+
+## Tools That Use OpenAPI
+
+| Tool              | Purpose                       |
+| ----------------- | ----------------------------- |
+| Swagger UI        | Interactive API documentation |
+| Swagger Editor    | Write & validate specs        |
+| OpenAPI Generator | Client/server SDK generation  |
+| Postman           | Import & test APIs            |
+| Stoplight         | API design & governance       |
+
+OpenAPI/Swagger is essential for REST API documentation and discoverability because it:
+
+- Standardizes API descriptions
+- Enables automatic, interactive documentation
+- Makes APIs self-describing
+- Reduces onboarding time
+- Improves consistency and maintainability
+
+Well-designed REST APIs are not just usable — they are discoverable, and OpenAPI makes that possible.

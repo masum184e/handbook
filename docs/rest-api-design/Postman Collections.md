@@ -1,0 +1,79 @@
+A Postman Collection is a grouped set of API requests saved together in Postman.
+Beyond testing, collections act as interactive, executable API documentation.
+
+## Discoverability Perspective
+
+Discoverability answers:
+
+>“How do I explore this API without prior knowledge?”
+
+Postman collections enable:
+
+- Logical grouping of endpoints
+- Descriptive names and comments
+- Predefined environments and variables
+- Visual exploration of request flow
+
+>Postman collections act as a guided tour of the API.
+
+## Key Components
+
+| Component           | Description                  |
+| ------------------- | ---------------------------- |
+| Collection          | Top-level container          |
+| Folder              | Groups related endpoints     |
+| Request             | Individual API call          |
+| Environment         | Variables (URL, tokens)      |
+| Documentation       | Markdown-based descriptions  |
+| Examples            | Saved request/response pairs |
+| Pre-request Scripts | Setup logic                  |
+| Tests               | Validation logic             |
+
+
+## Documentation
+### End Point Based
+```
+We’ll document a User Management API using a Postman Collection.
+
+Base URL:
+
+{{baseUrl}} = https://api.example.com/v1
+```
+
+### Collection-Level
+```
+# User Management API
+
+This collection provides all endpoints required to manage users.
+
+## Authentication
+1. Call **Login**
+2. Copy the token
+3. Set `authToken` environment variable
+
+## Usage Flow
+1. Authenticate
+2. Create user
+3. Fetch users
+```
+## Automated Postman Tests
+```ts
+pm.test("Status code is 201", function () {
+    pm.response.to.have.status(201);
+});
+pm.test("Response contains email", () => {
+  const jsonData = pm.response.json();
+  pm.expect(jsonData.email).to.eql("alice@test.com");
+});
+```
+
+## What Can Be Tested Using Postman
+
+| Area           | Description                 |
+| -------------- | --------------------------- |
+| HTTP Methods   | GET, POST, PUT, DELETE      |
+| Status Codes   | 200, 201, 400, 401, 404     |
+| Headers        | Content-Type, Authorization |
+| Response Body  | JSON fields and values      |
+| Authentication | API keys, OAuth             |
+| Performance    | Response time               |

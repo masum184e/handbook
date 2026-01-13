@@ -1,0 +1,72 @@
+Asynchronous processing means the client sends a request, and instead of waiting for the task to finish, the server immediately responds with a task reference or status URL. The client can then poll or wait for notification when the task completes.
+
+## Why Async is Important for Performance & Scalability
+
+1. Non-blocking operations: The server does not hold resources while the task is running.
+2. Improved latency: The client gets a response immediately.
+3. Better resource utilization: Long-running tasks are handled in background workers or queues.
+4. Supports high throughput: Server can handle many requests concurrently.
+
+## Common Pattern: Task Queue
+
+1. Client sends request:
+
+```sh
+POST /api/reports
+Content-Type: application/json
+
+{
+  "reportType": "monthly_sales",
+  "format": "pdf"
+}
+```
+
+2. Server immediately responds:
+
+```sh
+HTTP/1.1 202 Accepted
+Content-Type: application/json
+Location: /api/reports/789/status
+
+{
+  "taskId": "789",
+  "status": "pending"
+}
+```
+
+2. Client polls status:
+
+```sh
+GET /api/reports/789/status
+```
+
+3. Server responds:
+
+```sh
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "taskId": "789",
+  "status": "completed",
+  "resultUrl": "/api/reports/789/download"
+}
+```
+
+4. Client downloads the result:
+
+```sh
+GET /api/reports/789/download
+```
+
+- `202 Accepted` → Server accepted the task but hasn’t completed it.
+- `Location` header → Provides a status endpoint to check progress.
+- This pattern decouples client request from long-running processing, improving scalability.
+
+## Asynchronous Processing Design Tips
+
+- Use task queues (e.g., RabbitMQ, Kafka, AWS SQS) for background work.
+- Track task status: `pending`, `in_progress`, `completed`, `failed`.
+- Return a `taskId` to allow polling or result retrieval.
+- Avoid synchronous blocking on long tasks.
+
