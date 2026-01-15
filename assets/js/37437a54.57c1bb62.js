@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[9045],{3867(e){e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Docker","slug":"/category/docker","permalink":"/handbook/docs/category/docker","sidebar":"dockerSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/docker/"}}}}')}}]);

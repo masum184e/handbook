@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-rest-api-design/Security Practices" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Security Practices | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/rest-api-design/Security Practices"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Security Practices | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="HTTPS Everywhere"><meta data-rh="true" property="og:description" content="HTTPS Everywhere"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/rest-api-design/Security Practices"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/rest-api-design/Security Practices" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/rest-api-design/Security Practices" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"REST API Design","item":"https://masum184e.github.io/handbook/docs/category/rest-api-design"},{"@type":"ListItem","position":2,"name":"Security Practices","item":"https://masum184e.github.io/handbook/docs/rest-api-design/Security Practices"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.f95f8452.css">
+<script src="/handbook/assets/js/runtime~main.3296bc83.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.02324b62.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--active" href="/handbook/docs/category/rest-api-design"><span title="REST API Design" class="categoryLinkLabel_W154">REST API Design</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/"><span title="Introduction" class="linkLabel_WmDU">Introduction</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/API"><span title="Application Programming Interface" class="linkLabel_WmDU">Application Programming Interface</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/LifeCycle"><span title="Life Cycle" class="linkLabel_WmDU">Life Cycle</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Constraints"><span title="Constraints" class="linkLabel_WmDU">Constraints</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Resource Design"><span title="Resource Design" class="linkLabel_WmDU">Resource Design</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Richardson Maturity Model"><span title="Richardson" class="linkLabel_WmDU">Richardson</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Partial Response"><span title="Partial Response" class="linkLabel_WmDU">Partial Response</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Error Response"><span title="Error Response" class="linkLabel_WmDU">Error Response</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Cache Control"><span title="Cache Control" class="linkLabel_WmDU">Cache Control</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/E-Tag"><span title="E-Tag" class="linkLabel_WmDU">E-Tag</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/API Versioning"><span title="API Versioning" class="linkLabel_WmDU">API Versioning</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Changes"><span title="Changes" class="linkLabel_WmDU">Changes</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Code First"><span title="Code First" class="linkLabel_WmDU">Code First</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Design First"><span title="Design First" class="linkLabel_WmDU">Design First</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/API Specification"><span title="API Specification" class="linkLabel_WmDU">API Specification</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/OAuth"><span title="OAuth" class="linkLabel_WmDU">OAuth</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Max Retry"><span title="Max Retry" class="linkLabel_WmDU">Max Retry</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Jail"><span title="Jail" class="linkLabel_WmDU">Jail</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Security Headers"><span title="Security Headers" class="linkLabel_WmDU">Security Headers</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/API Management"><span title="API Management" class="linkLabel_WmDU">API Management</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Developer Portal"><span title="Developer Portal" class="linkLabel_WmDU">Developer Portal</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Authentication"><span title="Authentication" class="linkLabel_WmDU">Authentication</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Access Control"><span title="Access Control" class="linkLabel_WmDU">Access Control</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/handbook/docs/rest-api-design/Security Practices"><span title="Security Practices" class="linkLabel_WmDU">Security Practices</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Input Validation"><span title="Input Validation" class="linkLabel_WmDU">Input Validation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Error Tracking"><span title="Error Tracking" class="linkLabel_WmDU">Error Tracking</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Standard Error Format"><span title="Standard Error Format" class="linkLabel_WmDU">Standard Error Format</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Swagger Specification"><span title="Swagger Specification" class="linkLabel_WmDU">Swagger Specification</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/API Blueprint"><span title="API Blueprint" class="linkLabel_WmDU">API Blueprint</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/29_1. RAML"><span title="RAML" class="linkLabel_WmDU">RAML</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Postman Collections"><span title="Postman Collections" class="linkLabel_WmDU">Postman Collections</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Self Description"><span title="Self Description" class="linkLabel_WmDU">Self Description</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/HATEOAS"><span title="HATEOAS" class="linkLabel_WmDU">HATEOAS</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Unit Testing"><span title="Unit Testing" class="linkLabel_WmDU">Unit Testing</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Integration Testing"><span title="Integration Testing" class="linkLabel_WmDU">Integration Testing</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/API Monitoring"><span title="API Monitoring" class="linkLabel_WmDU">API Monitoring</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Caching Strategies"><span title="Caching" class="linkLabel_WmDU">Caching</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Rate Limiting"><span title="Rate Limiting" class="linkLabel_WmDU">Rate Limiting</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Quotas"><span title="Quotas" class="linkLabel_WmDU">Quotas</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Async Processing"><span title="Async Processing" class="linkLabel_WmDU">Async Processing</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/rest-api-design/Webhooks"><span title="Webhooks" class="linkLabel_WmDU">Webhooks</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/handbook/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/handbook/docs/category/rest-api-design"><span>REST API Design</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Security Practices</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Security Practices</h1></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="https-everywhere">HTTPS Everywhere<a href="#https-everywhere" class="hash-link" aria-label="Direct link to HTTPS Everywhere" title="Direct link to HTTPS Everywhere" translate="no">​</a></h2>
+<ul>
+<li class="">HTTPS (Hypertext Transfer Protocol Secure) = HTTP + TLS (Transport Layer Security).</li>
+<li class="">Ensures that all communication between the client (browser, mobile app, or service) and the API server is:<!-- -->
+<ul>
+<li class="">Encrypted → prevents eavesdropping (man-in-the-middle attacks).</li>
+<li class="">Authenticated → guarantees the server is who it claims to be.</li>
+<li class="">Integrity-protected → prevents data tampering in transit.</li>
+</ul>
+</li>
+</ul>
+<p>“HTTPS Everywhere” means: Always enforce HTTPS for all REST API requests — no exceptions.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-https-is-critical-for-rest-apis">Why HTTPS is Critical for REST APIs<a href="#why-https-is-critical-for-rest-apis" class="hash-link" aria-label="Direct link to Why HTTPS is Critical for REST APIs" title="Direct link to Why HTTPS is Critical for REST APIs" translate="no">​</a></h3>
+<ol>
+<li class="">Protects Sensitive Data</li>
+</ol>
+<ul>
+<li class="">API calls often include tokens, API keys, passwords, user info.</li>
+<li class="">Without HTTPS, this data can be stolen in plain text.</li>
+</ul>
+<ol start="2">
+<li class="">Prevents Man-in-the-Middle (MITM) Attacks</li>
+</ol>
+<ul>
+<li class="">Attackers can intercept and modify requests on unsecured HTTP.</li>
+<li class="">With HTTPS, TLS ensures encryption + server authenticity.</li>
+</ul>
+<ol start="3">
+<li class="">Secures Authentication &amp; Authorization</li>
+</ol>
+<ul>
+<li class="">Mechanisms like Basic Auth, OAuth 2.0, JWT are safe only if transported via HTTPS.</li>
+</ul>
+<ol start="4">
+<li class="">Builds Trust</li>
+</ol>
+<ul>
+<li class="">Most modern clients reject HTTP APIs or warn users.</li>
+<li class="">Browsers block mixed content (HTTPS site calling HTTP API).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-to-enforce-https-in-rest-apis">How to Enforce HTTPS in REST APIs<a href="#how-to-enforce-https-in-rest-apis" class="hash-link" aria-label="Direct link to How to Enforce HTTPS in REST APIs" title="Direct link to How to Enforce HTTPS in REST APIs" translate="no">​</a></h3>
+<ol>
+<li class="">Redirect all HTTP requests → HTTPS</li>
+</ol>
+<ul>
+<li class="">If a client mistakenly calls <code>http://api.example.com</code>, the server responds with <code>301 Moved Permanently</code> → redirects to <code>https://api.example.com</code>.</li>
+</ul>
+<ol start="2">
+<li class="">Use HSTS (HTTP Strict Transport Security)</li>
+</ol>
+<ul>
+<li class="">Tells browsers: “Always use HTTPS, even if the user types HTTP.”</li>
+</ul>
+<p>Example header:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Strict-Transport-Security: max-age=31536000; includeSubDomains</span><br></span></code></pre></div></div>
+<ol start="3">
+<li class="">Disable HTTP completely</li>
+</ol>
+<ul>
+<li class="">Block port <code>80</code> (HTTP) and only accept <code>443</code> (HTTPS).</li>
+</ul>
+<ol start="4">
+<li class="">Use TLS Certificates (SSL)</li>
+</ol>
+<ul>
+<li class="">Get a trusted TLS cert (e.g., from Let’s Encrypt).</li>
+<li class="">Keep certificates updated &amp; rotated.</li>
+</ul>
+<ol start="5">
+<li class="">Validate Certificates</li>
+</ol>
+<ul>
+<li class="">Clients should reject self-signed or invalid certs unless explicitly trusted.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="rest-api-over-https">REST API over HTTPS<a href="#rest-api-over-https" class="hash-link" aria-label="Direct link to REST API over HTTPS" title="Direct link to REST API over HTTPS" translate="no">​</a></h3>
+<p>Insecure HTTP Request</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">GET http://api.example.com/user/profile</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Authorization: Bearer abc123token</span><br></span></code></pre></div></div>
+<p>Risk: The token is sent in plain text. Anyone sniffing the network (Wi-Fi hotspot, ISP, proxy) can steal it.</p>
+<p>Secure HTTPS Request</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">GET https://api.example.com/user/profile</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Authorization: Bearer abc123token</span><br></span></code></pre></div></div>
+<p>The request and token are encrypted with TLS.</p>
+<p>Even if intercepted, attackers cannot read or modify it.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="cross-origin-resource-sharing">Cross-Origin Resource Sharing<a href="#cross-origin-resource-sharing" class="hash-link" aria-label="Direct link to Cross-Origin Resource Sharing" title="Direct link to Cross-Origin Resource Sharing" translate="no">​</a></h2>
+<ul>
+<li class="">CORS is a browser security mechanism that controls how web applications (running in one origin/domain) can request resources from another origin.</li>
+<li class="">It prevents malicious websites from making unauthorized requests to your REST API on behalf of a user.</li>
+</ul>
+<p>Origin = combination of:</p>
+<div class="language-nginx codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-nginx codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">scheme + domain + port</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>https://app.example.com</code> → origin</li>
+<li class=""><code>https://api.example.com</code> → different origin</li>
+</ul>
+<p>By default, browsers block cross-origin requests for security. CORS defines rules for when to allow them.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-cors-is-important-in-rest-apis">Why CORS is Important in REST APIs<a href="#why-cors-is-important-in-rest-apis" class="hash-link" aria-label="Direct link to Why CORS is Important in REST APIs" title="Direct link to Why CORS is Important in REST APIs" translate="no">​</a></h3>
+<ul>
+<li class="">REST APIs are often consumed by frontend apps hosted on different domains.</li>
+<li class="">Example:<!-- -->
+<ul>
+<li class="">Frontend app → <code>https://myapp.com</code></li>
+<li class="">Backend API → <code>https://api.myapp.com</code></li>
+</ul>
+</li>
+<li class="">Without CORS → browser blocks API calls.</li>
+<li class="">With properly configured CORS → only trusted domains can call the API.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-cors-works">How CORS Works<a href="#how-cors-works" class="hash-link" aria-label="Direct link to How CORS Works" title="Direct link to How CORS Works" translate="no">​</a></h3>
+<ol>
+<li class="">Simple Request (e.g., GET with standard headers):</li>
+</ol>
+<ul>
+<li class="">Browser sends request directly with an <code>Origin</code> header.</li>
+<li class="">Server responds with <code>Access-Control-Allow-Origin</code> header if allowed.</li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">GET /user/profile HTTP/1.1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Host: api.example.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Origin: https://myapp.com</span><br></span></code></pre></div></div>
+<p>Response:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">HTTP/1.1 200 OK</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Origin: https://myapp.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Content-Type: application/json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{ &quot;username&quot;: &quot;masum&quot;, &quot;email&quot;: &quot;masum@example.com&quot; }</span><br></span></code></pre></div></div>
+<ol start="2">
+<li class="">Preflight Request (for non-simple requests, e.g., POST with custom headers):</li>
+</ol>
+<ul>
+<li class="">Browser sends an OPTIONS request first.</li>
+<li class="">Server replies with allowed methods, headers, origins.</li>
+<li class="">If valid → browser sends the actual request.</li>
+</ul>
+<p>Example (Preflight request):</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">OPTIONS /user/profile HTTP/1.1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Host: api.example.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Origin: https://myapp.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Request-Method: POST</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Request-Headers: Content-Type, Authorization</span><br></span></code></pre></div></div>
+<p>Response:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">HTTP/1.1 204 No Content</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Origin: https://myapp.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Methods: GET, POST, PUT, DELETE</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Headers: Content-Type, Authorization</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Credentials: true</span><br></span></code></pre></div></div>
+<p>Then the browser proceeds with the real <code>POST</code> request.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="cors-headers-explained">CORS Headers Explained<a href="#cors-headers-explained" class="hash-link" aria-label="Direct link to CORS Headers Explained" title="Direct link to CORS Headers Explained" translate="no">​</a></h3>
+<ul>
+<li class="">
+<p>Access-Control-Allow-Origin → which domains are allowed (e.g., <code>https://myapp.com</code> or <code>*</code>).</p>
+</li>
+<li class="">
+<p>Access-Control-Allow-Methods → allowed HTTP methods (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>).</p>
+</li>
+<li class="">
+<p>Access-Control-Allow-Headers → allowed request headers (<code>Authorization</code>, <code>Content-Type</code>).</p>
+</li>
+<li class="">
+<p>Access-Control-Allow-Credentials → whether cookies/auth headers are allowed (<code>true</code>/<code>false</code>).</p>
+</li>
+<li class="">
+<p>Access-Control-Max-Age → how long preflight results are cached (in seconds).</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="cors-in-rest-api">CORS in REST API<a href="#cors-in-rest-api" class="hash-link" aria-label="Direct link to CORS in REST API" title="Direct link to CORS in REST API" translate="no">​</a></h3>
+<p>Suppose your API is at <code>https://api.example.com</code> and frontend at <code>https://app.example.com</code>.</p>
+<p>Correct CORS Response</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">HTTP/1.1 200 OK</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Origin: https://app.example.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Methods: GET, POST, PUT, DELETE</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Headers: Content-Type, Authorization</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Access-Control-Allow-Credentials: true</span><br></span></code></pre></div></div>
+<ul>
+<li class="">Only requests from <code>https://app.example.com</code> are allowed.</li>
+<li class="">API allows specific methods &amp; headers.</li>
+<li class="">Cookies or JWT tokens can be sent with <code>withCredentials = true</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="best-practices-for-cors-in-rest-apis">Best Practices for CORS in REST APIs<a href="#best-practices-for-cors-in-rest-apis" class="hash-link" aria-label="Direct link to Best Practices for CORS in REST APIs" title="Direct link to Best Practices for CORS in REST APIs" translate="no">​</a></h3>
+<ol>
+<li class="">Never use <code>*</code> for <code>Access-Control-Allow-Origin</code> if your API requires authentication.</li>
+<li class="">Restrict allowed methods</li>
+</ol>
+<ul>
+<li class="">Only expose what’s necessary (<code>GET</code>, <code>POST</code>).</li>
+</ul>
+<ol start="3">
+<li class="">Restrict allowed headers</li>
+</ol>
+<ul>
+<li class="">Avoid letting clients send arbitrary headers.</li>
+</ul>
+<ol start="4">
+<li class="">Enable credentials only when needed</li>
+</ol>
+<ul>
+<li class=""><code>Access-Control-Allow-Credentials</code>: true → only for trusted apps.</li>
+</ul>
+<ol start="5">
+<li class="">Use short max-age for sensitive APIs</li>
+</ol>
+<ul>
+<li class="">Prevents browsers from caching bad CORS rules too long.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="rate-limiting">Rate Limiting<a href="#rate-limiting" class="hash-link" aria-label="Direct link to Rate Limiting" title="Direct link to Rate Limiting" translate="no">​</a></h2>
+<p>Rate limiting is the process of restricting the number of requests a client can make to an API within a specific timeframe.</p>
+<ul>
+<li class="">Prevents DoS/DDoS attacks (attackers flooding API with requests).</li>
+<li class="">Prevents brute force attacks (guessing passwords or tokens).</li>
+<li class="">Ensures fair usage so one client doesn’t overload the system.</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li class="">Limit each client to 100 requests per minute.</li>
+<li class="">If a client exceeds → return <code>429 Too Many Requests</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-of-rate-limiting">Example of Rate Limiting<a href="#example-of-rate-limiting" class="hash-link" aria-label="Direct link to Example of Rate Limiting" title="Direct link to Example of Rate Limiting" translate="no">​</a></h3>
+<p>API allows max 5 requests per minute per user.</p>
+<p>Request (6th request within 1 minute)</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">GET /user/profile HTTP/1.1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Authorization: Bearer eyJhbGciOiJIUzI1NiIs...</span><br></span></code></pre></div></div>
+<p>Response</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">HTTP/1.1 429 Too Many Requests</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Retry-After: 30</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Content-Type: application/json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;error&quot;: &quot;Rate limit exceeded. Try again in 30 seconds.&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><code>Retry-After: 30</code> → tells client how long to wait before retrying.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-rate-limiting-strategies">Common Rate Limiting Strategies<a href="#common-rate-limiting-strategies" class="hash-link" aria-label="Direct link to Common Rate Limiting Strategies" title="Direct link to Common Rate Limiting Strategies" translate="no">​</a></h3>
+<ol>
+<li class="">Fixed Window</li>
+</ol>
+<ul>
+<li class="">Example: 100 requests per minute.</li>
+<li class="">Simple but can cause bursts at window edges.</li>
+</ul>
+<ol start="2">
+<li class="">Sliding Window / Rolling Window</li>
+</ol>
+<ul>
+<li class="">Tracks requests over the last N seconds.</li>
+<li class="">Smoother enforcement.</li>
+</ul>
+<ol start="3">
+<li class="">Token Bucket (most popular)</li>
+</ol>
+<ul>
+<li class="">Each client has a &quot;bucket&quot; of tokens (e.g., 10 tokens).</li>
+<li class="">Each request consumes a token.</li>
+<li class="">Tokens refill at a fixed rate.</li>
+</ul>
+<ol start="4">
+<li class="">Leaky Bucket</li>
+</ol>
+<ul>
+<li class="">Similar to token bucket but enforces steady outflow (good for throttling).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="best-practices-of-rate-limiting">Best Practices of Rate Limiting<a href="#best-practices-of-rate-limiting" class="hash-link" aria-label="Direct link to Best Practices of Rate Limiting" title="Direct link to Best Practices of Rate Limiting" translate="no">​</a></h3>
+<ul>
+<li class="">Different limits for different endpoints<!-- -->
+<ul>
+<li class="">Example: <code>/login</code> (lower limit) vs <code>/posts</code> (higher).</li>
+</ul>
+</li>
+<li class="">Different limits per user / API key / IP</li>
+<li class="">Send helpful headers<!-- -->
+<ul>
+<li class=""><code>X-RateLimit-Limit</code> → max allowed</li>
+<li class=""><code>X-RateLimit-Remaining</code> → remaining requests</li>
+<li class=""><code>X-RateLimit-Reset</code> → reset time</li>
+</ul>
+</li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">X-RateLimit-Limit: 100</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">X-RateLimit-Remaining: 5</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">X-RateLimit-Reset: 1694200320</span><br></span></code></pre></div></div>
+<ul>
+<li class="">Use caching layer (Redis, Memcached) for fast counting.</li>
+<li class="">Combine with monitoring to detect abuse.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="throttling">Throttling<a href="#throttling" class="hash-link" aria-label="Direct link to Throttling" title="Direct link to Throttling" translate="no">​</a></h2>
+<p>Throttling is slowing down or delaying requests when clients exceed certain thresholds.</p>
+<ul>
+<li class="">Instead of outright blocking, the API may:<!-- -->
+<ul>
+<li class="">Queue requests.</li>
+<li class="">Allow fewer requests per second.</li>
+</ul>
+</li>
+<li class="">Ensures system stays responsive under heavy load.</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li class="">API allows 10 requests per second.</li>
+<li class="">If a client sends 20, extra requests are delayed (processed later).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-of-throttling">Example of Throttling<a href="#example-of-throttling" class="hash-link" aria-label="Direct link to Example of Throttling" title="Direct link to Example of Throttling" translate="no">​</a></h3>
+<p>Scenario: API allows max 10 requests per second.</p>
+<p>If a client sends 15 requests:</p>
+<ul>
+<li class="">First 10 are processed immediately.</li>
+<li class="">Next 5 are delayed and spread out over time.</li>
+</ul>
+<p>Client won’t see errors, but responses arrive slower.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="rate-limiting-vs-throttling">Rate Limiting vs Throttling<a href="#rate-limiting-vs-throttling" class="hash-link" aria-label="Direct link to Rate Limiting vs Throttling" title="Direct link to Rate Limiting vs Throttling" translate="no">​</a></h3>
+<table><thead><tr><th>Feature</th><th>Rate Limiting 🚦</th><th>Throttling 🕒</th></tr></thead><tbody><tr><td>Purpose</td><td>Restrict maximum requests</td><td>Slow down requests</td></tr><tr><td>Behavior</td><td>Block when limit exceeded</td><td>Delay or spread requests</td></tr><tr><td>Example</td><td>100 requests/minute max</td><td>10 requests/sec, others queued</td></tr><tr><td>Error Code</td><td><code>429 Too Many Requests</code></td><td>Usually still <code>200</code> (delayed)</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="avoiding-common-vulnerabilities">Avoiding common vulnerabilities<a href="#avoiding-common-vulnerabilities" class="hash-link" aria-label="Direct link to Avoiding common vulnerabilities" title="Direct link to Avoiding common vulnerabilities" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="sql-injection">SQL Injection<a href="#sql-injection" class="hash-link" aria-label="Direct link to SQL Injection" title="Direct link to SQL Injection" translate="no">​</a></h3>
+<ul>
+<li class="">SQL Injection happens when untrusted input is concatenated into a database query.</li>
+<li class="">Attackers can manipulate queries to read, modify, or delete data.</li>
+</ul>
+<p><strong>Vulnerable Example</strong></p>
+<div class="language-py codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-py codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Python pseudo-code</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">username </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> request</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">GET</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;username&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">query </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string-interpolation string" style="color:#e3116c">f&quot;SELECT * FROM users WHERE username = &#x27;</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">username</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&#x27;&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cursor</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">execute</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">query</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Python pseudo-code</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">username </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> request</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">GET</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;username&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">query </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string-interpolation string" style="color:#e3116c">f&quot;SELECT * FROM users WHERE username = &#x27;</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">username</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&#x27;&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cursor</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">execute</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">query</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<ul>
+<li class="">If attacker sends: <code>username=admin&#x27; OR &#x27;1&#x27;=&#x27;1</code></li>
+<li class="">Generated query: <code>SELECT * FROM users WHERE username = &#x27;admin&#x27; OR &#x27;1&#x27;=&#x27;1&#x27;;</code> Returns all users instead of just one.</li>
+</ul>
+<p><strong>Prevention</strong></p>
+<ol>
+<li class="">
+<p>Use Parameterized Queries / Prepared Statements: <code>cursor.execute(&quot;SELECT * FROM users WHERE username = %s&quot;, (username,))</code></p>
+</li>
+<li class="">
+<p>Use ORM frameworks (like Django ORM, Hibernate, SQLAlchemy).</p>
+</li>
+<li class="">
+<p>Validate and sanitize input (ensure type: string, int, etc.).</p>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="cross-site-scripting">Cross-Site Scripting<a href="#cross-site-scripting" class="hash-link" aria-label="Direct link to Cross-Site Scripting" title="Direct link to Cross-Site Scripting" translate="no">​</a></h3>
+<ul>
+<li class="">XSS occurs when malicious JavaScript is injected into your API’s response.</li>
+<li class="">If your REST API is consumed by a frontend (like React, Angular), stored XSS can allow attackers to steal cookies, tokens, or session info.</li>
+</ul>
+<p><strong>Vulnerable Example</strong></p>
+<p>API returns unescaped user input:</p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token property" style="color:#36acaa">&quot;comment&quot;</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;&lt;script&gt;alert(&#x27;Hacked!&#x27;)&lt;/script&gt;&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<p>Browser frontend might render this as executable script → attacker code runs.</p>
+<p><strong>Prevention</strong></p>
+<ol>
+<li class="">Escape or sanitize output before sending to clients.</li>
+</ol>
+<ul>
+<li class="">Use libraries like DOMPurify (JS), OWASP ESAPI (Java).</li>
+</ul>
+<ol start="2">
+<li class="">Return only JSON, never raw HTML from REST APIs.</li>
+</ol>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> </span><span class="token property" style="color:#36acaa">&quot;comment&quot;</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;&amp;lt;script&amp;gt;alert(&#x27;Hacked!&#x27;)&amp;lt;/script&amp;gt;&quot;</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<ol start="3">
+<li class="">Set correct headers</li>
+</ol>
+<ul>
+<li class=""><code>Content-Type: application/json</code></li>
+<li class=""><code>X-Content-Type-Options: nosniff</code></li>
+</ul>
+<ol start="4">
+<li class="">Implement CSP (Content Security Policy) on frontend.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="cross-site-request-forgery">Cross-Site Request Forgery<a href="#cross-site-request-forgery" class="hash-link" aria-label="Direct link to Cross-Site Request Forgery" title="Direct link to Cross-Site Request Forgery" translate="no">​</a></h3>
+<ul>
+<li class="">CSRF tricks a logged-in user’s browser into making an unintended request to your API.</li>
+<li class="">Example: If user is logged into a banking app, an attacker could trick them into transferring money using a malicious webpage.</li>
+</ul>
+<p><strong>Vulnerable Example</strong></p>
+<ul>
+<li class="">User is logged in to <code>bank.com</code></li>
+<li class="">Attacker hosts a page with:</li>
+</ul>
+<div class="language-html codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-html codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token tag punctuation" style="color:#393A34">&lt;</span><span class="token tag" style="color:#00009f">form</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">action</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">https://bank.com/api/transfer</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">method</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">POST</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag punctuation" style="color:#393A34">&gt;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token tag punctuation" style="color:#393A34">&lt;</span><span class="token tag" style="color:#00009f">input</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">type</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">hidden</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">name</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">amount</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">value</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">1000</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag" style="color:#00009f"> </span><span class="token tag punctuation" style="color:#393A34">/&gt;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token tag punctuation" style="color:#393A34">&lt;</span><span class="token tag" style="color:#00009f">input</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">type</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">hidden</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">name</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">toAccount</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">value</span><span class="token tag attr-value punctuation attr-equals" style="color:#393A34">=</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag attr-value" style="color:#e3116c">attacker123</span><span class="token tag attr-value punctuation" style="color:#393A34">&quot;</span><span class="token tag" style="color:#00009f"> </span><span class="token tag punctuation" style="color:#393A34">/&gt;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token tag punctuation" style="color:#393A34">&lt;/</span><span class="token tag" style="color:#00009f">form</span><span class="token tag punctuation" style="color:#393A34">&gt;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token tag punctuation" style="color:#393A34">&lt;</span><span class="token tag" style="color:#00009f">script</span><span class="token tag punctuation" style="color:#393A34">&gt;</span><span class="token script language-javascript"></span><br></span><span class="token-line" style="color:#393A34"><span class="token script language-javascript">  </span><span class="token script language-javascript dom variable" style="color:#36acaa">document</span><span class="token script language-javascript punctuation" style="color:#393A34">.</span><span class="token script language-javascript property-access">forms</span><span class="token script language-javascript punctuation" style="color:#393A34">[</span><span class="token script language-javascript number" style="color:#36acaa">0</span><span class="token script language-javascript punctuation" style="color:#393A34">]</span><span class="token script language-javascript punctuation" style="color:#393A34">.</span><span class="token script language-javascript method function property-access" style="color:#d73a49">submit</span><span class="token script language-javascript punctuation" style="color:#393A34">(</span><span class="token script language-javascript punctuation" style="color:#393A34">)</span><span class="token script language-javascript punctuation" style="color:#393A34">;</span><span class="token script language-javascript"></span><br></span><span class="token-line" style="color:#393A34"><span class="token script language-javascript"></span><span class="token tag punctuation" style="color:#393A34">&lt;/</span><span class="token tag" style="color:#00009f">script</span><span class="token tag punctuation" style="color:#393A34">&gt;</span><br></span></code></pre></div></div>
+<p>User unknowingly sends money while visiting attacker’s site.</p>
+<p><strong>Prevention</strong></p>
+<ol>
+<li class="">Use anti-CSRF tokens</li>
+</ol>
+<ul>
+<li class="">Include random token in forms/requests.</li>
+</ul>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> </span><span class="token property" style="color:#36acaa">&quot;csrf_token&quot;</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;abc123xyz&quot;</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<ol start="2">
+<li class="">Use SameSite cookies</li>
+</ol>
+<ul>
+<li class=""><code>Set-Cookie: session=abc123; SameSite=Strict; Secure</code></li>
+<li class="">Prevents cookies from being sent in cross-site requests.</li>
+</ul>
+<ol start="3">
+<li class="">
+<p>Require re-authentication for critical actions (e.g., money transfer).</p>
+</li>
+<li class="">
+<p>Use JWT in headers instead of cookies for stateless APIs (but still ensure proper CORS rules).</p>
+</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="api-gateway-usage">API Gateway usage<a href="#api-gateway-usage" class="hash-link" aria-label="Direct link to API Gateway usage" title="Direct link to API Gateway usage" translate="no">​</a></h2>
+<ul>
+<li class="">An API Gateway is a single entry point for all client requests to your REST APIs.</li>
+<li class="">Instead of clients calling services directly, they go through the gateway.</li>
+<li class="">The gateway then routes, filters, or modifies the requests before sending them to backend microservices.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-use-an-api-gateway-for-security">Why Use an API Gateway for Security?<a href="#why-use-an-api-gateway-for-security" class="hash-link" aria-label="Direct link to Why Use an API Gateway for Security?" title="Direct link to Why Use an API Gateway for Security?" translate="no">​</a></h3>
+<ul>
+<li class="">Centralized authentication &amp; authorization</li>
+<li class="">Rate limiting &amp; throttling</li>
+<li class="">Logging &amp; monitoring (audit trails)</li>
+<li class="">CORS &amp; HTTPS enforcement</li>
+<li class="">Input validation &amp; threat protection (e.g., blocking SQLi, XSS patterns)</li>
+<li class="">Acts as a firewall for APIs (protects backend services from direct exposure)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-an-api-gateway-works-flow">How an API Gateway Works (Flow)<a href="#how-an-api-gateway-works-flow" class="hash-link" aria-label="Direct link to How an API Gateway Works (Flow)" title="Direct link to How an API Gateway Works (Flow)" translate="no">​</a></h3>
+<ol>
+<li class="">Client makes request to <code>https://api.example.com</code></li>
+<li class="">API Gateway intercepts request → applies policies (auth, rate limit, CORS, etc.)</li>
+<li class="">If valid → forwards to backend service (e.g., <code>user-service</code>, <code>payment-service</code>)</li>
+<li class="">Collects response and returns it to client</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-security-features-of-api-gateway">Key Security Features of API Gateway<a href="#key-security-features-of-api-gateway" class="hash-link" aria-label="Direct link to Key Security Features of API Gateway" title="Direct link to Key Security Features of API Gateway" translate="no">​</a></h3>
+<ol>
+<li class="">Authentication &amp; Authorization</li>
+</ol>
+<ul>
+<li class="">Gateway can check API keys, JWT tokens, OAuth 2.0 tokens before forwarding requests.</li>
+<li class="">Example: If a request lacks a valid token → rejected at gateway (never reaches backend).</li>
+</ul>
+<ol start="2">
+<li class="">Rate Limiting &amp; Throttling</li>
+</ol>
+<ul>
+<li class="">Prevents abuse and DDoS attacks.</li>
+<li class="">Example: Limit <code>100 requests/minute</code> per user.</li>
+</ul>
+<ol start="3">
+<li class="">Data Protection (HTTPS Everywhere)</li>
+</ol>
+<ul>
+<li class="">Gateway enforces TLS/SSL.</li>
+<li class="">Backend services can remain private (internal network only).</li>
+</ul>
+<ol start="4">
+<li class="">Input Validation / Threat Protection</li>
+</ol>
+<ul>
+<li class="">Blocks requests with malicious payloads (SQL injection, XSS, etc.).</li>
+<li class="">Example: API Gateway WAF (Web Application Firewall) integration.</li>
+</ul>
+<ol start="5">
+<li class="">CORS Handling</li>
+</ol>
+<ul>
+<li class="">Centralized CORS configuration instead of every microservice handling it.</li>
+</ul>
+<ol start="6">
+<li class="">Logging &amp; Monitoring</li>
+</ol>
+<ul>
+<li class="">Logs all requests/responses.</li>
+<li class="">Helps detect anomalies (e.g., brute force attempts).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-scenario-with-api-gateway">Example Scenario with API Gateway<a href="#example-scenario-with-api-gateway" class="hash-link" aria-label="Direct link to Example Scenario with API Gateway" title="Direct link to Example Scenario with API Gateway" translate="no">​</a></h3>
+<ul>
+<li class="">Frontend app → <code>https://app.example.com</code></li>
+<li class="">API Gateway → <code>https://api.example.com</code></li>
+<li class="">Backend services (internal):<!-- -->
+<ul>
+<li class=""><code>user-service.local</code></li>
+<li class=""><code>payment-service.local</code></li>
+</ul>
+</li>
+</ul>
+<p>Request Flow</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">GET /users/profile HTTP/1.1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Host: api.example.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Authorization: Bearer eyJhbGciOiJIUzI1NiIs...</span><br></span></code></pre></div></div>
+<p>Gateway Actions</p>
+<ol>
+<li class="">
+<p>Check authentication → validate JWT.</p>
+</li>
+<li class="">
+<p>Check rate limit → ensure client hasn’t exceeded quota.</p>
+</li>
+<li class="">
+<p>Check CORS policy → ensure request origin is allowed.</p>
+</li>
+<li class="">
+<p>Forward request → <code>user-service.local/api/profile</code>.</p>
+</li>
+</ol>
+<p>Response from Gateway</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">HTTP/1.1 200 OK</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Content-Type: application/json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{ &quot;id&quot;: 101, &quot;username&quot;: &quot;masum&quot;, &quot;email&quot;: &quot;masum@example.com&quot; }</span><br></span></code></pre></div></div>
+<p>If client exceeded limit:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">HTTP/1.1 429 Too Many Requests</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Retry-After: 60</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Content-Type: application/json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{ &quot;error&quot;: &quot;Rate limit exceeded. Try again later.&quot; }</span><br></span></code></pre></div></div></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/handbook/docs/rest-api-design/Access Control"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Access Control</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/handbook/docs/rest-api-design/Input Validation"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Input Validation</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#https-everywhere" class="table-of-contents__link toc-highlight">HTTPS Everywhere</a><ul><li><a href="#why-https-is-critical-for-rest-apis" class="table-of-contents__link toc-highlight">Why HTTPS is Critical for REST APIs</a></li><li><a href="#how-to-enforce-https-in-rest-apis" class="table-of-contents__link toc-highlight">How to Enforce HTTPS in REST APIs</a></li><li><a href="#rest-api-over-https" class="table-of-contents__link toc-highlight">REST API over HTTPS</a></li></ul></li><li><a href="#cross-origin-resource-sharing" class="table-of-contents__link toc-highlight">Cross-Origin Resource Sharing</a><ul><li><a href="#why-cors-is-important-in-rest-apis" class="table-of-contents__link toc-highlight">Why CORS is Important in REST APIs</a></li><li><a href="#how-cors-works" class="table-of-contents__link toc-highlight">How CORS Works</a></li><li><a href="#cors-headers-explained" class="table-of-contents__link toc-highlight">CORS Headers Explained</a></li><li><a href="#cors-in-rest-api" class="table-of-contents__link toc-highlight">CORS in REST API</a></li><li><a href="#best-practices-for-cors-in-rest-apis" class="table-of-contents__link toc-highlight">Best Practices for CORS in REST APIs</a></li></ul></li><li><a href="#rate-limiting" class="table-of-contents__link toc-highlight">Rate Limiting</a><ul><li><a href="#example-of-rate-limiting" class="table-of-contents__link toc-highlight">Example of Rate Limiting</a></li><li><a href="#common-rate-limiting-strategies" class="table-of-contents__link toc-highlight">Common Rate Limiting Strategies</a></li><li><a href="#best-practices-of-rate-limiting" class="table-of-contents__link toc-highlight">Best Practices of Rate Limiting</a></li></ul></li><li><a href="#throttling" class="table-of-contents__link toc-highlight">Throttling</a><ul><li><a href="#example-of-throttling" class="table-of-contents__link toc-highlight">Example of Throttling</a></li><li><a href="#rate-limiting-vs-throttling" class="table-of-contents__link toc-highlight">Rate Limiting vs Throttling</a></li></ul></li><li><a href="#avoiding-common-vulnerabilities" class="table-of-contents__link toc-highlight">Avoiding common vulnerabilities</a><ul><li><a href="#sql-injection" class="table-of-contents__link toc-highlight">SQL Injection</a></li><li><a href="#cross-site-scripting" class="table-of-contents__link toc-highlight">Cross-Site Scripting</a></li><li><a href="#cross-site-request-forgery" class="table-of-contents__link toc-highlight">Cross-Site Request Forgery</a></li></ul></li><li><a href="#api-gateway-usage" class="table-of-contents__link toc-highlight">API Gateway usage</a><ul><li><a href="#why-use-an-api-gateway-for-security" class="table-of-contents__link toc-highlight">Why Use an API Gateway for Security?</a></li><li><a href="#how-an-api-gateway-works-flow" class="table-of-contents__link toc-highlight">How an API Gateway Works (Flow)</a></li><li><a href="#key-security-features-of-api-gateway" class="table-of-contents__link toc-highlight">Key Security Features of API Gateway</a></li><li><a href="#example-scenario-with-api-gateway" class="table-of-contents__link toc-highlight">Example Scenario with API Gateway</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2026
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>
