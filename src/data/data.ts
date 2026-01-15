@@ -94,6 +94,12 @@ const backend = [
             "Message queues, exchanges, routing, pub/sub patterns, reliability, and distributed messaging.",
         link: "/docs/rabbitmq",
         Svg: require("@site/static/icons/rabbitmq.svg").default,
+    }, {
+        title: "Git",
+        description:
+            "Version control fundamentals, branching, merging, rebasing, and collaborative workflow management.",
+        link: "/docs/git",
+        Svg: require("@site/static/icons/git.svg").default,
     },
 ];
 const languages = [

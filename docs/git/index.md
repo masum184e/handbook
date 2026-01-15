@@ -3,4 +3,4 @@ title: Introduction
 sidebar_position: 1
 ---
 
-Welcome to the Rest API Design handbook.
+Welcome to the Git handbook.
