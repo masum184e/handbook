@@ -36,6 +36,13 @@ const databases = [
         link: "/docs/mysql",
         Svg: require("@site/static/icons/mysql.svg").default,
     },
+    // {
+    //     title: "PostgreSQL",
+    //     description:
+    //         "Advanced SQL, indexing, performance tuning, JSONB, full-text search, and enterprise-grade features.",
+    //     link: "/docs/postgresql",
+    //     Svg: require("@site/static/icons/postgresql.svg").default,
+    // },
     {
         title: "MongoDB",
         description:
@@ -50,7 +57,29 @@ const databases = [
         link: "/docs/redis",
         Svg: require("@site/static/icons/redis.svg").default,
     },
+    {
+        title: "Mongoose",
+        description:
+            "MongoDB object modeling for Node.js, schema design, validation, middleware, and relationships.",
+        link: "/docs/mongoose",
+        Svg: require("@site/static/icons/mongoose.svg").default,
+    },
+    {
+        title: "Prisma",
+        description:
+            "Modern ORM for Node.js and TypeScript with type-safe database access, migrations, and schema management.",
+        link: "/docs/prisma",
+        Svg: require("@site/static/icons/prisma.svg").default,
+    },
+    // {
+    //     title: "Supabase",
+    //     description:
+    //         "Open-source Firebase alternative built on PostgreSQL with real-time APIs, auth, storage, and edge functions.",
+    //     link: "/docs/supabase",
+    //     Svg: require("@site/static/icons/supabase.svg").default,
+    // },
 ];
+
 
 const backend = [
     {

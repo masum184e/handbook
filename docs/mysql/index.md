@@ -35,3 +35,15 @@ It is used to store, organize, and manage data in a structured way using tables 
    - Can handle small projects (like a single-user application) as well as large, high-traffic websites.
 7. Security
    - Built-in user authentication, SSL support, and privileges system.
+
+## Questions
+
+1. when using InnoDB engine ensures data reliability and integrity
+2. how to perform caching.
+3. practice cloud solutions
+4. how to define `1-1`, `1-\*`, `\*-\*` relationship with foreign ey
+5. constraint → Rules for the column (e.g., NOT NULL, UNIQUE, PRIMARY KEY). table_constraints → Constraints applied to the table as a whole (e.g., a PRIMARY KEY defined at the end).
+6. Be very careful — CASCADE can remove more than you expect.
+7. `DECIMAL(10, 2)` - what the value inserted for 3.5278 is it 3.52 or 3.53?
+8. how B tree work during indexing
+9. An index is a data structure that stores pointers to rows in a table, organized to make lookups faster.
