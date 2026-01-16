@@ -57,20 +57,20 @@ const databases = [
         link: "/docs/redis",
         Svg: require("@site/static/icons/redis.svg").default,
     },
-    {
-        title: "Mongoose",
-        description:
-            "MongoDB object modeling for Node.js, schema design, validation, middleware, and relationships.",
-        link: "/docs/mongoose",
-        Svg: require("@site/static/icons/mongoose.svg").default,
-    },
-    {
-        title: "Prisma",
-        description:
-            "Modern ORM for Node.js and TypeScript with type-safe database access, migrations, and schema management.",
-        link: "/docs/prisma",
-        Svg: require("@site/static/icons/prisma.svg").default,
-    },
+    // {
+    //     title: "Mongoose",
+    //     description:
+    //         "MongoDB object modeling for Node.js, schema design, validation, middleware, and relationships.",
+    //     link: "/docs/mongoose",
+    //     Svg: require("@site/static/icons/mongoose.svg").default,
+    // },
+    // {
+    //     title: "Prisma",
+    //     description:
+    //         "Modern ORM for Node.js and TypeScript with type-safe database access, migrations, and schema management.",
+    //     link: "/docs/prisma",
+    //     Svg: require("@site/static/icons/prisma.svg").default,
+    // },
     // {
     //     title: "Supabase",
     //     description:
