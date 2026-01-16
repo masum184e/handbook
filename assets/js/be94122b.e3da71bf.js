@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[3650],{91688(a){a.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Prisma","slug":"/category/prisma","permalink":"/handbook/docs/category/prisma","sidebar":"prismaApiSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/prisma/Introduction"}}}}')}}]);
