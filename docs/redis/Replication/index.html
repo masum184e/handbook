@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-redis/Replication" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Replication | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/redis/Replication"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Replication | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="Master-Slave replication"><meta data-rh="true" property="og:description" content="Master-Slave replication"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/redis/Replication"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/redis/Replication" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/redis/Replication" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.f95f8452.css">
+<script src="/handbook/assets/js/runtime~main.37906538.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.169a743f.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Replication</h1></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="master-slave-replication">Master-Slave replication<a href="#master-slave-replication" class="hash-link" aria-label="Direct link to Master-Slave replication" title="Direct link to Master-Slave replication" translate="no">​</a></h2>
+<p>Redis provides asynchronous replication that allows you to set up one master node and one or more slave (replica) nodes.</p>
+<p><strong>The master:</strong></p>
+<ul>
+<li class="">Handles all write operations (SET, INCR, DEL, etc.).</li>
+<li class="">Propagates data changes to the replicas.</li>
+</ul>
+<p><strong>The slaves:</strong></p>
+<ul>
+<li class="">Get a copy of the master’s dataset.</li>
+<li class="">Keep synchronized with the master by receiving a continuous stream of changes.</li>
+<li class="">Can handle read-only queries (GET, MGET, etc.), reducing load on the master.</li>
+</ul>
+<p>This model is often used for high availability (HA), load balancing, and data redundancy.</p>
+<p><strong>Limitations</strong></p>
+<ul>
+<li class="">Asynchronous replication → data may be lost if the master crashes before changes are propagated.</li>
+<li class="">Slaves are read-only → writes always go to master.</li>
+<li class="">No automatic failover → unless you use Redis Sentinel or Cluster.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-replication-works-in-redis">How Replication Works in Redis<a href="#how-replication-works-in-redis" class="hash-link" aria-label="Direct link to How Replication Works in Redis" title="Direct link to How Replication Works in Redis" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p><strong>Initial Sync</strong></p>
+<ul>
+<li class="">When a slave connects to the master, it requests a full synchronization.</li>
+<li class="">The master performs a <code>BGSAVE</code> (background save) to create an RDB snapshot.</li>
+<li class="">It sends this snapshot to the slave, which loads it into memory.</li>
+<li class="">While the snapshot is being sent, the master buffers write commands.</li>
+<li class="">After the snapshot is loaded, the master sends the buffered commands to the slave.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Ongoing Replication</strong></p>
+<ul>
+<li class="">After the initial sync, the master continuously sends write commands to the slave so it stays up-to-date.</li>
+<li class="">This is asynchronous, meaning there could be a slight lag.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Automatic Reconnection</strong></p>
+<ul>
+<li class="">If the slave disconnects, it automatically tries to reconnect and resync with the master.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration">Configuration<a href="#configuration" class="hash-link" aria-label="Direct link to Configuration" title="Direct link to Configuration" translate="no">​</a></h3>
+<p>On the Master (redis.conf)</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Master’s config (default)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">replica-serve-stale-data yes</span><br></span></code></pre></div></div>
+<p>On the Slave (redis.conf)</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Point to the master</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">replicaof 127.0.0.1 6379</span><br></span></code></pre></div></div>
+<p>Or dynamically in the CLI:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6380&gt; REPLICAOF 127.0.0.1 6379</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-setup">Example Setup<a href="#example-setup" class="hash-link" aria-label="Direct link to Example Setup" title="Direct link to Example Setup" translate="no">​</a></h3>
+<p>Let’s say we want 1 master and 2 slaves.</p>
+<ol>
+<li class="">
+<p><strong>Start Master</strong></p>
+<div class="language-sj codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sj codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 6379</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p><strong>Start Slaves</strong></p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 6380</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 6381</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p><strong>Configure Slaves</strong></p>
+<p>In the Redis CLI:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6380&gt; REPLICAOF 127.0.0.1 6379</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6381&gt; REPLICAOF 127.0.0.1 6379</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p><strong>Test Replication</strong></p>
+<p>On master:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6379&gt; SET user:1 &quot;Alice&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">OK</span><br></span></code></pre></div></div>
+<p>On slave (port 6380 or 6381):</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6380&gt; GET user:1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;Alice&quot;</span><br></span></code></pre></div></div>
+<p>The data written to the master is automatically replicated to the slaves.</p>
+</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="read-replicas-in-redis">Read Replicas in Redis<a href="#read-replicas-in-redis" class="hash-link" aria-label="Direct link to Read Replicas in Redis" title="Direct link to Read Replicas in Redis" translate="no">​</a></h2>
+<p>A read replica in Redis is simply a replica node (slave) configured to receive data from the master and serve read-only queries.</p>
+<ul>
+<li class="">Master: Handles all write operations (e.g., <code>SET</code>, <code>INCR</code>, <code>DEL</code>).</li>
+<li class="">Replica: Receives replicated data from the master and can serve read operations (e.g., <code>GET</code>, <code>MGET</code>, <code>HGET</code>).</li>
+</ul>
+<p>This improves performance and scalability, since you can distribute read queries across multiple replicas, reducing load on the master.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-characteristics-of-read-replicas">Key Characteristics of Read Replicas<a href="#key-characteristics-of-read-replicas" class="hash-link" aria-label="Direct link to Key Characteristics of Read Replicas" title="Direct link to Key Characteristics of Read Replicas" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p><strong>Read-only by default</strong></p>
+<ul>
+<li class="">By default, replicas are read-only (replica-read-only yes in config).</li>
+<li class="">This prevents accidental writes.</li>
+<li class="">You can override with CONFIG SET replica-read-only no, but it breaks consistency.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Asynchronous Replication</strong></p>
+<ul>
+<li class="">Replicas might be slightly behind the master (called replication lag).</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Scaling Reads</strong></p>
+<ul>
+<li class="">Applications can direct read-heavy traffic (like analytics or reporting queries) to replicas.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>High Availability</strong></p>
+<ul>
+<li class="">If the master goes down, replicas can be promoted to master (manually, or automatically via Sentinel).</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="limitations-of-read-replicas">Limitations of Read Replicas<a href="#limitations-of-read-replicas" class="hash-link" aria-label="Direct link to Limitations of Read Replicas" title="Direct link to Limitations of Read Replicas" translate="no">​</a></h3>
+<ul>
+<li class="">Replication Lag: Replicas may serve slightly outdated data compared to the master.</li>
+<li class="">No Writes Allowed: You cannot perform writes on replicas unless explicitly allowed.</li>
+<li class="">Manual Promotion: By default, replicas don’t automatically take over as master (requires Sentinel or Cluster).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="redis-sentinel-for-failover">Redis Sentinel for Failover<a href="#redis-sentinel-for-failover" class="hash-link" aria-label="Direct link to Redis Sentinel for Failover" title="Direct link to Redis Sentinel for Failover" translate="no">​</a></h2>
+<p>Redis Sentinel is a distributed system that provides:</p>
+<ol>
+<li class="">
+<p><strong>Monitoring</strong></p>
+<ul>
+<li class="">Keeps track of whether the master and replicas are working properly.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Notification</strong></p>
+<ul>
+<li class="">Alerts administrators or external systems when something goes wrong.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Automatic Failover</strong></p>
+<ul>
+<li class="">If the master is not reachable, Sentinel promotes one of the replicas to master and reconfigures the other replicas to follow it.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Configuration Provider</strong></p>
+<ul>
+<li class="">Applications can query Sentinel to know the current master’s address (no need to hardcode the master IP).</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-sentinel">Why Sentinel?<a href="#why-sentinel" class="hash-link" aria-label="Direct link to Why Sentinel?" title="Direct link to Why Sentinel?" translate="no">​</a></h3>
+<ul>
+<li class="">Normal master-replica setup gives redundancy but requires manual intervention when the master fails.</li>
+<li class="">Sentinel automates failover, ensuring high availability with minimal downtime.</li>
+<li class="">Useful for production deployments where availability is critical.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-sentinel-works">How Sentinel Works<a href="#how-sentinel-works" class="hash-link" aria-label="Direct link to How Sentinel Works" title="Direct link to How Sentinel Works" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p><strong>Monitoring</strong></p>
+<ul>
+<li class="">Each Sentinel constantly checks the health of the master and replicas via PINGs.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Failure Detection</strong></p>
+<ul>
+<li class="">If a master doesn’t respond within a configured time (down-after-milliseconds), the Sentinel marks it as subjectively down.</li>
+<li class="">Other Sentinels must agree to mark it objectively down (majority vote).</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Failover</strong></p>
+<ul>
+<li class="">Sentinels elect a leader.</li>
+<li class="">The leader promotes one replica to master.</li>
+<li class="">Other replicas are reconfigured to follow the new master.</li>
+<li class="">Applications connected through Sentinel will automatically discover the new master.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="sentinel-configuration-example">Sentinel Configuration Example<a href="#sentinel-configuration-example" class="hash-link" aria-label="Direct link to Sentinel Configuration Example" title="Direct link to Sentinel Configuration Example" translate="no">​</a></h3>
+<p>Suppose we have:</p>
+<ul>
+<li class="">Master → Port 6379</li>
+<li class="">Replicas → Ports 6380, 6381</li>
+<li class="">Sentinels → Ports 26379, 26380, 26381</li>
+</ul>
+<ol>
+<li class="">
+<p><strong>Configure Redis Master</strong></p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># redis-master.conf</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">port 6379</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p><strong>Configure Replicas</strong></p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># redis-slave.conf (for each replica)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">port 6380</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">replicaof 127.0.0.1 6379</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p><strong>Configure Sentinel</strong></p>
+<p>Create a <code>sentinel.conf</code>:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">port 26379</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sentinel monitor mymaster 127.0.0.1 6379 2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sentinel down-after-milliseconds mymaster 5000</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sentinel failover-timeout mymaster 10000</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sentinel parallel-syncs mymaster 1</span><br></span></code></pre></div></div>
+<p>Explanation:</p>
+<ul>
+<li class=""><code>mymaster</code> → Name of monitored master.</li>
+<li class=""><code>127.0.0.1 6379</code> → Master’s address and port.</li>
+<li class=""><code>2</code> → Number of Sentinels that must agree master is down.</li>
+<li class=""><code>down-after-milliseconds</code> → Time after which a master is considered down (5s).</li>
+<li class=""><code>failover-timeout</code> → Max time for failover (10s).</li>
+<li class=""><code>parallel-syncs</code> → Number of replicas syncing with new master at once.</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Start Components</strong></p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-server redis-master.conf</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server redis-slave.conf --port 6380</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server redis-slave.conf --port 6381</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-sentinel sentinel.conf --port 26379</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-sentinel sentinel.conf --port 26380</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-sentinel sentinel.conf --port 26381</span><br></span></code></pre></div></div>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-walkthrough-of-sentinel">Example Walkthrough of Sentinel<a href="#example-walkthrough-of-sentinel" class="hash-link" aria-label="Direct link to Example Walkthrough of Sentinel" title="Direct link to Example Walkthrough of Sentinel" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Normal Operation</p>
+<ul>
+<li class="">Master: <code>6379</code></li>
+<li class="">Replicas: <code>6380</code>, <code>6381</code></li>
+<li class="">Sentinels monitor the master.</li>
+</ul>
+</li>
+<li class="">
+<p>Insert Data</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6379&gt; SET user:1 &quot;Alice&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">OK</span><br></span></code></pre></div></div>
+<p>Check replica:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6380&gt; GET user:1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;Alice&quot;</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Simulate Failure</p>
+<p>Stop the master:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">pkill -f &quot;redis-server.*6379&quot;</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Failover Happens</p>
+<ul>
+<li class="">Sentinels detect master is down after 5 seconds.</li>
+<li class="">They vote and promote one replica (say 6380) as new master.</li>
+<li class="">Other replica (6381) is reconfigured to follow 6380.</li>
+</ul>
+<p>Check with Sentinel:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">1) &quot;127.0.0.1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">2) &quot;6380&quot;</span><br></span></code></pre></div></div>
+<p>The master has changed automatically!</p>
+</li>
+<li class="">
+<p>Client Auto-Discovery</p>
+<p>Applications can connect to Sentinel to always find the current master:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli -p 26379 SENTINEL get-master-addr-by-name mymaster</span><br></span></code></pre></div></div>
+<p>This avoids hardcoding the master’s address in the app.</p>
+</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="redis-cluster">Redis Cluster<a href="#redis-cluster" class="hash-link" aria-label="Direct link to Redis Cluster" title="Direct link to Redis Cluster" translate="no">​</a></h2>
+<p>Redis Cluster is Redis’s built-in distributed solution that provides:</p>
+<ol>
+<li class="">
+<p>Automatic Sharding (Data Partitioning)</p>
+<ul>
+<li class="">Splits the dataset across multiple nodes.</li>
+<li class="">Each node holds only part of the data.</li>
+</ul>
+</li>
+<li class="">
+<p>High Availability with Replication</p>
+<ul>
+<li class="">Each shard (master) can have replicas.</li>
+<li class="">If a master fails, a replica is promoted automatically.</li>
+</ul>
+</li>
+<li class="">
+<p>No Single Point of Failure</p>
+<ul>
+<li class="">Cluster survives as long as the majority of masters are available.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="sharding-in-redis-cluster">Sharding in Redis Cluster<a href="#sharding-in-redis-cluster" class="hash-link" aria-label="Direct link to Sharding in Redis Cluster" title="Direct link to Sharding in Redis Cluster" translate="no">​</a></h3>
+<p>Instead of storing all keys on one master, Redis Cluster divides the keyspace into 16384 hash slots.</p>
+<ul>
+<li class="">Each master node is responsible for a subset of slots.</li>
+<li class="">When a client issues a command, Redis determines the slot for the key using CRC16 hashing:</li>
+</ul>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">HASH_SLOT = CRC16(key) mod 16384</span><br></span></code></pre></div></div>
+<ul>
+<li class="">That slot tells Redis which node holds the key.</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li class="">Key <code>user:1</code> → Slot <code>5798</code></li>
+<li class="">Key <code>user:2</code> → Slot <code>15296</code></li>
+</ul>
+<p>If you have 3 masters, Redis divides 16384 slots across them (roughly ~5461 slots each).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="hash-slots">Hash Slots<a href="#hash-slots" class="hash-link" aria-label="Direct link to Hash Slots" title="Direct link to Hash Slots" translate="no">​</a></h3>
+<ul>
+<li class="">16384 slots → fixed, not configurable.</li>
+<li class="">Each master manages some slots.</li>
+<li class="">Replicas mirror their master’s slots (but are read-only).</li>
+<li class="">During rebalancing, slots can be moved between masters.</li>
+</ul>
+<p>This makes scaling horizontal:</p>
+<ul>
+<li class="">Add a new master → some slots are migrated to it.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="replication-in-cluster">Replication in Cluster<a href="#replication-in-cluster" class="hash-link" aria-label="Direct link to Replication in Cluster" title="Direct link to Replication in Cluster" translate="no">​</a></h3>
+<p>Each master has at least one replica:</p>
+<ul>
+<li class="">If master fails → a replica is promoted.</li>
+<li class="">Ensures high availability with automatic failover.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-setup-of-cluster-3-masters-3-replicas">Example Setup of Cluster (3 Masters, 3 Replicas)<a href="#example-setup-of-cluster-3-masters-3-replicas" class="hash-link" aria-label="Direct link to Example Setup of Cluster (3 Masters, 3 Replicas)" title="Direct link to Example Setup of Cluster (3 Masters, 3 Replicas)" translate="no">​</a></h3>
+<p>We want a 6-node cluster:</p>
+<ul>
+<li class="">3 Masters: ports <code>7000</code>, <code>7001</code>, <code>7002</code></li>
+<li class="">3 Replicas: ports <code>7003</code>, <code>7004</code>, <code>7005</code></li>
+</ul>
+<ol>
+<li class=""><strong>Start Nodes</strong></li>
+</ol>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 7000 --cluster-enabled yes --cluster-config-file nodes-7000.conf --cluster-node-timeout 5000 --appendonly yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 7001 --cluster-enabled yes --cluster-config-file nodes-7001.conf --cluster-node-timeout 5000 --appendonly yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 7002 --cluster-enabled yes --cluster-config-file nodes-7002.conf --cluster-node-timeout 5000 --appendonly yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 7003 --cluster-enabled yes --cluster-config-file nodes-7003.conf --cluster-node-timeout 5000 --appendonly yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 7004 --cluster-enabled yes --cluster-config-file nodes-7004.conf --cluster-node-timeout 5000 --appendonly yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">redis-server --port 7005 --cluster-enabled yes --cluster-config-file nodes-7005.conf --cluster-node-timeout 5000 --appendonly yes</span><br></span></code></pre></div></div>
+<ol start="2">
+<li class="">
+<p><strong>Create the Cluster</strong></p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli --cluster create 127.0.0.1:7000 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                          127.0.0.1:7001 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                          127.0.0.1:7002 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                          127.0.0.1:7003 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                          127.0.0.1:7004 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                          127.0.0.1:7005 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">                          --cluster-replicas 1</span><br></span></code></pre></div></div>
+</li>
+</ol>
+<ul>
+<li class=""><code>--cluster-replicas 1</code> → Each master will have one replica.</li>
+<li class="">Redis will automatically assign slots across the 3 masters.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-walkthrough">Example Walkthrough<a href="#example-walkthrough" class="hash-link" aria-label="Direct link to Example Walkthrough" title="Direct link to Example Walkthrough" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Check Cluster Info</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli -c -p 7000 cluster info</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Check Slot Assignment</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli -c -p 7000 cluster slots</span><br></span></code></pre></div></div>
+<p>Example output:</p>
+<div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">0-5460       -&gt; 7000 (master), 7003 (replica)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">5461-10922   -&gt; 7001 (master), 7004 (replica)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">10923-16383  -&gt; 7002 (master), 7005 (replica)</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Insert a Key</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli -c -p 7000 SET user:1 &quot;Alice&quot;</span><br></span></code></pre></div></div>
+<p>The client will:</p>
+<ul>
+<li class="">Compute slot for <code>user:1</code> (e.g., <code>5798</code>).</li>
+<li class="">Redirect request to the correct master (<code>7001</code>).</li>
+</ul>
+<p>With <code>-c</code> (cluster mode), <code>redis-cli</code> automatically follows redirects.</p>
+</li>
+<li class="">
+<p>Read a Key</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli -c -p 7002 GET user:1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;Alice&quot;</span><br></span></code></pre></div></div>
+<p>Even though you connected to <code>7002</code>, the client redirects you to the correct node.</p>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="benefits-of-redis-cluster">Benefits of Redis Cluster<a href="#benefits-of-redis-cluster" class="hash-link" aria-label="Direct link to Benefits of Redis Cluster" title="Direct link to Benefits of Redis Cluster" translate="no">​</a></h3>
+<ul>
+<li class="">Horizontal scaling → Distributes data across multiple nodes.</li>
+<li class="">High availability → Failover handled by replicas.</li>
+<li class="">No single point of failure (if majority of masters remain).</li>
+<li class="">Auto rebalancing of slots when nodes are added/removed.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="limitations-of-redis-cluster">Limitations of Redis Cluster<a href="#limitations-of-redis-cluster" class="hash-link" aria-label="Direct link to Limitations of Redis Cluster" title="Direct link to Limitations of Redis Cluster" translate="no">​</a></h3>
+<ul>
+<li class="">Cross-slot operations: Multi-key operations must be in the same slot (use hash tags like <code>{user}:1</code> and <code>{user}:2</code>).</li>
+<li class="">Strong network requirements: All nodes must communicate with each other.</li>
+<li class="">Higher complexity than standalone/sentinel setups.</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#master-slave-replication" class="table-of-contents__link toc-highlight">Master-Slave replication</a><ul><li><a href="#how-replication-works-in-redis" class="table-of-contents__link toc-highlight">How Replication Works in Redis</a></li><li><a href="#configuration" class="table-of-contents__link toc-highlight">Configuration</a></li><li><a href="#example-setup" class="table-of-contents__link toc-highlight">Example Setup</a></li></ul></li><li><a href="#read-replicas-in-redis" class="table-of-contents__link toc-highlight">Read Replicas in Redis</a><ul><li><a href="#key-characteristics-of-read-replicas" class="table-of-contents__link toc-highlight">Key Characteristics of Read Replicas</a></li><li><a href="#limitations-of-read-replicas" class="table-of-contents__link toc-highlight">Limitations of Read Replicas</a></li></ul></li><li><a href="#redis-sentinel-for-failover" class="table-of-contents__link toc-highlight">Redis Sentinel for Failover</a><ul><li><a href="#why-sentinel" class="table-of-contents__link toc-highlight">Why Sentinel?</a></li><li><a href="#how-sentinel-works" class="table-of-contents__link toc-highlight">How Sentinel Works</a></li><li><a href="#sentinel-configuration-example" class="table-of-contents__link toc-highlight">Sentinel Configuration Example</a></li><li><a href="#example-walkthrough-of-sentinel" class="table-of-contents__link toc-highlight">Example Walkthrough of Sentinel</a></li></ul></li><li><a href="#redis-cluster" class="table-of-contents__link toc-highlight">Redis Cluster</a><ul><li><a href="#sharding-in-redis-cluster" class="table-of-contents__link toc-highlight">Sharding in Redis Cluster</a></li><li><a href="#hash-slots" class="table-of-contents__link toc-highlight">Hash Slots</a></li><li><a href="#replication-in-cluster" class="table-of-contents__link toc-highlight">Replication in Cluster</a></li><li><a href="#example-setup-of-cluster-3-masters-3-replicas" class="table-of-contents__link toc-highlight">Example Setup of Cluster (3 Masters, 3 Replicas)</a></li><li><a href="#example-walkthrough" class="table-of-contents__link toc-highlight">Example Walkthrough</a></li><li><a href="#benefits-of-redis-cluster" class="table-of-contents__link toc-highlight">Benefits of Redis Cluster</a></li><li><a href="#limitations-of-redis-cluster" class="table-of-contents__link toc-highlight">Limitations of Redis Cluster</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2026
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>

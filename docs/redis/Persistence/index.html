@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-redis/Persistence" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Persistence | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/redis/Persistence"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Persistence | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="Redis Database Backup"><meta data-rh="true" property="og:description" content="Redis Database Backup"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/redis/Persistence"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/redis/Persistence" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/redis/Persistence" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.f95f8452.css">
+<script src="/handbook/assets/js/runtime~main.37906538.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.169a743f.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Persistence</h1></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="redis-database-backup">Redis Database Backup<a href="#redis-database-backup" class="hash-link" aria-label="Direct link to Redis Database Backup" title="Direct link to Redis Database Backup" translate="no">​</a></h2>
+<ul>
+<li class="">RDB (Redis Database Backup) is one of the two main persistence mechanisms in Redis (the other is AOF).</li>
+<li class="">It works by taking point-in-time snapshots of your dataset and saving them to disk as a binary file (<code>dump.rdb</code>).</li>
+<li class="">These snapshots can later be loaded when Redis restarts → ensuring data durability.</li>
+</ul>
+<p>Think of it like taking a photo of your data at specific intervals.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-rdb-works">How RDB Works<a href="#how-rdb-works" class="hash-link" aria-label="Direct link to How RDB Works" title="Direct link to How RDB Works" translate="no">​</a></h3>
+<ul>
+<li class="">When certain conditions are met, Redis forks a background process.</li>
+<li class="">This process writes the entire dataset from memory into an RDB file (<code>dump.rdb</code>).</li>
+<li class="">Redis keeps serving clients during this snapshot (thanks to forking).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuring-rdb-in-redisconf">Configuring RDB in <code>redis.conf</code><a href="#configuring-rdb-in-redisconf" class="hash-link" aria-label="Direct link to configuring-rdb-in-redisconf" title="Direct link to configuring-rdb-in-redisconf" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Automatic Snapshots</p>
+<p>Defined using save rules:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">save 900 1      # Snapshot if 1 key changed in 900 seconds (15 min)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">save 300 10     # Snapshot if 10 keys changed in 300 seconds (5 min)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">save 60 10000   # Snapshot if 10000 keys changed in 60 seconds</span><br></span></code></pre></div></div>
+<ul>
+<li class="">Format: <code>save &lt;seconds&gt; &lt;changes&gt;</code></li>
+<li class="">You can define multiple rules.</li>
+<li class="">To disable RDB snapshots:</li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">save &quot;&quot;</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>RDB File Settings</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">dbfilename dump.rdb        # Default snapshot file name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">dir /var/lib/redis/        # Directory to save RDB files</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Manual Snapshots</p>
+<p>You can force snapshots with commands:</p>
+<ul>
+<li class=""><code>SAVE</code> → Creates snapshot in main thread (blocks clients).</li>
+<li class=""><code>BGSAVE</code> → Forks a background process (non-blocking, preferred).</li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">127.0.0.1:6379&gt; BGSAVE</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Background saving started</span><br></span></code></pre></div></div>
+<p>The file <code>dump.rdb</code> will be created in your Redis data directory.</p>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="performance-considerations">Performance Considerations<a href="#performance-considerations" class="hash-link" aria-label="Direct link to Performance Considerations" title="Direct link to Performance Considerations" translate="no">​</a></h3>
+<p><strong>Advantages of RDB</strong></p>
+<ul>
+<li class="">Compact binary format → good for backups &amp; replication.</li>
+<li class="">Faster recovery time compared to AOF.</li>
+<li class="">Low overhead during normal operations (most work is done in background).</li>
+</ul>
+<p><strong>Drawbacks</strong></p>
+<ul>
+<li class="">Data loss risk → since snapshots happen at intervals, any changes after the last snapshot may be lost if Redis crashes.
+(e.g., if snapshot every 5 minutes, and crash happens after 4 minutes, you lose last 4 minutes of data).</li>
+<li class="">Forking can be expensive for very large datasets (can cause CPU + memory spikes).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="append-only-file">Append Only File<a href="#append-only-file" class="hash-link" aria-label="Direct link to Append Only File" title="Direct link to Append Only File" translate="no">​</a></h2>
+<ul>
+<li class="">AOF (Append Only File) is a persistence method where every write operation Redis executes is logged to a file.</li>
+<li class="">Instead of taking snapshots (like RDB), Redis appends commands to a log file (<code>appendonly.aof</code>).</li>
+<li class="">On restart, Redis replays the log to rebuild the dataset.</li>
+</ul>
+<p>Think of it as a black box recorder — every change is stored so nothing is lost.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuring-aof-in-redisconf">Configuring AOF in redis.conf<a href="#configuring-aof-in-redisconf" class="hash-link" aria-label="Direct link to Configuring AOF in redis.conf" title="Direct link to Configuring AOF in redis.conf" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Enable AOF</p>
+<div class="language-conf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-conf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">appendonly yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">appendfilename &quot;appendonly.aof&quot;</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Sync Policy (<code>appendfsync</code>)</p>
+<p>This controls how often Redis writes AOF changes to disk:</p>
+<div class="language-conf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-conf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">appendfsync always      # Write every command to disk immediately (safest, slowest)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">appendfsync everysec    # Default: write once per second (good balance)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">appendfsync no          # Let OS decide when to flush (fastest, risky)</span><br></span></code></pre></div></div>
+<p>Most production systems use <code>everysec</code>.</p>
+</li>
+<li class="">
+<p>Rewrite Policy</p>
+<p>Since AOF keeps growing, Redis rewrites the log periodically to compact it.
+Settings:</p>
+<div class="language-conf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-conf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">auto-aof-rewrite-percentage 100   # Rewrite when AOF file is 100% larger than last rewrite</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">auto-aof-rewrite-min-size 64mb    # Minimum file size before rewriting</span><br></span></code></pre></div></div>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="recovery-with-aof">Recovery with AOF<a href="#recovery-with-aof" class="hash-link" aria-label="Direct link to Recovery with AOF" title="Direct link to Recovery with AOF" translate="no">​</a></h3>
+<p>When Redis restarts:</p>
+<ol>
+<li class="">It reads the AOF file.</li>
+<li class="">Replays the commands one by one.</li>
+<li class="">Reconstructs the dataset in memory.</li>
+</ol>
+<p>This guarantees minimal data loss (at most 1 second if using <code>everysec</code>).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="commands-for-managing-aof">Commands for Managing AOF<a href="#commands-for-managing-aof" class="hash-link" aria-label="Direct link to Commands for Managing AOF" title="Direct link to Commands for Managing AOF" translate="no">​</a></h3>
+<ul>
+<li class="">Rewrite AOF manually: <code>BGREWRITEAOF</code>. Creates a new compact AOF file in the background.</li>
+<li class="">Check AOF status: <code>CONFIG GET appendonly</code></li>
+<li class="">Enable AOF at runtime: <code>CONFIG SET appendonly yes</code></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="hybrid-persistence">Hybrid Persistence<a href="#hybrid-persistence" class="hash-link" aria-label="Direct link to Hybrid Persistence" title="Direct link to Hybrid Persistence" translate="no">​</a></h2>
+<ul>
+<li class="">Redis originally supported RDB (snapshots) and AOF (append-only file) separately.</li>
+<li class="">Since Redis 4.0, a hybrid persistence mode was introduced.</li>
+<li class="">It stores a binary RDB snapshot (fast to reload) plus AOF logs (for recent changes).</li>
+</ul>
+<p>Think of it as:</p>
+<ul>
+<li class="">Take a photo (RDB) of the dataset → fast to recover.</li>
+<li class="">Record the video (AOF) of changes after that snapshot → durable with minimal data loss.</li>
+</ul>
+<p>The combined persistence file is written to AOF.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-hybrid-persistence-works">How Hybrid Persistence Works<a href="#how-hybrid-persistence-works" class="hash-link" aria-label="Direct link to How Hybrid Persistence Works" title="Direct link to How Hybrid Persistence Works" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Redis periodically creates RDB snapshots.</p>
+</li>
+<li class="">
+<p>Instead of writing only commands to AOF, Redis writes:</p>
+<ul>
+<li class="">The latest RDB snapshot (as binary dump).</li>
+<li class="">Plus incremental AOF commands since that snapshot.</li>
+</ul>
+</li>
+<li class="">
+<p>On restart, Redis:</p>
+<ul>
+<li class="">Loads the RDB part (fast load).</li>
+<li class="">Replays the AOF portion (ensures recent durability).</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuring-hybrid-persistence">Configuring Hybrid Persistence<a href="#configuring-hybrid-persistence" class="hash-link" aria-label="Direct link to Configuring Hybrid Persistence" title="Direct link to Configuring Hybrid Persistence" translate="no">​</a></h3>
+<p>In <code>redis.conf</code>, enable AOF persistence and allow RDB preamble:</p>
+<div class="language-conf codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-conf codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">appendonly yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aof-use-rdb-preamble yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">appendfsync everysec</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>appendonly yes</code> → Enables AOF logging.</li>
+<li class=""><code>aof-use-rdb-preamble yes</code> → Hybrid persistence ON (default since Redis 4.0).</li>
+<li class=""><code>appendfsync everysec</code> → Sync once per second (balance durability + performance).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="check-aof-file">Check AOF File<a href="#check-aof-file" class="hash-link" aria-label="Direct link to Check AOF File" title="Direct link to Check AOF File" translate="no">​</a></h3>
+<p>Open <code>appendonly.aof</code> → you’ll see it begins with an RDB binary block, followed by AOF commands:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">&lt;binary RDB data&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">*3</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$3</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">SET</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$6</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">user:2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$6</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Billah</span><br></span></code></pre></div></div>
+<p>The first part is RDB, the rest are AOF commands.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="restart-redis">Restart Redis<a href="#restart-redis" class="hash-link" aria-label="Direct link to Restart Redis" title="Direct link to Restart Redis" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl restart redis-server</span><br></span></code></pre></div></div>
+<p>Redis reloads:</p>
+<ol>
+<li class="">RDB portion (fast load of bulk data).</li>
+<li class="">AOF portion (applies latest changes).</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="performance">Performance<a href="#performance" class="hash-link" aria-label="Direct link to Performance" title="Direct link to Performance" translate="no">​</a></h3>
+<p><strong>Advantages of Hybrid Persistence</strong></p>
+<ul>
+<li class="">Faster restart than pure AOF (thanks to RDB snapshot).</li>
+<li class="">More durable than pure RDB (thanks to AOF tail).</li>
+<li class="">Smaller AOF files (since bulk dataset is stored as RDB).</li>
+</ul>
+<p><strong>Drawbacks</strong></p>
+<ul>
+<li class="">Slightly more complex than pure RDB or AOF.</li>
+<li class="">Still some performance overhead compared to RDB-only.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="backup--restore-strategies">Backup &amp; Restore Strategies<a href="#backup--restore-strategies" class="hash-link" aria-label="Direct link to Backup &amp; Restore Strategies" title="Direct link to Backup &amp; Restore Strategies" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="restore-from-rdb">Restore from RDB<a href="#restore-from-rdb" class="hash-link" aria-label="Direct link to Restore from RDB" title="Direct link to Restore from RDB" translate="no">​</a></h3>
+<ol>
+<li class="">Stop Redis server:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl stop redis-server</span><br></span></code></pre></div></div>
+<ol start="2">
+<li class="">Replace the current <code>dump.rdb</code> with your backup:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cp /backups/dump-2025-09-04.rdb /var/lib/redis/dump.rdb</span><br></span></code></pre></div></div>
+<ol start="3">
+<li class="">Restart Redis:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl start redis-server</span><br></span></code></pre></div></div>
+<ol start="4">
+<li class="">Verify:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">redis-cli GET user:1</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="restore-from-aof">Restore from AOF<a href="#restore-from-aof" class="hash-link" aria-label="Direct link to Restore from AOF" title="Direct link to Restore from AOF" translate="no">​</a></h3>
+<ol>
+<li class="">Stop Redis:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl stop redis-server</span><br></span></code></pre></div></div>
+<ol start="2">
+<li class="">Replace <code>appendonly.aof</code> with your backup:</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cp /backups/appendonly-2025-09-04.aof /var/lib/redis/appendonly.aof</span><br></span></code></pre></div></div>
+<ol start="3">
+<li class="">Restart Redis → Redis will replay all commands from AOF.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="restore-from-hybrid-persistence">Restore from Hybrid Persistence<a href="#restore-from-hybrid-persistence" class="hash-link" aria-label="Direct link to Restore from Hybrid Persistence" title="Direct link to Restore from Hybrid Persistence" translate="no">​</a></h3>
+<ol>
+<li class="">Stop Redis.</li>
+<li class="">Copy backup AOF (with RDB preamble) into place.</li>
+<li class="">Restart Redis → it loads the RDB snapshot, then replays the AOF tail.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-workflow-of-backup">Example Workflow of Backup<a href="#example-workflow-of-backup" class="hash-link" aria-label="Direct link to Example Workflow of Backup" title="Direct link to Example Workflow of Backup" translate="no">​</a></h3>
+<p>Backup (Daily RDB Backup with Cron)</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">0 2 * * * redis-cli BGSAVE &amp;&amp; cp /var/lib/redis/dump.rdb /backups/dump-$(date +\%F).rdb</span><br></span></code></pre></div></div>
+<p>Runs every day at 2 AM.</p>
+<p>Restore</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl stop redis-server</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cp /backups/dump-2025-09-04.rdb /var/lib/redis/dump.rdb</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl start redis-server</span><br></span></code></pre></div></div></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#redis-database-backup" class="table-of-contents__link toc-highlight">Redis Database Backup</a><ul><li><a href="#how-rdb-works" class="table-of-contents__link toc-highlight">How RDB Works</a></li><li><a href="#configuring-rdb-in-redisconf" class="table-of-contents__link toc-highlight">Configuring RDB in <code>redis.conf</code></a></li><li><a href="#performance-considerations" class="table-of-contents__link toc-highlight">Performance Considerations</a></li></ul></li><li><a href="#append-only-file" class="table-of-contents__link toc-highlight">Append Only File</a><ul><li><a href="#configuring-aof-in-redisconf" class="table-of-contents__link toc-highlight">Configuring AOF in redis.conf</a></li><li><a href="#recovery-with-aof" class="table-of-contents__link toc-highlight">Recovery with AOF</a></li><li><a href="#commands-for-managing-aof" class="table-of-contents__link toc-highlight">Commands for Managing AOF</a></li></ul></li><li><a href="#hybrid-persistence" class="table-of-contents__link toc-highlight">Hybrid Persistence</a><ul><li><a href="#how-hybrid-persistence-works" class="table-of-contents__link toc-highlight">How Hybrid Persistence Works</a></li><li><a href="#configuring-hybrid-persistence" class="table-of-contents__link toc-highlight">Configuring Hybrid Persistence</a></li><li><a href="#check-aof-file" class="table-of-contents__link toc-highlight">Check AOF File</a></li><li><a href="#restart-redis" class="table-of-contents__link toc-highlight">Restart Redis</a></li><li><a href="#performance" class="table-of-contents__link toc-highlight">Performance</a></li></ul></li><li><a href="#backup--restore-strategies" class="table-of-contents__link toc-highlight">Backup &amp; Restore Strategies</a><ul><li><a href="#restore-from-rdb" class="table-of-contents__link toc-highlight">Restore from RDB</a></li><li><a href="#restore-from-aof" class="table-of-contents__link toc-highlight">Restore from AOF</a></li><li><a href="#restore-from-hybrid-persistence" class="table-of-contents__link toc-highlight">Restore from Hybrid Persistence</a></li><li><a href="#example-workflow-of-backup" class="table-of-contents__link toc-highlight">Example Workflow of Backup</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2026
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>

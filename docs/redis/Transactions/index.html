@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-redis/Transactions" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Transactions | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/redis/Transactions"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Transactions | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="MULTI, EXEC, DISCARD, WATCH"><meta data-rh="true" property="og:description" content="MULTI, EXEC, DISCARD, WATCH"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/redis/Transactions"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/redis/Transactions" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/redis/Transactions" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.f95f8452.css">
+<script src="/handbook/assets/js/runtime~main.37906538.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.169a743f.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Transactions</h1></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="multi-exec-discard-watch">MULTI, EXEC, DISCARD, WATCH<a href="#multi-exec-discard-watch" class="hash-link" aria-label="Direct link to MULTI, EXEC, DISCARD, WATCH" title="Direct link to MULTI, EXEC, DISCARD, WATCH" translate="no">​</a></h2>
+<p>A transaction in Redis is a sequence of commands that are executed in order, as a single isolated operation.</p>
+<ul>
+<li class="">It ensures atomicity → either all commands execute or none do.</li>
+<li class="">Transactions in Redis use the commands:<!-- -->
+<ul>
+<li class=""><code>MULTI</code> → Start a transaction</li>
+<li class=""><code>EXEC</code> → Execute the transaction</li>
+<li class=""><code>DISCARD</code> → Cancel the transaction</li>
+<li class=""><code>WATCH</code> → Watch keys for changes (optimistic locking)</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="multi"><code>MULTI</code><a href="#multi" class="hash-link" aria-label="Direct link to multi" title="Direct link to multi" translate="no">​</a></h3>
+<ul>
+<li class="">Marks the start of a transaction.</li>
+<li class="">After <code>MULTI</code>, commands are queued, not executed immediately.</li>
+<li class="">The queued commands will run only when <code>EXEC</code> is called.</li>
+</ul>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">MULTI</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">SET user:1 &quot;Masum&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">INCR counter</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">EXEC</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>MULTI</code> → starts transaction</li>
+<li class=""><code>SET</code> and <code>INCR</code> are queued</li>
+<li class=""><code>EXEC</code> → executes both in sequence</li>
+<li class="">Atomicity ensures that either both run successfully or none run</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="exec"><code>EXEC</code><a href="#exec" class="hash-link" aria-label="Direct link to exec" title="Direct link to exec" translate="no">​</a></h3>
+<ul>
+<li class="">Executes all commands queued after <code>MULTI</code>.</li>
+<li class="">If a command fails (like syntax error), only that command fails, but others run.</li>
+<li class="">The whole transaction is atomic from an isolation perspective → no other client’s command can interleave between them.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="discard"><code>DISCARD</code><a href="#discard" class="hash-link" aria-label="Direct link to discard" title="Direct link to discard" translate="no">​</a></h3>
+<ul>
+<li class="">Cancels a transaction.</li>
+<li class="">Clears all commands queued after <code>MULTI</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="watch"><code>WATCH</code><a href="#watch" class="hash-link" aria-label="Direct link to watch" title="Direct link to watch" translate="no">​</a></h3>
+<ul>
+<li class="">Provides optimistic locking.</li>
+<li class="">You can <code>WATCH</code> one or more keys.</li>
+<li class="">If any watched key is modified by another client before <code>EXEC</code>, the transaction is aborted (returns <code>nil</code>).</li>
+</ul>
+<p>Useful for implementing check-and-set (CAS) logic.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="preventing-race-conditions-with-watch">Preventing Race Conditions with WATCH<a href="#preventing-race-conditions-with-watch" class="hash-link" aria-label="Direct link to Preventing Race Conditions with WATCH" title="Direct link to Preventing Race Conditions with WATCH" translate="no">​</a></h3>
+<p>Client A:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">WATCH balance</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">val = GET balance   # suppose balance = 100</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">MULTI</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">SET balance 90      # deduct 10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">EXEC</span><br></span></code></pre></div></div>
+<p>If Client B modifies <code>balance</code> before Client A executes <code>EXEC</code>:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">SET balance 50</span><br></span></code></pre></div></div>
+<p>Then Client A’s <code>EXEC</code> will fail:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">(nil)</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>WATCH</code> balance → monitors the <code>balance</code> key.</li>
+<li class="">Since another client modified it before <code>EXEC</code>, Redis aborts the transaction.</li>
+<li class="">This prevents race conditions (like double spending).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="transaction-flow-summary">Transaction Flow Summary<a href="#transaction-flow-summary" class="hash-link" aria-label="Direct link to Transaction Flow Summary" title="Direct link to Transaction Flow Summary" translate="no">​</a></h3>
+<ul>
+<li class=""><code>WATCH key1 key2</code> → (optional) watch keys for changes.</li>
+<li class=""><code>MULTI</code> → start transaction.</li>
+<li class=""><code>Queue</code> commands (<code>SET</code>, <code>INCR</code>, etc.).</li>
+<li class=""><code>EXEC</code> → execute transaction if watched keys unchanged.<!-- -->
+<ul>
+<li class="">If watched keys were modified → transaction aborts.</li>
+</ul>
+</li>
+<li class=""><code>DISCARD</code> → cancel transaction manually if needed.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="optimistic-locking">Optimistic Locking<a href="#optimistic-locking" class="hash-link" aria-label="Direct link to Optimistic Locking" title="Direct link to Optimistic Locking" translate="no">​</a></h2>
+<ul>
+<li class="">Optimistic locking is a technique to handle concurrent updates safely without using traditional locks.</li>
+<li class="">In Redis, it is implemented via the <code>WATCH</code> command.</li>
+<li class="">The idea: “I hope no one else changes this key while I’m working on it.”</li>
+<li class="">If the key changes before the transaction executes, Redis aborts the transaction to prevent race conditions.</li>
+</ul>
+<p>This is particularly useful in high-concurrency environments like counters, wallets, or stock management.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-optimistic-locking-works">How Optimistic Locking Works<a href="#how-optimistic-locking-works" class="hash-link" aria-label="Direct link to How Optimistic Locking Works" title="Direct link to How Optimistic Locking Works" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>WATCH keys → Redis monitors these keys.</p>
+</li>
+<li class="">
+<p>Read the key(s) → get their current values.</p>
+</li>
+<li class="">
+<p>MULTI → start a transaction and queue commands.</p>
+</li>
+<li class="">
+<p>EXEC → attempt to execute transaction.</p>
+<ul>
+<li class="">If any watched key changed since <code>WATCH</code>, transaction fails (returns <code>nil</code>).</li>
+<li class="">Otherwise, all queued commands execute atomically.</li>
+</ul>
+</li>
+</ol>
+<p>Key point: Optimistic locking is non-blocking. Other clients can still read/write the key; your transaction simply aborts if conflict occurs.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="bank-account-transfer">Bank Account Transfer<a href="#bank-account-transfer" class="hash-link" aria-label="Direct link to Bank Account Transfer" title="Direct link to Bank Account Transfer" translate="no">​</a></h3>
+<p>Imagine we want to deduct $10 from Alice’s balance safely, even if multiple clients try to modify it.</p>
+<ol>
+<li class="">Setup: <code>SET balance:alice 100</code></li>
+<li class="">Safe Deduction Using WATCH</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">WATCH balance:alice         # Monitor the key</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">val = GET balance:alice      # Suppose val = 100</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if val &gt;= 10:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    MULTI                    # Start transaction</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    DECRBY balance:alice 10  # Deduct 10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    EXEC                     # Attempt to execute transaction</span><br></span></code></pre></div></div>
+<p>Scenario 1: No other client modifies balance</p>
+<ul>
+<li class=""><code>EXEC</code> succeeds → balance becomes 90.</li>
+</ul>
+<p>Scenario 2: Another client modifies balance before EXEC</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">SET balance:alice 50</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>EXEC</code> fails → returns (<code>nil</code>)</li>
+<li class="">You can retry the transaction if needed.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="ensuring-atomic-operations">Ensuring atomic operations<a href="#ensuring-atomic-operations" class="hash-link" aria-label="Direct link to Ensuring atomic operations" title="Direct link to Ensuring atomic operations" translate="no">​</a></h2>
+<ul>
+<li class="">Atomic operations are operations that are completed entirely or not at all, with no interference from other clients.</li>
+<li class="">In Redis, atomicity is built into many commands by default.</li>
+<li class="">For example, commands like <code>INCR</code>, <code>DECR</code>, <code>SETNX</code>, <code>HSET</code>, and list operations like <code>LPUSH</code> are atomic.</li>
+<li class="">This means you don’t need a transaction for single operations, even in a concurrent environment.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-redis-ensures-atomicity">How Redis Ensures Atomicity<a href="#how-redis-ensures-atomicity" class="hash-link" aria-label="Direct link to How Redis Ensures Atomicity" title="Direct link to How Redis Ensures Atomicity" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Single-threaded execution:</p>
+<ul>
+<li class="">Redis runs commands one at a time on a single main thread.
+This ensures no two commands from different clients can interleave.</li>
+</ul>
+</li>
+<li class="">
+<p>MULTI/EXEC transactions:</p>
+<ul>
+<li class="">For multi-command operations, you can use <code>MULTI</code> → <code>EXEC</code>.</li>
+<li class="">Redis executes all queued commands atomically after <code>EXEC</code>.</li>
+</ul>
+</li>
+<li class="">
+<p>Optimistic locking (<code>WATCH</code>):</p>
+<ul>
+<li class="">Ensures atomicity when you need to check a key’s value before modifying it.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="examples-of-atomic-operations">Examples of Atomic Operations<a href="#examples-of-atomic-operations" class="hash-link" aria-label="Direct link to Examples of Atomic Operations" title="Direct link to Examples of Atomic Operations" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Atomic INCR</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">SET counter 0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">INCR counter</span><br></span></code></pre></div></div>
+<p>Even if multiple clients run <code>INCR counter</code> simultaneously, Redis ensures each increment is applied exactly once.</p>
+</li>
+<li class="">
+<p>Atomic Check-and-Set (SETNX)</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">SETNX lock &quot;1&quot;</span><br></span></code></pre></div></div>
+<ul>
+<li class=""><code>SETNX</code> = &quot;SET if Not eXists&quot;</li>
+<li class="">If the key doesn’t exist → sets it and returns <code>1</code></li>
+<li class="">If the key exists → does nothing and returns <code>0</code></li>
+<li class="">Useful for implementing distributed locks safely.</li>
+</ul>
+</li>
+<li class="">
+<p>Atomic Multi-Key Operation with Transaction</p>
+<p>Suppose you want to transfer money from Alice to Bob:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">WATCH balance:alice balance:bob   # Watch keys for changes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">alice_balance = GET balance:alice</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if alice_balance &gt;= 10:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    MULTI</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    DECRBY balance:alice 10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    INCRBY balance:bob 10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    EXEC</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">else:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    DISCARD</span><br></span></code></pre></div></div>
+</li>
+</ol>
+<ul>
+<li class=""><code>MULTI</code> → queue multiple commands</li>
+<li class=""><code>EXEC</code> → executes all commands atomically</li>
+<li class=""><code>WATCH</code> → ensures no one else modifies balances during this transaction</li>
+</ul>
+<ol start="4">
+<li class="">
+<p>Atomic List Operation</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">LPUSH queue &quot;task1&quot;</span><br></span></code></pre></div></div>
+<p>Even if multiple clients push to the same list simultaneously, Redis ensures each push is atomic.</p>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="tips-to-ensure-atomicity-in-redis">Tips to Ensure Atomicity in Redis<a href="#tips-to-ensure-atomicity-in-redis" class="hash-link" aria-label="Direct link to Tips to Ensure Atomicity in Redis" title="Direct link to Tips to Ensure Atomicity in Redis" translate="no">​</a></h3>
+<ol>
+<li class="">Use single commands whenever possible → they are already atomic.</li>
+<li class="">For multiple commands on related keys, use <code>MULTI/EXEC</code> to group them.</li>
+<li class="">Use <code>WATCH</code> if you need to implement conditional updates safely.</li>
+<li class="">Avoid long-running scripts or operations inside transactions → can block other clients.</li>
+</ol></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#multi-exec-discard-watch" class="table-of-contents__link toc-highlight">MULTI, EXEC, DISCARD, WATCH</a><ul><li><a href="#multi" class="table-of-contents__link toc-highlight"><code>MULTI</code></a></li><li><a href="#exec" class="table-of-contents__link toc-highlight"><code>EXEC</code></a></li><li><a href="#discard" class="table-of-contents__link toc-highlight"><code>DISCARD</code></a></li><li><a href="#watch" class="table-of-contents__link toc-highlight"><code>WATCH</code></a></li><li><a href="#preventing-race-conditions-with-watch" class="table-of-contents__link toc-highlight">Preventing Race Conditions with WATCH</a></li><li><a href="#transaction-flow-summary" class="table-of-contents__link toc-highlight">Transaction Flow Summary</a></li></ul></li><li><a href="#optimistic-locking" class="table-of-contents__link toc-highlight">Optimistic Locking</a><ul><li><a href="#how-optimistic-locking-works" class="table-of-contents__link toc-highlight">How Optimistic Locking Works</a></li><li><a href="#bank-account-transfer" class="table-of-contents__link toc-highlight">Bank Account Transfer</a></li></ul></li><li><a href="#ensuring-atomic-operations" class="table-of-contents__link toc-highlight">Ensuring atomic operations</a><ul><li><a href="#how-redis-ensures-atomicity" class="table-of-contents__link toc-highlight">How Redis Ensures Atomicity</a></li><li><a href="#examples-of-atomic-operations" class="table-of-contents__link toc-highlight">Examples of Atomic Operations</a></li><li><a href="#tips-to-ensure-atomicity-in-redis" class="table-of-contents__link toc-highlight">Tips to Ensure Atomicity in Redis</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2026
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>
