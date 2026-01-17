@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[126],{92010(a){a.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"React JS","slug":"/category/react-js","permalink":"/handbook/docs/category/react-js","sidebar":"reactjsApiSidebar","navigation":{"next":{"title":"Basics","permalink":"/handbook/docs/reactjs/Basics"}}}}')}}]);
