@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[9903],{35848(n){n.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"NGINX","slug":"/category/nginx","permalink":"/handbook/docs/category/nginx","sidebar":"nginxApiSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/nginx/Introduction"}}}}')}}]);
