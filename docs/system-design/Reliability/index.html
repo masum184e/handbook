@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-system-design/Reliability" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Reliability | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/system-design/Reliability"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Reliability | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="Reliability"><meta data-rh="true" property="og:description" content="Reliability"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/system-design/Reliability"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/system-design/Reliability" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/system-design/Reliability" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"System Design","item":"https://masum184e.github.io/handbook/docs/category/system-design"},{"@type":"ListItem","position":2,"name":"Reliability","item":"https://masum184e.github.io/handbook/docs/system-design/Reliability"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.6dad0bd5.css">
+<script src="/handbook/assets/js/runtime~main.c8e7657b.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.07bcfcb9.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--active" href="/handbook/docs/category/system-design"><span title="System Design" class="categoryLinkLabel_W154">System Design</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/"><span title="Introduction" class="linkLabel_WmDU">Introduction</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Fundamentals"><span title="Fundamentals" class="linkLabel_WmDU">Fundamentals</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/handbook/docs/system-design/Software Architecture/"><span title="Software Architecture" class="categoryLinkLabel_W154">Software Architecture</span></a><button aria-label="Expand sidebar category &#x27;Software Architecture&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Category of Data"><span title="Category of Data" class="linkLabel_WmDU">Category of Data</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Caching"><span title="Caching" class="linkLabel_WmDU">Caching</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Reverse Proxy"><span title="Reverse Proxy" class="linkLabel_WmDU">Reverse Proxy</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/API Gateway"><span title="API Gateway" class="linkLabel_WmDU">API Gateway</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Load Balancer"><span title="Load Balancer" class="linkLabel_WmDU">Load Balancer</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Rate Limiting"><span title="Rate Limiting" class="linkLabel_WmDU">Rate Limiting</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/handbook/docs/system-design/Replication/Replication"><span title="Replication" class="categoryLinkLabel_W154">Replication</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Performance"><span title="Performance" class="linkLabel_WmDU">Performance</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Queue"><span title="Queue" class="linkLabel_WmDU">Queue</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/handbook/docs/system-design/Latency/Latency"><span title="Latency" class="categoryLinkLabel_W154">Latency</span></a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Throughput"><span title="Throughput" class="linkLabel_WmDU">Throughput</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/TCP"><span title="TCP" class="linkLabel_WmDU">TCP</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/TCP Handshake"><span title="TCP Handshake" class="linkLabel_WmDU">TCP Handshake</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/TLS Handshake"><span title="TLS Handshake" class="linkLabel_WmDU">TLS Handshake</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Scalability"><span title="Scalability" class="linkLabel_WmDU">Scalability</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Decentralization"><span title="Decentralization" class="linkLabel_WmDU">Decentralization</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/system-design/Independence"><span title="Independence" class="linkLabel_WmDU">Independence</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/handbook/docs/system-design/Reliability"><span title="Reliability" class="linkLabel_WmDU">Reliability</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/handbook/docs/system-design/Security/Application Security"><span title="Security" class="categoryLinkLabel_W154">Security</span></a></div></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/handbook/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/handbook/docs/category/system-design"><span>System Design</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Reliability</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Reliability</h1></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="reliability">Reliability<a href="#reliability" class="hash-link" aria-label="Direct link to Reliability" title="Direct link to Reliability" translate="no">​</a></h2>
+<p>Reliability in system design refers to the ability of a system to consistently perform its intended function correctly, even in the presence of faults or failures. It means the system should be fault-tolerant, resilient, and able to recover gracefully from errors.</p>
+<ul>
+<li class=""><strong>Availability:</strong> The system is up and accessible when needed.</li>
+<li class=""><strong>Fault tolerance:</strong> The system continues operating even if some components fail.</li>
+<li class=""><strong>Durability:</strong> Once data is written, it remains available without loss.</li>
+<li class=""><strong>Consistency:</strong> The system behaves in an expected way under all circumstances.</li>
+</ul>
+<p><strong>Goals of a Reliable System</strong></p>
+<ul>
+<li class=""><strong>Minimize Downtime</strong> – Keep services running with minimal interruptions.</li>
+<li class=""><strong>Fail Gracefully</strong> – If a part fails, it doesn’t crash the whole system.</li>
+<li class=""><strong>Quick Recovery</strong> – Recover fast from outages or failures.</li>
+<li class=""><strong>Prevent Data Loss</strong> – Data must not be lost during or after failures.</li>
+<li class=""><strong>Predictable Behavior</strong> – The system works the same way every tim</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="improve-reliability">Improve Reliability<a href="#improve-reliability" class="hash-link" aria-label="Direct link to Improve Reliability" title="Direct link to Improve Reliability" translate="no">​</a></h3>
+<table><thead><tr><th>Technique</th><th>Description</th></tr></thead><tbody><tr><td><strong>Redundancy</strong></td><td>Duplicate components (servers, DBs) to handle failures</td></tr><tr><td><strong>Load Balancing</strong></td><td>Distribute traffic across multiple instances</td></tr><tr><td><strong>Failover Mechanisms</strong></td><td>Automatically switch to backup systems if the primary one fails</td></tr><tr><td><strong>Replication</strong></td><td>Copy data across multiple nodes for high availability and durability</td></tr><tr><td><strong>Health Checks</strong></td><td>Monitor services and restart failed ones</td></tr><tr><td><strong>Retries with Backoff</strong></td><td>Retry failed requests after increasing intervals</td></tr><tr><td><strong>Graceful Degradation</strong></td><td>The system reduces functionality instead of failing completely</td></tr><tr><td><strong>Monitoring &amp; Alerting</strong></td><td>Detect and respond to issues quickly</td></tr><tr><td><strong>Backups &amp; Snapshots</strong></td><td>Recover from disasters or data corruption</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-of-reliable-e-commerce-system">Example of Reliable E-commerce System<a href="#example-of-reliable-e-commerce-system" class="hash-link" aria-label="Direct link to Example of Reliable E-commerce System" title="Direct link to Example of Reliable E-commerce System" translate="no">​</a></h3>
+<p>Imagine you&#x27;re designing an e-commerce platform like Amazon. Reliability is crucial—downtime means lost sales and customers.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="components">Components<a href="#components" class="hash-link" aria-label="Direct link to Components" title="Direct link to Components" translate="no">​</a></h4>
+<ul>
+<li class="">Frontend Web Servers</li>
+<li class="">Backend Services (like Product Service, Payment Service)</li>
+<li class="">Database (e.g., MySQL/PostgreSQL)</li>
+<li class="">Cache Layer (e.g., Redis)</li>
+<li class="">Message Queue (e.g., RabbitMQ/Kafka)</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-to-design-for-reliability">How to Design for Reliability<a href="#how-to-design-for-reliability" class="hash-link" aria-label="Direct link to How to Design for Reliability" title="Direct link to How to Design for Reliability" translate="no">​</a></h4>
+<ol>
+<li class="">
+<p>Web Servers:</p>
+<ul>
+<li class="">Use load balancer (like Nginx or AWS ELB) to distribute traffic.</li>
+<li class="">Auto-scale using Kubernetes or AWS Auto Scaling.</li>
+</ul>
+</li>
+<li class="">
+<p>Backend Services:</p>
+<ul>
+<li class="">Deploy multiple instances (e.g., 3 replicas of Payment Service).</li>
+<li class="">Implement circuit breakers to avoid cascading failures.</li>
+</ul>
+</li>
+<li class="">
+<p>Database:</p>
+<ul>
+<li class="">Use master-slave replication or multi-master.</li>
+<li class="">Enable automated backups and point-in-time recovery.</li>
+</ul>
+</li>
+<li class="">
+<p>Caching Layer:</p>
+<ul>
+<li class="">Use Redis in cluster mode with failover support.</li>
+</ul>
+</li>
+<li class="">
+<p>Message Queue:</p>
+<ul>
+<li class="">Use Kafka with replication and acknowledgments to prevent message loss.</li>
+<li class="">Retry failed messages with dead-letter queues.</li>
+</ul>
+</li>
+<li class="">
+<p>Monitoring &amp; Alerts:</p>
+<ul>
+<li class="">Tools like Prometheus + Grafana, Datadog, or ELK Stack.</li>
+<li class="">Set alerts on latency, error rates, and service health.</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="failure">Failure<a href="#failure" class="hash-link" aria-label="Direct link to Failure" title="Direct link to Failure" translate="no">​</a></h2>
+<p>In system design, failure refers to any event where a system, component, or service stops working as expected. This could mean downtime, data loss, performance degradation, or incorrect results — essentially, anything that breaks the system’s reliability, availability, or correctness.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-failure">Types of Failure<a href="#types-of-failure" class="hash-link" aria-label="Direct link to Types of Failure" title="Direct link to Types of Failure" translate="no">​</a></h3>
+<table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Hardware failure</strong></td><td>Disk crash, memory error, power outage</td></tr><tr><td><strong>Software failure</strong></td><td>Bugs, crashes, memory leaks, unhandled exceptions</td></tr><tr><td><strong>Network failure</strong></td><td>Packet loss, timeout, DNS issues, latency spikes</td></tr><tr><td><strong>Database failure</strong></td><td>Corruption, connection timeouts, replication lag</td></tr><tr><td><strong>Dependency failure</strong></td><td>External services (APIs, payment gateways) go down</td></tr><tr><td><strong>Human error</strong></td><td>Misconfigurations, accidental deletions, bad deployments</td></tr><tr><td><strong>Security failure</strong></td><td>Breach, DDoS attacks, unauthorized access</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="failure-vs-fault">Failure vs Fault<a href="#failure-vs-fault" class="hash-link" aria-label="Direct link to Failure vs Fault" title="Direct link to Failure vs Fault" translate="no">​</a></h3>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td><strong>Fault</strong></td><td>A <strong>bug or issue</strong> in the system (e.g., bad code, misconfiguration)</td></tr><tr><td><strong>Failure</strong></td><td>When a fault <strong>manifests</strong> and the system behaves incorrectly or crashes</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="examples-of-failures">Examples of Failures<a href="#examples-of-failures" class="hash-link" aria-label="Direct link to Examples of Failures" title="Direct link to Examples of Failures" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-database-failure">1. Database Failure<a href="#1-database-failure" class="hash-link" aria-label="Direct link to 1. Database Failure" title="Direct link to 1. Database Failure" translate="no">​</a></h4>
+<p>Scenario: Your e-commerce app uses a single MySQL instance. One day, the database crashes due to disk failure.
+Impact: Entire website becomes read-only or completely non-functional.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-service-dependency-failure">2. Service Dependency Failure<a href="#2-service-dependency-failure" class="hash-link" aria-label="Direct link to 2. Service Dependency Failure" title="Direct link to 2. Service Dependency Failure" translate="no">​</a></h4>
+<p>Your service uses an external payment gateway. That API becomes unavailable.
+Impact: Users can’t complete checkouts, causing loss in revenue.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-network-partitioning-split-brain">3. Network Partitioning (Split-Brain)<a href="#3-network-partitioning-split-brain" class="hash-link" aria-label="Direct link to 3. Network Partitioning (Split-Brain)" title="Direct link to 3. Network Partitioning (Split-Brain)" translate="no">​</a></h4>
+<p>Two services hosted in separate regions lose connection due to a network partition.
+Impact: They operate independently, potentially causing conflicting data writes.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-deployment-failure">4. Deployment Failure<a href="#4-deployment-failure" class="hash-link" aria-label="Direct link to 4. Deployment Failure" title="Direct link to 4. Deployment Failure" translate="no">​</a></h4>
+<p>A new release has a bug that crashes the user authentication service.
+Impact: Users cannot log in.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-to-handle-failures-design-principles">How to Handle Failures (Design Principles)<a href="#how-to-handle-failures-design-principles" class="hash-link" aria-label="Direct link to How to Handle Failures (Design Principles)" title="Direct link to How to Handle Failures (Design Principles)" translate="no">​</a></h3>
+<table><thead><tr><th>Technique</th><th>Description</th></tr></thead><tbody><tr><td><strong>Redundancy</strong></td><td>Use backup servers/services in case of failure</td></tr><tr><td><strong>Failover</strong></td><td>Automatically switch to standby systems</td></tr><tr><td><strong>Circuit Breaker Pattern</strong></td><td>Temporarily stop requests to a failing service</td></tr><tr><td><strong>Retries with Backoff</strong></td><td>Retry failed requests, but not too aggressively</td></tr><tr><td><strong>Timeouts</strong></td><td>Prevent hanging requests due to slow/failing services</td></tr><tr><td><strong>Bulkheads</strong></td><td>Isolate failures to small parts of the system</td></tr><tr><td><strong>Graceful Degradation</strong></td><td>Reduce functionality instead of total failure</td></tr><tr><td><strong>Monitoring and Alerts</strong></td><td>Detect and respond quickly to failures</td></tr><tr><td><strong>Disaster Recovery</strong></td><td>Plan and test for catastrophic failures</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-of-netflix">Example of Netflix<a href="#example-of-netflix" class="hash-link" aria-label="Direct link to Example of Netflix" title="Direct link to Example of Netflix" translate="no">​</a></h3>
+<p>Netflix must be resilient to failures since it serves millions globally.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="failure-scenario">Failure Scenario:<a href="#failure-scenario" class="hash-link" aria-label="Direct link to Failure Scenario:" title="Direct link to Failure Scenario:" translate="no">​</a></h4>
+<p>A single data center goes down due to a power issue.</p>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id="design-solutions-netflix-uses">Design Solutions Netflix uses:<a href="#design-solutions-netflix-uses" class="hash-link" aria-label="Direct link to Design Solutions Netflix uses:" title="Direct link to Design Solutions Netflix uses:" translate="no">​</a></h5>
+<ul>
+<li class=""><strong>Multi-region deployments:</strong> Traffic rerouted to healthy regions.</li>
+<li class=""><strong>Chaos Monkey (part of the Simian Army):</strong> Intentionally kills services in production to test resilience.</li>
+<li class=""><strong>Retry and backoff:</strong> If a microservice fails, the caller retries with increasing intervals.</li>
+<li class=""><strong>Circuit breakers:</strong> If a service fails continuously, calls are stopped temporarily.</li>
+</ul>
+<p>Result: End users likely don’t notice the issue.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="failure-detection--recovery">Failure Detection &amp; Recovery<a href="#failure-detection--recovery" class="hash-link" aria-label="Direct link to Failure Detection &amp; Recovery" title="Direct link to Failure Detection &amp; Recovery" translate="no">​</a></h3>
+<table><thead><tr><th>Step</th><th>Description</th></tr></thead><tbody><tr><td><strong>Detection</strong></td><td>Use health checks, metrics, heartbeat signals</td></tr><tr><td><strong>Isolation</strong></td><td>Use containerization or process boundaries to localize failure</td></tr><tr><td><strong>Recovery</strong></td><td>Auto-restart, failover, database restore, or fallback services</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="availability">Availability<a href="#availability" class="hash-link" aria-label="Direct link to Availability" title="Direct link to Availability" translate="no">​</a></h2>
+<p>Availability in system design refers to how accessible and operational a system is at any given time. It answers the question:
+“Can users access the system when they need to?”</p>
+<p>A highly available system is designed to ensure minimal downtime and maximum uptime, even in the face of failures or heavy load.</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Availability = (Uptime) / (Uptime + Downtime)</span><br></span></code></pre></div></div>
+<p>For example, a service that is available 99.9% of the time means it may be down for about 43 minutes per month.</p>
+<table><thead><tr><th>Availability %</th><th>Downtime per Year</th><th>Downtime per Month</th></tr></thead><tbody><tr><td>99%</td><td>~3.65 days</td><td>~7.2 hours</td></tr><tr><td>99.9%</td><td>~8.8 hours</td><td>~43.8 minutes</td></tr><tr><td>99.99%</td><td>~52.6 minutes</td><td>~4.4 minutes</td></tr><tr><td>99.999%</td><td>~5.26 minutes</td><td>~26 seconds</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-concepts-for-high-availability">Key Concepts for High Availability<a href="#key-concepts-for-high-availability" class="hash-link" aria-label="Direct link to Key Concepts for High Availability" title="Direct link to Key Concepts for High Availability" translate="no">​</a></h3>
+<table><thead><tr><th>Concept</th><th>Explanation</th></tr></thead><tbody><tr><td><strong>Redundancy</strong></td><td>Duplicate components to take over if one fails</td></tr><tr><td><strong>Failover</strong></td><td>Switch automatically to a backup system or server</td></tr><tr><td><strong>Load Balancing</strong></td><td>Distribute incoming traffic to multiple servers</td></tr><tr><td><strong>Health Checks</strong></td><td>Constant monitoring to ensure services are running properly</td></tr><tr><td><strong>Stateless Architecture</strong></td><td>Servers don&#x27;t store session data; allows any instance to handle requests</td></tr><tr><td><strong>Scalability</strong></td><td>Handle traffic surges without going down</td></tr><tr><td><strong>Monitoring &amp; Alerts</strong></td><td>Get notified instantly of any service degradation</td></tr><tr><td><strong>Disaster Recovery</strong></td><td>Plans to recover from major failures (like region-wide outages)</td></tr></tbody></table>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="techniques-to-improve-availability">Techniques to Improve Availability<a href="#techniques-to-improve-availability" class="hash-link" aria-label="Direct link to Techniques to Improve Availability" title="Direct link to Techniques to Improve Availability" translate="no">​</a></h4>
+<table><thead><tr><th>Technique</th><th>How It Helps</th></tr></thead><tbody><tr><td><strong>Multi-Zone Deployment</strong></td><td>Deploy services across availability zones or regions</td></tr><tr><td><strong>Auto Scaling</strong></td><td>Add/remove servers automatically to maintain service health</td></tr><tr><td><strong>Caching</strong></td><td>Reduce load on databases, enabling faster and more resilient performance</td></tr><tr><td><strong>Database Replication</strong></td><td>Keep secondary DBs ready for failover</td></tr><tr><td><strong>Circuit Breaker Pattern</strong></td><td>Avoid cascading failures</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-of-highly-available-web-app">Example of Highly Available Web App<a href="#example-of-highly-available-web-app" class="hash-link" aria-label="Direct link to Example of Highly Available Web App" title="Direct link to Example of Highly Available Web App" translate="no">​</a></h3>
+<p>Let’s say you are designing a food delivery app backend like Uber Eats.</p>
+<p>Goal: 99.99% Availability</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="components-1">Components:<a href="#components-1" class="hash-link" aria-label="Direct link to Components:" title="Direct link to Components:" translate="no">​</a></h4>
+<ul>
+<li class="">Frontend Web Servers</li>
+<li class="">Backend Microservices (e.g., Order, Payment, Notification)</li>
+<li class="">Database (e.g., PostgreSQL)</li>
+<li class="">Cache (Redis)</li>
+<li class="">Message Queue (e.g., Kafka)</li>
+<li class="">Load Balancer (e.g., NGINX, AWS ALB)</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="high-availability-design">High Availability Design:<a href="#high-availability-design" class="hash-link" aria-label="Direct link to High Availability Design:" title="Direct link to High Availability Design:" translate="no">​</a></h4>
+<ol>
+<li class="">
+<p>Load Balancers:</p>
+<ul>
+<li class="">Distribute incoming traffic to multiple web servers.</li>
+<li class="">If one server goes down, traffic is rerouted.</li>
+</ul>
+</li>
+<li class="">
+<p>Web and Backend Services:</p>
+<ul>
+<li class="">Deployed in multiple availability zones (AZs).</li>
+<li class="">Use auto-scaling groups in AWS or Kubernetes deployments with multiple replicas.</li>
+</ul>
+</li>
+<li class="">
+<p>Database:</p>
+<ul>
+<li class="">Master-Slave replication.</li>
+<li class="">Automatic failover to replicas using tools like Amazon RDS Multi-AZ or Patroni.</li>
+</ul>
+</li>
+<li class="">
+<p>Caching Layer:</p>
+<ul>
+<li class="">Redis Sentinel or Redis Cluster for high availability and failover.</li>
+</ul>
+</li>
+<li class="">
+<p>Message Queue:</p>
+<ul>
+<li class="">Kafka or RabbitMQ with replication to prevent message loss if a broker fails.</li>
+</ul>
+</li>
+<li class="">
+<p>Monitoring:</p>
+<ul>
+<li class="">Use Prometheus + Grafana or Datadog.</li>
+<li class="">Trigger alerts if response times spike or instances fail.</li>
+</ul>
+</li>
+<li class="">
+<p>Disaster Recovery Plan:</p>
+<ul>
+<li class="">Nightly backups.</li>
+<li class="">Infrastructure templates (e.g., Terraform) to re-deploy in a new region quickly.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="availability-vs-reliability">Availability vs Reliability<a href="#availability-vs-reliability" class="hash-link" aria-label="Direct link to Availability vs Reliability" title="Direct link to Availability vs Reliability" translate="no">​</a></h3>
+<table><thead><tr><th>Term</th><th>Focus</th><th>Example</th></tr></thead><tbody><tr><td>Availability</td><td>System is <strong>accessible</strong> and <strong>working</strong></td><td>Website loads when the user visits it</td></tr><tr><td>Reliability</td><td>System is <strong>functionally correct</strong> over time</td><td>The correct product is shown when searched</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-availability-in-aws">Example Availability in AWS<a href="#example-availability-in-aws" class="hash-link" aria-label="Direct link to Example Availability in AWS" title="Direct link to Example Availability in AWS" translate="no">​</a></h3>
+<p>Imagine hosting your app on AWS:</p>
+<ul>
+<li class="">EC2 instances in 3 AZs behind an Elastic Load Balancer</li>
+<li class="">RDS PostgreSQL in Multi-AZ mode</li>
+<li class="">S3 for asset storage (which is designed for 99.999999999% durability and high availability)</li>
+<li class="">CloudFront CDN to distribute content globally</li>
+</ul>
+<p>This setup ensures that even if one data center (AZ) goes down, your app remains availabl</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="fault-tolerance">Fault Tolerance<a href="#fault-tolerance" class="hash-link" aria-label="Direct link to Fault Tolerance" title="Direct link to Fault Tolerance" translate="no">​</a></h2>
+<p>Fault tolerance means the system can withstand failures without affecting the overall functionality.</p>
+<p>Failures are inevitable in any large-scale system—due to hardware crashes, software bugs, network issues, or human errors. A fault-tolerant system anticipates these failures and is designed to isolate, absorb, or recover from them.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="fault-vs-failure-vs-fault-tolerance">Fault vs Failure vs Fault Tolerance<a href="#fault-vs-failure-vs-fault-tolerance" class="hash-link" aria-label="Direct link to Fault vs Failure vs Fault Tolerance" title="Direct link to Fault vs Failure vs Fault Tolerance" translate="no">​</a></h3>
+<table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody><tr><td><strong>Fault</strong></td><td>A defect or abnormal condition (e.g., a bug, hardware failure)</td></tr><tr><td><strong>Failure</strong></td><td>When a fault causes a system or component to behave incorrectly</td></tr><tr><td><strong>Fault Tolerance</strong></td><td>The system’s ability to continue functioning despite the fault</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="characteristics-of-fault-tolerant-systems">Characteristics of Fault-Tolerant Systems<a href="#characteristics-of-fault-tolerant-systems" class="hash-link" aria-label="Direct link to Characteristics of Fault-Tolerant Systems" title="Direct link to Characteristics of Fault-Tolerant Systems" translate="no">​</a></h3>
+<table><thead><tr><th>Feature</th><th>Description</th></tr></thead><tbody><tr><td><strong>Redundancy</strong></td><td>Having backup components that can take over in case of failure</td></tr><tr><td><strong>Failover</strong></td><td>Automatic switching to a backup system/component</td></tr><tr><td><strong>Replication</strong></td><td>Duplication of data/services across multiple nodes</td></tr><tr><td><strong>Isolation</strong></td><td>Contain failures to prevent cascading breakdowns</td></tr><tr><td><strong>Graceful Degradation</strong></td><td>If part of the system fails, reduce functionality instead of full crash</td></tr><tr><td><strong>Monitoring &amp; Alerts</strong></td><td>Detect faults early and respond proactively</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="netflixs-fault-tolerance">Netflix&#x27;s Fault Tolerance<a href="#netflixs-fault-tolerance" class="hash-link" aria-label="Direct link to Netflix&#x27;s Fault Tolerance" title="Direct link to Netflix&#x27;s Fault Tolerance" translate="no">​</a></h3>
+<p>Netflix is a great real-world example of extreme fault tolerance:</p>
+<ul>
+<li class="">Runs across multiple AWS regions.</li>
+<li class="">Uses Chaos Monkey, a tool that intentionally kills random servers to test fault tolerance.</li>
+<li class="">Relies on microservices with:<!-- -->
+<ul>
+<li class="">Redundancy</li>
+<li class="">Circuit breakers</li>
+<li class="">Service discovery</li>
+<li class="">Retry and timeout logic</li>
+<li class="">Eventual consistency in distributed systems
+Even if one part of Netflix breaks (e.g., recommendations), the core video streaming still works—thanks to graceful degradation.</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="fault-tolerance-in-distributed-systems">Fault Tolerance in Distributed Systems<a href="#fault-tolerance-in-distributed-systems" class="hash-link" aria-label="Direct link to Fault Tolerance in Distributed Systems" title="Direct link to Fault Tolerance in Distributed Systems" translate="no">​</a></h3>
+<p>Distributed systems (e.g., cloud apps, microservices) face unique challenges:</p>
+<table><thead><tr><th>Fault Type</th><th>Strategy to Handle</th></tr></thead><tbody><tr><td><strong>Node failure</strong></td><td>Use replication and automatic failover</td></tr><tr><td><strong>Network partition</strong></td><td>Apply CAP theorem trade-offs (choose between consistency and availability)</td></tr><tr><td><strong>Service crash</strong></td><td>Restart with health checks (e.g., Kubernetes liveness probes)</td></tr><tr><td><strong>Disk failure</strong></td><td>Use RAID, cloud storage, and backups</td></tr><tr><td><strong>Corrupted data</strong></td><td>Use checksums and versioned backups</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="redundancy">Redundancy<a href="#redundancy" class="hash-link" aria-label="Direct link to Redundancy" title="Direct link to Redundancy" translate="no">​</a></h2>
+<p>Redundancy in system design refers to having multiple components or resources that serve the same purpose, so that if one fails, the others can take over. It is a core technique for achieving fault tolerance, high availability, and reliability in modern systems.</p>
+<p><strong>Why is Redundancy Important?</strong></p>
+<ul>
+<li class="">Prevents single points of failure (SPOF)</li>
+<li class="">Improves system availability and reliability</li>
+<li class="">Enables load balancing and failover</li>
+<li class="">Supports disaster recovery plans</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-redundancy">Types of Redundancy<a href="#types-of-redundancy" class="hash-link" aria-label="Direct link to Types of Redundancy" title="Direct link to Types of Redundancy" translate="no">​</a></h3>
+<table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Hardware Redundancy</strong></td><td>Multiple physical devices (e.g., servers, disks, power supplies)</td></tr><tr><td><strong>Software Redundancy</strong></td><td>Multiple software instances performing the same function</td></tr><tr><td><strong>Network Redundancy</strong></td><td>Multiple network paths, routers, ISPs</td></tr><tr><td><strong>Data Redundancy</strong></td><td>Storing copies of data in different places (e.g., replication, backups)</td></tr><tr><td><strong>Geographic Redundancy</strong></td><td>Deploying across multiple data centers or regions</td></tr><tr><td><strong>Service Redundancy</strong></td><td>Redundant APIs or microservices doing the same job</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="redundancy-in-a-web-application">Redundancy in a Web Application<a href="#redundancy-in-a-web-application" class="hash-link" aria-label="Direct link to Redundancy in a Web Application" title="Direct link to Redundancy in a Web Application" translate="no">​</a></h3>
+<p>Imagine you&#x27;re building an online ticket booking system. Here’s how redundancy is applied:</p>
+<p>Goal: Ensure 99.99% availability and zero data loss</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="components-2">Components:<a href="#components-2" class="hash-link" aria-label="Direct link to Components:" title="Direct link to Components:" translate="no">​</a></h4>
+<ul>
+<li class="">Web servers</li>
+<li class="">Backend services (Booking, Payment, Notification)</li>
+<li class="">Databases</li>
+<li class="">File storage</li>
+<li class="">Message queues</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="where-redundancy-is-applied">Where Redundancy is Applied:<a href="#where-redundancy-is-applied" class="hash-link" aria-label="Direct link to Where Redundancy is Applied:" title="Direct link to Where Redundancy is Applied:" translate="no">​</a></h4>
+<ol>
+<li class="">
+<p>Web Servers (Software Redundancy)</p>
+<ul>
+<li class="">Deploy multiple web server instances behind a load balancer.</li>
+<li class="">If one crashes, others continue to serve traffic.</li>
+</ul>
+</li>
+<li class="">
+<p>Database (Data Redundancy)</p>
+<ul>
+<li class="">Use master-slave replication (e.g., MySQL, PostgreSQL).</li>
+<li class="">If the master goes down, the slave can take over (automatic failover).</li>
+</ul>
+</li>
+<li class="">
+<p>File Storage (Geographic Redundancy)</p>
+<ul>
+<li class="">Store user-uploaded files in cloud storage (e.g., AWS S3), replicated across multiple availability zones (AZs).</li>
+</ul>
+</li>
+<li class="">
+<p>Message Queue (Service Redundancy)</p>
+<ul>
+<li class="">Kafka cluster with multiple brokers and topic replication.</li>
+<li class="">Messages remain safe even if one broker fails.</li>
+</ul>
+</li>
+<li class="">
+<p>Network (Network Redundancy)</p>
+<ul>
+<li class="">Use multiple NICs, routers, and ISPs to ensure internet connectivity even if one fails.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="failure-scenario-1">Failure Scenario<a href="#failure-scenario-1" class="hash-link" aria-label="Direct link to Failure Scenario" title="Direct link to Failure Scenario" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="without-redundancy">Without Redundancy<a href="#without-redundancy" class="hash-link" aria-label="Direct link to Without Redundancy" title="Direct link to Without Redundancy" translate="no">​</a></h4>
+<ul>
+<li class="">You have a single database server.</li>
+<li class="">It crashes due to disk failure.</li>
+<li class="">Entire system goes down. Orders can&#x27;t be placed.</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="with-redundancy">With Redundancy<a href="#with-redundancy" class="hash-link" aria-label="Direct link to With Redundancy" title="Direct link to With Redundancy" translate="no">​</a></h4>
+<ul>
+<li class="">You have a replicated database setup.</li>
+<li class="">Master fails → slave takes over in seconds.</li>
+<li class="">System stays online, users continue booking tickets.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="redundancy-vs-replication-vs-backup">Redundancy vs Replication vs Backup<a href="#redundancy-vs-replication-vs-backup" class="hash-link" aria-label="Direct link to Redundancy vs Replication vs Backup" title="Direct link to Redundancy vs Replication vs Backup" translate="no">​</a></h3>
+<table><thead><tr><th>Concept</th><th>Purpose</th><th>Example</th></tr></thead><tbody><tr><td><strong>Redundancy</strong></td><td>Availability during failure</td><td>Multiple web servers</td></tr><tr><td><strong>Replication</strong></td><td>Real-time duplication of data</td><td>MySQL master-slave</td></tr><tr><td><strong>Backup</strong></td><td>Recovery from long-term data loss</td><td>Nightly database snapshots</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="design-considerations">Design Considerations<a href="#design-considerations" class="hash-link" aria-label="Direct link to Design Considerations" title="Direct link to Design Considerations" translate="no">​</a></h3>
+<table><thead><tr><th>Consideration</th><th>Why It Matters</th></tr></thead><tbody><tr><td><strong>Cost</strong></td><td>More components = more expense</td></tr><tr><td><strong>Consistency</strong></td><td>Need to handle data consistency across replicas</td></tr><tr><td><strong>Failover logic</strong></td><td>Must be well-tested and fast</td></tr><tr><td><strong>Monitoring</strong></td><td>Alert if primary fails and system switches to backup</td></tr><tr><td><strong>Testing</strong></td><td>Simulate failures regularly (e.g., Chaos Engineering)</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-redundancy-patterns">Common Redundancy Patterns<a href="#common-redundancy-patterns" class="hash-link" aria-label="Direct link to Common Redundancy Patterns" title="Direct link to Common Redundancy Patterns" translate="no">​</a></h3>
+<table><thead><tr><th>Consideration</th><th>Why It Matters</th></tr></thead><tbody><tr><td><strong>Cost</strong></td><td>More components = more expense</td></tr><tr><td><strong>Consistency</strong></td><td>Need to handle data consistency across replicas</td></tr><tr><td><strong>Failover logic</strong></td><td>Must be well-tested and fast</td></tr><tr><td><strong>Monitoring</strong></td><td>Alert if primary fails and system switches to backup</td></tr><tr><td><strong>Testing</strong></td><td>Simulate failures regularly (e.g., Chaos Engineering)</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="fault-detection">Fault Detection<a href="#fault-detection" class="hash-link" aria-label="Direct link to Fault Detection" title="Direct link to Fault Detection" translate="no">​</a></h2>
+<p>Fault detection is the process of identifying when a component or service in a system is behaving abnormally or failing, so corrective action can be taken.</p>
+<p>It is a key first step in building fault-tolerant, highly available, and resilient systems.</p>
+<p><strong>Why Is Fault Detection Important?</strong></p>
+<ul>
+<li class="">Prevents cascading failures by catching issues early</li>
+<li class="">Improves reliability and uptime</li>
+<li class="">Enables automated recovery (e.g., auto-restart, failover)</li>
+<li class="">Helps alert human operators quickly</li>
+<li class="">Ensures service-level objectives (SLOs) are met</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="fault-detection-vs-fault-tolerance">Fault Detection vs Fault Tolerance<a href="#fault-detection-vs-fault-tolerance" class="hash-link" aria-label="Direct link to Fault Detection vs Fault Tolerance" title="Direct link to Fault Detection vs Fault Tolerance" translate="no">​</a></h3>
+<table><thead><tr><th>Concept</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Fault Detection</strong></td><td>Identifies faults when they happen</td></tr><tr><td><strong>Fault Tolerance</strong></td><td>Continues operation despite the fault</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-fault-detection-works">How Fault Detection Works<a href="#how-fault-detection-works" class="hash-link" aria-label="Direct link to How Fault Detection Works" title="Direct link to How Fault Detection Works" translate="no">​</a></h3>
+<p>Fault detection usually involves observing system behavior and checking if it deviates from the expected state.</p>
+<p><strong>Common Techniques:</strong></p>
+<table><thead><tr><th>Technique</th><th>Description</th></tr></thead><tbody><tr><td><strong>Health Checks</strong></td><td>Regularly ping services to check if they’re responsive</td></tr><tr><td><strong>Heartbeats</strong></td><td>Components send periodic signals to confirm they’re alive</td></tr><tr><td><strong>Timeouts</strong></td><td>If a service doesn&#x27;t respond in time, it may be considered faulty</td></tr><tr><td><strong>Monitoring &amp; Metrics</strong></td><td>Use tools to watch CPU, memory, error rates, request latency, etc.</td></tr><tr><td><strong>Log Analysis</strong></td><td>Scan logs for known error patterns</td></tr><tr><td><strong>Synthetic Tests</strong></td><td>Simulate user activity to detect failures in end-to-end flows</td></tr><tr><td><strong>Alerting Systems</strong></td><td>Send notifications (email, Slack, PagerDuty) when faults are detected</td></tr><tr><td><strong>Anomaly Detection (AI/ML)</strong></td><td>Detect subtle failures by modeling normal behavior and finding deviations</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="fault-detection-in-a-web-application">Fault Detection in a Web Application<a href="#fault-detection-in-a-web-application" class="hash-link" aria-label="Direct link to Fault Detection in a Web Application" title="Direct link to Fault Detection in a Web Application" translate="no">​</a></h3>
+<p>Imagine a ride-sharing app backend with services like:</p>
+<ul>
+<li class="">User Service</li>
+<li class="">Ride Matching Service</li>
+<li class="">Payment Service</li>
+</ul>
+<p>All running on Kubernetes.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="fault-detection-methods">Fault Detection Methods:<a href="#fault-detection-methods" class="hash-link" aria-label="Direct link to Fault Detection Methods:" title="Direct link to Fault Detection Methods:" translate="no">​</a></h4>
+<ol>
+<li class="">
+<p>Liveness and Readiness Probes (Kubernetes)</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">livenessProbe</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">httpGet</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">path</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> /healthz</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">port</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">8080</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">initialDelaySeconds</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">10</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">periodSeconds</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><br></span></code></pre></div></div>
+<ul>
+<li class="">Kubernetes kills and restarts a container if it fails health checks.</li>
+<li class="">Detects fault automatically and triggers self-healing.</li>
+</ul>
+</li>
+<li class="">
+<p>Heartbeats Between Services</p>
+<ul>
+<li class="">Each service sends heartbeats to a central monitoring service.</li>
+<li class="">If no heartbeat is received within X seconds → mark as unhealthy.</li>
+</ul>
+</li>
+<li class="">
+<p>Monitoring with Prometheus + Grafana</p>
+<ul>
+<li class="">Track:<!-- -->
+<ul>
+<li class="">Error rate &gt; 5% → raise alert</li>
+<li class="">CPU usage &gt; 90% → potential overload</li>
+<li class="">Request latency &gt; 3s → backend lag</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="">
+<p>Alerting via PagerDuty</p>
+<ul>
+<li class="">When a fault is detected (e.g., Payment Service crashes), a notification is sent to an engineer:</li>
+</ul>
+</li>
+</ol>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">PaymentService error rate &gt; 10% for last 5 mins on prod cluster</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="health-check">Health Check<a href="#health-check" class="hash-link" aria-label="Direct link to Health Check" title="Direct link to Health Check" translate="no">​</a></h2>
+<p>A health check is a mechanism that tests whether a component or service in a system is working correctly. It’s a foundational tool used in modern system design for:</p>
+<ul>
+<li class="">Monitoring service health</li>
+<li class="">Triggering auto-healing</li>
+<li class="">Enabling load balancing</li>
+<li class="">Facilitating graceful startup and shutdown</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-health-checks">Types of Health Checks<a href="#types-of-health-checks" class="hash-link" aria-label="Direct link to Types of Health Checks" title="Direct link to Types of Health Checks" translate="no">​</a></h3>
+<table><thead><tr><th>Type</th><th>Purpose</th><th>Used By</th></tr></thead><tbody><tr><td><strong>Liveness Check</strong></td><td>Checks if the app is running (not dead or stuck)</td><td>Restart if it fails (e.g., Kubernetes)</td></tr><tr><td><strong>Readiness Check</strong></td><td>Checks if the app is ready to serve requests</td><td>Add/remove instance from load balancer</td></tr><tr><td><strong>Startup Check</strong></td><td>Checks if the app has finished initializing</td><td>Delay liveness and readiness until app is ready</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="where-health-checks-are-used">Where Health Checks Are Used<a href="#where-health-checks-are-used" class="hash-link" aria-label="Direct link to Where Health Checks Are Used" title="Direct link to Where Health Checks Are Used" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Load Balancers</p>
+<ul>
+<li class="">Detect unhealthy nodes and stop sending traffic.</li>
+<li class="">Example: AWS ALB/ELB, NGINX, HAProxy</li>
+</ul>
+</li>
+<li class="">
+<p>Container Orchestrators (like Kubernetes)</p>
+<ul>
+<li class="">Kill and restart failed containers automatically.</li>
+<li class="">Only send traffic to &quot;ready&quot; pods.</li>
+</ul>
+</li>
+<li class="">
+<p>Service Meshes</p>
+<ul>
+<li class="">Decide routing based on service health (e.g., Istio, Linkerd).</li>
+</ul>
+</li>
+<li class="">
+<p>Monitoring Systems</p>
+<ul>
+<li class="">Collect health status to alert or visualize system state.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="health-check-in-kubernetes">Health Check in Kubernetes<a href="#health-check-in-kubernetes" class="hash-link" aria-label="Direct link to Health Check in Kubernetes" title="Direct link to Health Check in Kubernetes" translate="no">​</a></h3>
+<p>Application: Food Delivery Backend API. Let&#x27;s say you have a Node.js app running in Kubernetes. You want to:</p>
+<ul>
+<li class="">Restart it if it crashes (liveness)</li>
+<li class="">Wait for DB connection before allowing traffic (readiness)</li>
+</ul>
+<p>Sample Express API</p>
+<div class="language-js codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-js codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">app</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">get</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;/healthz&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token parameter">req</span><span class="token parameter punctuation" style="color:#393A34">,</span><span class="token parameter"> res</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token arrow operator" style="color:#393A34">=&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword control-flow" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">db</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">isConnected</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    res</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">status</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">200</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">send</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;OK&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"> </span><span class="token keyword control-flow" style="color:#00009f">else</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    res</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">status</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">500</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">send</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;DB not connected&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></span></code></pre></div></div>
+<p>Kubernetes YAML</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">livenessProbe</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">httpGet</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">path</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> /healthz</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">port</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3000</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">initialDelaySeconds</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">10</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">periodSeconds</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">failureThreshold</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token key atrule" style="color:#00a4db">readinessProbe</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">httpGet</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">path</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> /healthz</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token key atrule" style="color:#00a4db">port</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3000</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">initialDelaySeconds</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">periodSeconds</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><br></span></code></pre></div></div>
+<p>Kubernetes will:</p>
+<ul>
+<li class="">Check <code>/healthz</code> every 5 seconds.</li>
+<li class="">If 3 consecutive failures → restart the container (liveness).</li>
+<li class="">If it fails readiness → stop sending traffic to it.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="characteristics-of-a-good-health-check-endpoint">Characteristics of a Good Health Check Endpoint<a href="#characteristics-of-a-good-health-check-endpoint" class="hash-link" aria-label="Direct link to Characteristics of a Good Health Check Endpoint" title="Direct link to Characteristics of a Good Health Check Endpoint" translate="no">​</a></h3>
+<table><thead><tr><th>Characteristic</th><th>Why It Matters</th></tr></thead><tbody><tr><td><strong>Fast</strong></td><td>Should respond quickly (e.g., <code>&lt;100ms</code>)</td></tr><tr><td><strong>Non-blocking</strong></td><td>Should not interfere with actual processing logic</td></tr><tr><td><strong>Minimal logic</strong></td><td>Avoid full computation — just check essentials (DB, cache, etc.)</td></tr><tr><td><strong>Returns correct status codes</strong></td><td><code>200 OK</code> for healthy, <code>500</code>/<code>503</code> for unhealthy</td></tr><tr><td><strong>Customizable</strong></td><td>Should allow adding logic like DB/caching/service dependency checks</td></tr></tbody></table>
+<p><strong>What Happens Without Health Checks?</strong></p>
+<ul>
+<li class="">A crashed service keeps receiving traffic, causing errors.</li>
+<li class="">An initializing service gets hit before it’s ready.</li>
+<li class="">Failures go unnoticed until users complain or traffic drops.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="recovery">Recovery<a href="#recovery" class="hash-link" aria-label="Direct link to Recovery" title="Direct link to Recovery" translate="no">​</a></h2>
+<p>Recovery is the process of bringing a system or component back to a working state after a failure has occurred.</p>
+<p><strong>Why It Matters:</strong> No matter how robust a system is, failures are inevitable — recovery ensures minimal downtime and data loss.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="recovery-techniques">Recovery Techniques<a href="#recovery-techniques" class="hash-link" aria-label="Direct link to Recovery Techniques" title="Direct link to Recovery Techniques" translate="no">​</a></h3>
+<table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Automatic Recovery</strong></td><td>System detects failure and recovers without human intervention</td></tr><tr><td><strong>Manual Recovery</strong></td><td>Requires human to restore from backups or fix configuration</td></tr><tr><td><strong>Checkpointing</strong></td><td>Periodic snapshots to resume from last good state</td></tr><tr><td><strong>Failover</strong></td><td>Switch to standby system/service (e.g., secondary DB)</td></tr></tbody></table>
+<p><strong>Example</strong></p>
+<ul>
+<li class="">A PostgreSQL DB crashes. AWS RDS triggers automatic failover to a read replica.</li>
+<li class="">Users see minimal downtime (a few seconds) and the system continues operating.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="system-stability">System Stability<a href="#system-stability" class="hash-link" aria-label="Direct link to System Stability" title="Direct link to System Stability" translate="no">​</a></h2>
+<p>Stability means a system continues operating within expected performance and behavior limits, even under stress or partial failure.</p>
+<p><strong>Why It Matters:</strong>
+Unstable systems may:</p>
+<ul>
+<li class="">Crash under load</li>
+<li class="">Return incorrect data</li>
+<li class="">Exhibit erratic behavior</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="stability-strategies">Stability Strategies<a href="#stability-strategies" class="hash-link" aria-label="Direct link to Stability Strategies" title="Direct link to Stability Strategies" translate="no">​</a></h3>
+<table><thead><tr><th>Strategy</th><th>Description</th></tr></thead><tbody><tr><td><strong>Load Shedding</strong></td><td>Drop some requests when system is overwhelmed (return 429 Too Many Requests)</td></tr><tr><td><strong>Rate Limiting</strong></td><td>Control how much traffic a system accepts</td></tr><tr><td><strong>Backpressure</strong></td><td>Tell clients to slow down sending data (common in message queues)</td></tr><tr><td><strong>Resource Isolation</strong></td><td>Separate critical components to avoid full system crash</td></tr></tbody></table>
+<p><strong>Example:</strong></p>
+<ul>
+<li class="">If your payment service is getting overloaded, you:</li>
+<li class="">Temporarily stop accepting new requests (load shedding)</li>
+<li class="">Let current requests finish without crashing the entire system</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="timeout">Timeout<a href="#timeout" class="hash-link" aria-label="Direct link to Timeout" title="Direct link to Timeout" translate="no">​</a></h2>
+<p>A timeout defines how long a system or client should wait for a response before giving up.</p>
+<p><strong>Why It Matters:</strong></p>
+<p>Without timeouts:</p>
+<ul>
+<li class="">A system might wait forever for a response</li>
+<li class="">Threads or resources may be blocked</li>
+<li class="">Cascading failures can occur</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<ul>
+<li class="">Set timeouts for API calls, DB queries, external services</li>
+</ul>
+<div class="language-py codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-py codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> requests</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">requests</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">get</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;https://api.payment.com/pay&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> timeout</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># Wait max 3s</span><br></span></code></pre></div></div>
+<ul>
+<li class="">If the payment API doesn’t respond within 3 seconds, retry or fail gracefully.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="retries">Retries<a href="#retries" class="hash-link" aria-label="Direct link to Retries" title="Direct link to Retries" translate="no">​</a></h2>
+<p>Retries automatically reattempt failed requests in case of transient errors (e.g., network blips, timeouts).</p>
+<p><strong>Why It Matters:</strong></p>
+<p>Many failures are temporary — retrying can resolve the issue without user impact.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="retry-best-practices">Retry Best Practices<a href="#retry-best-practices" class="hash-link" aria-label="Direct link to Retry Best Practices" title="Direct link to Retry Best Practices" translate="no">​</a></h3>
+<table><thead><tr><th>Practice</th><th>Why It Helps</th></tr></thead><tbody><tr><td><strong>Exponential Backoff</strong></td><td>Avoid overwhelming services with aggressive retries</td></tr><tr><td><strong>Jitter</strong></td><td>Add randomness to prevent retry storms</td></tr><tr><td><strong>Retry Budget</strong></td><td>Limit number of retries to avoid infinite loops</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="circuit-breaker-pattern">Circuit Breaker Pattern<a href="#circuit-breaker-pattern" class="hash-link" aria-label="Direct link to Circuit Breaker Pattern" title="Direct link to Circuit Breaker Pattern" translate="no">​</a></h2>
+<p>A circuit breaker prevents a system from repeatedly trying to use a failing component, giving it time to recover.</p>
+<p>Inspired by electrical circuit breakers, it works in three states:</p>
+<table><thead><tr><th>State</th><th>Description</th></tr></thead><tbody><tr><td><strong>Closed</strong></td><td>Requests pass through normally</td></tr><tr><td><strong>Open</strong></td><td>Requests fail immediately (service is down)</td></tr><tr><td><strong>Half-Open</strong></td><td>Send a few trial requests to check if service has recovered</td></tr></tbody></table>
+<p><strong>Why It Matters:</strong></p>
+<ul>
+<li class="">Prevents overwhelming a failing service</li>
+<li class="">Helps fail fast, rather than wasting time</li>
+<li class="">Essential for graceful degradation</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="example-of-circuit-breaker">Example of Circuit Breaker<a href="#example-of-circuit-breaker" class="hash-link" aria-label="Direct link to Example of Circuit Breaker" title="Direct link to Example of Circuit Breaker" translate="no">​</a></h3>
+<p>Suppose the Payment Service is failing:</p>
+<ul>
+<li class="">After 5 failures in a row → Circuit opens.</li>
+<li class="">For the next 30 seconds → All payment calls fail instantly.</li>
+<li class="">After 30 seconds → Half-open: 1 test request sent.<!-- -->
+<ul>
+<li class="">If it succeeds → Circuit closes.</li>
+<li class="">If it fails → Circuit remains open.</li>
+</ul>
+</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/handbook/docs/system-design/Independence"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Independence</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/handbook/docs/system-design/Security/Application Security"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Application Security</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#reliability" class="table-of-contents__link toc-highlight">Reliability</a><ul><li><a href="#improve-reliability" class="table-of-contents__link toc-highlight">Improve Reliability</a></li><li><a href="#example-of-reliable-e-commerce-system" class="table-of-contents__link toc-highlight">Example of Reliable E-commerce System</a></li></ul></li><li><a href="#failure" class="table-of-contents__link toc-highlight">Failure</a><ul><li><a href="#types-of-failure" class="table-of-contents__link toc-highlight">Types of Failure</a></li><li><a href="#failure-vs-fault" class="table-of-contents__link toc-highlight">Failure vs Fault</a></li><li><a href="#examples-of-failures" class="table-of-contents__link toc-highlight">Examples of Failures</a></li><li><a href="#how-to-handle-failures-design-principles" class="table-of-contents__link toc-highlight">How to Handle Failures (Design Principles)</a></li><li><a href="#example-of-netflix" class="table-of-contents__link toc-highlight">Example of Netflix</a></li><li><a href="#failure-detection--recovery" class="table-of-contents__link toc-highlight">Failure Detection &amp; Recovery</a></li></ul></li><li><a href="#availability" class="table-of-contents__link toc-highlight">Availability</a><ul><li><a href="#key-concepts-for-high-availability" class="table-of-contents__link toc-highlight">Key Concepts for High Availability</a></li><li><a href="#example-of-highly-available-web-app" class="table-of-contents__link toc-highlight">Example of Highly Available Web App</a></li><li><a href="#availability-vs-reliability" class="table-of-contents__link toc-highlight">Availability vs Reliability</a></li><li><a href="#example-availability-in-aws" class="table-of-contents__link toc-highlight">Example Availability in AWS</a></li></ul></li><li><a href="#fault-tolerance" class="table-of-contents__link toc-highlight">Fault Tolerance</a><ul><li><a href="#fault-vs-failure-vs-fault-tolerance" class="table-of-contents__link toc-highlight">Fault vs Failure vs Fault Tolerance</a></li><li><a href="#characteristics-of-fault-tolerant-systems" class="table-of-contents__link toc-highlight">Characteristics of Fault-Tolerant Systems</a></li><li><a href="#netflixs-fault-tolerance" class="table-of-contents__link toc-highlight">Netflix&#39;s Fault Tolerance</a></li><li><a href="#fault-tolerance-in-distributed-systems" class="table-of-contents__link toc-highlight">Fault Tolerance in Distributed Systems</a></li></ul></li><li><a href="#redundancy" class="table-of-contents__link toc-highlight">Redundancy</a><ul><li><a href="#types-of-redundancy" class="table-of-contents__link toc-highlight">Types of Redundancy</a></li><li><a href="#redundancy-in-a-web-application" class="table-of-contents__link toc-highlight">Redundancy in a Web Application</a></li><li><a href="#failure-scenario-1" class="table-of-contents__link toc-highlight">Failure Scenario</a></li><li><a href="#redundancy-vs-replication-vs-backup" class="table-of-contents__link toc-highlight">Redundancy vs Replication vs Backup</a></li><li><a href="#design-considerations" class="table-of-contents__link toc-highlight">Design Considerations</a></li><li><a href="#common-redundancy-patterns" class="table-of-contents__link toc-highlight">Common Redundancy Patterns</a></li></ul></li><li><a href="#fault-detection" class="table-of-contents__link toc-highlight">Fault Detection</a><ul><li><a href="#fault-detection-vs-fault-tolerance" class="table-of-contents__link toc-highlight">Fault Detection vs Fault Tolerance</a></li><li><a href="#how-fault-detection-works" class="table-of-contents__link toc-highlight">How Fault Detection Works</a></li><li><a href="#fault-detection-in-a-web-application" class="table-of-contents__link toc-highlight">Fault Detection in a Web Application</a></li></ul></li><li><a href="#health-check" class="table-of-contents__link toc-highlight">Health Check</a><ul><li><a href="#types-of-health-checks" class="table-of-contents__link toc-highlight">Types of Health Checks</a></li><li><a href="#where-health-checks-are-used" class="table-of-contents__link toc-highlight">Where Health Checks Are Used</a></li><li><a href="#health-check-in-kubernetes" class="table-of-contents__link toc-highlight">Health Check in Kubernetes</a></li><li><a href="#characteristics-of-a-good-health-check-endpoint" class="table-of-contents__link toc-highlight">Characteristics of a Good Health Check Endpoint</a></li></ul></li><li><a href="#recovery" class="table-of-contents__link toc-highlight">Recovery</a><ul><li><a href="#recovery-techniques" class="table-of-contents__link toc-highlight">Recovery Techniques</a></li></ul></li><li><a href="#system-stability" class="table-of-contents__link toc-highlight">System Stability</a><ul><li><a href="#stability-strategies" class="table-of-contents__link toc-highlight">Stability Strategies</a></li></ul></li><li><a href="#timeout" class="table-of-contents__link toc-highlight">Timeout</a></li><li><a href="#retries" class="table-of-contents__link toc-highlight">Retries</a><ul><li><a href="#retry-best-practices" class="table-of-contents__link toc-highlight">Retry Best Practices</a></li></ul></li><li><a href="#circuit-breaker-pattern" class="table-of-contents__link toc-highlight">Circuit Breaker Pattern</a><ul><li><a href="#example-of-circuit-breaker" class="table-of-contents__link toc-highlight">Example of Circuit Breaker</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2026
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>
