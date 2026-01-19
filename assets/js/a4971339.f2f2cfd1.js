@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[7700],{25993(a){a.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Golang","slug":"/category/golang","permalink":"/handbook/docs/category/golang","sidebar":"golangSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/golang/"}}}}')}}]);

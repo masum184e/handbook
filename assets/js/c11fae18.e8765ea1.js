@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[4359],{6989(a){a.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"MySQL","slug":"/category/mysql","permalink":"/handbook/docs/category/mysql","sidebar":"mysqlSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/mysql/"}}}}')}}]);

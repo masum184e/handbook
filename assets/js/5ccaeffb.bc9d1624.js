@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[2150],{50390(t){t.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Git","slug":"/category/git","permalink":"/handbook/docs/category/git","sidebar":"gitSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/git/"}}}}')}}]);

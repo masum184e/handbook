@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[13884],{14578(e){e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"NextJS","slug":"/category/nextjs","permalink":"/handbook/docs/category/nextjs","sidebar":"nextjsSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/nextjs/"}}}}')}}]);

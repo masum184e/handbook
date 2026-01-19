@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[33868],{87078(o){o.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"IoT","slug":"/category/iot","permalink":"/handbook/docs/category/iot","sidebar":"iotSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/iot/"}}}}')}}]);

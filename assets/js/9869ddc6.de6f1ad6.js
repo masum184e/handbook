@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[48844],{70976(e){e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Redis","slug":"/category/redis","permalink":"/handbook/docs/category/redis","sidebar":"redisApiSidebar","navigation":{"next":{"title":"Introduction","permalink":"/handbook/docs/redis/Introduction"}}}}')}}]);
