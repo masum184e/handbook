@@ -1,0 +1,135 @@
+When you develop a React app locally, you usually run `npm start`
+
+This runs a development server that is:
+
+- Slow(er)
+- Unoptimized
+- Includes debugging tools
+- Reloads instantly for developer convenience
+
+A production-ready build is different. It is:
+
+- Optimized for speed
+- Smaller in size
+- Secure
+- Ready to be deployed to servers like Vercel, Netlify, AWS, or traditional hosting
+
+This is done using:
+
+```sh
+npm run build
+```
+
+## What `npm run build` actuallydoes
+
+React (via tools like Create React App, Vite, or Webpack) performs several critical steps:
+
+### Code Bundling
+
+- Combines all JavaScript files into few optimized bundles
+- Reduces the number of HTTP requests
+
+```
+src/App.js
+src/components/Header.js
+src/utils/helpers.js
+```
+
+becomes
+
+```
+build/static/js/main.8f3a2.js
+```
+
+### Minification
+
+Removes: - Whitespace - Comments - Long variable names
+
+Before (development):
+
+```jsx
+function calculateTotal(price, tax) {
+  return price + tax;
+}
+```
+
+After (production)
+
+```jsx
+function a(b, c) {
+  return b + c;
+}
+```
+
+### Tree Shaking
+
+- Removes unused code
+- Only keeps what your app actually uses
+
+```jsx
+import { add, subtract, multiply } from "./math";
+```
+
+If you only use `add`, the others are removed from the final build.
+
+### Environment Optimization
+
+- `process.env.NODE_ENV` is set to `"production"`
+- React disables:
+  - Warnings
+  - Extra checks
+  - DevTools hooks
+
+This improves runtime performance.
+
+### Asset Optimization
+
+- Images are compressed
+- CSS is minified
+- Fonts are optimized
+- Files are renamed with hashes for caching
+
+```
+logo.png → logo.4f3d2a.png
+```
+
+This allows browsers to cache files aggressively.
+
+### Generates a `build/` folder
+
+After build completes:
+
+```
+build/
+├── index.html
+├── static/
+│   ├── css/
+│   │   └── main.3f4a1.css
+│   └── js/
+│       └── main.8f3a2.js
+```
+
+This folder is what you deploy.
+
+## Serving the producation build locally
+
+You should never deploy without testing the build.
+
+```
+npm install -g serve
+serve -s build
+```
+
+Runs at: http://localhost:3000
+
+This simulates real production behavior.
+
+
+## Why production build is faster than development
+| Feature          | Development | Production |
+| ---------------- | ----------- | ---------- |
+| Source maps      | Full        | Minimal    |
+| Console warnings | Enabled     | Disabled   |
+| File size        | Large       | Small      |
+| Hot reload       | Yes         | No         |
+| Optimization     | No          | Yes        |
