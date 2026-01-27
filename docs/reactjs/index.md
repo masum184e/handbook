@@ -9,6 +9,30 @@ Welcome to the ReactJS handbook.
 - All environment variable names must start with `REACT_APP_`.
 - Anything in `.env` in React is visible to the browser.
 
+| Tool               | Why it’s used            |
+| ------------------ | ------------------------ |
+| **React (CDN)**    | Core React library       |
+| **ReactDOM (CDN)** | Renders React to the DOM |
+
+CDN is good for learning and small demos, not scalable for real apps.
+
+**Without Babel, No JSX**
+
+JSX is not valid JavaScript. Without Babel, we must use:
+
+```jsx
+React.createElement(type, props, children);
+```
+
+What’s happening?
+
+1. Browser loads React from CDN
+2. Component is defined as a function
+3. React creates elements manually
+4. ReactDOM renders to `#root`
+
+- Using JSX Without Webpack, Not Ideal, but you can use Babel in the browser
+
 ## React Router DOM
 
 - `BrowserRouter` uses the HTML5 history API to keep the UI in sync with the URL.
@@ -32,6 +56,7 @@ Welcome to the ReactJS handbook.
     - `navigate("/about", { replace: true })` → replaces current entry (Back button skips it).
 
 - `useLocation()` allows access to `state` passed during navigation.
+
 ## Question
 
 - what the difference between dev and production server, why dev server is slow and unoptimized where production is optimized for speed, what happens under the hood
