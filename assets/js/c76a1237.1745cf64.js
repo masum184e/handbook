@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[95010],{90747(e){e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Node JS","slug":"/category/node-js","permalink":"/handbook/docs/category/node-js","sidebar":"nodejsApiSidebar","navigation":{"next":{"title":"Architecture","permalink":"/handbook/docs/nodejs/Architecture"}}}}')}}]);
