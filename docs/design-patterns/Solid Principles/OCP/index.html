@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-design-patterns/SOLID Principles/OCP" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">OCP | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/design-patterns/SOLID Principles/OCP"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="OCP | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="Software entities (classes, modules, functions) should be open for extension but closed for modification."><meta data-rh="true" property="og:description" content="Software entities (classes, modules, functions) should be open for extension but closed for modification."><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/design-patterns/SOLID Principles/OCP"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/design-patterns/SOLID Principles/OCP" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/design-patterns/SOLID Principles/OCP" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Design Patterns","item":"https://masum184e.github.io/handbook/docs/category/design-patterns"},{"@type":"ListItem","position":2,"name":"OCP","item":"https://masum184e.github.io/handbook/docs/design-patterns/SOLID Principles/OCP"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.6dad0bd5.css">
+<script src="/handbook/assets/js/runtime~main.aa4ad2fa.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.28be200c.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--active" href="/handbook/docs/category/design-patterns"><span title="Design Patterns" class="categoryLinkLabel_W154">Design Patterns</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/"><span title="Introduction" class="linkLabel_WmDU">Introduction</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/handbook/docs/design-patterns/Code Smells/"><span title="Code Smells" class="categoryLinkLabel_W154">Code Smells</span></a><button aria-label="Expand sidebar category &#x27;Code Smells&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/handbook/docs/design-patterns/SOLID Principles/SRP"><span title="SOLID Principles" class="categoryLinkLabel_W154">SOLID Principles</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/SOLID Principles/SRP"><span title="SRP" class="linkLabel_WmDU">SRP</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/handbook/docs/design-patterns/SOLID Principles/OCP"><span title="OCP" class="linkLabel_WmDU">OCP</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/SOLID Principles/LSP"><span title="LSP" class="linkLabel_WmDU">LSP</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/SOLID Principles/ISP"><span title="ISP" class="linkLabel_WmDU">ISP</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/SOLID Principles/DIP"><span title="DIP" class="linkLabel_WmDU">DIP</span></a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/Solid Principles"><span title="Solid Principles" class="linkLabel_WmDU">Solid Principles</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/handbook/docs/design-patterns/Design Patterns/"><span title="Design Patterns" class="categoryLinkLabel_W154">Design Patterns</span></a><button aria-label="Expand sidebar category &#x27;Design Patterns&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/Refactoring"><span title="Refactoring" class="linkLabel_WmDU">Refactoring</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/design-patterns/Anti Pattern"><span title="Anti Pattern" class="linkLabel_WmDU">Anti Pattern</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/handbook/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/handbook/docs/category/design-patterns"><span>Design Patterns</span></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">SOLID Principles</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">OCP</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>OCP</h1></header><p>Software entities (classes, modules, functions) should be open for extension but closed for modification.</p>
+<p>That sounds abstract. Let’s translate it:</p>
+<ul>
+<li class="">You should be able to add new behavior</li>
+<li class="">Without changing already-tested, stable code</li>
+</ul>
+<p>In short:</p>
+<blockquote>
+<p>Add new code instead of editing old code.</p>
+</blockquote>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-ocp-exists">Why OCP Exists<a href="#why-ocp-exists" class="hash-link" aria-label="Direct link to Why OCP Exists" title="Direct link to Why OCP Exists" translate="no">​</a></h2>
+<p>Every time you modify existing code:</p>
+<ul>
+<li class="">You risk breaking working behavior</li>
+<li class="">You increase regression risk</li>
+<li class="">You require retesting</li>
+<li class="">You increase merge conflicts in teams</li>
+</ul>
+<p>OCP minimizes change ripple.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="violating-ocp--classic-example">Violating OCP — Classic Example<a href="#violating-ocp--classic-example" class="hash-link" aria-label="Direct link to Violating OCP — Classic Example" title="Direct link to Violating OCP — Classic Example" translate="no">​</a></h2>
+<p>Imagine an e-commerce discount system:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class DiscountCalculator {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    public double calculate(String customerType, double amount) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        if (customerType.equals(&quot;REGULAR&quot;)) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            return amount * 0.05;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        } </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        else if (customerType.equals(&quot;VIP&quot;)) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            return amount * 0.10;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        } </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        else if (customerType.equals(&quot;PREMIUM&quot;)) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            return amount * 0.20;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        return 0;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>Problem:</p>
+<ul>
+<li class="">Every new customer type requires editing this class.</li>
+<li class="">The class grows endlessly.</li>
+<li class="">Risk of breaking logic increases.</li>
+</ul>
+<p>This is closed for extension, open for modification — the opposite of OCP.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="applying-ocp-with-polymorphism">Applying OCP with Polymorphism<a href="#applying-ocp-with-polymorphism" class="hash-link" aria-label="Direct link to Applying OCP with Polymorphism" title="Direct link to Applying OCP with Polymorphism" translate="no">​</a></h2>
+<p>Step 1: Define abstraction</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">interface DiscountPolicy {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    double calculate(double amount);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>Step 2: Implement behaviors</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class RegularDiscount implements DiscountPolicy {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    public double calculate(double amount) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        return amount * 0.05;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">class VipDiscount implements DiscountPolicy {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    public double calculate(double amount) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        return amount * 0.10;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">class PremiumDiscount implements DiscountPolicy {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    public double calculate(double amount) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        return amount * 0.20;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>Step 3: Use abstraction</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class DiscountCalculator {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    public double calculate(DiscountPolicy policy, double amount) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        return policy.calculate(amount);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>Now:</p>
+<ul>
+<li class="">Add <code>StudentDiscount</code></li>
+<li class="">No change to existing classes</li>
+<li class="">Just create a new implementation</li>
+</ul>
+<p>The system is:</p>
+<ul>
+<li class="">Open for extension (add new policies)</li>
+<li class="">Closed for modification (existing code untouched)</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-actually-changed">What Actually Changed?<a href="#what-actually-changed" class="hash-link" aria-label="Direct link to What Actually Changed?" title="Direct link to What Actually Changed?" translate="no">​</a></h2>
+<p>Instead of: Behavior controlled by conditionals</p>
+<p>We now have: Behavior controlled by polymorphism</p>
+<p>OCP often means:</p>
+<blockquote>
+<p>Replace <code>if/else</code> with polymorphism.</p>
+</blockquote>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="real-world-example-notification-system">Real-World Example: Notification System<a href="#real-world-example-notification-system" class="hash-link" aria-label="Direct link to Real-World Example: Notification System" title="Direct link to Real-World Example: Notification System" translate="no">​</a></h2>
+<p>Bad Design:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">class NotificationService {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    void send(String type) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        if (type.equals(&quot;EMAIL&quot;)) { ... }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        else if (type.equals(&quot;SMS&quot;)) { ... }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>Every new channel → modify this class.</p>
+<p>OCP-Compliant:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">interface NotificationSender {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    void send(String message);</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>Implementations:</p>
+<ul>
+<li class="">EmailSender</li>
+<li class="">SmsSender</li>
+<li class="">PushSender</li>
+<li class="">WhatsAppSender (later)</li>
+</ul>
+<p><code>NotificationService</code> remains unchanged.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-hidden-mechanism-behind-ocp">The Hidden Mechanism Behind OCP<a href="#the-hidden-mechanism-behind-ocp" class="hash-link" aria-label="Direct link to The Hidden Mechanism Behind OCP" title="Direct link to The Hidden Mechanism Behind OCP" translate="no">​</a></h2>
+<p>OCP relies heavily on:</p>
+<ul>
+<li class="">Abstraction</li>
+<li class="">Polymorphism</li>
+<li class="">Dependency Inversion Principle (DIP)</li>
+</ul>
+<p>High-level modules depend on abstractions, not concrete classes.</p>
+<p>That’s how you avoid modifying them.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="real-world-tradeoffs">Real-World Tradeoffs<a href="#real-world-tradeoffs" class="hash-link" aria-label="Direct link to Real-World Tradeoffs" title="Direct link to Real-World Tradeoffs" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="increased-abstraction">Increased Abstraction<a href="#increased-abstraction" class="hash-link" aria-label="Direct link to Increased Abstraction" title="Direct link to Increased Abstraction" translate="no">​</a></h3>
+<p>More:</p>
+<ul>
+<li class="">Interfaces</li>
+<li class="">Classes</li>
+<li class="">Indirection layers</li>
+</ul>
+<p>Small system: OCP may feel like overengineering.</p>
+<p>Large system: OCP prevents chaos.</p>
+<p>Tradeoff: Simplicity now vs extensibility later.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="hard-to-predict-extension-points">Hard to Predict Extension Points<a href="#hard-to-predict-extension-points" class="hash-link" aria-label="Direct link to Hard to Predict Extension Points" title="Direct link to Hard to Predict Extension Points" translate="no">​</a></h3>
+<p>You can’t design for every possible extension.</p>
+<p>If you abstract too early:</p>
+<ul>
+<li class="">You create useless abstractions.</li>
+<li class="">You complicate code unnecessarily.</li>
+</ul>
+<p>This is called: Speculative generality (a design smell).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="indirection-cost">Indirection Cost<a href="#indirection-cost" class="hash-link" aria-label="Direct link to Indirection Cost" title="Direct link to Indirection Cost" translate="no">​</a></h3>
+<p>More abstraction means:</p>
+<ul>
+<li class="">Harder debugging</li>
+<li class="">More files to navigate</li>
+<li class="">Slight runtime overhead (usually negligible)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="sometimes-modification-is-fine">Sometimes Modification Is Fine<a href="#sometimes-modification-is-fine" class="hash-link" aria-label="Direct link to Sometimes Modification Is Fine" title="Direct link to Sometimes Modification Is Fine" translate="no">​</a></h3>
+<p>If:</p>
+<ul>
+<li class="">The system is small</li>
+<li class="">The code changes rarely</li>
+<li class="">There are only 2–3 cases</li>
+</ul>
+<p>Then simple conditionals might be better.</p>
+<p>OCP is most valuable when:</p>
+<ul>
+<li class="">Behavior varies often</li>
+<li class="">System evolves frequently</li>
+<li class="">Multiple developers work on it</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="real-world-case-study-payment-gateways">Real-World Case Study: Payment Gateways<a href="#real-world-case-study-payment-gateways" class="hash-link" aria-label="Direct link to Real-World Case Study: Payment Gateways" title="Direct link to Real-World Case Study: Payment Gateways" translate="no">​</a></h2>
+<p>Imagine you integrate:</p>
+<ul>
+<li class="">Stripe</li>
+<li class="">PayPal</li>
+<li class="">Square</li>
+</ul>
+<p>Bad design: Every new gateway → modify core payment class.</p>
+<p>Good OCP design: Each gateway implements <code>PaymentGateway</code>.</p>
+<p>When a new provider appears:</p>
+<ul>
+<li class="">Add new class.</li>
+<li class="">No touching existing payment processing logic.</li>
+<li class="">No regression risk.</li>
+</ul>
+<p>In production systems, this matters massively.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="ocp-and-stability">OCP and Stability<a href="#ocp-and-stability" class="hash-link" aria-label="Direct link to OCP and Stability" title="Direct link to OCP and Stability" translate="no">​</a></h2>
+<p>Robert C. Martin (Uncle Bob) explains:</p>
+<blockquote>
+<p>The more stable a module is, the more it should obey OCP.</p>
+</blockquote>
+<p>Core business rules:</p>
+<ul>
+<li class="">Should be closed.</li>
+<li class="">Extended via plugins.</li>
+</ul>
+<p>Unstable modules (like UI):</p>
+<ul>
+<li class="">Can be modified more freely.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="when-ocp-goes-wrong">When OCP Goes Wrong<a href="#when-ocp-goes-wrong" class="hash-link" aria-label="Direct link to When OCP Goes Wrong" title="Direct link to When OCP Goes Wrong" translate="no">​</a></h2>
+<p>Overengineering example:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">interface FileReaderStrategy { ... }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">class XmlFileReader implements FileReaderStrategy { ... }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">class JsonFileReader implements FileReaderStrategy { ... }</span><br></span></code></pre></div></div>
+<p>But the system only ever reads JSON.</p>
+<p>You built extensibility you’ll never use.</p>
+<p>That’s wasted complexity.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="practical-guideline">Practical Guideline<a href="#practical-guideline" class="hash-link" aria-label="Direct link to Practical Guideline" title="Direct link to Practical Guideline" translate="no">​</a></h2>
+<p>Use OCP when:</p>
+<ul>
+<li class="">You expect new behavior types</li>
+<li class="">The system is long-lived</li>
+<li class="">You work in a team</li>
+<li class="">Regression risk is costly</li>
+</ul>
+<p>Avoid heavy abstraction when:</p>
+<ul>
+<li class="">System is small</li>
+<li class="">Requirements are stable</li>
+<li class="">Performance-critical inner loops</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="deep-insight">Deep Insight<a href="#deep-insight" class="hash-link" aria-label="Direct link to Deep Insight" title="Direct link to Deep Insight" translate="no">​</a></h2>
+<p>OCP is about minimizing risk, not maximizing abstraction.</p>
+<p>It shifts the question from:</p>
+<p>“How do I implement this?”</p>
+<p>to</p>
+<p>“How will this change in the future?”</p>
+<p>Good engineers design for change.
+Great engineers design only for likely change.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="final-summary">Final Summary<a href="#final-summary" class="hash-link" aria-label="Direct link to Final Summary" title="Direct link to Final Summary" translate="no">​</a></h2>
+<p>Open/Closed Principle means:</p>
+<ul>
+<li class="">Extend via new classes.</li>
+<li class="">Avoid modifying stable, tested code.</li>
+<li class="">Use abstraction and polymorphism.</li>
+<li class="">Balance flexibility with simplicity.</li>
+</ul>
+<p>It reduces:</p>
+<ul>
+<li class="">Regression bugs</li>
+<li class="">Merge conflicts</li>
+<li class="">Fear of refactoring</li>
+</ul>
+<p>But it increases:</p>
+<ul>
+<li class="">Indirection</li>
+<li class="">Architectural complexity</li>
+<li class="">Number of moving parts</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/handbook/docs/design-patterns/SOLID Principles/SRP"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">SRP</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/handbook/docs/design-patterns/SOLID Principles/LSP"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">LSP</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#why-ocp-exists" class="table-of-contents__link toc-highlight">Why OCP Exists</a></li><li><a href="#violating-ocp--classic-example" class="table-of-contents__link toc-highlight">Violating OCP — Classic Example</a></li><li><a href="#applying-ocp-with-polymorphism" class="table-of-contents__link toc-highlight">Applying OCP with Polymorphism</a></li><li><a href="#what-actually-changed" class="table-of-contents__link toc-highlight">What Actually Changed?</a></li><li><a href="#real-world-example-notification-system" class="table-of-contents__link toc-highlight">Real-World Example: Notification System</a></li><li><a href="#the-hidden-mechanism-behind-ocp" class="table-of-contents__link toc-highlight">The Hidden Mechanism Behind OCP</a></li><li><a href="#real-world-tradeoffs" class="table-of-contents__link toc-highlight">Real-World Tradeoffs</a><ul><li><a href="#increased-abstraction" class="table-of-contents__link toc-highlight">Increased Abstraction</a></li><li><a href="#hard-to-predict-extension-points" class="table-of-contents__link toc-highlight">Hard to Predict Extension Points</a></li><li><a href="#indirection-cost" class="table-of-contents__link toc-highlight">Indirection Cost</a></li><li><a href="#sometimes-modification-is-fine" class="table-of-contents__link toc-highlight">Sometimes Modification Is Fine</a></li></ul></li><li><a href="#real-world-case-study-payment-gateways" class="table-of-contents__link toc-highlight">Real-World Case Study: Payment Gateways</a></li><li><a href="#ocp-and-stability" class="table-of-contents__link toc-highlight">OCP and Stability</a></li><li><a href="#when-ocp-goes-wrong" class="table-of-contents__link toc-highlight">When OCP Goes Wrong</a></li><li><a href="#practical-guideline" class="table-of-contents__link toc-highlight">Practical Guideline</a></li><li><a href="#deep-insight" class="table-of-contents__link toc-highlight">Deep Insight</a></li><li><a href="#final-summary" class="table-of-contents__link toc-highlight">Final Summary</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2026
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>
