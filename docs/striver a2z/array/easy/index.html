@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Easy (2) | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/striver a2z/array/easy"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Easy (2) | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="In place: O(1) Space Complexity"><meta data-rh="true" property="og:description" content="In place: O(1) Space Complexity"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/striver a2z/array/easy"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/array/easy" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/array/easy" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DSA","item":"https://masum184e.github.io/handbook/docs/category/dsa"},{"@type":"ListItem","position":2,"name":"Striver A2Z DSA Sheet","item":"https://masum184e.github.io/handbook/docs/dsa/Striver A2Z/"},{"@type":"ListItem","position":3,"name":"Easy (2)","item":"https://masum184e.github.io/handbook/docs/striver a2z/array/easy"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.6dad0bd5.css">
-<script src="/handbook/assets/js/runtime~main.a1f729cf.js" defer="defer"></script>
+<script src="/handbook/assets/js/runtime~main.143d1589.js" defer="defer"></script>
 <script src="/handbook/assets/js/main.5fc0d8e6.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -39,8 +39,19 @@
 <li class=""><a href="https://leetcode.com/problems/rotate-array/" target="_blank" rel="noopener noreferrer" class="">Left Rotate By D Place</a></li>
 <li class=""><a href="https://leetcode.com/problems/move-zeroes/" target="_blank" rel="noopener noreferrer" class="">Moves Zeros to end</a></li>
 <li class="">Linear Search</li>
-<li class=""><a href="https://www.geeksforgeeks.org/problems/union-of-two-sorted-arrays-1587115621/1" target="_blank" rel="noopener noreferrer" class="">Find Union*</a></li>
-<li class=""><a href="https://leetcode.com/problems/missing-number/" target="_blank" rel="noopener noreferrer" class="">Find Missing numbers*</a></li>
+<li class="">Find Union<!-- -->
+<ul>
+<li class="">If we need it iterate two array, and the itereation depend on each other, follow two pointer approach</li>
+<li class="">Inserting a key in map/set required <code>log(N)</code> times</li>
+</ul>
+</li>
+<li class="">Find Missing numbers<!-- -->
+<ul>
+<li class="">Brute force approach of finding an element from an array is 2 loop, one is for iteration, other is to find that iterated item.</li>
+<li class="">Bit Approach: xor of <code>[0, n]</code>(<code>xr^=i</code>) vs xor of item of array</li>
+<li class="">Math Approach: sum of <code>[0, n]</code>(<code>n*(n+1/2)</code>) vs sum of item of array</li>
+</ul>
+</li>
 <li class="">Maximum Consecutive Ones</li>
 <li class="">Find the number that appear once</li>
 <li class=""><a href="https://leetcode.com/problems/subarray-sum-equals-k/" target="_blank" rel="noopener noreferrer" class="">Sub Array Sum(K) - Positive</a></li>
