@@ -8,6 +8,12 @@
 .docusaurus
 .cache-loader
 
+*.html
+*.css
+*.js
+*.cpp
+*.exe
+
 # Misc
 .DS_Store
 .env.local
