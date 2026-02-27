@@ -13,6 +13,7 @@
 *.js
 *.cpp
 *.exe
+*.prob
 
 # Misc
 .DS_Store

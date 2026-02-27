@@ -1,0 +1,5 @@
+1. [Assign Cookies](https://leetcode.com/problems/assign-cookies/)
+1. [Fractional Knapsack](https://www.geeksforgeeks.org/problems/fractional-knapsack-1587115620/1)
+1. [Minimum coins](https://leetcode.com/problems/coin-change/)
+1. [Lemonade Change](https://leetcode.com/problems/lemonade-change/description/)
+1. [Valid Paranthesis Checker](https://leetcode.com/problems/valid-parenthesis-string/description/)
