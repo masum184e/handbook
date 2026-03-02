@@ -49,3 +49,20 @@
   display: none;
 }
 
+.danger{
+  background-color: #e13238;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+
+.warning{
+  background-color: yellow;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+
+.info{
+  background-color: blue;
+  padding: 0 5px;
+  border-radius: 5px;
+}
