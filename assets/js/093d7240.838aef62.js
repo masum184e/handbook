@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[48392],{51189(e){e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":".NET","slug":"/category/net","permalink":"/handbook/docs/category/net","sidebar":"dotnetApiSidebar","navigation":{"next":{"title":"Intro","permalink":"/handbook/docs/dotnet/Intro"}}}}')}}]);
