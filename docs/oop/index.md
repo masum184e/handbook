@@ -1,5 +1,5 @@
 ---
-title: Introduction
+title: Introduction 📄
 sidebar_position: 1
 ---
 
@@ -83,8 +83,6 @@ As software grows large, procedural programming creates problems:
 | Poor real-world modeling | Objects       |
 | Hard to extend systems   | Abstraction   |
 
----
-
 ## Features of OOP
 
 ## Encapsulation
@@ -102,16 +100,14 @@ private int balance;
 * Showing only essential details
 * Hiding implementation complexity
 
-Example:  
-You drive a car without knowing engine internals.
+Example: You drive a car without knowing engine internals.
 
 ## Inheritance
 
 * One class can inherit another
 * Promotes code reuse
 
-Example:  
-`Dog` inherits from `Animal`
+Example: `Dog` inherits from `Animal`
 
 ## Polymorphism
 
@@ -119,8 +115,7 @@ Example:
 * Method Overloading
 * Method Overriding
 
-Example:  
-`draw()` works differently for Circle and Square
+Example: `draw()` works differently for Circle and Square
 
 ## Advantages of OOP
 
