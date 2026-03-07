@@ -1,7 +1,6 @@
 ---
 id: pattern-recognition
-slug: /final-semester/patter-recognition
-title: Introduction
+slug: /final-semester/pattern-recognition
 sidebar_position: 1
 ---
 
