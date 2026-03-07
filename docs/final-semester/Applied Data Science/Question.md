@@ -25,7 +25,7 @@ We calculate $v_2(k) = P(O_2|k) \cdot \max_{j}(v_1(j) \cdot P(k|j))$:
 - **Rainy:** $0.4 \times \max(0.2331 \cdot 0.1, 0.0333 \cdot 0.7, 0.0666 \cdot 0.3) = 0.4 \times 0.02331 = \mathbf{0.00932}$ (from Sunny or Rainy)
 - **Cloudy:** $0.3 \times \max(0.2331 \cdot 0.3, 0.0333 \cdot 0.1, 0.0666 \cdot 0.4) = 0.3 \times 0.06993 = \mathbf{0.02098}$ (from Sunny)
 
-### **Day 3: Observation = Stays Indoors**
+**Day 3: Observation = Stays Indoors**
 
 We calculate $v_3(k) = P(O_3|k) \cdot \max_{j}(v_2(j) \cdot P(k|j))$:
 
@@ -39,6 +39,7 @@ We calculate $v_3(k) = P(O_3|k) \cdot \max_{j}(v_2(j) \cdot P(k|j))$:
 
 <details>
 <summary>(b) Compute the probability of observing the sequence Jogging, Shopping, Stays Indoors.</summary>
+
 We use the **Forward Algorithm** to find the total probability of this observation sequence by summing the probabilities of all possible paths.
 
 Using the values from the step-by-step calculations (Forward probabilities $\alpha_t$):
@@ -100,6 +101,7 @@ $$E(S) = -0.5(-1) - 0.5(-1) = \mathbf{1.0}$$
 
 <details>
 <summary>(b) Build a decision tree (manually) using the feature with the highest information gain at the root.</summary>
+
 To find the root, we calculate the Information Gain (IG) for **Age**, **Income**, and **Previous Purchases**.
 
 $$\text{Gain}(S, A) = E(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} E(S_v)$$
@@ -242,6 +244,7 @@ For $K=0$:
 **Test Sample:** $X=1, Y=1, Z=0$.
 
 **The Problem:**
+
 Looking at the data for $K=1$, there are **zero** instances where $Y=1$ AND $K=1$ simultaneously (Wait, looking closely at the table: row 2 and 4 show $Y=1$ when $K=1$).
 Let's look for a true zero: In the data, for $K=1$, $Z$ is always $1$. Therefore, **$P(Z=0|K=1) = 0$**.
 
@@ -289,12 +292,15 @@ We calculate Euclidean distance: $d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$
 
 <details>
 <summary>(b) For a binary classification task, what will be the training error for a 1-Nearest Neighbor? Briefly explain.</summary>
+
 The training error for 1-NN is typically **0% (or zero)**.
 **Explanation:** When you test the model using a point that is already in the training set, its nearest neighbor is itself (distance = 0). Since it is its own neighbor, it will always be assigned its own true label, resulting in perfect accuracy on the training data.
+
 </details>
 
 <details>
 <summary>(c) Discuss why $k$-Nearest Neighbors is called a "lazy learner.</summary>
+
 $k$-NN is a **lazy learner** because it does not perform any "learning" or generalize a model during the training phase.
 
 1. **No Training Phase:** It simply stores the training data in memory.
