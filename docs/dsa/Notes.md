@@ -47,6 +47,7 @@
    7. weekly 491 - 1
    8. biweekly 177
 5. cpsacademy(blog+video)
+6. implment cpp stl `next_permuations`
 
 ## Blog
 

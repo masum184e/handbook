@@ -133,6 +133,13 @@ const backend = [
 ];
 const languages = [
     {
+        title: "Rust",
+        description:
+            "Systems programming with memory safety, ownership, borrowing, lifetimes, and building fast, reliable software.",
+        link: "/docs/rust",
+        Svg: require("@site/static/icons/rust.svg").default,
+    },
+    {
         title: "Golang",
         description:
             "Go fundamentals, concurrency with goroutines, channels, and building high-performance backend services.",
@@ -146,13 +153,13 @@ const languages = [
         link: "/docs/typescript",
         Svg: require("@site/static/icons/typescript.svg").default,
     },
-    {
-        title: "JavaScript",
-        description:
-            "Core JavaScript concepts, async programming, closures, event loop, and browser & Node.js fundamentals.",
-        link: "/docs/javascript",
-        Svg: require("@site/static/icons/javascript.svg").default,
-    },
+    // {
+    //     title: "JavaScript",
+    //     description:
+    //         "Core JavaScript concepts, async programming, closures, event loop, and browser & Node.js fundamentals.",
+    //     link: "/docs/javascript",
+    //     Svg: require("@site/static/icons/javascript.svg").default,
+    // },
 ];
 
 export { fundamentals, backend, languages, databases }

@@ -1,3 +1,8 @@
+---
+title: Introduction
+sidebar_position: 1
+---
+
 Rust is a modern programming language designed for:
 
 - High performance (like C/C++)
