@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[89144],{42432(a){a.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"Rust","slug":"/category/rust","permalink":"/handbook/docs/category/rust","sidebar":"rustApiSidebar","navigation":{"next":{"title":"Installation","permalink":"/handbook/docs/rust/Installation"}}}}')}}]);
