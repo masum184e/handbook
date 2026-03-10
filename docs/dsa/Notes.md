@@ -1,4 +1,4 @@
-1. [Complexity Analysis Blog](https://www.cpsacademy.io/blog/complexity-analysis-a-to-z--interview-crack--secret-weapon)
+1. Complexity Analysis Blog
 2. [C# Blog](https://www.cpsacademy.io/blog/--c-sharp-programming-)
 3. OOP Blog
 4. [Pointer Blog](https://www.cpsacademy.io/blog/pointers--programming----------/)
@@ -48,14 +48,12 @@
    8. biweekly 177
 5. cpsacademy(blog+video)
 6. implment cpp stl `next_permuations`
+7. explore c++ stl (`map`(bst), `unordered_map`(hashmap))
 
 ## Blog
 
-1. Abstraction
-2. real project
-3. oop interview
-4. strings - character array
-5. string practice problem
+8. pointer - memory management
+9. string - practice problem
 
 difference between avg case and tight bound
 
