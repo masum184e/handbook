@@ -3,48 +3,6 @@ title: Introduction
 sidebar_position: 1
 ---
 
-Welcome to the DSA handbook.
-
-### Now
-
-1. 3 Sum, 4 Sum Duplicacy removal
-2. 2D BS and DFS, BFS
-3. Boyer–Moore majority vote algorithm
-4. gcd, xor
-
-### Dec 30, 2025
-
-Primary focus on **all 13 problem of 1D Array**
-
-1. [Koko Eating Banans](https://leetcode.com/problems/koko-eating-bananas/)
-2. [Search in Roated Sorted II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
-3. [Signle Element](https://leetcode.com/problems/single-element-in-a-sorted-array/)
-4. [Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
-5. [Count rotation](https://www.geeksforgeeks.org/problems/rotation4723/1)
-6. [Find Peak Element](https://leetcode.com/problems/find-peak-element/)
-7. [Search Insert Position](https://leetcode.com/problems/search-insert-position/)
-8. [Find Square Root](https://www.geeksforgeeks.org/problems/square-root/1)
-9. [Maximum one's](https://leetcode.com/problems/row-with-maximum-ones/)
-10. [Search in 2D matrix](https://leetcode.com/problems/search-a-2d-matrix-ii/)
-
-### Dec 31, 2025
-
-Primary focus on **all 9 problem of LL, DLL and Medium of DLL**
-
-- Note Down current & current->next
-- Iterative & Recursive Reverse
-
-### Feb 1, 2025
-
-Primary focus on **all 14 problem of array easy**
-
----
----
----
----
----
----
-
 ## Weaknesses
 
 - 0 problems last year → severe inactivity.
@@ -103,8 +61,8 @@ Weekdays (2 hours)
    - Review wrong submissions
    - Rewrite clean solution
 3. Block 3 (30 min):
-    - Re-solve 1 previously solved problem WITHOUT looking
-    - Total: 4 problems/day
+   - Re-solve 1 previously solved problem WITHOUT looking
+   - Total: 4 problems/day
 
 Weekend (3–4 hours)
 
@@ -474,3 +432,246 @@ Now build it.
 Start today.
 Solve 3 problems.
 No excuses.
+
+## Question
+
+<details>
+
+<summary>Explain Halting Problem and Collatz Conjecture</summary>
+
+I’ll explain both concepts carefully. They are famous problems in **Computer Science** and **Number Theory**, and they illustrate two different kinds of limits:
+
+- limits of **computation**
+- limits of **mathematical proof**
+
+**Halting Problem**
+
+The **Halting Problem** was proven unsolvable by **Alan Turing** in **1936**.
+
+The halting problem asks:
+
+> Can we write a program that determines whether **any program** will eventually stop (halt) or run forever for a given input?
+
+In simpler words:
+
+Given:
+
+- a program **P**
+- an input **I**
+
+Question:
+
+> Will **P(I)** eventually **stop**, or will it **run forever**?
+
+**Example Programs**
+
+**Program that halts**
+
+```cpp
+int main(){
+    int x = 5;
+    return 0;
+}
+```
+
+This clearly **halts immediately**.
+
+**Program that does not halt**
+
+```cpp
+while(true){
+}
+```
+
+This program **runs forever**.
+
+**The Real Question**
+
+Can we create a program like this?
+
+```
+HALT(program P, input I)
+
+if P(I) stops
+    return "HALTS"
+else
+    return "RUNS FOREVER"
+```
+
+The halting problem asks:
+
+> Can such a universal program exist?
+
+**Turing’s Proof Idea (Simplified)**
+
+Turing proved **no such algorithm can exist**.
+
+He used a **self-contradiction argument**.
+
+Assume a program exists:
+
+```
+HALT(P, I)
+```
+
+that perfectly predicts halting.
+
+Now construct another program:
+
+```
+WEIRD(P):
+
+if HALT(P, P) == "HALTS"
+    loop forever
+else
+    stop
+```
+
+Now ask:
+
+```
+What happens if we run WEIRD(WEIRD)?
+```
+
+**Case 1**
+
+HALT says **WEIRD halts**
+
+Then WEIRD will **loop forever**
+
+Contradiction.
+
+**Case 2**
+
+HALT says **WEIRD runs forever**
+
+Then WEIRD will **stop**
+
+Contradiction again.
+
+Therefore:
+
+**HALT cannot exist.**
+
+Meaning:
+
+> There is **no general algorithm that can determine for every program whether it halts.**
+
+**Why It Matters**
+
+The halting problem proves a fundamental limitation of computers.
+
+Even the most powerful computers **cannot solve every computational question**.
+
+It is a cornerstone concept in **Computability Theory**.
+
+**Collatz Conjecture**
+
+The **Collatz Conjecture** was proposed by **Lothar Collatz** in **1937**.
+
+It is a famous unsolved problem in **Number Theory**.
+
+**Rule**
+
+Start with any positive integer **n**.
+
+Repeat:
+
+If **n is even**
+
+$$
+n = n/2
+$$
+
+If **n is odd**
+
+$$
+n = 3n + 1
+$$
+
+Repeat the process.
+
+**Conjecture**
+
+The conjecture says:
+
+> No matter what positive integer you start with, the sequence will eventually reach **1**.
+
+But **no one has proven this for all numbers**.
+
+Example 1: n = 6
+
+Start: 6
+
+6 is even
+6 / 2 = 3
+
+3 is odd
+3 × 3 + 1 = 10
+
+10 is even
+10 / 2 = 5
+
+5 is odd
+3 × 5 + 1 = 16
+
+16 → 8 → 4 → 2 → 1
+
+Sequence:
+
+```
+6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1
+```
+
+Example 2: n = 11
+
+```
+11 → 34 → 17 → 52 → 26 → 13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1
+```
+
+Even though numbers sometimes **increase**, eventually they reach **1**.
+
+**Why It Is Interesting**
+
+The rule is **extremely simple**, yet no one has proved it for all integers.
+
+Computers have tested it for extremely large numbers, but a **general mathematical proof is still unknown**.
+
+**Collatz Algorithm Example**
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main(){
+    long long n;
+    cin >> n;
+
+    while(n != 1){
+        cout << n << " ";
+
+        if(n % 2 == 0)
+            n = n / 2;
+        else
+            n = 3 * n + 1;
+    }
+
+    cout << 1;
+}
+```
+
+**Key Difference Between the Two**
+
+| Feature | Halting Problem                      | Collatz Conjecture               |
+| ------- | ------------------------------------ | -------------------------------- |
+| Type    | Proven unsolvable problem            | Unproven mathematical conjecture |
+| Field   | Computability theory                 | Number theory                    |
+| Status  | Proven impossible to solve generally | Still open                       |
+| Idea    | Programs may run forever             | Number sequence always reaches 1 |
+
+**Simple intuition**
+
+- **Halting Problem:** proves computers **cannot solve everything**.
+- **Collatz Conjecture:** shows simple math problems can be **extremely hard to prove**.
+
+</details>
