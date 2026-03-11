@@ -1,86 +1,3 @@
-Mathematics is full of concepts that help us understand numbers and their relationships. One such important concept is the **Greatest Common Divisor (GCD)**. It plays a fundamental role in number theory, fractions, algebra, cryptography, and computer science.
-
----
-
-## What is GCD?
-
-The **Greatest Common Divisor (GCD)** of two or more integers is the **largest number that divides all of them exactly (without leaving a remainder).**
-
-It is also called:
-
-* Greatest Common Factor (GCF)
-* Highest Common Factor (HCF)
-
-All three terms mean the same thing.
-
----
-
-## Simple Explanation
-
-Imagine you have:
-
-* 12 chocolates
-* 18 chocolates
-
-You want to divide them into equal groups, with no leftovers.
-
-The largest possible group size that works for both is **6**.
-
-So,
-
-$$
-GCD(12, 18) = 6
-$$
-
----
-
-## Why is GCD Important in Mathematics?
-
-GCD helps in:
-
-* Simplifying fractions
-* Solving equations
-* Understanding number relationships
-* Building cryptographic systems
-* Designing efficient computer algorithms
-
-It is one of the foundational concepts in number theory.
-
----
-
-## Real-Life Applications of GCD
-
-Here are some real-world examples:
-
-### Example 1: Arranging Objects
-
-You have:
-
-* 24 apples
-* 36 oranges
-
-You want equal groups with no leftovers.
-
-GCD(24, 36) = 12
-
-So you can make **12 equal groups**.
-
----
-
-### Example 2: Cutting Materials
-
-You have:
-
-* 20 meters of wire
-* 30 meters of rope
-
-You want equal length pieces with no waste.
-
-GCD(20, 30) = 10
-
-So each piece can be **10 meters long**.
-
----
 
 ## Definition of GCD
 
@@ -577,27 +494,7 @@ $$
 \gcd(a^m, a^n) = a^{\min(m, n)}
 $$
 
----
-
 ## Applications of GCD
-
-### 1. Simplifying Fractions
-
-Example:
-
-$$
-\frac{18}{24}
-$$
-
-GCD(18, 24) = 6
-
-Divide both:
-
-$$
-= \frac{3}{4}
-$$
-
----
 
 ### 2. Solving Diophantine Equations
 
@@ -613,28 +510,6 @@ $$
 \gcd(6, 9) = 3
 $$
 
----
-
-### 3. Cryptography
-
-Encryption systems like RSA use GCD to:
-
-* Generate keys
-* Ensure security
-
----
-
-### 4. Computer Science
-
-Used in:
-
-* Algorithms
-* Data structures
-* Programming
-* Optimization problems
-
----
-
 ### 5. Geometry Problems
 
 Finding largest square tile size.
@@ -649,8 +524,6 @@ GCD = 6
 
 Largest square tile = 6 × 6
 
----
-
 ## Common Mistakes Students Make
 
 ### Mistake 1: Confusing GCD with LCM
@@ -658,65 +531,10 @@ Largest square tile = 6 × 6
 GCD = Largest common divisor
 LCM = Smallest common multiple
 
----
-
-### Mistake 2: Missing Factors
-
-Example:
-
-Factors of 12:
-
-Students forget 4 or 6.
-
----
-
 ### Mistake 3: Stopping Euclidean Algorithm Early
 
 Must continue until remainder = 0.
 
----
-
-### Mistake 4: Incorrect Prime Factorization
-
-Correct:
-
-24 = 2 × 2 × 2 × 3
-
-Not:
-
-2 × 2 × 6
-
----
-
-### Mistake 5: Assuming GCD is Always Small
-
-Example:
-
-GCD(100, 200) = 100
-
----
-
-## Conclusion
-
-The Greatest Common Divisor is a fundamental mathematical concept that helps us understand relationships between numbers. It is essential in simplifying fractions, solving equations, programming, and cryptography.
-
-We explored multiple methods to calculate GCD, including listing factors, prime factorization, Euclidean algorithm, division method, subtraction, and recursion.
-
-Understanding GCD improves your mathematical skills and prepares you for advanced topics in algebra, number theory, and computer science.
-
----
-
-## Summary
-
 **Key Points:**
 
-* GCD is the largest number that divides both numbers
-* Also called GCF or HCF
-* Multiple methods exist to calculate GCD
 * Euclidean algorithm is the most efficient
-* GCD helps simplify fractions
-* Used in cryptography and computer science
-* Important mathematical properties exist
-* Essential for algebra and programming
-
-Mastering GCD builds a strong foundation for advanced mathematics and problem-solving.

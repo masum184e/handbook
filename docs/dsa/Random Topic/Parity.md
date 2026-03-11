@@ -1,26 +1,9 @@
-If you’ve solved even a handful of problems on Codeforces or AtCoder, you’ve already encountered **parity** — even if you didn’t realize it.
-
-In mathematics, **parity** simply means whether a number is **even or odd**. That’s it.
-
-Yet this simple concept is one of the most powerful tools in competitive programming. Parity appears in: Invariants, Game theory, Graph theory, Permutations, Constructive algorithms, Bitwise problems.
-
-Very often, a complicated-looking problem collapses into something simple once you analyze **what changes parity and what doesn’t**.
-
----
-
-# 1. What Is Parity?
+## What Is Parity
 
 Parity refers to whether an integer is:
 
-* **Even** → divisible by 2
-* **Odd** → not divisible by 2
-
-Mathematically:
-
 * Even numbers: $2k$
 * Odd numbers: $2k + 1$
-
-In C++:
 
 ```cpp
 if (x % 2 == 0) {  

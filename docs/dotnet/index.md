@@ -29,6 +29,8 @@ CLR
 
 - Execute the code
 - Manages the memory(Garbage Collector)
+- Provide type safety
+- Handle Exception
 
 ## C# vs Java
 
