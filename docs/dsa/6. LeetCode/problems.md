@@ -1,3 +1,10 @@
+1. https://leetcode.com/problems/number-of-1-bits/
+2. https://leetcode.com/problems/power-of-two
+3. https://leetcode.com/problems/maximum-average-subarray-i
+4. https://leetcode.com/problems/lemonade-change/
+5. https://leetcode.com/problems/assign-cookies/
+6. https://leetcode.com/problems/minimum-bit-flips-to-convert-number
+---
 1. https://leetcode.com/problems/subarray-sum-equals-k/
 2. https://leetcode.com/problems/finding-pairs-with-a-certain-sum/
 3. https://leetcode.com/problems/majority-element/
@@ -95,10 +102,8 @@
 95. [https://leetcode.com/problems/maximum-product-subarray/](https://leetcode.com/problems/maximum-product-subarray/)
 96. [https://leetcode.com/problems/palindrome-number/](https://leetcode.com/problems/palindrome-number/)
 97. [https://leetcode.com/problems/reverse-integer/](https://leetcode.com/problems/reverse-integer/)
-98. [https://leetcode.com/problems/lemonade-change/](https://leetcode.com/problems/lemonade-change/)
 99. [https://leetcode.com/problems/coin-change/](https://leetcode.com/problems/coin-change/)
 100. [https://leetcode.com/problems/power-of-four/](https://leetcode.com/problems/power-of-four/)
-101. [https://leetcode.com/problems/power-of-two/](https://leetcode.com/problems/power-of-two/)
 102. [https://leetcode.com/problems/isomorphic-strings/](https://leetcode.com/problems/isomorphic-strings/)
 103. [https://leetcode.com/problems/longest-common-prefix/](https://leetcode.com/problems/longest-common-prefix/)
 104. [https://leetcode.com/problems/reverse-words-in-a-string/](https://leetcode.com/problems/reverse-words-in-a-string/)
