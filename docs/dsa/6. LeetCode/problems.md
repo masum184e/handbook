@@ -4,6 +4,7 @@
 4. https://leetcode.com/problems/lemonade-change/
 5. https://leetcode.com/problems/assign-cookies/
 6. https://leetcode.com/problems/minimum-bit-flips-to-convert-number
+7. https://leetcode.com/problems/perfect-number/
 ---
 1. https://leetcode.com/problems/subarray-sum-equals-k/
 2. https://leetcode.com/problems/finding-pairs-with-a-certain-sum/
