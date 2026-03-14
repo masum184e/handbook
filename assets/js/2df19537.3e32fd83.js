@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[50482],{46948(a){a.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"DSA","slug":"/category/dsa","permalink":"/handbook/docs/category/dsa","sidebar":"dsaSidebar","navigation":{"next":{"title":"Tracker","permalink":"/handbook/docs/dsa/Tracker/"}}}}')}}]);
