@@ -1,4 +1,5 @@
 1. https://codeforces.com/problemset/problem/1617/B
+2. https://codeforces.com/contest/1462/problem/C
 ---
 1. https://codeforces.com/problemset/problem/318/A
 1. https://codeforces.com/problemset/problem/2203/B
@@ -52,7 +53,6 @@
 1. https://codeforces.com/problemset/problem/44/A
 1. https://codeforces.com/problemset/problem/1927/A
 1. https://codeforces.com/problemset/problem/26/A
-1. https://codeforces.com/problemset/problem/1462/C
 1. https://codeforces.com/problemset/problem/1878/C
 1. https://codeforces.com/problemset/problem/1918/A
 1. https://codeforces.com/problemset/problem/1925/A
