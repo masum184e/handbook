@@ -5,7 +5,10 @@
 5. https://leetcode.com/problems/single-number
 6. https://leetcode.com/problems/number-of-1-bits
 7. https://leetcode.com/problems/maximum-average-subarray-i
-
+8. https://leetcode.com/problems/valid-anagram
+9. https://leetcode.com/problems/sort-characters-by-frequency
+10. https://leetcode.com/problems/roman-to-integer/description/
+11. https://leetcode.com/problems/reverse-words-in-a-string/
 ---
 
 1. https://leetcode.com/problems/minimum-bit-flips-to-convert-number
@@ -24,7 +27,6 @@
 14. [https://leetcode.com/problems/merge-two-sorted-lists/](https://leetcode.com/problems/merge-two-sorted-lists/)
 15. [https://leetcode.com/problems/remove-duplicates-from-sorted-list/](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
 16. [https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/](https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/)
-17. [https://leetcode.com/problems/roman-to-integer/](https://leetcode.com/problems/roman-to-integer/)
 18. [https://leetcode.com/problems/add-two-numbers/](https://leetcode.com/problems/add-two-numbers/)
 19. https://leetcode.com/problems/divide-two-integers/description/
 20. [https://leetcode.com/problems/find-the-maximum-divisibility-score/](https://leetcode.com/problems/find-the-maximum-divisibility-score/)
@@ -111,7 +113,6 @@
 101. https://leetcode.com/problems/power-of-four/
 102. [https://leetcode.com/problems/isomorphic-strings/](https://leetcode.com/problems/isomorphic-strings/)
 103. [https://leetcode.com/problems/longest-common-prefix/](https://leetcode.com/problems/longest-common-prefix/)
-104. [https://leetcode.com/problems/reverse-words-in-a-string/](https://leetcode.com/problems/reverse-words-in-a-string/)
 105. [https://leetcode.com/problems/largest-odd-number-in-string/](https://leetcode.com/problems/largest-odd-number-in-string/)
 106. [https://leetcode.com/problems/arranging-coins/](https://leetcode.com/problems/arranging-coins/)
 107. [https://leetcode.com/problems/merge-sorted-array/](https://leetcode.com/problems/merge-sorted-array/)
@@ -127,7 +128,6 @@
 117. [https://leetcode.com/problems/longest-palindrome/](https://leetcode.com/problems/longest-palindrome/)
 118. [https://leetcode.com/problems/longest-increasing-subsequence/](https://leetcode.com/problems/longest-increasing-subsequence/)
 119. [https://leetcode.com/problems/longest-common-subsequence/](https://leetcode.com/problems/longest-common-subsequence/)
-120. [https://leetcode.com/problems/sort-characters-by-frequency/](https://leetcode.com/problems/sort-characters-by-frequency/)
 121. [https://leetcode.com/problems/set-matrix-zeroes/](https://leetcode.com/problems/set-matrix-zeroes/)
 122. [https://leetcode.com/problems/rotate-image/](https://leetcode.com/problems/rotate-image/)
 123. https://leetcode.com/problems/generate-binary-strings-without-adjacent-zeros/
