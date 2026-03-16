@@ -10,7 +10,7 @@ C# is the combination of good things of Java and C++.
 ## How .NET execute
 
 ```
-তোমার C# Code
+   C# Code
       ↓
    Compiler
       ↓

@@ -1,8 +1,8 @@
 1. Complexity Analysis Blog
-2. [C# Blog](https://www.cpsacademy.io/blog/--c-sharp-programming-)
+2. C# Blog
 3. OOP Blog
 4. [Pointer Blog](https://www.cpsacademy.io/blog/pointers--programming----------/)
-5. [Array and String](https://www.cpsacademy.io/blog/array--string--a-to-z)
+5. Array and String
 6. [STL](https://www.cpsacademy.io/blog/c-stl-complete-guide-beginner-to-advanced--)
 7. [CF Expert Blog](https://www.cpsacademy.io/blog/codeforces--800--1600--complete--roadmap---cp-icpc--interview---cover-/codeforces-800--1600-complete-bangla-roadmap)
 8. [Codechef Rating Ladder](https://docs.google.com/spreadsheets/d/1V9rvF7LHwBuuLllDNw_xEJ6upM8yloec9O3uAxq-4G8/edit?gid=1688954650#gid=1688954650)
