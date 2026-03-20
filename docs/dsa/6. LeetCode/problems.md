@@ -12,8 +12,9 @@
 12. https://leetcode.com/problems/hamming-distance
 13. https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses
 14. https://leetcode.com/problems/missing-number
-15. https://leetcode.com/problems/max-consecutive-ones/
-
+15. https://leetcode.com/problems/max-consecutive-ones
+16. https://leetcode.com/problems/find-missing-and-repeated-values
+17. https://leetcode.com/problems/string-to-integer-atoi/
 ---
 
 1. https://leetcode.com/problems/minimum-bit-flips-to-convert-number
