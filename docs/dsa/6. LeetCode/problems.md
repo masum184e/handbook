@@ -14,7 +14,11 @@
 14. https://leetcode.com/problems/missing-number
 15. https://leetcode.com/problems/max-consecutive-ones
 16. https://leetcode.com/problems/find-missing-and-repeated-values
-17. https://leetcode.com/problems/string-to-integer-atoi/
+17. https://leetcode.com/problems/string-to-integer-atoi
+18. https://leetcode.com/problems/merge-strings-alternately
+19. https://leetcode.com/problems/pascals-triangle
+20. https://leetcode.com/problems/pascals-triangle-ii/
+21. https://leetcode.com/problems/delete-node-in-a-linked-list/
 ---
 
 1. https://leetcode.com/problems/minimum-bit-flips-to-convert-number
@@ -52,7 +56,6 @@
 33. [https://leetcode.com/problems/middle-of-the-linked-list/](https://leetcode.com/problems/middle-of-the-linked-list/)
 34. [https://leetcode.com/problems/remove-nth-node-from-end-of-list/](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
 35. [https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/](https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/)
-36. [https://leetcode.com/problems/delete-node-in-a-linked-list/](https://leetcode.com/problems/delete-node-in-a-linked-list/)
 37. https://leetcode.com/problems/search-in-rotated-sorted-array-ii
 38. https://leetcode.com/problems/odd-even-linked-list
 39. https://leetcode.com/problems/sort-array-by-parity
@@ -76,7 +79,6 @@
 57. [https://leetcode.com/problems/koko-eating-bananas/](https://leetcode.com/problems/koko-eating-bananas/)
 58. [https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 59. [https://leetcode.com/problems/sqrtx/](https://leetcode.com/problems/sqrtx/)
-60. [https://leetcode.com/problems/pascals-triangle/](https://leetcode.com/problems/pascals-triangle/)
 61. [https://leetcode.com/problems/frequency-of-the-most-frequent-element/](https://leetcode.com/problems/frequency-of-the-most-frequent-element/)
 62. [https://leetcode.com/problems/valid-palindrome/](https://leetcode.com/problems/valid-palindrome/)
 63. [https://leetcode.com/problems/maximum-depth-of-binary-tree/](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
