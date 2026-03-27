@@ -17,8 +17,11 @@
 17. https://leetcode.com/problems/string-to-integer-atoi
 18. https://leetcode.com/problems/merge-strings-alternately
 19. https://leetcode.com/problems/pascals-triangle
-20. https://leetcode.com/problems/pascals-triangle-ii/
-21. https://leetcode.com/problems/delete-node-in-a-linked-list/
+20. https://leetcode.com/problems/pascals-triangle-ii
+21. https://leetcode.com/problems/delete-node-in-a-linked-list
+22. https://leetcode.com/problems/rotate-list
+23. https://leetcode.com/problems/merge-two-sorted-lists
+24. https://leetcode.com/problems/maximum-depth-of-binary-tree
 ---
 
 1. https://leetcode.com/problems/minimum-bit-flips-to-convert-number
@@ -38,7 +41,6 @@
 15. [https://leetcode.com/problems/move-zeroes/](https://leetcode.com/problems/move-zeroes/)
 16. [https://leetcode.com/problems/apply-operations-to-an-array/](https://leetcode.com/problems/apply-operations-to-an-array/)
 17. [https://leetcode.com/problems/longest-harmonious-subsequence/](https://leetcode.com/problems/longest-harmonious-subsequence/)
-18. [https://leetcode.com/problems/merge-two-sorted-lists/](https://leetcode.com/problems/merge-two-sorted-lists/)
 19. [https://leetcode.com/problems/remove-duplicates-from-sorted-list/](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
 20. [https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/](https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/)
 21. [https://leetcode.com/problems/add-two-numbers/](https://leetcode.com/problems/add-two-numbers/)
@@ -81,7 +83,6 @@
 59. [https://leetcode.com/problems/sqrtx/](https://leetcode.com/problems/sqrtx/)
 61. [https://leetcode.com/problems/frequency-of-the-most-frequent-element/](https://leetcode.com/problems/frequency-of-the-most-frequent-element/)
 62. [https://leetcode.com/problems/valid-palindrome/](https://leetcode.com/problems/valid-palindrome/)
-63. [https://leetcode.com/problems/maximum-depth-of-binary-tree/](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
 64. [https://leetcode.com/problems/binary-tree-inorder-traversal/](https://leetcode.com/problems/binary-tree-inorder-traversal/)
 65. [https://leetcode.com/problems/binary-tree-preorder-traversal/](https://leetcode.com/problems/binary-tree-preorder-traversal/)
 66. [https://leetcode.com/problems/fibonacci-number/](https://leetcode.com/problems/fibonacci-number/)
