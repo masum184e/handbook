@@ -1,8 +1,3 @@
----
-title: Tracker
-sidebar_position: 1
----
-
 ## Pupil
 
 A: 10 - 20  

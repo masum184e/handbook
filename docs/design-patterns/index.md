@@ -13,6 +13,19 @@ Design principles in software development act like a set of guiding rules that h
 6. Promote Reusability
 7. Support Long-Term Sustainability
 
+> Design Principles are a set of guidelines that explain how to use OOP tools (such as classes, inheritance, interfaces, and polymorphism) effectively to write better code.
+
+## Design Principles vs Design Patterns
+
+| Aspect   | Design Principles       | Design Patterns          |
+| -------- | ----------------------- | ------------------------ |
+| Nature   | Guidelines              | Solutions                |
+| Level    | High-level              | More concrete            |
+| Purpose  | Improve design thinking | Solve recurring problems |
+| Usage    | Always applied          | Used when needed         |
+| Examples | SOLID, DRY              | Factory, Observer        |
+
+
 ## DRY — _Don't Repeat Yourself_
 
 DRY means:

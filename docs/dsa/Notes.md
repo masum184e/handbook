@@ -4,6 +4,7 @@
 4. [Pointer Blog](https://www.cpsacademy.io/blog/pointers--programming----------/)
 5. Array and String
 6. [STL](https://www.cpsacademy.io/blog/c-stl-complete-guide-beginner-to-advanced--)
+7. [SOLID](https://www.cpsacademy.io/blog/solid--beyond--c-design-principles--series)
 7. CF Expert Blog
 8. [Codechef Rating Ladder](https://docs.google.com/spreadsheets/d/1V9rvF7LHwBuuLllDNw_xEJ6upM8yloec9O3uAxq-4G8/edit?gid=1688954650#gid=1688954650)
 9. [400 Problem List](https://docs.google.com/spreadsheets/d/1JKPnkRnB9jedrTLw4IVeHiIIWeBNF1lfVgh0UVBY2LY/edit?gid=0#gid=0)
@@ -21,6 +22,7 @@
 18. [Pointer Blog](https://www.cpsacademy.io/blog/pointers--programming----------/)
 19. [Array and String](https://www.cpsacademy.io/blog/array--string--a-to-z)
 20. [STL](https://www.cpsacademy.io/blog/c-stl-complete-guide-beginner-to-advanced--)
+7. [SOLID](https://www.cpsacademy.io/blog/solid--beyond--c-design-principles--series)
 21. [CF Expert Blog](https://www.cpsacademy.io/blog/codeforces--800--1600--complete--roadmap---cp-icpc--interview---cover-/codeforces-800--1600-complete-bangla-roadmap)
 22. [Codechef Rating Ladder](https://docs.google.com/spreadsheets/d/1V9rvF7LHwBuuLllDNw_xEJ6upM8yloec9O3uAxq-4G8/edit?gid=1688954650#gid=1688954650)
 23. [400 Problem List](https://docs.google.com/spreadsheets/d/1JKPnkRnB9jedrTLw4IVeHiIIWeBNF1lfVgh0UVBY2LY/edit?gid=0#gid=0)
@@ -50,6 +52,15 @@
 6. implment cpp stl `next_permuations`
 7. explore c++ stl (`map`(bst), `unordered_map`(hashmap))
 
+## Problems
+### Array & Strings
+https://leetcode.com/problems/kth-largest-element-in-an-array/description/
+https://leetcode.com/problems/rotate-array/description/
+https://leetcode.com/problems/group-anagrams/description/
+### Matrix
+https://leetcode.com/problems/rotate-image/description/
+https://leetcode.com/problems/flipping-an-image/
+https://leetcode.com/problems/spiral-matrix/description/
 ## Blog
 
 8. pointer - memory management
@@ -71,3 +82,7 @@ name1 and name2 are not same
 আসল strcmp আরো lexicographical comparison করে, কিন্তু basic idea এটাই
 
 ## String থেকে Spaces সরাও
+
+
+- https://leetcode.com/problems/sort-list/description/
+   - Try to solve with with $O(1)$ space complexity
