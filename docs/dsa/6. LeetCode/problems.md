@@ -46,7 +46,6 @@
 21. [https://leetcode.com/problems/add-two-numbers/](https://leetcode.com/problems/add-two-numbers/)
 22. https://leetcode.com/problems/divide-two-integers/description/
 23. [https://leetcode.com/problems/find-the-maximum-divisibility-score/](https://leetcode.com/problems/find-the-maximum-divisibility-score/)
-24. [https://leetcode.com/problems/row-with-maximum-ones/](https://leetcode.com/problems/row-with-maximum-ones/)
 25. [https://leetcode.com/problems/search-insert-position/](https://leetcode.com/problems/search-insert-position/)
 26. [https://leetcode.com/problems/smallest-pair-with-different-frequencies/](https://leetcode.com/problems/smallest-pair-with-different-frequencies/)
 27. [https://leetcode.com/problems/assign-cookies/](https://leetcode.com/problems/assign-cookies/)
@@ -80,7 +79,6 @@
 56. [https://leetcode.com/problems/search-in-rotated-sorted-array/](https://leetcode.com/problems/search-in-rotated-sorted-array/)
 57. [https://leetcode.com/problems/koko-eating-bananas/](https://leetcode.com/problems/koko-eating-bananas/)
 58. [https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
-59. [https://leetcode.com/problems/sqrtx/](https://leetcode.com/problems/sqrtx/)
 61. [https://leetcode.com/problems/frequency-of-the-most-frequent-element/](https://leetcode.com/problems/frequency-of-the-most-frequent-element/)
 62. [https://leetcode.com/problems/valid-palindrome/](https://leetcode.com/problems/valid-palindrome/)
 64. [https://leetcode.com/problems/binary-tree-inorder-traversal/](https://leetcode.com/problems/binary-tree-inorder-traversal/)
@@ -130,7 +128,6 @@
 108. [https://leetcode.com/problems/rotate-string/](https://leetcode.com/problems/rotate-string/)
 109. [https://leetcode.com/problems/longest-consecutive-sequence/](https://leetcode.com/problems/longest-consecutive-sequence/)
 110. [https://leetcode.com/problems/valid-parentheses/](https://leetcode.com/problems/valid-parentheses/)
-111. [https://leetcode.com/problems/search-a-2d-matrix-ii/](https://leetcode.com/problems/search-a-2d-matrix-ii/)
 112. [https://leetcode.com/problems/contains-duplicate/](https://leetcode.com/problems/contains-duplicate/)
 113. [https://leetcode.com/problems/sum-of-two-integers/](https://leetcode.com/problems/sum-of-two-integers/)
 114. [https://leetcode.com/problems/valid-parenthesis-string/](https://leetcode.com/problems/valid-parenthesis-string/)

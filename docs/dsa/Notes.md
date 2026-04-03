@@ -1,7 +1,7 @@
 1. Complexity Analysis Blog
 2. C# Blog
 3. OOP Blog
-4. [Pointer Blog](https://www.cpsacademy.io/blog/pointers--programming----------/)
+4. Pointer Blog
 5. Array and String
 6. [STL](https://www.cpsacademy.io/blog/c-stl-complete-guide-beginner-to-advanced--)
 7. [SOLID](https://www.cpsacademy.io/blog/solid--beyond--c-design-principles--series)
@@ -38,7 +38,6 @@
 
 1. build 3 Portfolio
 2. Read 3 blog on CP
-3. Solve Sliding Window Problem in LC
 4. upsolve
    1. CF Round 1082
    2. CF Edu Round 187 = complete
@@ -51,6 +50,7 @@
 5. cpsacademy(blog+video)
 6. implment cpp stl `next_permuations`
 7. explore c++ stl (`map`(bst), `unordered_map`(hashmap))
+8. implment realloc with malloc with capacity and size variable and note it down(append with existing note)
 
 ## Problems
 ### Array & Strings
