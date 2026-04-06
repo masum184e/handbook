@@ -5,6 +5,7 @@
 5. Array and String
 6. [STL](https://www.cpsacademy.io/blog/c-stl-complete-guide-beginner-to-advanced--)
 7. [SOLID](https://www.cpsacademy.io/blog/solid--beyond--c-design-principles--series)
+8. Recursion
 7. CF Expert Blog
 8. [Codechef Rating Ladder](https://docs.google.com/spreadsheets/d/1V9rvF7LHwBuuLllDNw_xEJ6upM8yloec9O3uAxq-4G8/edit?gid=1688954650#gid=1688954650)
 9. [400 Problem List](https://docs.google.com/spreadsheets/d/1JKPnkRnB9jedrTLw4IVeHiIIWeBNF1lfVgh0UVBY2LY/edit?gid=0#gid=0)
@@ -23,6 +24,7 @@
 19. [Array and String](https://www.cpsacademy.io/blog/array--string--a-to-z)
 20. [STL](https://www.cpsacademy.io/blog/c-stl-complete-guide-beginner-to-advanced--)
 7. [SOLID](https://www.cpsacademy.io/blog/solid--beyond--c-design-principles--series)
+8. [Recursion](https://www.cpsacademy.io/blog/-recursion-----dynamic-programming-/------call-----)
 21. [CF Expert Blog](https://www.cpsacademy.io/blog/codeforces--800--1600--complete--roadmap---cp-icpc--interview---cover-/codeforces-800--1600-complete-bangla-roadmap)
 22. [Codechef Rating Ladder](https://docs.google.com/spreadsheets/d/1V9rvF7LHwBuuLllDNw_xEJ6upM8yloec9O3uAxq-4G8/edit?gid=1688954650#gid=1688954650)
 23. [400 Problem List](https://docs.google.com/spreadsheets/d/1JKPnkRnB9jedrTLw4IVeHiIIWeBNF1lfVgh0UVBY2LY/edit?gid=0#gid=0)
@@ -54,35 +56,47 @@
 
 ## Problems
 ### Array & Strings
-https://leetcode.com/problems/kth-largest-element-in-an-array/description/
-https://leetcode.com/problems/rotate-array/description/
-https://leetcode.com/problems/group-anagrams/description/
+https://leetcode.com/problems/kth-largest-element-in-an-array
+https://leetcode.com/problems/rotate-array
+https://leetcode.com/problems/group-anagrams
 ### Matrix
-https://leetcode.com/problems/rotate-image/description/
-https://leetcode.com/problems/flipping-an-image/
-https://leetcode.com/problems/spiral-matrix/description/
-## Blog
+https://leetcode.com/problems/rotate-image
+https://leetcode.com/problems/flipping-an-image
+https://leetcode.com/problems/spiral-matrix
 
-8. pointer - memory management
-9. string - practice problem
+
+## Blog
 
 difference between avg case and tight bound
 
 frequency count with: সেক্ষেত্রে অন্য পদ্ধতি ব্যবহার করতে হবে (যেমন nested loop দিয়ে, বা পরে sorting শিখলে আরো ভালো উপায় পাবে)। - array practice/onek data
 
-##
-
-char name1[5] = {'R', 'a', 'h', 'i', 'm'};  
-char name2[] = "Rahim";
-
-name1 and name2 are not same
-
-##
-
-আসল strcmp আরো lexicographical comparison করে, কিন্তু basic idea এটাই
-
 ## String থেকে Spaces সরাও
 
-
-- https://leetcode.com/problems/sort-list/description/
+- https://leetcode.com/problems/sort-list
    - Try to solve with with $O(1)$ space complexity
+
+
+
+### Fixed Sliding Window
+
+1. [Sliding Subarray Beauty](https://leetcode.com/problems/sliding-subarray-beauty)
+    1. 06 April, 2026: 00.40.44 ❌
+        - Failed at edge cases
+            - `set` doesn't allow duplicates, `multiset` does
+            - `next` function is used to access set with index
+            ```cpp
+            auto it = next(st.begin(), x - 1);
+            vec.push_back(*it);
+            ```
+            `next` is lineare caused $O(k)$ time complexity, eventually the program become $O(n * k)$
+            - `erase` function remove all the element, get the ... of the specific item through `find`
+            ```cpp
+            st.erase(nums[i - k]);
+            st.erase(st.find(nums[i - k]));
+            ```
+            - Reduce the time complexity with frequency array(Check the constraints), if require implment the xth smallest number function.
+5. [Number of Sub-arrays of Size K and Average ≥ Threshold](https://leetcode.com/problems/number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold/)
+6. [Check If a String Contains All Binary Codes of Size K](https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/)
+7. [Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+8. [Permutation in String](https://leetcode.com/problems/permutation-in-string/)
