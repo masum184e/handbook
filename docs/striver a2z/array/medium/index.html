@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Medium (8) | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/striver a2z/array/medium"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Medium (8) | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="- To apply two pointer approach for sum problem, array need to be sorted, if not sorted use hash map."><meta data-rh="true" property="og:description" content="- To apply two pointer approach for sum problem, array need to be sorted, if not sorted use hash map."><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/striver a2z/array/medium"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/array/medium" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/array/medium" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DSA","item":"https://masum184e.github.io/handbook/docs/category/dsa"},{"@type":"ListItem","position":2,"name":"Striver A2Z DSA Sheet","item":"https://masum184e.github.io/handbook/docs/dsa/Striver A2Z/"},{"@type":"ListItem","position":3,"name":"Medium (8)","item":"https://masum184e.github.io/handbook/docs/striver a2z/array/medium"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.82264dc9.css">
-<script src="/handbook/assets/js/runtime~main.1b76015e.js" defer="defer"></script>
+<script src="/handbook/assets/js/runtime~main.da3232ab.js" defer="defer"></script>
 <script src="/handbook/assets/js/main.4f10b3b4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -74,7 +74,66 @@
 </li>
 </ol>
 </li>
-<li class=""><a href="https://leetcode.com/problems/next-permutation/" target="_blank" rel="noopener noreferrer" class="">Next Permuation</a></li>
+<li class=""><a href="https://leetcode.com/problems/next-permutation/" target="_blank" rel="noopener noreferrer" class="">Next Permuation</a>
+<ol>
+<li class="">07 April, 2026: 00.45.54 ❌<!-- -->
+<ul>
+<li class="">Failed at implementation<!-- -->
+<ul>
+<li class="">We want the next slightly bigger arrangement, not just any bigger one.</li>
+<li class="">We do this by modifying the sequence from the right side, because:<!-- -->
+<ul>
+<li class="">The right side changes more frequently in lexicographic order.</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li class="">First decreasing element from right<br>
+<!-- -->Scan from right → left and find the first index <code>i</code> where:<!-- -->
+<div class="language-cpp codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-cpp codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre></div></div>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">i       = 0 1 2 3 4 5</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">nums[i] = 1 2 3 6 5 4</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">i = 2 | 3 &lt; 6  ✅</span><br></span></code></pre></div></div>
+</li>
+</ol>
+<!-- -->Breakpoint at index <code>i = 2</code> (value = <code>3</code>)<!-- -->
+<ul>
+<li class="">The right side is non-increasing.</li>
+<li class="">That means it&#x27;s already the largest possible arrangement of that suffix.</li>
+<li class="">So we must modify something to the left.</li>
+</ul>
+<ol start="2">
+<li class="">Find the &quot;just larger&quot; number to swap<!-- -->
+<ul>
+<li class="">From the right side (<code>[6, 5, 4]</code>), find the smallest number greater than <code>nums[i] = 3</code>.</li>
+<li class="">We want the next smallest increase, not a big jump.</li>
+<li class="">For <code>3</code>, candidates on right: <code>4</code>, Smallest &gt; <code>3 → 4</code></li>
+</ul>
+</li>
+<li class="">Swap <code>nums[i]</code> with that number<!-- -->
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">1 2 4 6 5 3</span><br></span></code></pre></div></div>
+<!-- -->Now we increased the number slightly.</li>
+<li class="">Reverse the suffix
+Reverse everything to the right of index <code>i = 2</code>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">1 2 4 | 6 5 3  → reverse → 1 2 4 | 3 5 6</span><br></span></code></pre></div></div>
+<ul>
+<li class="">The suffix was in descending order (largest)</li>
+<li class="">Reversing keeps it as the smallest possible arrangement</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li class="">Edge Case: Already Largest Permutation
+If no breakpoint exists:<!-- -->
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">6 5 4 3 2 1</span><br></span></code></pre></div></div>
+<!-- -->Entire array is descending → largest permutation<br>
+<!-- -->Solution: Reverse whole array<!-- -->
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">1 2 3 4 5 6</span><br></span></code></pre></div></div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
 <li class="">Array Leaders</li>
 <li class=""><a href="https://leetcode.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener noreferrer" class="">Longest Consecutive Sequences</a></li>
 <li class=""><a href="https://leetcode.com/problems/set-matrix-zeroes/" target="_blank" rel="noopener noreferrer" class="">Set Zeros</a></li>
