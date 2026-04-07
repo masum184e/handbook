@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Hard (8) | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/striver a2z/array/hard"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Hard (8) | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="1. Pascal&#x27;s Triangle"><meta data-rh="true" property="og:description" content="1. Pascal&#x27;s Triangle"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/striver a2z/array/hard"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/array/hard" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/striver a2z/array/hard" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DSA","item":"https://masum184e.github.io/handbook/docs/category/dsa"},{"@type":"ListItem","position":2,"name":"Striver A2Z DSA Sheet","item":"https://masum184e.github.io/handbook/docs/dsa/Striver A2Z/"},{"@type":"ListItem","position":3,"name":"Hard (8)","item":"https://masum184e.github.io/handbook/docs/striver a2z/array/hard"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.82264dc9.css">
-<script src="/handbook/assets/js/runtime~main.73116bcc.js" defer="defer"></script>
+<script src="/handbook/assets/js/runtime~main.1b76015e.js" defer="defer"></script>
 <script src="/handbook/assets/js/main.4f10b3b4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -125,9 +125,16 @@
 <li class=""><a href="https://leetcode.com/problems/reverse-pairs/" target="_blank" rel="noopener noreferrer" class="">Reverse Pairs</a></li>
 </ol>
 <ul>
-<li class="">Bruteforce failed</li>
-<li class="">Apply sorting alorithm for better pair comparison</li>
-<li class="">Don&#x27;t worry about the order of the item as the problem want the element, not their index</li>
+<li class="">
+<p>Bruteforce failed, apply sorting alorithm for better pair comparison. Don&#x27;t worry about the order of the item as the problem want the element, not their index</p>
+</li>
+<li class="">
+<p>A reverse pair is defined as:</p>
+<div class="language-cpp codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-cpp codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">i</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> nums</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">j</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain">  where i </span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain"> j</span><br></span></code></pre></div></div>
+<p>You need to count these before merging. Usually, during merge sort:</p>
+<p>Before merging the two halves, for each <code>i</code> in left array, count how many js in right array satisfy <code>nums[i] &gt; 2 * nums[j]</code>.
+Add this count to your total.</p>
+</li>
 </ul>
 <ol start="12">
 <li class=""><a href="https://leetcode.com/problems/maximum-product-subarray/" target="_blank" rel="noopener noreferrer" class="">Maximum Product Subarray</a>
