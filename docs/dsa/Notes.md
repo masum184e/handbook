@@ -50,7 +50,6 @@
    7. weekly 491 - 1
    8. biweekly 177
 5. cpsacademy(blog+video)
-6. implment cpp stl `next_permuations`
 7. explore c++ stl (`map`(bst), `unordered_map`(hashmap))
 8. implment realloc with malloc with capacity and size variable and note it down(append with existing note)
 
@@ -59,12 +58,24 @@
 https://leetcode.com/problems/kth-largest-element-in-an-array
 https://leetcode.com/problems/rotate-array
 https://leetcode.com/problems/group-anagrams
+https://leetcode.com/problems/rearrange-array-elements-by-sign (support for in-place)
 ### Matrix
 https://leetcode.com/problems/rotate-image
 https://leetcode.com/problems/flipping-an-image
-https://leetcode.com/problems/spiral-matrix
-
-
+### STL
+https://leetcode.com/problems/design-circular-queue
+https://leetcode.com/problems/snakes-and-ladders
+https://leetcode.com/problems/first-unique-character-in-a-string
+https://leetcode.com/problems/moving-average-from-data-stream
+https://leetcode.com/problems/open-the-lock
+https://leetcode.com/problems/jump-game-iii
+https://leetcode.com/problems/perfect-squares
+https://leetcode.com/problems/bus-routes
+https://leetcode.com/problems/max-stack
+https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string
+https://leetcode.com/problems/daily-temperatures
+https://leetcode.com/problems/decode-string
+https://leetcode.com/problems/score-of-parentheses
 ## Blog
 
 difference between avg case and tight bound

@@ -41,7 +41,6 @@
 15. [https://leetcode.com/problems/move-zeroes/](https://leetcode.com/problems/move-zeroes/)
 16. [https://leetcode.com/problems/apply-operations-to-an-array/](https://leetcode.com/problems/apply-operations-to-an-array/)
 17. [https://leetcode.com/problems/longest-harmonious-subsequence/](https://leetcode.com/problems/longest-harmonious-subsequence/)
-19. [https://leetcode.com/problems/remove-duplicates-from-sorted-list/](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
 20. [https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/](https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/)
 21. [https://leetcode.com/problems/add-two-numbers/](https://leetcode.com/problems/add-two-numbers/)
 22. https://leetcode.com/problems/divide-two-integers/description/
@@ -127,8 +126,6 @@
 107. [https://leetcode.com/problems/merge-sorted-array/](https://leetcode.com/problems/merge-sorted-array/)
 108. [https://leetcode.com/problems/rotate-string/](https://leetcode.com/problems/rotate-string/)
 109. [https://leetcode.com/problems/longest-consecutive-sequence/](https://leetcode.com/problems/longest-consecutive-sequence/)
-110. [https://leetcode.com/problems/valid-parentheses/](https://leetcode.com/problems/valid-parentheses/)
-112. [https://leetcode.com/problems/contains-duplicate/](https://leetcode.com/problems/contains-duplicate/)
 113. [https://leetcode.com/problems/sum-of-two-integers/](https://leetcode.com/problems/sum-of-two-integers/)
 114. [https://leetcode.com/problems/valid-parenthesis-string/](https://leetcode.com/problems/valid-parenthesis-string/)
 115. [https://leetcode.com/problems/merge-intervals/](https://leetcode.com/problems/merge-intervals/)
