@@ -5,8 +5,8 @@ const NoteWrapper = ({ children }) => {
 
   const tabs = [
     { key: "problems", label: "Problems" },
-    { key: "date", label: "Date" },
     { key: "notes", label: "Notes" },
+    { key: "urls", label: "URL" },
   ];
 
   const filteredChildren = React.Children.map(children, (child) => {
