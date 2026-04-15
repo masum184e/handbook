@@ -6,6 +6,7 @@ import Columns from "../components/MDX/Columns";
 import Callout from "../components/MDX/Callout";
 import Note from "../components/MDX/Note";
 import Tip from "../components/MDX/Tip";
+import NoteWrapper from "../components/MDX/NoteWrapper";
 
 export default {
   ...MDXComponents,
@@ -14,4 +15,5 @@ export default {
   Callout,
   Note,
   Tip,
+  NoteWrapper
 };

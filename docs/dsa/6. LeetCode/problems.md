@@ -1,29 +1,3 @@
-1. https://leetcode.com/problems/xor-operation-in-an-array
-2. https://leetcode.com/problems/power-of-two
-3. https://leetcode.com/problems/binary-search
-4. https://leetcode.com/problems/perfect-number
-5. https://leetcode.com/problems/single-number
-6. https://leetcode.com/problems/number-of-1-bits
-7. https://leetcode.com/problems/maximum-average-subarray-i
-8. https://leetcode.com/problems/valid-anagram
-9. https://leetcode.com/problems/sort-characters-by-frequency
-10. https://leetcode.com/problems/roman-to-integer
-11. https://leetcode.com/problems/reverse-words-in-a-string
-12. https://leetcode.com/problems/hamming-distance
-13. https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses
-14. https://leetcode.com/problems/missing-number
-15. https://leetcode.com/problems/max-consecutive-ones
-16. https://leetcode.com/problems/find-missing-and-repeated-values
-17. https://leetcode.com/problems/string-to-integer-atoi
-18. https://leetcode.com/problems/merge-strings-alternately
-19. https://leetcode.com/problems/pascals-triangle
-20. https://leetcode.com/problems/pascals-triangle-ii
-21. https://leetcode.com/problems/delete-node-in-a-linked-list
-22. https://leetcode.com/problems/rotate-list
-23. https://leetcode.com/problems/merge-two-sorted-lists
-24. https://leetcode.com/problems/maximum-depth-of-binary-tree
----
-
 1. https://leetcode.com/problems/minimum-bit-flips-to-convert-number
 2. https://leetcode.com/problems/remove-outermost-parentheses
 3. https://leetcode.com/problems/isomorphic-strings
@@ -37,6 +11,7 @@
 11. https://leetcode.com/problems/majority-element/
 12. https://leetcode.com/problems/maximum-subarray/
 13. https://leetcode.com/problems/count-prefixes-of-a-given-string
+14. https://leetcode.com/problems/count-the-number-of-beautiful-subarrays
 14. [https://leetcode.com/problems/remove-duplicates-from-sorted-array/](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
 15. [https://leetcode.com/problems/move-zeroes/](https://leetcode.com/problems/move-zeroes/)
 16. [https://leetcode.com/problems/apply-operations-to-an-array/](https://leetcode.com/problems/apply-operations-to-an-array/)
@@ -103,7 +78,6 @@
 84. [https://leetcode.com/problems/create-hello-world-function/](https://leetcode.com/problems/create-hello-world-function/)
 85. [https://leetcode.com/problems/sum-of-left-leaves/](https://leetcode.com/problems/sum-of-left-leaves/)
 86. [https://leetcode.com/problems/sort-an-array/](https://leetcode.com/problems/sort-an-array/)
-87. [https://leetcode.com/problems/implement-stack-using-queues/](https://leetcode.com/problems/implement-stack-using-queues/)
 88. https://leetcode.com/problems/powx-n
 89. [https://leetcode.com/problems/number-of-provinces/](https://leetcode.com/problems/number-of-provinces/)
 90. [https://leetcode.com/problems/insert-into-a-binary-search-tree/](https://leetcode.com/problems/insert-into-a-binary-search-tree/)
@@ -128,7 +102,6 @@
 109. [https://leetcode.com/problems/longest-consecutive-sequence/](https://leetcode.com/problems/longest-consecutive-sequence/)
 113. [https://leetcode.com/problems/sum-of-two-integers/](https://leetcode.com/problems/sum-of-two-integers/)
 114. [https://leetcode.com/problems/valid-parenthesis-string/](https://leetcode.com/problems/valid-parenthesis-string/)
-115. [https://leetcode.com/problems/merge-intervals/](https://leetcode.com/problems/merge-intervals/)
 116. [https://leetcode.com/problems/non-overlapping-intervals/](https://leetcode.com/problems/non-overlapping-intervals/)
 117. [https://leetcode.com/problems/longest-palindrome/](https://leetcode.com/problems/longest-palindrome/)
 118. [https://leetcode.com/problems/longest-increasing-subsequence/](https://leetcode.com/problems/longest-increasing-subsequence/)
