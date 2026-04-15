@@ -3,7 +3,6 @@ title: Recursion 📄
 sidebar_position: 6
 ---
 
-
 **Recursion Tracing** means following the execution flow of recursive calls:
 
 - How functions are called (going down the call stack).
@@ -91,9 +90,20 @@ tailRec(3) → prints 3
             tailRec(0) → stops
 ```
 
+Sum of 1 to N:
+
+```cpp
+int sum_tail(int n, int acc = 0) {
+    if (n == 0) return acc;
+    return sum_tail(n - 1, acc + n); // recursive call is last
+}
+```
+
 ## Head Recursion
 
 When the recursive call happens first, before any other statements. Work happens after recursive call returns.
+
+Backtracking occur in head recursion.
 
 ```cpp
 void headRecursion(int n) {
@@ -114,6 +124,15 @@ headRec(3)
          print 1
      print 2
  print 3
+```
+
+Sum of 1 to N:
+
+```cpp
+int sum(int n) {
+    if (n == 1) return 1;
+    return sum(n - 1) + n;
+}
 ```
 
 ## Tree Recursion
