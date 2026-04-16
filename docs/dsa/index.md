@@ -3,6 +3,12 @@ title: Introduction
 sidebar_position: 1
 ---
 
+## Summary
+
+1. Read the problem and simulate
+2. If couldn't able to solve, don't end the contest, try it out, you will have better brainstorming
+3. LeetCode -> CSES -> CF
+
 ## Weaknesses
 
 - 0 problems last year → severe inactivity.
