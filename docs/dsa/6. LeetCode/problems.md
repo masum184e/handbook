@@ -111,4 +111,3 @@
 122. https://leetcode.com/problems/generate-binary-strings-without-adjacent-zeros/
 123. https://leetcode.com/problems/max-consecutive-ones-iii/description/
 124. https://leetcode.com/problems/longest-repeating-character-replacement/description/
-125. https://leetcode.com/problems/remove-linked-list-elements/
