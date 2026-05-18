@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-software-maintainance/Chapter 7" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Chapter 7 | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/software-maintainance/Chapter 7"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Chapter 7 | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="Reverse Engineering (in Software Maintenance)"><meta data-rh="true" property="og:description" content="Reverse Engineering (in Software Maintenance)"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/software-maintainance/Chapter 7"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/software-maintainance/Chapter 7" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/software-maintainance/Chapter 7" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Software Maintainance","item":"https://masum184e.github.io/handbook/docs/category/software-maintainance"},{"@type":"ListItem","position":2,"name":"Chapter 7","item":"https://masum184e.github.io/handbook/docs/software-maintainance/Chapter 7"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.82264dc9.css">
+<script src="/handbook/assets/js/runtime~main.a368546d.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.7ea976f5.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/handbook/img/mb-logo.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/handbook/"><div class="navbar__logo"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--light_NVdE" height="10" width="30"><img src="/handbook/img/mb-logo.png" alt="Md Masum Billah" class="themedComponent_mlkZ themedComponent--dark_xIcU" height="10" width="30"></div><b class="navbar__title text--truncate">Md Masum Billah</b></a><a class="navbar__item navbar__link" href="/handbook/">Handbook</a><a class="navbar__item navbar__link" href="/handbook/docs/roadmap">Roadmap</a><a href="https://mdmasumbillah.vercel.app/blogs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Thoughts</a><a href="https://mdmasumbillah.vercel.app/projects" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Projects</a><a href="https://mdmasumbillah.vercel.app/academy" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Academy</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://drive.google.com/file/d/1Ca7hBqPzyat2WKleedcHtMZYINEkkeSH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Resume<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://github.com/masum184e" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Portfolio<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--active" href="/handbook/docs/category/software-maintainance"><span title="Software Maintainance" class="categoryLinkLabel_W154">Software Maintainance</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/"><span title="Introduction" class="linkLabel_WmDU">Introduction</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Question"><span title="Question" class="linkLabel_WmDU">Question</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Case Study"><span title="Case Study" class="linkLabel_WmDU">Case Study</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Chapter 1"><span title="Chapter 1" class="linkLabel_WmDU">Chapter 1</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Chapter 2"><span title="Chapter 2" class="linkLabel_WmDU">Chapter 2</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Chapter 3"><span title="Chapter 3" class="linkLabel_WmDU">Chapter 3</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Chapter 4"><span title="Chapter 4" class="linkLabel_WmDU">Chapter 4</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Chapter 5"><span title="Chapter 5" class="linkLabel_WmDU">Chapter 5</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/handbook/docs/software-maintainance/Chapter 6"><span title="Chapter 6" class="linkLabel_WmDU">Chapter 6</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/handbook/docs/software-maintainance/Chapter 7"><span title="Chapter 7" class="linkLabel_WmDU">Chapter 7</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/handbook/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/handbook/docs/category/software-maintainance"><span>Software Maintainance</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Chapter 7</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Chapter 7</h1></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="reverse-engineering-in-software-maintenance">Reverse Engineering (in Software Maintenance)<a href="#reverse-engineering-in-software-maintenance" class="hash-link" aria-label="Direct link to Reverse Engineering (in Software Maintenance)" title="Direct link to Reverse Engineering (in Software Maintenance)" translate="no">​</a></h2>
+<p>Reverse engineering is:</p>
+<blockquote>
+<p>The process of analyzing an existing software system to <strong>identify its components, relationships, and structure</strong>, and to <strong>represent it at a higher level of abstraction</strong>.</p>
+</blockquote>
+<ul>
+<li class="">It works <strong>backward</strong> from implementation (code) → design → requirements.</li>
+<li class="">Usually starts from <strong>source code</strong>, because documentation is often missing or outdated.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="purpose-of-reverse-engineering">Purpose of Reverse Engineering<a href="#purpose-of-reverse-engineering" class="hash-link" aria-label="Direct link to Purpose of Reverse Engineering" title="Direct link to Purpose of Reverse Engineering" translate="no">​</a></h3>
+<p>According to the book, reverse engineering is mainly used to:</p>
+<ul>
+<li class="">Improve <strong>program understanding</strong></li>
+<li class="">Recover <strong>lost or outdated documentation</strong></li>
+<li class="">Identify <strong>system components and dependencies</strong></li>
+<li class="">Support <strong>maintenance and modification</strong></li>
+<li class="">Extract <strong>reusable components</strong></li>
+<li class="">Reduce <strong>maintenance effort and complexity</strong></li>
+</ul>
+<blockquote>
+<p>Reverse engineering itself <strong>does not modify the system</strong>—it only helps understand it.</p>
+</blockquote>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="abstraction-in-reverse-engineering">Abstraction in Reverse Engineering<a href="#abstraction-in-reverse-engineering" class="hash-link" aria-label="Direct link to Abstraction in Reverse Engineering" title="Direct link to Abstraction in Reverse Engineering" translate="no">​</a></h2>
+<p>Reverse engineering relies heavily on <strong>abstraction</strong>, which means:</p>
+<ul>
+<li class="">Focusing on important details</li>
+<li class="">Ignoring unnecessary low-level details</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-abstraction">Types of abstraction:<a href="#types-of-abstraction" class="hash-link" aria-label="Direct link to Types of abstraction:" title="Direct link to Types of abstraction:" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Function abstraction</strong>
+<ul>
+<li class="">Focuses on data structures</li>
+<li class="">Ignores implementation details</li>
+<li class="">Example: Treating a stack as push/pop instead of array implementation</li>
+</ul>
+</li>
+<li class=""><strong>Data abstraction</strong>
+<ul>
+<li class="">Focuses on what a function does, not how</li>
+<li class="">Identify data structures</li>
+<li class="">Example: <code>sort()</code> instead of sorting algorithm details</li>
+</ul>
+</li>
+<li class=""><strong>Process abstraction</strong>
+<ul>
+<li class="">Identify control flow and execution order</li>
+<li class="">Example: loops, conditionals, program sequence</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="levels-of-reverse-engineering">Levels of Reverse Engineering<a href="#levels-of-reverse-engineering" class="hash-link" aria-label="Direct link to Levels of Reverse Engineering" title="Direct link to Levels of Reverse Engineering" translate="no">​</a></h2>
+<p>The book explains reverse engineering in terms of <strong>levels of abstraction</strong>. These levels show how far we move from low-level code to high-level understanding.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="redocumentation-lowest-level">Redocumentation (Lowest Level)<a href="#redocumentation-lowest-level" class="hash-link" aria-label="Direct link to Redocumentation (Lowest Level)" title="Direct link to Redocumentation (Lowest Level)" translate="no">​</a></h3>
+<ul>
+<li class="">Creating documentation at the <strong>same level of abstraction</strong> as the existing system.</li>
+</ul>
+<p><strong>Characteristics</strong></p>
+<ul>
+<li class="">Does <strong>not change abstraction level</strong></li>
+<li class="">Focuses on improving <strong>readability and documentation</strong></li>
+<li class="">Produces:<!-- -->
+<ul>
+<li class="">Comments</li>
+<li class="">Flowcharts</li>
+<li class="">Code documentation</li>
+</ul>
+</li>
+</ul>
+<p><strong>Purpose</strong>: Help developers understand poorly documented code</p>
+<p><strong>Example</strong>: Generating UML diagrams from code without changing design understanding</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="design-recovery-intermediate-level">Design Recovery (Intermediate Level)<a href="#design-recovery-intermediate-level" class="hash-link" aria-label="Direct link to Design Recovery (Intermediate Level)" title="Direct link to Design Recovery (Intermediate Level)" translate="no">​</a></h3>
+<p>Recovering the <strong>design structure</strong> of the system from code.</p>
+<p><strong>Characteristics</strong></p>
+<ul>
+<li class="">Moves from <strong>implementation → design level</strong></li>
+<li class="">Uses:<!-- -->
+<ul>
+<li class="">Domain knowledge</li>
+<li class="">Heuristics</li>
+<li class="">External information</li>
+</ul>
+</li>
+</ul>
+<p><strong>What it produces</strong></p>
+<ul>
+<li class="">Architecture diagrams</li>
+<li class="">Module structure</li>
+<li class="">Relationships between components</li>
+</ul>
+<p><strong>Key Insight</strong>: Not just extracting information—<strong>interpreting it</strong></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="specification-recovery-highest-level">Specification Recovery (Highest Level)<a href="#specification-recovery-highest-level" class="hash-link" aria-label="Direct link to Specification Recovery (Highest Level)" title="Direct link to Specification Recovery (Highest Level)" translate="no">​</a></h3>
+<p>Recovering <strong>high-level requirements and specifications</strong> of the system.</p>
+<p><strong>Characteristics</strong></p>
+<ul>
+<li class="">Moves from <strong>code → requirements</strong></li>
+<li class="">Highest level of abstraction</li>
+<li class="">Answers:<!-- -->
+<ul>
+<li class="">What does the system do?</li>
+<li class="">Why does it exist?</li>
+</ul>
+</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li class="">Functional specifications</li>
+<li class="">Requirement models</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary-of-levels">Summary of Levels<a href="#summary-of-levels" class="hash-link" aria-label="Direct link to Summary of Levels" title="Direct link to Summary of Levels" translate="no">​</a></h3>
+<table><thead><tr><th>Level</th><th>Abstraction</th><th>Focus</th><th>Output</th></tr></thead><tbody><tr><td><strong>Redocumentation</strong></td><td>Same level</td><td>Code understanding</td><td>Comments, diagrams</td></tr><tr><td><strong>Design Recovery</strong></td><td>Higher</td><td>System design</td><td>Architecture, modules</td></tr><tr><td><strong>Specification Recovery</strong></td><td>Highest</td><td>System purpose</td><td>Requirements</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="important-concept">Important Concept<a href="#important-concept" class="hash-link" aria-label="Direct link to Important Concept" title="Direct link to Important Concept" translate="no">​</a></h2>
+<ul>
+<li class="">Reverse engineering is a <strong>bottom-up process</strong>:<!-- -->
+<ul>
+<li class="">Start with code (low level)</li>
+<li class="">Gradually move to design and specification</li>
+</ul>
+</li>
+<li class="">If abstraction <strong>does not increase</strong>, it is: <em>Redocumentation</em></li>
+<li class="">If abstraction <strong>increases</strong>, it becomes: <em>Design or Specification Recovery</em></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="relationship-with-other-techniques">Relationship with Other Techniques<a href="#relationship-with-other-techniques" class="hash-link" aria-label="Direct link to Relationship with Other Techniques" title="Direct link to Relationship with Other Techniques" translate="no">​</a></h2>
+<p>Reverse engineering supports:</p>
+<ul>
+<li class=""><strong>Forward Engineering</strong> → building new systems</li>
+<li class=""><strong>Restructuring</strong> → improving code structure</li>
+<li class=""><strong>Reengineering</strong> → transforming the system completely</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="restructuring">Restructuring<a href="#restructuring" class="hash-link" aria-label="Direct link to Restructuring" title="Direct link to Restructuring" translate="no">​</a></h2>
+<p>Transforming a system to improve its structure without changing its external behavior</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="types-of-restructuring">Types of Restructuring<a href="#types-of-restructuring" class="hash-link" aria-label="Direct link to Types of Restructuring" title="Direct link to Types of Restructuring" translate="no">​</a></h3>
+<ol>
+<li class="">Code Restructuring<!-- -->
+<ul>
+<li class="">Improves code readability</li>
+<li class="">Example: Removing goto statements, Simplifying conditions</li>
+</ul>
+</li>
+<li class="">Data Restructuring<!-- -->
+<ul>
+<li class="">Improves data organization</li>
+<li class="">Example: Converting file structures to databases</li>
+<li class="">Key Characteristics<!-- -->
+<ul>
+<li class="">Behavior remains unchanged</li>
+<li class="">Focus is on internal quality</li>
+<li class="">Often automated</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reengineering">Reengineering<a href="#reengineering" class="hash-link" aria-label="Direct link to Reengineering" title="Direct link to Reengineering" translate="no">​</a></h3>
+<p>The process of examining and altering a system to reconstitute it in a new form</p>
+<p>Reengineering combines:</p>
+<ul>
+<li class="">Reverse engineering (understanding)</li>
+<li class="">Forward engineering (rebuilding)</li>
+</ul>
+<p>Activities</p>
+<ol>
+<li class="">Reverse engineering → understand system</li>
+<li class="">Restructuring → clean/improve</li>
+<li class="">Forward engineering → rebuild</li>
+</ol>
+<p>Goals</p>
+<ul>
+<li class="">Improve maintainability</li>
+<li class="">Modernize systems</li>
+<li class="">Increase performance</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="forward-engineering">Forward Engineering<a href="#forward-engineering" class="hash-link" aria-label="Direct link to Forward Engineering" title="Direct link to Forward Engineering" translate="no">​</a></h3>
+<p>The traditional process of moving from high-level abstraction to implementation</p>
+<p>Direction: Requirements → Design → Code</p>
+<p>Characteristics</p>
+<ul>
+<li class="">Builds new systems<!-- -->
+<ul>
+<li class="">Uses:</li>
+<li class="">Specifications</li>
+<li class="">Design models</li>
+</ul>
+</li>
+<li class="">Opposite of reverse engineering</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="question">Question<a href="#question" class="hash-link" aria-label="Direct link to Question" title="Direct link to Question" translate="no">​</a></h2>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Discuss the application of reverse engineering techniques to maintenance problems.</summary><div><div class="collapsibleContent_i85q"><p>Reverse engineering plays a critical role in software maintenance, especially for legacy systems.</p><ol>
+<li class="">Program Understanding<!-- -->
+<ul>
+<li class="">Problem: Legacy systems lack documentation</li>
+<li class="">Solution: Reverse engineering extracts: Structure, Logic, Dependencies</li>
+<li class="">Helps maintainers understand the system before making changes</li>
+</ul>
+</li>
+<li class="">Impact Analysis<!-- -->
+<ul>
+<li class="">Problem: Hard to predict effects of changes</li>
+<li class="">Solution: Identify relationships between components</li>
+<li class="">Helps answer: What will break if I change this?</li>
+</ul>
+</li>
+<li class="">Redocumentation<!-- -->
+<ul>
+<li class="">Problem: Missing or outdated documentation</li>
+<li class="">Solution: Generate:, Diagrams, Reports, Comments</li>
+</ul>
+</li>
+<li class="">Design Recovery<!-- -->
+<ul>
+<li class="">Problem: Original design lost over time</li>
+<li class="">Solution: Reconstruct architecture and module structure</li>
+</ul>
+</li>
+<li class="">Migration and Reengineering<!-- -->
+<ul>
+<li class="">Problem: Old systems need modernization</li>
+<li class="">Solution: Reverse engineering helps: Understand old system, Prepare for transformation</li>
+</ul>
+</li>
+<li class="">Debugging and Error Correction<!-- -->
+<ul>
+<li class="">Problem: Difficult to locate bugs</li>
+<li class="">Solution: Analyze control and data flow, Trace execution paths</li>
+</ul>
+</li>
+<li class="">Reuse of Components<!-- -->
+<ul>
+<li class="">Problem: Reinventing existing solutions</li>
+<li class="">Solution: Identify reusable modules</li>
+</ul>
+</li>
+<li class="">Security Analysis - Problem: Unknown vulnerabilities - Solution: Analyze code behavior and structure</li>
+</ol></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Discuss reverse engineering tools and identify some of their limitations.</summary><div><div class="collapsibleContent_i85q"><p>Reverse engineering tools are software tools that help analyze an existing system and extract higher-level representations (design, structure, or documentation) from source code or binaries.</p><ol>
+<li class="">Code Analysis Tools: Analyze source code structure Provide: Control flow, Data flow, Call graphs</li>
+<li class="">Redocumentation Tools: Generate documentation from code</li>
+<li class="">Design Recovery Tools: Extract higher-level design information</li>
+<li class="">Data Reverse Engineering Tools: Focus on data structures and databases</li>
+</ol><p><strong>Limitations</strong></p><ol>
+<li class="">Limited Understanding of Semantics</li>
+<li class="">Incomplete Design Recovery</li>
+<li class="">Difficulty with Poor Code Quality</li>
+<li class="">Scalability Issues</li>
+<li class="">Limited Automation</li>
+<li class="">Language and Platform Dependency</li>
+<li class="">Loss of High-Level Information</li>
+</ol></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>2. Carry out specification and design recovery on all or
+parts of a software system that you are not familiar with
+(the system should be at least 2K lines of code in
+length). What technique(s) do you use to identify the specification and design and why? What form of representation do you consider suitable for these tasks? Indicate your reasons. What lessons did you </summary><div><div class="collapsibleContent_i85q"><p>For this exercise, I selected a <strong>medium-sized open-source system (~2K–3K LOC)</strong>:</p><p>A <strong>Library Management System (LMS)</strong> written in Java/Python
+(Modules: user management, book catalog, issue/return, fine calculation)</p><p><strong>Specification and Design Recovery</strong></p><ol>
+<li class="">
+<p>Specification Recovery</p>
+<p>To recover the <strong>system specification (what the system does)</strong>:</p>
+<ul>
+<li class="">Read:<!-- -->
+<ul>
+<li class="">Main entry files (<code>main()</code>, controllers)<!-- -->
+<ul>
+<li class="">User interface code (menus, forms)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="">Analyze:<!-- -->
+<ul>
+<li class="">Input/output behavior</li>
+<li class="">User interactions</li>
+</ul>
+</li>
+<li class="">Observe:<!-- -->
+<ul>
+<li class="">System responses to actions</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="">
+<p>Recovered Specification (Example)<br>
+<!-- -->Functional Requirements:</p>
+<ul>
+<li class="">Users can:<!-- -->
+<ul>
+<li class="">Search books</li>
+<li class="">Borrow and return books</li>
+</ul>
+</li>
+<li class="">Admin can:<!-- -->
+<ul>
+<li class="">Add/remove books</li>
+<li class="">Manage users</li>
+</ul>
+</li>
+<li class="">System:<!-- -->
+<ul>
+<li class="">Tracks due dates</li>
+<li class="">Calculates fines</li>
+</ul>
+</li>
+</ul>
+<p>Non-functional Observations:</p>
+<ul>
+<li class="">Console-based interface</li>
+<li class="">File/database storage</li>
+<li class="">Basic validation</li>
+</ul>
+</li>
+<li class="">
+<p>Design Recovery<br>
+<!-- -->To recover <strong>system design (how it works)</strong>:</p>
+<ul>
+<li class="">Identify:<!-- -->
+<ul>
+<li class="">Modules and classes</li>
+<li class="">Relationships between components</li>
+</ul>
+</li>
+<li class="">Analyze:<!-- -->
+<ul>
+<li class="">Function calls</li>
+<li class="">Data flow</li>
+<li class="">Control flow</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol><p><strong>Recovered Design (Example)</strong></p><p>Modules Identified:</p><ul>
+<li class=""><code>UserModule</code></li>
+<li class=""><code>BookModule</code></li>
+<li class=""><code>TransactionModule</code></li>
+<li class=""><code>Database/FileHandler</code></li>
+</ul><p>Relationships:</p><ul>
+<li class="">User → interacts with → Transaction</li>
+<li class="">Transaction → accesses → Book + Database</li>
+</ul><p><strong>Techniques Used</strong></p><ol>
+<li class="">
+<p>Static Analysis</p>
+<ul>
+<li class="">Reading source code without execution</li>
+<li class="">Identified:<!-- -->
+<ul>
+<li class="">Class structure</li>
+<li class="">Function definitions</li>
+<li class="">Dependencies</li>
+</ul>
+</li>
+</ul>
+<p><strong>Why used?</strong></p>
+<ul>
+<li class="">Safe and straightforward</li>
+<li class="">Good for structural understanding</li>
+</ul>
+</li>
+<li class="">
+<p>Control Flow Analysis</p>
+<ul>
+<li class="">Tracing execution paths (if-else, loops)</li>
+<li class=""><strong>Why used?</strong> Helps understand logic and decision-making</li>
+</ul>
+</li>
+<li class="">
+<p>Data Flow Analysis</p>
+<ul>
+<li class="">Tracking how data moves through the system</li>
+</ul>
+<p><strong>Why used?</strong></p>
+<ul>
+<li class="">Essential for understanding:<!-- -->
+<ul>
+<li class="">Inputs/outputs</li>
+<li class="">Data dependencies</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="">
+<p>Dynamic Analysis (Optional but useful)</p>
+<ul>
+<li class="">Running the system and observing behavior</li>
+</ul>
+<p><strong>Why used?</strong></p>
+<ul>
+<li class="">Confirms assumptions from static analysis</li>
+<li class="">Helps understand runtime behavior</li>
+</ul>
+</li>
+<li class="">
+<p>Abstraction</p>
+<ul>
+<li class="">Ignoring low-level code details</li>
+<li class="">Focusing on:<!-- -->
+<ul>
+<li class="">Functions</li>
+<li class="">Modules</li>
+<li class="">System goals</li>
+</ul>
+</li>
+</ul>
+<p><strong>Why used?</strong> Necessary to move from code → design → specification</p>
+</li>
+</ol></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>3. A bank has a substantial investment in a Cobol
+software system that is at least one million lines of code
+in length and has been running for over 20 years. It is
+used on a daily basis to perform various operations such
+as managing customer accounts and loans. After several
+years of modification - both planned and ad hoc - the
+system has become too expensive to maintain. As a
+result, the bank wants some advice on the next step to
+take. Suppose that you have been employed as a
+software maintenance consultant. What advice would
+you give the bank? Indicate the reasons for any
+recommendations you make.</summary><div><div class="collapsibleContent_i85q"><p>Here’s the advice I would give as a software maintenance consultant.</p><ol>
+<li class="">
+<p>First Step: Understand Before Acting</p>
+<p><strong>Recommendation: Perform Reverse Engineering + System Assessment</strong></p>
+<p>Before any decision:</p>
+<ul>
+<li class="">Recover <strong>system architecture, modules, and dependencies</strong></li>
+<li class="">Identify:<!-- -->
+<ul>
+<li class="">Critical business functions (accounts, loans, transactions)</li>
+<li class="">High-maintenance/problem areas</li>
+<li class="">Obsolete components</li>
+</ul>
+</li>
+</ul>
+<p><strong>Reason:</strong></p>
+<ul>
+<li class="">After 20 years, documentation is likely outdated or missing</li>
+<li class="">Decisions without understanding will increase risk and cost</li>
+</ul>
+</li>
+<li class="">
+<p>Evaluate Strategic Options</p>
+<p>The bank has <strong>four main options</strong>:</p>
+<ul>
+<li class="">
+<p>Option 1: Continue Maintenance (Not Recommended Alone): Keep fixing and modifying the existing COBOL system</p>
+<p><strong>Problems</strong></p>
+<ul>
+<li class="">Maintenance cost will keep increasing</li>
+<li class="">System complexity will worsen</li>
+<li class="">Skills (COBOL developers) are becoming scarce</li>
+</ul>
+<p><strong>Conclusion:</strong> Only a short-term solution</p>
+</li>
+<li class="">
+<p>Option 2: Complete System Replacement (High Risk): Rewrite the entire system using modern technology</p>
+<p><strong>Problems</strong></p>
+<ul>
+<li class="">Extremely expensive and time-consuming</li>
+<li class="">High failure rate in large system rewrites</li>
+<li class="">Risk of losing critical business logic</li>
+</ul>
+<p><strong>Conclusion:</strong> Avoid “big bang” replacement</p>
+</li>
+<li class="">
+<p>Option 3: Reengineering (Recommended Core Strategy): Improve and transform the existing system</p>
+<p><strong>Activities</strong></p>
+<ul>
+<li class="">Reverse engineering → understand system</li>
+<li class="">Restructuring → improve code and data</li>
+<li class="">Partial redesign → modernize components</li>
+</ul>
+<p><strong>Benefits</strong></p>
+<ul>
+<li class="">Preserves proven business logic</li>
+<li class="">Reduces risk compared to full rewrite</li>
+<li class="">Improves maintainability</li>
+</ul>
+<p><strong>Reason:</strong> The system has worked reliably for 20 years—this knowledge is valuable</p>
+</li>
+<li class="">
+<p>Option 4: Incremental Modernization (Best Practical Approach): Gradually replace or upgrade parts of the system</p>
+<p><strong>Approach</strong></p>
+<ul>
+<li class="">Identify modules:<!-- -->
+<ul>
+<li class="">High-change → replace first</li>
+<li class="">Stable → keep or wrap</li>
+</ul>
+</li>
+</ul>
+<p><strong>Techniques</strong></p>
+<ul>
+<li class="">Introduce APIs around COBOL system</li>
+<li class="">Migrate modules to modern platforms step-by-step</li>
+</ul>
+<p><strong>Reason:</strong></p>
+<ul>
+<li class="">Minimizes disruption to daily banking operations</li>
+<li class="">Allows continuous system use during transition</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol><p><em>The bank should adopt a reengineering-based incremental modernization strategy, combining reverse engineering, restructuring, and gradual replacement to reduce risk, preserve business logic, and improve maintainability.</em></p></div></div></details></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/handbook/docs/software-maintainance/Chapter 6"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Chapter 6</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#reverse-engineering-in-software-maintenance" class="table-of-contents__link toc-highlight">Reverse Engineering (in Software Maintenance)</a><ul><li><a href="#purpose-of-reverse-engineering" class="table-of-contents__link toc-highlight">Purpose of Reverse Engineering</a></li></ul></li><li><a href="#abstraction-in-reverse-engineering" class="table-of-contents__link toc-highlight">Abstraction in Reverse Engineering</a><ul><li><a href="#types-of-abstraction" class="table-of-contents__link toc-highlight">Types of abstraction:</a></li></ul></li><li><a href="#levels-of-reverse-engineering" class="table-of-contents__link toc-highlight">Levels of Reverse Engineering</a><ul><li><a href="#redocumentation-lowest-level" class="table-of-contents__link toc-highlight">Redocumentation (Lowest Level)</a></li><li><a href="#design-recovery-intermediate-level" class="table-of-contents__link toc-highlight">Design Recovery (Intermediate Level)</a></li><li><a href="#specification-recovery-highest-level" class="table-of-contents__link toc-highlight">Specification Recovery (Highest Level)</a></li><li><a href="#summary-of-levels" class="table-of-contents__link toc-highlight">Summary of Levels</a></li></ul></li><li><a href="#important-concept" class="table-of-contents__link toc-highlight">Important Concept</a></li><li><a href="#relationship-with-other-techniques" class="table-of-contents__link toc-highlight">Relationship with Other Techniques</a></li><li><a href="#restructuring" class="table-of-contents__link toc-highlight">Restructuring</a><ul><li><a href="#types-of-restructuring" class="table-of-contents__link toc-highlight">Types of Restructuring</a></li><li><a href="#reengineering" class="table-of-contents__link toc-highlight">Reengineering</a></li><li><a href="#forward-engineering" class="table-of-contents__link toc-highlight">Forward Engineering</a></li></ul></li><li><a href="#question" class="table-of-contents__link toc-highlight">Question</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+  Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
+  © 2026
+  <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
+</div></div></div></footer></div>
+</body>
+</html>
