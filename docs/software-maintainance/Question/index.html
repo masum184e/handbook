@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Question | Md Masum Billah - Handbook</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://masum184e.github.io/handbook/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://masum184e.github.io/handbook/docs/software-maintainance/Question"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Question | Md Masum Billah - Handbook"><meta data-rh="true" name="description" content="Semester Final"><meta data-rh="true" property="og:description" content="Semester Final"><link data-rh="true" rel="icon" href="/handbook/img/mb-logo.png"><link data-rh="true" rel="canonical" href="https://masum184e.github.io/handbook/docs/software-maintainance/Question"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/software-maintainance/Question" hreflang="en"><link data-rh="true" rel="alternate" href="https://masum184e.github.io/handbook/docs/software-maintainance/Question" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://Z4KTJJ1USA-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Software Maintainance","item":"https://masum184e.github.io/handbook/docs/category/software-maintainance"},{"@type":"ListItem","position":2,"name":"Question","item":"https://masum184e.github.io/handbook/docs/software-maintainance/Question"}]}</script><link rel="search" type="application/opensearchdescription+xml" title="Md Masum Billah - Handbook" href="/handbook/opensearch.xml"><link rel="stylesheet" href="/handbook/assets/css/styles.82264dc9.css">
-<script src="/handbook/assets/js/runtime~main.93cce250.js" defer="defer"></script>
-<script src="/handbook/assets/js/main.177a9649.js" defer="defer"></script>
+<script src="/handbook/assets/js/runtime~main.701c62d5.js" defer="defer"></script>
+<script src="/handbook/assets/js/main.50b83e99.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -139,6 +139,535 @@
 <li class=""><strong>Automated Documentation Tools</strong>: Generate documentation from code comments.</li>
 <li class=""><strong>Documentation Reviews</strong>: Include documentation checks during code reviews.</li>
 </ol><p>This ensures that documentation remains accurate and useful for long-term maintenance.</p></div></div></details>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="question-04">Question 04<a href="#question-04" class="hash-link" aria-label="Direct link to Question 04" title="Direct link to Question 04" translate="no">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>(a) Explain why it is important to reuse software instead of writing it from scratch.</summary><div><div class="collapsibleContent_i85q"><p><strong>Software reuse</strong> is the practice of using existing software components, libraries, frameworks, or code in new software projects instead of developing everything from the beginning.</p><p><strong>Importance of Software Reuse</strong></p><ol>
+<li class="">
+<p>Reduces Development Time</p>
+<ul>
+<li class="">Existing components are already implemented and tested.</li>
+<li class="">Developers spend less time coding and more time integrating features.</li>
+<li class="">Projects can be completed much faster.</li>
+</ul>
+<p><strong>Example:</strong> Using an existing authentication library instead of creating a login system from scratch.</p>
+</li>
+<li class="">
+<p>Lowers Development Cost</p>
+<ul>
+<li class="">Less coding means fewer developer hours.</li>
+<li class="">Reduces testing and maintenance costs.</li>
+<li class="">Organizations save money by avoiding duplicate work.</li>
+</ul>
+</li>
+<li class="">
+<p>Improves Software Quality</p>
+<ul>
+<li class="">Reused components have often been tested in many applications.</li>
+<li class="">Bugs are already identified and fixed.</li>
+<li class="">The resulting software is generally more reliable.</li>
+</ul>
+</li>
+<li class="">
+<p>Increases Productivity</p>
+<ul>
+<li class="">Developers can focus on solving new problems instead of recreating existing solutions.</li>
+</ul>
+<p>For example:</p>
+<ul>
+<li class="">Instead of writing a database engine,</li>
+<li class="">developers use MySQL or PostgreSQL.</li>
+</ul>
+</li>
+<li class="">
+<p>Reduces Risk</p>
+<ul>
+<li class="">Since reused software has already been deployed successfully, the risk of unexpected failures is lower.</li>
+</ul>
+</li>
+<li class="">
+<p>Promotes Standardization</p>
+<ul>
+<li class="">Using common libraries and frameworks ensures consistent coding practices and easier maintenance.</li>
+</ul>
+</li>
+<li class="">
+<p>Easier Maintenance</p>
+<ul>
+<li class="">Widely used reusable components receive regular updates, bug fixes, and security patches.</li>
+</ul>
+</li>
+<li class="">
+<p>Encourages Knowledge Sharing</p>
+<ul>
+<li class="">Reusable software promotes collaboration across teams because developers can share common components.</li>
+</ul>
+</li>
+</ol></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>4(b)(i). What is the first step that you would take?</summary><div><div class="collapsibleContent_i85q"><p>The first step is to <strong>perform a Reuse Assessment and Planning</strong>.</p><p>This includes:</p><p><strong>Step 1: Analyze Existing Software Assets</strong></p><p>Identify:</p><ul>
+<li class="">Source code</li>
+<li class="">Libraries</li>
+<li class="">APIs</li>
+<li class="">Documentation</li>
+<li class="">Design patterns</li>
+<li class="">Test cases</li>
+<li class="">Frameworks</li>
+</ul><p>Determine which assets can be reused.</p><p><strong>Step 2: Identify Business Goals</strong></p><p>Understand why the company wants software reuse.</p><p>Possible goals:</p><ul>
+<li class="">Reduce development cost</li>
+<li class="">Faster product delivery</li>
+<li class="">Improve software quality</li>
+<li class="">Standardize development</li>
+</ul><p><strong>Step 3: Assess Current Development Process</strong></p><p>Study:</p><ul>
+<li class="">Development workflow</li>
+<li class="">Version control</li>
+<li class="">Build systems</li>
+<li class="">Documentation quality</li>
+<li class="">Coding standards</li>
+</ul><p><strong>Step 4: Select Reusable Components</strong></p><p>Classify components according to:</p><ul>
+<li class="">High reuse potential</li>
+<li class="">Moderate reuse potential</li>
+<li class="">Not reusable</li>
+</ul><p><strong>Step 5: Create a Reuse Repository</strong></p><p>Build a centralized repository where reusable assets can be stored, documented, and searched.</p><p><strong>Step 6: Define Reuse Policies</strong></p><p>Establish:</p><ul>
+<li class="">Coding standards</li>
+<li class="">Documentation requirements</li>
+<li class="">Versioning rules</li>
+<li class="">Approval process</li>
+</ul><p><strong>Result</strong></p><p>A structured reuse program with reusable assets, clear policies, and a repository.</p></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>4(b)(ii). Outline the technical, managerial, economical, organizational, and legal steps that you would go through.</summary><div><div class="collapsibleContent_i85q"><ol>
+<li class="">Technical Steps<!-- -->
+<ul>
+<li class="">Identify reusable software components.</li>
+<li class="">Standardize coding practices.</li>
+<li class="">Develop modular software architecture.</li>
+<li class="">Create reusable APIs and libraries.</li>
+<li class="">Implement version control (e.g., Git).</li>
+<li class="">Build a reusable component repository.</li>
+<li class="">Document reusable modules.</li>
+<li class="">Establish testing procedures.</li>
+<li class="">Ensure compatibility among components.</li>
+</ul>
+</li>
+<li class="">Managerial Steps<!-- -->
+<ul>
+<li class="">Obtain management support.</li>
+<li class="">Define reuse objectives.</li>
+<li class="">Allocate budget and resources.</li>
+<li class="">Assign a reuse manager or team.</li>
+<li class="">Monitor reuse performance.</li>
+<li class="">Develop training programs.</li>
+<li class="">Create incentives for developers who contribute reusable components.</li>
+</ul>
+</li>
+<li class="">Economical Steps<!-- -->
+<ul>
+<li class="">Perform cost-benefit analysis.</li>
+<li class="">Estimate savings from reuse.</li>
+<li class="">Calculate maintenance costs.</li>
+<li class="">Evaluate return on investment (ROI).</li>
+<li class="">Prioritize components that provide the greatest economic benefit.</li>
+</ul>
+</li>
+<li class="">Organizational Steps<!-- -->
+<ul>
+<li class="">Promote a culture of software reuse.</li>
+<li class="">Encourage collaboration between teams.</li>
+<li class="">Develop organizational standards.</li>
+<li class="">Create documentation guidelines.</li>
+<li class="">Train employees in reuse techniques.</li>
+<li class="">Define roles and responsibilities.</li>
+</ul>
+</li>
+<li class="">Legal Steps<!-- -->
+<ul>
+<li class="">Verify software licenses.</li>
+<li class="">Ensure compliance with open-source licenses.</li>
+<li class="">Protect intellectual property.</li>
+<li class="">Review third-party agreements.</li>
+<li class="">Maintain proper copyright documentation.</li>
+<li class="">Ensure data privacy and security compliance.</li>
+</ul>
+</li>
+</ol><p><strong>Summary Table</strong></p><table><thead><tr><th>Area</th><th>Steps</th></tr></thead><tbody><tr><td>Technical</td><td>Modular design, reusable libraries, testing, documentation, repository</td></tr><tr><td>Managerial</td><td>Planning, budgeting, training, monitoring, management support</td></tr><tr><td>Economical</td><td>Cost-benefit analysis, ROI evaluation, maintenance planning</td></tr><tr><td>Organizational</td><td>Team collaboration, standards, culture, documentation</td></tr><tr><td>Legal</td><td>License verification, copyright compliance, intellectual property protection</td></tr></tbody></table></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>4(b)(iii). What difficulties would you anticipate and how would you mitigate them?</summary><div><div class="collapsibleContent_i85q"><ol>
+<li class="">
+<p>Resistance to Change</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Developers may prefer writing new code rather than reusing existing components.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Provide training.</li>
+<li class="">Demonstrate benefits of reuse.</li>
+<li class="">Reward successful reuse.</li>
+</ul>
+</li>
+<li class="">
+<p>Poor Documentation</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Developers cannot understand existing components.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Improve documentation.</li>
+<li class="">Create usage examples.</li>
+<li class="">Maintain user guides.</li>
+</ul>
+</li>
+<li class="">
+<p>Low-Quality Components</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Some existing code may contain bugs or poor design.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Perform code reviews.</li>
+<li class="">Refactor components.</li>
+<li class="">Apply comprehensive testing.</li>
+</ul>
+</li>
+<li class="">
+<p>Compatibility Issues</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Reusable components may not integrate well with new systems.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Use standard interfaces.</li>
+<li class="">Follow API standards.</li>
+<li class="">Conduct integration testing.</li>
+</ul>
+</li>
+<li class="">
+<p>Lack of Management Support</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Management may not allocate sufficient resources.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Present cost-benefit analysis.</li>
+<li class="">Demonstrate ROI.</li>
+<li class="">Showcase successful reuse case studies.</li>
+</ul>
+</li>
+<li class="">
+<p>Licensing Problems</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Third-party software may have restrictive licenses.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Review all licenses.</li>
+<li class="">Consult legal experts.</li>
+<li class="">Use approved open-source software.</li>
+</ul>
+</li>
+<li class="">
+<p>Difficulty Finding Reusable Components</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Developers may not know what assets are available.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Create a searchable reuse repository.</li>
+<li class="">Maintain a component catalog.</li>
+<li class="">Use metadata and tagging.</li>
+</ul>
+</li>
+<li class="">
+<p>Maintenance Challenges</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Reusable components require continuous updates.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Establish version control.</li>
+<li class="">Assign maintenance responsibility.</li>
+<li class="">Schedule periodic reviews.</li>
+</ul>
+</li>
+<li class="">
+<p>Lack of Reuse Culture</p>
+<p>Difficulty</p>
+<ul>
+<li class="">Teams may not prioritize reuse.</li>
+</ul>
+<p>Mitigation</p>
+<ul>
+<li class="">Promote organizational awareness.</li>
+<li class="">Include reuse in development guidelines.</li>
+<li class="">Encourage collaboration across projects.</li>
+</ul>
+</li>
+</ol></div></div></details>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="question-05">Question 05<a href="#question-05" class="hash-link" aria-label="Direct link to Question 05" title="Direct link to Question 05" translate="no">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>(a). How do different software maintenance process models handle the balance between quick bug fixes and long-term maintainability, and what are the trade-offs associated with each approach?</summary><div><div class="collapsibleContent_i85q"><p>Software maintenance models differ in how they prioritize <strong>immediate bug resolution</strong> versus <strong>long-term software quality and maintainability</strong>. The major models are compared below.</p><table><thead><tr><th>Maintenance Model</th><th>Handling Quick Bug Fixes</th><th>Handling Long-Term Maintainability</th><th>Trade-offs</th></tr></thead><tbody><tr><td><strong>Quick-Fix Model</strong></td><td>Applies immediate patches to solve problems quickly.</td><td>Little attention is given to software design or documentation.</td><td><strong>Advantage:</strong> Fast and low-cost initially. <strong>Disadvantage:</strong> Code quality degrades over time, making future maintenance difficult.</td></tr><tr><td><strong>Iterative Enhancement Model</strong></td><td>Bug fixes are implemented in planned iterations after analysis.</td><td>Each iteration includes refactoring, documentation, and testing, improving maintainability.</td><td><strong>Advantage:</strong> Better software quality and easier future maintenance. <strong>Disadvantage:</strong> Bug fixes may take longer than emergency patches.</td></tr><tr><td><strong>Reengineering Model</strong></td><td>Does not focus on immediate bug fixes.</td><td>Improves the overall architecture by restructuring or redesigning the software.</td><td><strong>Advantage:</strong> Extends software life and reduces technical debt. <strong>Disadvantage:</strong> Expensive, time-consuming, and may interrupt development.</td></tr><tr><td><strong>Boehm&#x27;s Maintenance Model</strong></td><td>Prioritizes bug fixes based on risk and business impact.</td><td>High-risk issues and architectural improvements are addressed systematically.</td><td><strong>Advantage:</strong> Efficient resource allocation and reduced maintenance risk. <strong>Disadvantage:</strong> Requires detailed risk analysis and careful planning.</td></tr></tbody></table><p>Conclusion</p><ul>
+<li class=""><strong>Quick-Fix Model</strong> emphasizes speed but sacrifices maintainability.</li>
+<li class=""><strong>Iterative Enhancement Model</strong> balances bug fixing with continuous improvement.</li>
+<li class=""><strong>Reengineering Model</strong> prioritizes long-term maintainability over immediate fixes.</li>
+<li class=""><strong>Boehm&#x27;s Maintenance Model</strong> uses risk assessment to balance urgent fixes and long-term software quality.</li>
+</ul></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>(b). What role does risk assessment play in Boehm&#x27;s Maintenance Model, and how does it compare to other models in terms of prioritizing maintenance tasks?</summary><div><div class="collapsibleContent_i85q"><p><strong>Role of Risk Assessment in Boehm&#x27;s Maintenance Model</strong></p><p>Risk assessment is the <strong>core feature</strong> of Boehm&#x27;s Maintenance Model. Before performing maintenance, each requested change is evaluated according to its potential risks.</p><p>The model considers factors such as:</p><ul>
+<li class="">Technical complexity</li>
+<li class="">Impact on system stability</li>
+<li class="">Business importance</li>
+<li class="">Cost of implementation</li>
+<li class="">Probability of failure</li>
+<li class="">Security implications</li>
+<li class="">User impact</li>
+</ul><p>Based on these factors, maintenance tasks are prioritized.</p><p>Example</p><p>Suppose a company receives three maintenance requests:</p><ul>
+<li class="">Fix a security vulnerability.</li>
+<li class="">Correct a spelling mistake in the user interface.</li>
+<li class="">Add a new reporting feature.</li>
+</ul><p>Using risk assessment:</p><ol>
+<li class="">Security vulnerability → Highest priority.</li>
+<li class="">Reporting feature → Medium priority.</li>
+<li class="">UI spelling correction → Lowest priority.</li>
+</ol><p>This ensures that critical issues are addressed before minor improvements.</p><p><strong>Comparison with Other Models</strong></p><table><thead><tr><th>Model</th><th>Method of Prioritizing Tasks</th></tr></thead><tbody><tr><td><strong>Quick-Fix Model</strong></td><td>Prioritizes the most urgent problems with little analysis.</td></tr><tr><td><strong>Iterative Enhancement Model</strong></td><td>Prioritizes tasks according to the development iteration or release plan.</td></tr><tr><td><strong>Reengineering Model</strong></td><td>Prioritizes architectural improvements and code restructuring.</td></tr><tr><td><strong>Boehm&#x27;s Maintenance Model</strong></td><td>Prioritizes tasks based on risk, cost, impact, and business value.</td></tr></tbody></table><p><strong>Advantages of Boehm&#x27;s Model</strong></p><ul>
+<li class="">Reduces maintenance risk.</li>
+<li class="">Focuses resources on high-impact issues.</li>
+<li class="">Improves software reliability.</li>
+<li class="">Supports informed decision-making.</li>
+<li class="">Balances short-term fixes with long-term quality.</li>
+</ul></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>(c). In what scenarios would an organization choose the Reengineering Model over the Iterative Enhancement Model, and what factors should be considered when making this decision?</summary><div><div class="collapsibleContent_i85q"><p>Scenarios for Choosing the Reengineering Model</p><p>An organization should choose the <strong>Reengineering Model</strong> when the existing software has significant structural or architectural problems that cannot be effectively resolved through small, incremental improvements.</p><p>Typical scenarios include:</p><ol>
+<li class="">Legacy Systems<!-- -->
+<ul>
+<li class="">Older software may use outdated technologies, making maintenance increasingly difficult.</li>
+<li class=""><strong>Example:</strong> A banking application written in COBOL that needs modernization.</li>
+</ul>
+</li>
+<li class="">Poor Software Architecture<!-- -->
+<ul>
+<li class="">If the system has become difficult to understand due to years of quick fixes and modifications, restructuring is necessary.</li>
+</ul>
+</li>
+<li class="">High Maintenance Cost<!-- -->
+<ul>
+<li class="">When maintaining the existing software costs more than improving its architecture, reengineering becomes more economical.</li>
+</ul>
+</li>
+<li class="">Technology Migration<!-- -->
+<ul>
+<li class="">Organizations may need to migrate from obsolete platforms to modern technologies, requiring major restructuring.</li>
+</ul>
+</li>
+<li class="">Performance and Scalability Issues<!-- -->
+<ul>
+<li class="">If the software cannot meet current performance or scalability requirements, reengineering may be required to redesign the system.</li>
+</ul>
+</li>
+<li class="">Security Improvements<!-- -->
+<ul>
+<li class="">Systems with outdated architectures may contain vulnerabilities that are difficult to address through incremental enhancements.</li>
+</ul>
+</li>
+</ol><p><strong>Factors to Consider Before Choosing Reengineering</strong></p><p>Technical Factors</p><ul>
+<li class="">Quality of the existing code</li>
+<li class="">Software architecture</li>
+<li class="">Technology obsolescence</li>
+<li class="">Complexity of the system</li>
+</ul><p>Economic Factors</p><ul>
+<li class="">Cost of reengineering</li>
+<li class="">Expected maintenance savings</li>
+<li class="">Return on investment (ROI)</li>
+</ul><p>Business Factors</p><ul>
+<li class="">Business criticality</li>
+<li class="">Project deadlines</li>
+<li class="">Customer requirements</li>
+<li class="">Availability of resources</li>
+</ul><p>Organizational Factors</p><ul>
+<li class="">Availability of skilled developers</li>
+<li class="">Management support</li>
+<li class="">Risk tolerance</li>
+<li class="">Training requirements</li>
+</ul><p><strong>Comparison: Reengineering vs. Iterative Enhancement</strong></p><table><thead><tr><th>Aspect</th><th>Reengineering Model</th><th>Iterative Enhancement Model</th></tr></thead><tbody><tr><td>Objective</td><td>Improve or redesign the software architecture</td><td>Gradually improve software through small changes</td></tr><tr><td>Suitable For</td><td>Legacy systems, outdated technology, poor design</td><td>Stable systems requiring continuous improvements</td></tr><tr><td>Cost</td><td>High initial investment</td><td>Lower incremental cost</td></tr><tr><td>Time</td><td>Longer implementation</td><td>Shorter development cycles</td></tr><tr><td>Risk</td><td>Higher during transformation</td><td>Lower because changes are incremental</td></tr><tr><td>Maintainability</td><td>Significant long-term improvement</td><td>Gradual improvement over time</td></tr></tbody></table></div></div></details>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="question-06">Question 06<a href="#question-06" class="hash-link" aria-label="Direct link to Question 06" title="Direct link to Question 06" translate="no">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>(a). Explain the role of program understanding in maintenance activities.</summary><div><div class="collapsibleContent_i85q"><p><strong>Program understanding</strong> is the process of analyzing and comprehending the structure, functionality, logic, and behavior of an existing software system before making any modifications. It helps maintenance engineers understand how the software works so they can make changes safely and effectively.</p><p><strong>Role of Program Understanding in Maintenance</strong></p><ol>
+<li class="">Understanding Existing Code</li>
+</ol><p>Before modifying software, developers must understand:</p><ul>
+<li class="">The purpose of the program.</li>
+<li class="">How different modules interact.</li>
+<li class="">Data flow and control flow.</li>
+<li class="">Relationships among classes, functions, and files.</li>
+</ul><p>This reduces the likelihood of introducing new errors.</p><hr><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-identifying-bugs">2. Identifying Bugs<a href="#2-identifying-bugs" class="hash-link" aria-label="Direct link to 2. Identifying Bugs" title="Direct link to 2. Identifying Bugs" translate="no">​</a></h3><p>Program understanding helps developers:</p><ul>
+<li class="">Trace the source of errors.</li>
+<li class="">Identify faulty modules.</li>
+<li class="">Understand the root cause instead of only fixing symptoms.</li>
+</ul><p><strong>Example:</strong>
+If an online banking application calculates incorrect interest, understanding the calculation module helps locate the exact defect.</p><hr><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-supporting-software-modification">3. Supporting Software Modification<a href="#3-supporting-software-modification" class="hash-link" aria-label="Direct link to 3. Supporting Software Modification" title="Direct link to 3. Supporting Software Modification" translate="no">​</a></h3><p>When adding new features or changing existing ones, developers need to understand:</p><ul>
+<li class="">Which modules will be affected.</li>
+<li class="">Dependencies between components.</li>
+<li class="">Possible side effects of the changes.</li>
+</ul><hr><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-improving-software-quality">4. Improving Software Quality<a href="#4-improving-software-quality" class="hash-link" aria-label="Direct link to 4. Improving Software Quality" title="Direct link to 4. Improving Software Quality" translate="no">​</a></h3><p>Understanding the code allows developers to:</p><ul>
+<li class="">Remove redundant code.</li>
+<li class="">Simplify complex logic.</li>
+<li class="">Improve readability and maintainability.</li>
+</ul><hr><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-assisting-reengineering-and-refactoring">5. Assisting Reengineering and Refactoring<a href="#5-assisting-reengineering-and-refactoring" class="hash-link" aria-label="Direct link to 5. Assisting Reengineering and Refactoring" title="Direct link to 5. Assisting Reengineering and Refactoring" translate="no">​</a></h3><p>Before restructuring legacy software, engineers must understand:</p><ul>
+<li class="">Existing architecture.</li>
+<li class="">Design decisions.</li>
+<li class="">Business rules embedded in the code.</li>
+</ul><hr><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-reducing-maintenance-cost">6. Reducing Maintenance Cost<a href="#6-reducing-maintenance-cost" class="hash-link" aria-label="Direct link to 6. Reducing Maintenance Cost" title="Direct link to 6. Reducing Maintenance Cost" translate="no">​</a></h3><p>Well-understood software requires:</p><ul>
+<li class="">Less debugging time.</li>
+<li class="">Faster implementation of changes.</li>
+<li class="">Fewer maintenance errors.</li>
+</ul><hr><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="importance-in-different-maintenance-types">Importance in Different Maintenance Types<a href="#importance-in-different-maintenance-types" class="hash-link" aria-label="Direct link to Importance in Different Maintenance Types" title="Direct link to Importance in Different Maintenance Types" translate="no">​</a></h2><table><thead><tr><th>Maintenance Type</th><th>Role of Program Understanding</th></tr></thead><tbody><tr><td>Corrective</td><td>Locate and fix defects accurately.</td></tr><tr><td>Adaptive</td><td>Understand the impact of environmental changes.</td></tr><tr><td>Perfective</td><td>Safely implement new features and enhancements.</td></tr><tr><td>Preventive</td><td>Identify areas needing refactoring to prevent future issues.</td></tr></tbody></table><hr><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="conclusion">Conclusion<a href="#conclusion" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion" translate="no">​</a></h2><p>Program understanding is a fundamental maintenance activity because it enables developers to analyze existing code, identify defects, implement changes safely, improve software quality, reduce maintenance costs, and support successful corrective, adaptive, perfective, and preventive maintenance.</p></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary></summary><div><div class="collapsibleContent_i85q"></div></div></details>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary></summary><div><div class="collapsibleContent_i85q"></div></div></details>
+<h1>6(b). Discuss the comprehension process models and their application to maintenance tasks. (3 Marks)</h1>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="definition">Definition<a href="#definition" class="hash-link" aria-label="Direct link to Definition" title="Direct link to Definition" translate="no">​</a></h2>
+<p>A <strong>program comprehension process model</strong> describes how software engineers understand an existing software system during maintenance. These models guide developers in analyzing code, documentation, and system behavior before making changes.</p>
+<p>The three main comprehension models are:</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-bottom-up-model">1. Bottom-Up Model<a href="#1-bottom-up-model" class="hash-link" aria-label="Direct link to 1. Bottom-Up Model" title="Direct link to 1. Bottom-Up Model" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="description">Description<a href="#description" class="hash-link" aria-label="Direct link to Description" title="Direct link to Description" translate="no">​</a></h3>
+<p>Developers begin by studying small program elements and gradually build an understanding of the entire system.</p>
+<p>Steps:</p>
+<ul>
+<li class="">Examine statements.</li>
+<li class="">Understand functions.</li>
+<li class="">Analyze modules.</li>
+<li class="">Understand the complete architecture.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="application">Application<a href="#application" class="hash-link" aria-label="Direct link to Application" title="Direct link to Application" translate="no">​</a></h3>
+<p>Useful when:</p>
+<ul>
+<li class="">Documentation is unavailable.</li>
+<li class="">Maintaining legacy software.</li>
+<li class="">Debugging unknown code.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="advantages">Advantages<a href="#advantages" class="hash-link" aria-label="Direct link to Advantages" title="Direct link to Advantages" translate="no">​</a></h3>
+<ul>
+<li class="">Provides a detailed understanding.</li>
+<li class="">Effective for unfamiliar systems.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="disadvantages">Disadvantages<a href="#disadvantages" class="hash-link" aria-label="Direct link to Disadvantages" title="Direct link to Disadvantages" translate="no">​</a></h3>
+<ul>
+<li class="">Time-consuming.</li>
+<li class="">Difficult for very large systems.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-top-down-model">2. Top-Down Model<a href="#2-top-down-model" class="hash-link" aria-label="Direct link to 2. Top-Down Model" title="Direct link to 2. Top-Down Model" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="description-1">Description<a href="#description-1" class="hash-link" aria-label="Direct link to Description" title="Direct link to Description" translate="no">​</a></h3>
+<p>Developers first understand the overall system and then examine detailed components.</p>
+<p>Steps:</p>
+<ul>
+<li class="">Study system requirements.</li>
+<li class="">Understand software architecture.</li>
+<li class="">Analyze modules.</li>
+<li class="">Examine source code.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="application-1">Application<a href="#application-1" class="hash-link" aria-label="Direct link to Application" title="Direct link to Application" translate="no">​</a></h3>
+<p>Useful for:</p>
+<ul>
+<li class="">Feature enhancement.</li>
+<li class="">Software design modification.</li>
+<li class="">Systems with good documentation.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="advantages-1">Advantages<a href="#advantages-1" class="hash-link" aria-label="Direct link to Advantages" title="Direct link to Advantages" translate="no">​</a></h3>
+<ul>
+<li class="">Faster overall understanding.</li>
+<li class="">Easier planning of modifications.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="disadvantages-1">Disadvantages<a href="#disadvantages-1" class="hash-link" aria-label="Direct link to Disadvantages" title="Direct link to Disadvantages" translate="no">​</a></h3>
+<ul>
+<li class="">Depends heavily on accurate documentation.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-opportunistic-hybrid-model">3. Opportunistic (Hybrid) Model<a href="#3-opportunistic-hybrid-model" class="hash-link" aria-label="Direct link to 3. Opportunistic (Hybrid) Model" title="Direct link to 3. Opportunistic (Hybrid) Model" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="description-2">Description<a href="#description-2" class="hash-link" aria-label="Direct link to Description" title="Direct link to Description" translate="no">​</a></h3>
+<p>This model combines both <strong>Top-Down</strong> and <strong>Bottom-Up</strong> approaches. Developers switch between high-level design and low-level code as needed.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="application-2">Application<a href="#application-2" class="hash-link" aria-label="Direct link to Application" title="Direct link to Application" translate="no">​</a></h3>
+<p>Commonly used in real software maintenance because engineers often alternate between architecture diagrams and source code while solving problems.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="advantages-2">Advantages<a href="#advantages-2" class="hash-link" aria-label="Direct link to Advantages" title="Direct link to Advantages" translate="no">​</a></h3>
+<ul>
+<li class="">Flexible.</li>
+<li class="">Efficient.</li>
+<li class="">Suitable for large software systems.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="disadvantages-2">Disadvantages<a href="#disadvantages-2" class="hash-link" aria-label="Direct link to Disadvantages" title="Direct link to Disadvantages" translate="no">​</a></h3>
+<ul>
+<li class="">Requires experienced developers.</li>
+<li class="">Can become complex if not managed carefully.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="applications-to-maintenance-tasks">Applications to Maintenance Tasks<a href="#applications-to-maintenance-tasks" class="hash-link" aria-label="Direct link to Applications to Maintenance Tasks" title="Direct link to Applications to Maintenance Tasks" translate="no">​</a></h2>
+<table><thead><tr><th>Maintenance Task</th><th>Suitable Comprehension Model</th><th>Reason</th></tr></thead><tbody><tr><td>Bug fixing</td><td>Bottom-Up</td><td>Focuses on detailed code analysis to locate defects.</td></tr><tr><td>Adding new features</td><td>Top-Down</td><td>Starts with understanding the system architecture before modifying components.</td></tr><tr><td>Large legacy system maintenance</td><td>Opportunistic</td><td>Combines architectural understanding with detailed code inspection.</td></tr><tr><td>Refactoring</td><td>Opportunistic</td><td>Requires both high-level design knowledge and low-level implementation details.</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="conclusion-1">Conclusion<a href="#conclusion-1" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion" translate="no">​</a></h2>
+<p>Program comprehension models help maintenance engineers understand existing software before making changes. <strong>Bottom-Up</strong> is effective for debugging, <strong>Top-Down</strong> is useful for feature enhancement and design modifications, while the <strong>Opportunistic Model</strong> is the most widely used in practice because it combines both approaches for efficient maintenance.</p>
+<hr>
+<h1>6(c). What is the most important difference between generic software product development and custom software development? What might this mean in practice for users of generic software products? (4 Marks)</h1>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="difference-between-generic-software-product-development-and-custom-software-development">Difference Between Generic Software Product Development and Custom Software Development<a href="#difference-between-generic-software-product-development-and-custom-software-development" class="hash-link" aria-label="Direct link to Difference Between Generic Software Product Development and Custom Software Development" title="Direct link to Difference Between Generic Software Product Development and Custom Software Development" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-generic-software-product-development">1. Generic Software Product Development<a href="#1-generic-software-product-development" class="hash-link" aria-label="Direct link to 1. Generic Software Product Development" title="Direct link to 1. Generic Software Product Development" translate="no">​</a></h3>
+<p>Generic software is developed for a <strong>large market of users</strong> rather than a single customer.</p>
+<p>Characteristics:</p>
+<ul>
+<li class="">Designed for many organizations or individuals.</li>
+<li class="">Requirements are determined by the software company based on market research.</li>
+<li class="">Sold commercially to multiple customers.</li>
+<li class="">One product serves many users.</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li class="">Microsoft Office</li>
+<li class="">Adobe Photoshop</li>
+<li class="">Google Chrome</li>
+<li class="">VLC Media Player</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-custom-software-development">2. Custom Software Development<a href="#2-custom-software-development" class="hash-link" aria-label="Direct link to 2. Custom Software Development" title="Direct link to 2. Custom Software Development" translate="no">​</a></h3>
+<p>Custom software is developed for a <strong>specific customer or organization</strong> according to their unique requirements.</p>
+<p>Characteristics:</p>
+<ul>
+<li class="">Requirements are provided directly by the client.</li>
+<li class="">Built for one organization.</li>
+<li class="">Highly tailored to business processes.</li>
+<li class="">Usually not sold to other customers.</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<ul>
+<li class="">Hospital Management System</li>
+<li class="">University Student Information System</li>
+<li class="">Banking Core Software</li>
+<li class="">Airline Reservation System</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="most-important-difference">Most Important Difference<a href="#most-important-difference" class="hash-link" aria-label="Direct link to Most Important Difference" title="Direct link to Most Important Difference" translate="no">​</a></h2>
+<p>The key difference is <strong>who defines the requirements</strong>.</p>
+<ul>
+<li class=""><strong>Generic Software:</strong> Requirements are decided by the software developer based on the needs of a broad market.</li>
+<li class=""><strong>Custom Software:</strong> Requirements are specified by a particular client and tailored to their specific needs.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="comparison-table">Comparison Table<a href="#comparison-table" class="hash-link" aria-label="Direct link to Comparison Table" title="Direct link to Comparison Table" translate="no">​</a></h2>
+<table><thead><tr><th>Aspect</th><th>Generic Software</th><th>Custom Software</th></tr></thead><tbody><tr><td>Target Users</td><td>Many users</td><td>One customer or organization</td></tr><tr><td>Requirements</td><td>Defined by the developer based on market demand</td><td>Defined by the client</td></tr><tr><td>Cost</td><td>Lower per user because development cost is shared</td><td>Higher because it is built specifically for one client</td></tr><tr><td>Customization</td><td>Limited</td><td>Extensive</td></tr><tr><td>Development Time</td><td>Usually shorter for end users (already available)</td><td>Longer because it is developed from scratch</td></tr><tr><td>Examples</td><td>Microsoft Office, Photoshop</td><td>Hospital, banking, or university systems</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-this-means-for-users-of-generic-software-products">What This Means for Users of Generic Software Products<a href="#what-this-means-for-users-of-generic-software-products" class="hash-link" aria-label="Direct link to What This Means for Users of Generic Software Products" title="Direct link to What This Means for Users of Generic Software Products" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="advantages-3">Advantages<a href="#advantages-3" class="hash-link" aria-label="Direct link to Advantages" title="Direct link to Advantages" translate="no">​</a></h3>
+<ul>
+<li class="">Lower purchase cost because costs are shared among many users.</li>
+<li class="">Immediate availability without waiting for development.</li>
+<li class="">Regular updates, bug fixes, and security patches.</li>
+<li class="">Well-tested and reliable due to widespread use.</li>
+<li class="">Extensive documentation and community support.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="disadvantages-3">Disadvantages<a href="#disadvantages-3" class="hash-link" aria-label="Direct link to Disadvantages" title="Direct link to Disadvantages" translate="no">​</a></h3>
+<ul>
+<li class="">Limited customization to individual needs.</li>
+<li class="">Users may need to adapt their workflows to fit the software.</li>
+<li class="">Features that are not useful to all users may still be included.</li>
+<li class="">Dependence on the vendor for updates and future improvements.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="question-07">Question 07<a href="#question-07" class="hash-link" aria-label="Direct link to Question 07" title="Direct link to Question 07" translate="no">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary></summary><div><div class="collapsibleContent_i85q"></div></div></details>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="question-08">Question 08<a href="#question-08" class="hash-link" aria-label="Direct link to Question 08" title="Direct link to Question 08" translate="no">​</a></h3>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary></summary><div><div class="collapsibleContent_i85q"></div></div></details>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="question-09">Question: 09<a href="#question-09" class="hash-link" aria-label="Direct link to Question: 09" title="Direct link to Question: 09" translate="no">​</a></h3>
 <details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>(a) Challenges in Modernizing a 30-Year-Old Legacy System</summary><div><div class="collapsibleContent_i85q"><p>Updating a three-decade-old inventory system while keeping it operational (often called &quot;changing the engines while the plane is flying&quot;) presents several critical challenges:</p><ul>
 <li class=""><strong>Legacy Knowledge Gap:</strong> After 30 years, the original developers are likely gone. Documentation may be missing or outdated, making it difficult to understand the business logic embedded in the old code.</li>
@@ -153,7 +682,7 @@
 <li class=""><strong>Scalability:</strong> Doubling the customer base can overwhelm a &quot;small company.&quot; An open-source model allows the community to help identify bugs and provide support, making the software more robust as it grows.</li>
 <li class=""><strong>Standardization:</strong> If the product becomes an open-source standard in its niche, it becomes harder for competitors to displace it. The company can then pivot its business model toward <strong>consulting and high-end support</strong> rather than just selling licenses.</li>
 <li class=""><strong>Trust and Transparency:</strong> New, large customers may feel more secure knowing they have access to the source code, ensuring they aren&#x27;t &quot;locked in&quot; if the small provider goes out of business.</li>
-</ul></div></div></details></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/handbook/docs/software-maintainance/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Introduction</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/handbook/docs/software-maintainance/Case Study"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Case Study</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#semester-final" class="table-of-contents__link toc-highlight">Semester Final</a><ul><li><a href="#question-01" class="table-of-contents__link toc-highlight">Question 01</a></li><li><a href="#question-02" class="table-of-contents__link toc-highlight">Question 02</a></li><li><a href="#question-03" class="table-of-contents__link toc-highlight">Question: 03</a></li><li><a href="#question-09" class="table-of-contents__link toc-highlight">Question: 09</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
+</ul></div></div></details></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/handbook/docs/software-maintainance/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Introduction</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/handbook/docs/software-maintainance/Case Study"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Case Study</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#semester-final" class="table-of-contents__link toc-highlight">Semester Final</a><ul><li><a href="#question-01" class="table-of-contents__link toc-highlight">Question 01</a></li><li><a href="#question-02" class="table-of-contents__link toc-highlight">Question 02</a></li><li><a href="#question-03" class="table-of-contents__link toc-highlight">Question: 03</a></li><li><a href="#question-04" class="table-of-contents__link toc-highlight">Question 04</a></li><li><a href="#question-05" class="table-of-contents__link toc-highlight">Question 05</a></li><li><a href="#question-06" class="table-of-contents__link toc-highlight">Question 06</a></li><li><a href="#2-identifying-bugs" class="table-of-contents__link toc-highlight">2. Identifying Bugs</a></li><li><a href="#3-supporting-software-modification" class="table-of-contents__link toc-highlight">3. Supporting Software Modification</a></li><li><a href="#4-improving-software-quality" class="table-of-contents__link toc-highlight">4. Improving Software Quality</a></li><li><a href="#5-assisting-reengineering-and-refactoring" class="table-of-contents__link toc-highlight">5. Assisting Reengineering and Refactoring</a></li><li><a href="#6-reducing-maintenance-cost" class="table-of-contents__link toc-highlight">6. Reducing Maintenance Cost</a></li></ul></li><li><a href="#importance-in-different-maintenance-types" class="table-of-contents__link toc-highlight">Importance in Different Maintenance Types</a></li><li><a href="#conclusion" class="table-of-contents__link toc-highlight">Conclusion</a></li><li><a href="#definition" class="table-of-contents__link toc-highlight">Definition</a></li><li><a href="#1-bottom-up-model" class="table-of-contents__link toc-highlight">1. Bottom-Up Model</a><ul><li><a href="#description" class="table-of-contents__link toc-highlight">Description</a></li><li><a href="#application" class="table-of-contents__link toc-highlight">Application</a></li><li><a href="#advantages" class="table-of-contents__link toc-highlight">Advantages</a></li><li><a href="#disadvantages" class="table-of-contents__link toc-highlight">Disadvantages</a></li></ul></li><li><a href="#2-top-down-model" class="table-of-contents__link toc-highlight">2. Top-Down Model</a><ul><li><a href="#description-1" class="table-of-contents__link toc-highlight">Description</a></li><li><a href="#application-1" class="table-of-contents__link toc-highlight">Application</a></li><li><a href="#advantages-1" class="table-of-contents__link toc-highlight">Advantages</a></li><li><a href="#disadvantages-1" class="table-of-contents__link toc-highlight">Disadvantages</a></li></ul></li><li><a href="#3-opportunistic-hybrid-model" class="table-of-contents__link toc-highlight">3. Opportunistic (Hybrid) Model</a><ul><li><a href="#description-2" class="table-of-contents__link toc-highlight">Description</a></li><li><a href="#application-2" class="table-of-contents__link toc-highlight">Application</a></li><li><a href="#advantages-2" class="table-of-contents__link toc-highlight">Advantages</a></li><li><a href="#disadvantages-2" class="table-of-contents__link toc-highlight">Disadvantages</a></li></ul></li><li><a href="#applications-to-maintenance-tasks" class="table-of-contents__link toc-highlight">Applications to Maintenance Tasks</a></li><li><a href="#conclusion-1" class="table-of-contents__link toc-highlight">Conclusion</a></li><li><a href="#difference-between-generic-software-product-development-and-custom-software-development" class="table-of-contents__link toc-highlight">Difference Between Generic Software Product Development and Custom Software Development</a><ul><li><a href="#1-generic-software-product-development" class="table-of-contents__link toc-highlight">1. Generic Software Product Development</a></li><li><a href="#2-custom-software-development" class="table-of-contents__link toc-highlight">2. Custom Software Development</a></li></ul></li><li><a href="#most-important-difference" class="table-of-contents__link toc-highlight">Most Important Difference</a></li><li><a href="#comparison-table" class="table-of-contents__link toc-highlight">Comparison Table</a></li><li><a href="#what-this-means-for-users-of-generic-software-products" class="table-of-contents__link toc-highlight">What This Means for Users of Generic Software Products</a><ul><li><a href="#advantages-3" class="table-of-contents__link toc-highlight">Advantages</a></li><li><a href="#disadvantages-3" class="table-of-contents__link toc-highlight">Disadvantages</a></li><li><a href="#question-07" class="table-of-contents__link toc-highlight">Question 07</a></li><li><a href="#question-08" class="table-of-contents__link toc-highlight">Question 08</a></li><li><a href="#question-09" class="table-of-contents__link toc-highlight">Question: 09</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Quick Links</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/dsa">Data Structure &amp; Algorithms</a></li><li class="footer__item"><a class="footer__link-item" href="/handbook/docs/aws">Amazon Web Services</a></li><li class="footer__item"><a href="https://tamimehsan.github.io/interview-questions-bangladesh/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Interview Questions (BD)<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Online Judges</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://codeforces.com/profile/masum1834e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Codeforces<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://leetcode.com/u/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LeetCode<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.codechef.com/users/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">CodeChef<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Join My Network</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.linkedin.com/in/masum1834e/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Linkedin<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.github.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.facebook.com/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Facebook<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Engage Me</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://wa.me/+8801400095352" target="_blank" rel="noopener noreferrer" class="footer__link-item">Whatsapp<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://t.me/masum184e" target="_blank" rel="noopener noreferrer" class="footer__link-item">Telegram<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:masum184e@gmail.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Email<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">
   Built with <a href="https://docusaurus.io/" target="_blank" rel="noopener noreferrer">Docusaurus</a>.
   © 2026
   <a href="https://mdmasumbillah.vercel.app/" target="_blank" rel="noopener noreferrer">Md Masum Billah</a>.
