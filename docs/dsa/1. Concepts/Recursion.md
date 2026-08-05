@@ -199,3 +199,282 @@ nested(95)
              ...
  eventually reaches nested(101) → returns 91
 ```
+
+
+## Recursion in Stack
+
+When solving **stack-related problems using recursion**, a very common pattern is:
+
+> **Use the recursion call stack as an implicit stack.**
+> First go deep until the base condition, then perform operations while returning (backtracking phase).
+
+This pattern appears in problems like:
+
+* Reverse a stack
+* Sort a stack
+* Delete middle element
+* Insert an element at the bottom
+* Evaluate recursive stack transformations
+
+
+### General Recursion + Stack Pattern
+
+```text
+solve(stack):
+
+    1. Base condition
+       - If stack is empty or size reaches target:
+           return
+
+    2. Remove the top element
+       - Store it temporarily
+
+    3. Recursive call
+       - Solve the smaller stack
+
+    4. Do the required operation
+       - Put the removed element back
+       - Modify stack
+       - Insert/remove something
+```
+
+The important idea:
+
+```
+Before recursive call:
+    Work while going down
+
+After recursive call:
+    Work while coming back
+```
+
+### Template Code
+
+```cpp
+void solve(stack<int>& st)
+{
+    // Base case
+    if(st.empty())
+        return;
+
+    // Step 1: Remove top element
+    int top = st.top();
+    st.pop();
+
+    // Step 2: Recursive call
+    solve(st);
+
+    // Step 3: Do work while returning
+    st.push(top);
+}
+```
+
+This simply reverses the process of removing elements.
+
+### Pattern 1: Insert Element at Bottom of Stack
+
+#### Problem
+
+Insert `x` at the bottom without using another stack.
+
+Example:
+
+```
+Stack:
+5
+4
+3
+2
+1  <- top
+
+Insert 10
+
+Result:
+5
+4
+3
+2
+1
+10 <- top
+```
+
+#### Idea
+
+Remove everything until stack becomes empty.
+
+Then insert the new element.
+
+While returning, restore removed elements.
+
+```cpp
+void insertAtBottom(stack<int>& st, int x)
+{
+    if(st.empty())
+    {
+        st.push(x);
+        return;
+    }
+
+    int temp = st.top();
+    st.pop();
+
+    insertAtBottom(st, x);
+
+    st.push(temp);
+}
+```
+
+### Pattern 2: Reverse a Stack
+
+#### Idea
+
+To reverse:
+
+1. Remove top element recursively.
+2. Insert removed element at bottom.
+
+```cpp
+void reverseStack(stack<int>& st)
+{
+    if(st.empty())
+        return;
+
+    int temp = st.top();
+    st.pop();
+
+    reverseStack(st);
+
+    insertAtBottom(st, temp);
+}
+```
+
+Flow:
+
+```
+Original:
+
+1
+2
+3
+4
+
+
+Remove:
+4
+3
+2
+1
+
+
+Insert bottom:
+
+4
+3
+2
+1
+
+becomes
+
+1
+2
+3
+4 reversed
+```
+
+### Pattern 3: Sort a Stack
+
+#### Idea
+
+Take the top element out.
+
+Sort the remaining stack.
+
+Insert the element in the correct position.
+
+```cpp
+void sortedInsert(stack<int>& st, int x)
+{
+    if(st.empty() || st.top() <= x)
+    {
+        st.push(x);
+        return;
+    }
+
+    int temp = st.top();
+    st.pop();
+
+    sortedInsert(st, x);
+
+    st.push(temp);
+}
+
+
+void sortStack(stack<int>& st)
+{
+    if(st.empty())
+        return;
+
+    int temp = st.top();
+    st.pop();
+
+    sortStack(st);
+
+    sortedInsert(st, temp);
+}
+```
+
+### How to Recognize This Pattern
+
+When you see:
+
+* "Without using extra stack"
+* "Use recursion"
+* "Modify stack order"
+* "Insert/delete at a specific position"
+* "Reverse or sort stack"
+
+Think:
+
+```
+Take top element
+↓
+Recursive call on smaller stack
+↓
+Solve the smaller problem
+↓
+Restore / modify while returning
+```
+
+### Mental Model
+
+Imagine recursion creates a hidden stack:
+
+```
+solve(5)
+ |
+ solve(4)
+ |
+ solve(3)
+ |
+ solve(2)
+ |
+ solve(1)
+ |
+ base case
+```
+
+Then execution returns upward:
+
+```
+solve(1) finishes
+      ↑
+solve(2) finishes
+      ↑
+solve(3) finishes
+      ↑
+solve(4) finishes
+      ↑
+solve(5) finishes
+```
+
+Most stack-recursion problems are solved in this **"go down → reach base → come back → modify"** pattern.

@@ -32,6 +32,14 @@ By choosing `article`, LaTeX automatically decides things like:
 - numbering style
 - page formatting
 
+**Example**
+
+`\documentclass[12pt,a4paper]{article}` defines the overall document type and layout.
+
+- `article`: Standard class for short documents (reports, assignments, papers).
+- `12pt`: Sets the base font size to 12 points (larger, more readable).
+- `a4paper`: Sets paper size to A4 (common outside the US).
+
 **Structure in article**
 
 It supports:
@@ -57,7 +65,8 @@ Here’s how `article` compares:
 - `book` → very large documents (books, theses with chapters)
 - `beamer` → presentations (slides)
 
-## Begin Document
+## Document
+### Begin Document
 
 ```tex
 \begin{document}
@@ -67,7 +76,7 @@ Here’s how `article` compares:
 - Everything before this is setup (called the **preamble**).
 - Everything after this is what appears in your output PDF.
 
-## End Document
+### End Document
 
 ```tex
 \end{document}
@@ -76,7 +85,7 @@ Here’s how `article` compares:
 - This marks the end of your document.
 - Anything written after this will be ignored by LaTeX.
 
-## Minimal Working Example (MWE)
+### Minimal Working Example (MWE)
 
 ```tex
 \documentclass{article}
@@ -90,6 +99,43 @@ Your content goes here
 
 - This is the smallest valid LaTeX document.
 - If your file is completely empty, LaTeX may fail to generate a PDF.
+
+## Package
+
+1. `\usepackage[margin=1in]{geometry}`
+    - Controls page layout (margins, page size, orientation).
+    - `margin=1in`: Sets all margins (top, bottom, left, right) to 1 inch.
+
+## Table 
+
+`\usepackage{longtable}`
+
+- Supports tables that span multiple pages.
+- Unlike `tabular`, it automatically breaks across pages.
+
+`\usepackage{array}`
+
+- Enhances table formatting.
+- Provides better column alignment options and custom column type
+
+`\usepackage{colortbl}`
+
+- Adds color to tables.
+- Lets you color rows, columns, and cells.
+
+`\usepackage{makecell}`
+
+- Improves table cell formatting.
+- Allows line breaks inside cells and easy formatting of headers.
+
+## Font
+
+`\usepackage{newtxtext,newtxmath}`
+
+- Sets the document font.
+- `newtxtext`: Times-like font for text.
+- `newtxmath`: Matching math font.
+- Gives a professional, publication-style look.
 
 ## Sections and Numbering
 
@@ -282,3 +328,261 @@ Output: `(Einstein, 1905)`
 | `\cite{key}`      | [1] or (Author, Year) |
 | `\textcite{key}`  | Author (Year)         |
 | `\parencite{key}` | (Author, Year)        |
+
+
+## Table
+
+### Basic `tabular` Environment
+
+This is the core table environment in LaTeX.
+
+```latex
+\begin{tabular}{column_spec}
+  cell1 & cell2 & cell3 \\
+  \hline
+  cell4 & cell5 & cell6 \\
+\end{tabular}
+```
+
+**Column Specifiers**
+
+* `l` → left aligned
+* `c` → centered
+* `r` → right aligned
+* `|` → vertical line
+
+**Example**
+
+```latex
+\begin{tabular}{|c|c|c|}
+\hline
+A & B & C \\
+\hline
+1 & 2 & 3 \\
+\hline
+\end{tabular}
+```
+
+**Notes**
+
+* `&` separates columns
+* `\\` ends a row
+* `\hline` draws horizontal lines
+
+### `table` Environment (Floating Table)
+
+Used to add captions and labels (for referencing).
+
+**Example**
+
+```latex
+\begin{table}[h]
+\centering
+\begin{tabular}{c c}
+A & B \\
+1 & 2 \\
+\end{tabular}
+\caption{Simple Table}
+\label{tab:example}
+\end{table}
+```
+
+**Key Points**
+
+* `[h]` → place “here” (approximate)
+* Use `\ref{tab:example}` to reference
+
+### `tabularx` (Auto Column Width)
+
+```latex
+\usepackage{tabularx}
+```
+
+Useful when table width must fit page width.
+
+**Example**
+
+```latex
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+Long text here & More long text \\
+\hline
+\end{tabularx}
+```
+
+**Special Column**
+
+* `X` → automatically stretches
+
+### `longtable` (Multi-page Tables)
+
+```latex
+\usepackage{longtable}
+```
+
+Used when tables span multiple pages.
+
+**Example**
+
+```latex
+\begin{longtable}{|c|c|}
+\hline
+Header1 & Header2 \\
+\hline
+\endfirsthead
+
+\hline
+Header1 & Header2 \\
+\hline
+\endhead
+
+Row1 & Data \\
+Row2 & Data \\
+\end{longtable}
+```
+
+**Key Features**
+
+* Automatically breaks across pages
+* Supports repeated headers
+
+### `tabulary` (Better Text Wrapping)
+
+```latex
+\usepackage{tabulary}
+```
+
+Balances column widths better than `tabularx`.
+
+**Example**
+
+```latex
+\begin{tabulary}{\textwidth}{LCR}
+Text & Center & Right \\
+\end{tabulary}
+```
+
+### `array` Package (Custom Columns)
+
+```latex
+\usepackage{array}
+```
+
+Lets you define new column types.
+
+**Example**
+
+```latex
+\newcolumntype{P}{>{\centering\arraybackslash}p{3cm}}
+
+\begin{tabular}{|P|P|}
+\hline
+Centered & Text \\
+\hline
+\end{tabular}
+```
+
+### `booktabs` (Professional Tables)
+
+```latex
+\usepackage{booktabs}
+```
+
+Improves table aesthetics (recommended for reports/papers).
+
+**Example**
+
+```latex
+\begin{tabular}{ccc}
+\toprule
+A & B & C \\
+\midrule
+1 & 2 & 3 \\
+\bottomrule
+\end{tabular}
+```
+
+**Avoid**
+
+* Vertical lines (`|`)
+* Too many `\hline`
+
+### `multirow` and `multicolumn`
+
+```latex
+\usepackage{multirow}
+```
+
+**Multicolumn**
+
+```latex
+\multicolumn{2}{c}{Merged}
+```
+
+**Multirow**
+
+```latex
+\multirow{2}{*}{Text}
+```
+
+**Example**
+
+```latex
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{2}{c}{Header} \\
+\hline
+A & B \\
+\hline
+\end{tabular}
+```
+
+### `tabular*` (Fixed Width Tables)
+
+Used to stretch table to a fixed width.
+
+```latex
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} c c c}
+A & B & C \\
+\end{tabular*}
+```
+
+### `sidewaystable` (Rotated Tables)
+
+```latex
+\usepackage{rotating}
+```
+**Syntax**
+```latex
+\begin{sidewaystable}
+\begin{tabular}{ccc}
+A & B & C \\
+\end{tabular}
+\end{sidewaystable}
+```
+
+### `tabbing` Environment (Not really a table)
+
+Useful for alignment (like typewriter formatting), not structured tables.
+
+```latex
+\begin{tabbing}
+Name \= Age \= City \\
+John \> 25 \> NY \\
+\end{tabbing}
+```
+
+### Practical Advice
+
+* Use `tabular` → for simple tables
+* Use `table` → when you need caption/reference
+* Use `tabularx` → for automatic width control
+* Use `longtable` → for multi-page tables
+* Use `booktabs` → for clean, professional output
+
+### Common Mistakes
+
+* Forgetting `\\` at row end
+* Miscounting columns
+* Overusing vertical lines
+* Using `h` float specifier expecting exact placement
