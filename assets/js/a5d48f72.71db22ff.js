@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkhandbook=globalThis.webpackChunkhandbook||[]).push([[48972],{12189(e){e.exports=JSON.parse('{"categoryGeneratedIndex":{"title":"IELTS","slug":"/category/ielts","permalink":"/handbook/docs/category/ielts","sidebar":"ieltsApiSidebar","navigation":{"next":{"title":"IELTS","permalink":"/handbook/docs/ielts/"}}}}')}}]);
